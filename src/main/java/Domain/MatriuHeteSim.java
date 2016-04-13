@@ -1,4 +1,7 @@
-package Domini;
+package Domain;
+import java.util.*;
+import Domain.Graph.*;
+
 
 public class MatriuHeteSim {
     private HashMap<Node, HashMap<Node, Float>> m; 
@@ -68,13 +71,13 @@ public class MatriuHeteSim {
 	Set<Node> cols;
 
 	/* Inicialitzem hashmap */
-	this.m = new HashMap<Node, HashMap<Fantasma, Float>>(this.numRows);
+	this.m = new HashMap<Node, HashMap<Node, Float>>(this.numRows);
 	float one = 1;
 	int k = 0;
 
 	for (Node i: rows) {
-	    HashMap<Fantasma, Float> dicCol =
-		    new HashMap<Fantasma, Float>(/* parametres */);
+	    HashMap<Node, Float> dicCol =
+		    new HashMap<Node, Float>(/* parametres */);
 	    cols = graf.getNeighbours(i, tCol);
 	    if (!cols.isEmpty()) {
 		/* Normalitzar per files */
@@ -160,8 +163,8 @@ public class MatriuHeteSim {
 	float cij;
 	
 	for (Node i: A.rowKeys()) {
+	    HashMap<Node, Float> dicCols = new HashMap<Node, Float>();
 	    for (Node j: B.rowKeys()) {
-		HashMap<Node, Float> dicCols = new HashMap<Node, Float>();
 		if (A.cols(i).size() < B.cols(j).size())
 		    cij = cij(A, B, i, j);
 		else
@@ -169,10 +172,10 @@ public class MatriuHeteSim {
 
 		if (cij != 0) {
 		    Float v = new Float(cij);
-		    dicCol.put(j, v);
+		    dicCols.put(j, v);
 		}
 	    }
-	    this.m.put(i, dicCol);
+	    this.m.put(i, dicCols);
 	}
     }
     
@@ -182,6 +185,7 @@ public class MatriuHeteSim {
 	for (Node k: A.cols(i)) {
 	    cij += A.value(i,k) * B.value(j,k);
 	}
+	return cij;
     }
 
     /**
@@ -196,8 +200,8 @@ public class MatriuHeteSim {
 	Fantasma j;
 	
 	for (Node i: A.rowKeys()) {
+	    HashMap<Node, Float> dicCols = new HashMap<Node, Float>();
 	    for (int jint = 0; jint < B.numCols(); jint++) {
-		HashMap<Node, Float> dicCols = new HashMap<Node, Float>();
 		cij = 0;
 		j = new Fantasma(jint);
 		for (Node k: A.cols(i)) {
@@ -206,10 +210,10 @@ public class MatriuHeteSim {
 
 		if (cij != 0) {
 		    Float v = new Float(cij);
-		    dicCol.put(j, v);
+		    dicCols.put(j, v);
 		}
 	    }
-	    this.m.put(i, dicCol);
+	    this.m.put(i, dicCols);
 	}
     }
 
@@ -224,16 +228,16 @@ public class MatriuHeteSim {
 	float cij;
 	
 	for (Node i: A.rowKeys()) {
+	    HashMap<Node, Float> dicCols = new HashMap<Node, Float>();
 	    for (Node j: B.rowKeys()) {
-		HashMap<Node, Float> dicCols = new HashMap<Node, Float>();
 		cij = cijnorm(A, B, i, j);
 	
 		if (cij != 0) {
 		    Float v = new Float(cij);
-		    dicCol.put(j, v);
+		    dicCols.put(j, v);
 		}
 	    }
-	    this.m.put(i, dicCol);
+	    this.m.put(i, dicCols);
 	}
     }
 
@@ -247,7 +251,7 @@ public class MatriuHeteSim {
 	for (Node k: B.cols(j)) {
 	    normj += B.value(j,k) * B.value(j,k);
 	}
-	normi = Math.sqrt(normi*normj);
+	normi = (float)Math.sqrt((double)normi*normj);
 	if (cij == 0) return cij;
 	else return cij/normi;
     }

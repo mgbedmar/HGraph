@@ -1,4 +1,6 @@
-package Domini;
+package Domain;
+import java.util.*;
+import Domain.Graph.*;
 
 public class HeteSim {
 
@@ -11,7 +13,8 @@ public class HeteSim {
     public static MatriuHeteSim calcul(Graph graf,
 				       ArrayList<String> cami) {
 
-	ArrayList<String> cami1, cami2;
+	ArrayList<String> cami1 = new ArrayList<String>();
+	ArrayList<String> cami2 = new ArrayList<String>();
 	subdividirCami(cami, cami1, cami2);
 	MatriuHeteSim pm1, pm2;
 	pm1 = calcularPM(graf, cami1, cami2.get(1));

@@ -1,4 +1,6 @@
-package Domini;
+package Domain;
+import java.util.*;
+import Domain.Graph.*;
 
 public class Resultat {
     private class Fila {
@@ -110,6 +112,6 @@ public class Resultat {
      * on apareix el nom.
      */
     public int filtrar(String nom) {
-
+	return 1;
     }
 }
