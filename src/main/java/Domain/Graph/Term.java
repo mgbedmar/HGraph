@@ -1,19 +1,24 @@
+package Domain.Graph;
 
 public class Term extends Node {
-    private final static type = "term";
+    private final static String type = "term";
     //Este atributo solo esta una vez por subclasse. Los nombres
     //serian "author", "term", "conf", "paper"
+
+    public Term(int id, String name) { 
+     
+    }
 
     /**
      * Getter.
      * @return type: tipus del node
      */
-    private String getType() {
-	//retorna el atributo static type
+    public String getType() {
+	return Term.type; /*retorna el atributo static type*/
     }
 
-    public boolean equals(Author author) {
-	//iguales si y solo si tienen la misma id
+    public boolean equals(Term term) {
+	return this.getID() == term.getID(); /*iguales si y solo si tienen la misma id*/
     }
 
     /**

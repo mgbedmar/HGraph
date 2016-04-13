@@ -1,19 +1,21 @@
+package Domain.Graph;
 
 public class Conf extends Node {
-    private final static type = "conf";
+    private final static String type = "conf";
     //Este atributo solo esta una vez por subclasse. Los nombres
     //serian "author", "term", "conf", "paper"
 
+    public Conf(int id, String name) { }
     /**
      * Getter.
      * @return type: tipus del node
      */
-    private String getType() {
-	//retorna el atributo static type
+    public String getType() {
+	return Conf.type;//retorna el atributo static type
     }
 
-    public boolean equals(Author author) {
-	//iguales si y solo si tienen la misma id
+    public boolean equals(Conf conf) {
+	return this.getID() == conf.getID();//iguales si y solo si tienen la misma id
     }
 
     /**

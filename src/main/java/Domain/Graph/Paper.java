@@ -1,19 +1,22 @@
+package Domain.Graph;
 
 public class Paper extends Node {
-    private final static type = "paper";
+    private final static String type = "paper";
     //Este atributo solo esta una vez por subclasse. Los nombres
     //serian "author", "term", "conf", "paper"
 
+
+    public Paper(int id, String name) { }
     /**
      * Getter.
      * @return type: tipus del node
      */
-    private String getType() {
-	//retorna el atributo static type
+    public String getType() {
+	return Paper.type;//retorna el atributo static type
     }
 
-    public boolean equals(Author author) {
-	//iguales si y solo si tienen la misma id
+    public boolean equals(Paper paper) {
+	return this.getID() == paper.getID();//iguales si y solo si tienen la misma id
     }
 
     /**

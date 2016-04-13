@@ -1,4 +1,4 @@
-package main.java;
+package Domain.Graph;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -42,23 +42,23 @@ public class Graph {
 	}
 	
 	public Node getNode(int id, String type) {
-		
+	    return null;
 	}
 	
 	public Node getNode(String name, String type) {
-		
+		return null;
 	}
 	
-	public Set<Node> getNeighbors(Node node) {
-		
+	public Set<Node> getNeighbours(Node node) {
+		return null;
 	}
 	
-	public Set<Node> getNeighbors(Node node, String type) {
-		
+	public Set<Node> getNeighbours(Node node, String type) {
+		return null;
 	} 
 	
 	public int afegirNode(String name, String type ) {
-		
+		return 0;
 	} 
 	
 	public void afegirNode(int id, String name, String type) {
@@ -66,23 +66,23 @@ public class Graph {
 	}
 	
 	public boolean afegirAresta(int id1, String type1, int id2, String type2) {
-		
+		return true;
 	}
 	
 	public boolean afegirAresta(String name1, String type1, String name2, String type2) {
-		
+		return true;
 	}
 	
 	public boolean esborrarNode(int id, String type) {
-		
+		return true;
 	}
 	
 	public boolean esborrarNode(String name, String type) {
-		
+		return true;
 	}
 	
 	public boolean esborrarAresta(Node node1, Node node2) {
-		
+		return true;
 	}
 	
 	

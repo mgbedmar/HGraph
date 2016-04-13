@@ -1,38 +1,41 @@
+package Domain.Graph;
+import java.util.HashSet;
+import java.util.Set;
 
-public class Node {
+public abstract class Node {
     private int id;
     private String name;
     private HashSet<Node> adj;
     
-    /**
+    /**x
      * Constructor.
      * @param id: identificador
      * @param name: el nom del node
      */
-    public Node(int id, String name) {
+    /*public Node(int id, String name) {
 	
-    }
+    }*/
 
     /**
      * Getter.
      * @return id: identificador
      */
     public int getID() {
-
+	return this.id;
     }
 
     /**
      * Getter.
      * @return type: tipus del node
      */
-    public String getType();
+    public abstract String getType();
 
     /**
      * Getter.
      * @return name: nom del node
      */
     public String getName() {
-
+	return this.name;
     }
 
     /**
@@ -43,8 +46,10 @@ public class Node {
 
     }
 
-    public boolean equals(Node node); //implementada a les subclasses
-    //dos nodes són iguals si són del mateix tipus i tenen la mateixa id
+    /* public boolean equals(Node node) {
+
+    } //implementada a les subclasses
+    //dos nodes són iguals si són del mateix tipus i tenen la mateixa id*/
 
     /**
      * Getter.
@@ -56,6 +61,7 @@ public class Node {
 	 *fuera. La copia tiene que ser shallow copy: es decir, 
 	 *tiene que hacer copia del HashSet pero no de los nodos.
 	 *Sirve con un clone() */
+	return null;
     }
 
     /**
@@ -69,6 +75,7 @@ public class Node {
 	  sus vecinos son de otros tipos. En ese caso hay que 
 	  explorar el HashSet y devolver los que toquen.
 	*/
+	return null;
     }
 
     /**
@@ -89,7 +96,7 @@ public class Node {
      * @return TRUE si i nomes si l'aresta existia
      */
     protected boolean esborrarAresta(Node node) {
-	//En principio esta se implementaria solo aqui
+	return true; //En principio esta se implementaria solo aqui
     }
 }
 

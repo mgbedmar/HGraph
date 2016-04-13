@@ -1,20 +1,22 @@
-package Domini.Graph;
+package Domain.Graph;
 
 public class Author extends Node {
-    private final static type = "author";
+    private final static String type = "author";
     //Este atributo solo esta una vez por subclasse. Los nombres
     //serian "author", "term", "conf", "paper"
+
+    public Author(int id, String name) { }
 
     /**
      * Getter.
      * @return type: tipus del node
      */
-    private String getType() {
-	//retorna el atributo static type
+    public String getType() {
+	return Author.type;//retorna el atributo static type
     }
 
     public boolean equals(Author author) {
-	//iguales si y solo si tienen la misma id
+	return this.getID() == author.getID();//iguales si y solo si tienen la misma id
     }
 
     /**
