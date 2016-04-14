@@ -1,11 +1,19 @@
 package Domain;
 import Domain.Graph.*;
+import java.util.Set;
 
 
 public class Consulta {
 
     private Consulta() {
         /* Constructor privat per evitar que s'instancii */
+    }
+
+    private static Resultat omplirAmbSet(Set<Node> set) {
+        Resultat res = new Resultat(1);
+        for (Node i: set)
+            res.afegirFila(i);
+        return res;
     }
 
     /**
@@ -15,7 +23,9 @@ public class Consulta {
      * @return Un Resultat d'una columna amb les files afegides i ordenat per primera columna ascendent.
      */
     public static Resultat consultaTipus(Graph graf, String type) {
-        Resultat res = new Resultat(1);
+        Set<Node> set = graf.getSetOfNodes(type);
+        Resultat res = omplirAmbSet(set);
+        res.ordenar(1, true);
         return res;
     }
 
@@ -26,7 +36,9 @@ public class Consulta {
      * @return Un Resultat d'una columna amb les files afegides i ordenat per primera columna ascendent.
      */
     public static Resultat consultaVeins(Graph graf, Node node) {
-        Resultat res = new Resultat(1);
+        Set<Node> set = graf.getNeighbours(node);
+        Resultat res = omplirAmbSet(set);
+        res.ordenar(1, true);
         return res;
     }
 
@@ -38,7 +50,9 @@ public class Consulta {
      * @return Un Resultat d'una columna amb les files afegides i ordenat per primera columna ascendent.
      */
     public static Resultat consultaVeins(Graph graf, Node node, String type) {
-        Resultat res = new Resultat(1);
+        Set<Node> set = graf.getNeighbours(node, type);
+        Resultat res = omplirAmbSet(set);
+        res.ordenar(1, true);
         return res;
     }
 
