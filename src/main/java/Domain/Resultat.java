@@ -2,34 +2,42 @@ package Domain;
 import java.util.*;
 import Domain.Graph.*;
 
-public class Resultat {
-    private class Fila {
-	public ArrayList<Node> nodes;
-	public float hs;
-	public byte marcat;
 
-	public Fila(int n, Node a, Node b, float hs) {
-	    if (n == 1 || n == 2) n = 1; //nombre de nodes
-	    else n = 2;
-	    this.nodes = new ArrayList<Node>(n);
-	    this.nodes.add(a);
-	    this.hs = hs;
-	    if (n == 2) this.nodes.add(b);
-	}
+public class Resultat {
+
+    protected class Fila {
+        protected String node1;
+        protected String node2;
+        protected float hs;
+
+        public Fila(Node a, Node b, float hs) {
+            this.node1 = a.getName();
+            this.hs = hs;
+            this.node2 = b.getName();
+        }
     }
 
     private ArrayList<Fila> res;
-    private int n; //nombre de columnes
+    private int nCols; //nombre de columnes
+    private int nNodes; //nombre de nodes
     private int currentIndex; //l'index del que s'ha de retornar
+    private ArrayList<String> desiredNames;
+    private ArrayList<Integer> undesiredRows;
+    private ArrayList<String> undesiredNames;
 
     /** 
      * Constructora. 
      * @param n: nombre de columnes 
      */
     public Resultat(int n) {
-	this.res = new ArrayList<Fila>();
-	this.n = n;
-	this.currentIndex = 0;
+        this.res = new ArrayList<Fila>();
+        this.nCols = n;
+	    this.currentIndex = 0;
+        if (n == 3) this.nNodes = 2;
+        else this.nNodes = 1;
+        this.desiredNames = new ArrayList<String>();
+        this.undesiredRows = new ArrayList<Integer>();
+        this.undesiredNames = new ArrayList<String>();
     }
 
     /**
@@ -37,8 +45,8 @@ public class Resultat {
      * @param a: node de la fila
      */
     public void afegirFila(Node a) {
-	Fila f = new Fila(n, a, null, -1);
-	this.res.add(f);
+        Fila f = new Fila(a, null, -1);
+        this.res.add(f);
     }
 
     /**
@@ -47,8 +55,8 @@ public class Resultat {
      * @param hs: mesura HeteSim del node a
      */
     public void afegirFila(Node a, float hs) {
-	Fila f = new Fila(n, a, null, hs);
-	this.res.add(f);
+        Fila f = new Fila(a, null, hs);
+        this.res.add(f);
     }
 
     /**
@@ -58,8 +66,48 @@ public class Resultat {
      * @param hs: mesura HeteSim del node a
      */
     public void afegirFila(Node a, Node b, float hs) {
-	Fila f = new Fila(n, a, b, hs);
-	this.res.add(f);
+        Fila f = new Fila(a, b, hs);
+        this.res.add(f);
+    }
+
+    /**
+     * Comprova si la fila compleix restriccions per mostrarla...
+     */
+    private boolean esValida(int index) {
+        if (undesiredRows.contains(index)) return false;
+
+        Fila factual = res.get(index);
+        if (!desiredNames.isEmpty() && (!desiredNames.contains(factual.node1))) {
+        /* no es buit i no esta el primer nom */
+            if (nNodes == 1) return false; //si no te altre node ja esta
+            else if (!desiredNames.contains(factual.node2)) {
+                /* el segon node existeix pero no esta en els desitjats */
+                return false;
+            }
+        }
+
+        if (undesiredNames.contains(factual.node1)) {
+            /* si el primer node es indesitjat */
+            return false;
+        }
+        if (nNodes == 2 && undesiredNames.contains(factual.node2)) {
+            /* si hi ha segon node i es indesitjat */
+            return false;
+        }
+
+        /* Si res de lo anterior, es pot mostrar */
+        return true;
+    }
+
+    /** Avanca l'index fins trobar fila valida per visualitzar o
+     * be sortir de rang.
+     * @return true si i nomes si esta dins de rang
+     */
+    private boolean avancarIndex() {
+        while (currentIndex < res.size() && !esValida(currentIndex)) {
+            ++currentIndex;
+        }
+        return currentIndex < res.size();
     }
 
     /**
@@ -71,31 +119,23 @@ public class Resultat {
      * en String si es el HS). Retorna null si no queden files.
      */
     public ArrayList<String> obtenirFila() {
-	if (this.currentIndex < res.size()) {
-	    ArrayList<String> fila = new ArrayList<String>(1+this.n);
-	    Fila f = res.get(currentIndex);
+        if (avancarIndex()) {
+            /* Muntem la fila... */
+            ArrayList<String> filaReturn = new ArrayList<>(1+this.nCols);
+            filaReturn.add(String.valueOf(currentIndex));
+            filaReturn.add(res.get(currentIndex).node1);
+            if (nNodes == 2)
+                filaReturn.add(res.get(currentIndex).node2);
+            if (nCols - nNodes == 1)
+                filaReturn.add(String.valueOf(res.get(currentIndex).hs));
 
-	    /* Muntem la fila a retornar */
-	    String str = String.valueOf(currentIndex);
-	    fila.add(str);
-	    for (int i = 0; i < f.nodes.size(); i++) {
-		str = f.nodes.get(i).getName();
-		fila.add(str);
-	    }
-	    if (f.hs >= 0) { //si en la consulta hi ha HS
-		str = String.valueOf(f.hs);
-		fila.add(str);
-	    }
+            /* Avancem l'index per la seguent obtenirFila */
+            ++currentIndex;
 
-	    /* Incrementem index per la seguent consulta */
-	    ++currentIndex;
-	    
-	    return fila;
-	}
-	
-	else return null;
+            return filaReturn;
+        }
+        else return null;
     }
-
 
     /**
      * Ordena el resultat segons el valor de la columna 
@@ -111,7 +151,56 @@ public class Resultat {
      * Filtra per nom, nomes es mostren els resultats 
      * on apareix el nom.
      */
-    public int filtrar(String nom) {
-	return 1;
+    public void filtrar(String nom) {
+        desiredNames.add(nom);
+        currentIndex = 0;
+    }
+
+    /**
+     * Treu el filtre per nom.
+     */
+    public void desfiltrar(String nom) {
+        desiredNames.remove(nom);
+        currentIndex = 0;
+    }
+
+    /**
+     * Amaga els resultats on apareix el nom.
+     */
+    public void amagar(String nom) {
+        undesiredNames.add(nom);
+        currentIndex = 0;
+    }
+
+    /**
+     * Desmaga els resultats on apareix el nom.
+     */
+    public void desamagar(String nom) {
+        undesiredNames.remove(nom);
+        currentIndex = 0;
+    }
+
+    /**
+     * Amaga una fila.
+     * @param index: numero de la fila que es vol amagar
+     */
+    public void amagar(int index) {
+        undesiredRows.add(index);
+        currentIndex = 0;
+    }
+
+    /**
+     * Desmaga una fila.
+     * @param index: numero de la fila que es vol desamagar
+     */
+    public void desamagar(int index) {
+        undesiredRows.remove(index);
+        currentIndex = 0;
+    }
+}
+
+class FilaByFirstNameAscend implements Comparator<Resultat.Fila> {
+    public int compare(Resultat.Fila one, Resultat.Fila another) {
+        return 1;
     }
 }
