@@ -25,14 +25,14 @@ public class Resultat {
     private ArrayList<Integer> undesiredRows;
     private ArrayList<String> undesiredNames;
 
-    /** 
+    /**
      * Constructora. 
      * @param n: nombre de columnes 
      */
     public Resultat(int n) {
         this.res = new ArrayList<Fila>();
         this.nCols = n;
-	    this.currentIndex = 0;
+        this.currentIndex = 0;
         if (n == 3) this.nNodes = 2;
         else this.nNodes = 1;
         this.desiredNames = new ArrayList<String>();
@@ -143,8 +143,31 @@ public class Resultat {
      * descendentment si es fals.
      */
     public void ordenar(int numCol, boolean ascend) {
-	this.currentIndex = 0;
-	
+        if (numCol == 1) {
+            /* Ordenar pel primer node */
+            if (ascend)
+                res.sort(new FilaByFirstNameAscend());
+            else
+                res.sort(new FilaByFirstNameDescend());
+        }
+
+        else if (numCol == 2 && this.nNodes == 2) {
+            /* Ordenar pel segon node */
+            if (ascend)
+                res.sort(new FilaBySecondNameAscend());
+            else
+                res.sort(new FilaBySecondNameDescend());
+        }
+
+        else {
+            /* Ordenar pel HeteSim */
+            if (ascend)
+                res.sort(new FilaByHeteSimAscend());
+            else
+                res.sort(new FilaByHeteSimDescend());
+        }
+
+        currentIndex = 0;
     }
 
     /**
