@@ -199,8 +199,43 @@ public class Resultat {
     }
 }
 
+
 class FilaByFirstNameAscend implements Comparator<Resultat.Fila> {
     public int compare(Resultat.Fila one, Resultat.Fila another) {
-        return 1;
+        return one.node1.compareTo(another.node1);
+    }
+}
+
+class FilaByFirstNameDescend implements Comparator<Resultat.Fila> {
+    public int compare(Resultat.Fila one, Resultat.Fila another) {
+        return -one.node1.compareTo(another.node1);
+    }
+}
+
+class FilaBySecondNameAscend implements Comparator<Resultat.Fila> {
+    public int compare(Resultat.Fila one, Resultat.Fila another) {
+        return one.node2.compareTo(another.node2);
+    }
+}
+
+class FilaBySecondNameDescend implements Comparator<Resultat.Fila> {
+    public int compare(Resultat.Fila one, Resultat.Fila another) {
+        return -one.node2.compareTo(another.node2);
+    }
+}
+
+class FilaByHeteSimAscend implements Comparator<Resultat.Fila> {
+    public int compare(Resultat.Fila one, Resultat.Fila another) {
+        if (one.hs < another.hs) return -1;
+        else if (one.hs == another.hs) return 0;
+        else return 1;
+    }
+}
+
+class FilaByHeteSimDescend implements Comparator<Resultat.Fila> {
+    public int compare(Resultat.Fila one, Resultat.Fila another) {
+        if (one.hs < another.hs) return 1;
+        else if (one.hs == another.hs) return 0;
+        else return -1;
     }
 }
