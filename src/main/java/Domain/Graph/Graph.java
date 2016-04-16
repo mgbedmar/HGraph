@@ -289,20 +289,25 @@ public class Graph {
 	
 	/**
 	 * 
-	 * @param name
-	 * @param type
-	 * @return
+	 * @param name : nom del Node
+	 * @param type : tipus del Node
+	 * @return : true si el node ha estat borrat correctement. False si el tipus era invalid o no estaba al graf
 	 */
 	public boolean esborrarNode(String name, String type) {
-		Iterator<Node> it = this.elements.get(type).iterator();
-		boolean finish = false;
-		while (it.hasNext() && !finish) {
-			if (it.next().getName() == name) {
-				finish = true;
-				it.remove();
+		if (checkType(type)!= WRONG_TYPE) {
+			Iterator<Node> it = this.elements.get(type).iterator();
+			boolean finish = false;
+			while (it.hasNext() && !finish) {
+				if (it.next().getName() == name) {
+					finish = true;
+					it.remove();
+				}
 			}
+			return finish;			
 		}
-		return finish;
+		//Aquí hi hauria una Exception
+		return false;
+		
 	}
 	
 	/**
@@ -313,7 +318,11 @@ public class Graph {
 	 */
 	
 	public boolean esborrarAresta(Node node1, Node node2) {
-		return true;
+		if (elements.get(node1.getType()).contains(node1) && elements.get(node2.getType()).contains(node2)) {
+			node1.deleteRelationship(node2); node2.deleteRelationship(node1);
+			return true;
+		}
+		return false;
 	}
 	
 	
