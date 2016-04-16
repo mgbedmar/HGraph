@@ -16,11 +16,11 @@ public class Term extends Node {
      * @return type: tipus del node
      */
     public String getType() {
-	return Term.type; /*retorna el atributo static type*/
+    	return Term.type; /*retorna el atributo static type*/
     }
 
     public boolean equals(Term term) {
-	return this.getID() == term.getID(); /*iguales si y solo si tienen la misma id*/
+    	return this.getID() == term.getID(); /*iguales si y solo si tienen la misma id*/
     }
 
     /**
@@ -35,7 +35,7 @@ public class Term extends Node {
 	  a todos los otros tipos. Solo habria que mirar que 
 	  el que te pasan no es otro Paper y llamar a la super
 	*/
-   super.addRelationship(node);
+    	super.addRelationship(node);
     }
    
 }
