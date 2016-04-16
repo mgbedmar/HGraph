@@ -15,9 +15,9 @@ public abstract class Node {
     /*
     */
     public Node(int id, String name) {
-	this.id=id;
-    this.name=name;
-    adj=new HashSet<Node>();
+    	this.id=id;
+    	this.name=name;
+    	adj=new HashSet<Node>();
     }
 
     /**
@@ -25,7 +25,7 @@ public abstract class Node {
      * @return id: identificador
      */
     public int getID() {
-	return this.id;
+    	return this.id;
     }
 
     /**
@@ -39,7 +39,7 @@ public abstract class Node {
      * @return name: nom del node
      */
     public String getName() {
-	return this.name;
+    	return this.name;
     }
 
     /**
@@ -47,7 +47,7 @@ public abstract class Node {
      * @param name: nom nou del node
      */
     public void setName(String name) {
-    this.name= name;
+    	this.name= name;
     }
 
     /* public boolean equals(Node node) {
@@ -82,9 +82,8 @@ public abstract class Node {
 	  explorar el HashSet y devolver los que toquen.
 	*/
     	
-    	if(type.equals(this.getType().equals("paper")))
-    		return this.getNeighbours(type);
-    	else return this.getNeighbours();
+    	if(type.equals(type.equals("paper")))
+    			return this.getNeighbours();
     }
 
     /**
@@ -97,7 +96,7 @@ public abstract class Node {
 	   Despues, en las subclases hay que tener cuidado de
 	   controlar que el tipo sea el correcto.
 	 */
-    this.adj.add(node);
+    	this.adj.add(node);
     
     }
 
@@ -108,8 +107,8 @@ public abstract class Node {
      */
     protected boolean deleteRelationship(Node node) {
 //En principio esta se implementaria solo aqui
-    this.adj.remove(node);
+    	this.adj.remove(node);
    
-    return true;
+    	return true;
     }
 }

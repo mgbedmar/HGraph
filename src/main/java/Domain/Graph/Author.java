@@ -7,7 +7,7 @@ public class Author extends Node {
 
     public Author(int id, String name) {
 
-    super(id,name);
+    	super(id,name);
 
     }
 
@@ -16,11 +16,11 @@ public class Author extends Node {
      * @return type: tipus del node
      */
     public String getType() {
-	return Author.type;//retorna el atributo static type
+    	return Author.type;//retorna el atributo static type
     }
 
     public boolean equals(Author author) {
-	return this.getID() == author.getID();//iguales si y solo si tienen la misma id
+    	return this.getID() == author.getID();//iguales si y solo si tienen la misma id
     }
 
     /**

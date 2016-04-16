@@ -21,11 +21,11 @@ public class Paper extends Node {
      * @return type: tipus del node
      */
     public String getType() {
-	return Paper.type;//retorna el atributo static type
+    	return Paper.type;//retorna el atributo static type
     }
 
     public boolean equals(Paper paper) {
-	return this.getID() == paper.getID();//iguales si y solo si tienen la misma id
+    	return this.getID() == paper.getID();//iguales si y solo si tienen la misma id
     }
 
     /**
