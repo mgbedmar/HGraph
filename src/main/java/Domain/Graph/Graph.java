@@ -3,36 +3,80 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
+import java.util.TreeMap;
 
 /**
  * @author Dani
  *
  */
 public class Graph {
-	private HashMap<String,HashSet<? extends Node>> elements;
-	private final String AUTORS = "author";
+	private TreeMap<String,HashSet<Node>> elements;
+	private final String AUTHORS = "author";
 	private final String ARTICLES = "paper";
-	private final String CONFERENCIES = "conf";
-	private final String TERMES = "term";
+	private final String CONFERENCES = "conf";
+	private final String TERMS = "term";
+	private final String  WRONG_TYPE = "error";
+	
+	
+	private String checkType(String t) {
+		String tip;
+		switch (t) {		
+		case AUTHORS: case ARTICLES: case CONFERENCES: case TERMS:
+			tip = t;
+			break;			
+		default:
+			tip = WRONG_TYPE;
+					
+		}
+		return tip;		
+	}
+	
+	private boolean containsNode(int id, String type) {
+		if (checkType(type) != WRONG_TYPE) {
+			Iterator<Node> it = elements.get(type).iterator();
+			boolean found = false;
+			while(it.hasNext() && !found) {
+				found = (it.next().getID() == id);
+			}
+			return found;
+		}
+		//Excepcio Tipus erroni
+		return false;
+		
+	}
+	
+	private boolean containsNode(String name, String type) {
+		if (checkType(type) != WRONG_TYPE) {
+			Iterator<Node> it = elements.get(type).iterator();
+			boolean found = false;
+			while(it.hasNext() && !found) {
+				found = (it.next().getName() == name);
+			}
+			return found;
+		}
+		//Excepcio Tipus erroni
+		return false;
+		
+	}
 	
 	
 	
 	
 	//Constructora del Graf
 	public Graph () {
-		elements = new HashMap<String,HashSet<? extends Node>>();
-		elements.put("Autor", (HashSet<Author>) new HashSet<Author>() );
-		elements.put("Paper", (HashSet<Paper>) new HashSet<Paper>());
-		elements.put("Conferencia",(HashSet<Conf>) new HashSet<Conf>());
-		elements.put("Terme",(HashSet<Term>) new HashSet<Term>());		
+		elements = new TreeMap<String,HashSet< Node>>();
+		elements.put(AUTHORS, new HashSet<Node>() );
+		elements.put(ARTICLES, new HashSet<Node>());
+		elements.put(CONFERENCES,new HashSet<Node>());
+		elements.put(TERMS,new HashSet<Node>());		
 	}
 	
 	public HashSet<Node> getSetOfNodes() {
 		HashSet<Node> res = new HashSet<Node>();
-		res.addAll(elements.get("Autor"));
-		res.addAll(elements.get("Paper"));
-		res.addAll(elements.get("Conferencia"));
-		res.addAll(elements.get("Terme"));	
+		res.addAll(elements.get(AUTHORS));
+		res.addAll(elements.get(ARTICLES));
+		res.addAll(elements.get(CONFERENCES));
+		res.addAll(elements.get(TERMS));
 		
 		return res;		
 	}
@@ -42,34 +86,15 @@ public class Graph {
 	 * @return: Tots els nodes del graf del tipus dessitjat. Null si el tipus no existeix
 	 */
 	
-	public HashSet<? extends Node> getSetOfNodes(String tipus) {		
-		String clauConsulta = "ERROR";
-		switch (tipus) {
-		
-		case "author":
-			clauConsulta = "Autor";
-			break;
-		case "paper":
-			clauConsulta = "Paper";
-			break;
-		case "conf":
-			clauConsulta = "Conferencia";
-			break;
-		case "term":
-			clauConsulta = "Terme";
-			break;
-			
-		default:
-					
-		}
-		if (clauConsulta == "ERROR") {
+	public HashSet<? extends Node> getSetOfNodes(String type) {		
+		String clauConsulta = checkType(type);
+		if (clauConsulta == WRONG_TYPE) {
 			System.err.print("No s'ha insertat un tipus correcte de Node");
 			return null;
 		}
 		else {
 			return elements.get(clauConsulta);			
-		}
-		
+		}		
 	}
 	/**
 	 * 
@@ -79,34 +104,18 @@ public class Graph {
 	 */
 	
 	public Node getNode(int id, String type) {
-		String clauConsulta = "ERROR";
-		switch (type) {
-		
-		case "author":
-			clauConsulta = "Autor";
-			break;
-		case "paper":
-			clauConsulta = "Paper";
-			break;
-		case "conferencia":
-			clauConsulta = "Conferencia";
-			break;
-		case "terme":
-			clauConsulta = "Terme";
-			break;
-			
-		default:
-					
+		String clauConsulta = checkType(type);
+		if (clauConsulta == WRONG_TYPE) {
+			System.err.print("No s'ha insertat un tipus correcte de Node");
+			return null;
 		}
-		if (clauConsulta == "ERROR") {
-			System.err.print("No s'ha insertat un tipus correcte de Node");			
-		}
-		else {
+		else {			
 			for (Node nod : elements.get(clauConsulta)) {
 				if (nod.getID() == id) return nod;				
-			}			
+			}
+			return null;
 		}
-	    return null;
+	    
 	}
 	/**
 	 * 
@@ -115,17 +124,32 @@ public class Graph {
 	 * @return
 	 */
 	public Node getNode(String name, String type) {
-		return null;
+		String clauConsulta = checkType(type);
+		if (clauConsulta == WRONG_TYPE) {
+			System.err.print("No s'ha insertat un tipus correcte de Node");
+			return null;
+		}
+		else {			
+			for (Node nod : elements.get(clauConsulta)) {
+				if (nod.getName() == name) return nod;				
+			}
+			return null;
+		}
 	}
 	
 	/**
 	 * 
 	 * @param node
+	 * @pre
 	 * @return
 	 */
 	
 	public Set<Node> getNeighbours(Node node) {
+		if (elements.get(node.getType()).contains(node)) {
+			return node.getNeighbours();
+		}
 		return null;
+		
 	}
 	
 	/**
@@ -136,6 +160,9 @@ public class Graph {
 	 */
 	
 	public Set<Node> getNeighbours(Node node, String type) {
+		if (elements.get(node.getType()).contains(node) && checkType(type)!= WRONG_TYPE) {
+			return node.getNeighbours(type);
+		}
 		return null;
 	} 
 	
@@ -146,8 +173,27 @@ public class Graph {
 	 * @return
 	 */
 	
+	//AVÍS --> S'ha d'implementar el constructor Node(nom) amb generacio automatica de ID's
+	
 	public int afegirNode(String name, String type ) {
-		return 0;
+		switch (type) {
+		
+		case AUTHORS:
+			this.elements.get(AUTHORS).add(new Author(name));			
+			break;
+		case ARTICLES:
+			this.elements.get(ARTICLES).add(new Paper(name));
+			break;
+		case CONFERENCES:
+			this.elements.get(CONFERENCES).add(new Conf(name));
+			break;
+		case TERMS:
+			this.elements.get(TERMS).add(new Term(name));
+			break;			
+		default:
+			//aquí hi haura una Excepció
+					
+		}
 	}
 	
 	/**
@@ -158,34 +204,25 @@ public class Graph {
 	 */
 	
 	public void afegirNode(int id, String name, String type) {
-		Node ele = null;
-		
+				
 		switch (type) {
 		
-		case "author":
-			ele = new Author(id,name);
+		case AUTHORS:
+			this.elements.get(AUTHORS).add(new Author(id,name));			
 			break;
-		case "paper":
-			ele = new Paper(id,name);
+		case ARTICLES:
+			this.elements.get(ARTICLES).add(new Paper(id,name));
 			break;
-		case "conf":
-			ele = new Conf(id,name);
+		case CONFERENCES:
+			this.elements.get(CONFERENCES).add(new Conf(id,name));
 			break;
-		case "term":
-			ele = new Term(id,name);
-			break;
-			
+		case TERMS:
+			this.elements.get(TERMS).add(new Term(id,name));
+			break;			
 		default:
+			//aquí hi haura una Excepció
 					
 		}
-		
-		if (ele != null) this
-		
-		
-		
-		
-		
-		
 		
 	}
 	
@@ -199,7 +236,19 @@ public class Graph {
 	 */
 	
 	public boolean afegirAresta(int id1, String type1, int id2, String type2) {
-		return true;
+		if (containsNode(id1,type1) && containsNode(id2,type2)) {
+			this.getNode(id1, type1).addRelationship(this.getNode(id2, type2));
+			this.getNode(id2, type2).addRelationship(this.getNode(id1, type1));
+			return true;
+		}		
+		return false;		
+	}	
+	public boolean afegirAresta(Node a, Node b) {
+		if (this.elements.get(a.getType()).contains(a) && this.elements.get(b.getType()).contains(b)) {
+			a.addRelationship(b); b.addRelationship(a);
+			return true;
+		}		
+		return false;
 	}
 	
 	/**
@@ -212,7 +261,12 @@ public class Graph {
 	 */
 	
 	public boolean afegirAresta(String name1, String type1, String name2, String type2) {
-		return true;
+		if (containsNode(name1,type1) && containsNode(name2,type2)) {
+			this.getNode(name1, type1).addRelationship(this.getNode(name2, type2));
+			this.getNode(name2, type2).addRelationship(this.getNode(name1, type1));
+			return true;
+		}		
+		return false;
 	}
 	
 	/**
@@ -222,7 +276,15 @@ public class Graph {
 	 * @return
 	 */
 	public boolean esborrarNode(int id, String type) {
-		return true;
+		Iterator<Node> it = this.elements.get(type).iterator();
+		boolean finish = false;
+		while (it.hasNext() && !finish) {
+			if (it.next().getID() == id) {
+				finish = true;
+				it.remove();
+			}
+		}
+		return finish;
 	}
 	
 	/**
@@ -232,7 +294,15 @@ public class Graph {
 	 * @return
 	 */
 	public boolean esborrarNode(String name, String type) {
-		return true;
+		Iterator<Node> it = this.elements.get(type).iterator();
+		boolean finish = false;
+		while (it.hasNext() && !finish) {
+			if (it.next().getName() == name) {
+				finish = true;
+				it.remove();
+			}
+		}
+		return finish;
 	}
 	
 	/**
