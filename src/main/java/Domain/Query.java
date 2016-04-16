@@ -3,16 +3,16 @@ import Domain.Graph.*;
 import java.util.Set;
 
 
-public class Consulta {
+public class Query {
 
-    private Consulta() {
+    private Query() {
         /* Constructor privat per evitar que s'instancii */
     }
 
-    private static Resultat omplirAmbSet(Set<Node> set) {
-        Resultat res = new Resultat(1);
+    private static Result fillWithSet(Set<Node> set) {
+        Result res = new Result(1);
         for (Node i: set)
-            res.afegirFila(i);
+            res.addRow(i);
         return res;
     }
 
@@ -22,10 +22,10 @@ public class Consulta {
      * @param type: el tipus que es vol consultar.
      * @return Un Resultat d'una columna amb les files afegides i ordenat per primera columna ascendent.
      */
-    public static Resultat consultaTipus(Graph graf, String type) {
+    public static Result consultaTipus(Graph graf, String type) {
         Set<Node> set = graf.getSetOfNodes(type);
-        Resultat res = omplirAmbSet(set);
-        res.ordenar(1, true);
+        Result res = fillWithSet(set);
+        res.sort(1, true);
         return res;
     }
 
@@ -35,10 +35,10 @@ public class Consulta {
      * @param node: Node del que es consulten els veins.
      * @return Un Resultat d'unajavjava columna amb les files afegides i ordenat per primera columna ascendent.
      */
-    public static Resultat consultaVeins(Graph graf, Node node) {
+    public static Result consultaVeins(Graph graf, Node node) {
         Set<Node> set = graf.getNeighbours(node);
-        Resultat res = omplirAmbSet(set);
-        res.ordenar(1, true);
+        Result res = fillWithSet(set);
+        res.sort(1, true);
         return res;
     }
 
@@ -49,10 +49,10 @@ public class Consulta {
      * @param type: tipus que es vol consultar
      * @return Un Resultat d'una columna amb les files afegides i ordenat per primera columna ascendent.
      */
-    public static Resultat consultaVeins(Graph graf, Node node, String type) {
+    public static Result consultaVeins(Graph graf, Node node, String type) {
         Set<Node> set = graf.getNeighbours(node, type);
-        Resultat res = omplirAmbSet(set);
-        res.ordenar(1, true);
+        Result res = fillWithSet(set);
+        res.sort(1, true);
         return res;
     }
 
@@ -63,8 +63,8 @@ public class Consulta {
      * @param b: L'altre.
      * @return Un Resultat de tres columnes amb el HeteSim dels dos nodes.
      */
-    public static Resultat consulta1a1(Graph graf, Node a, Node b) {
-        Resultat res = new Resultat(3);
+    public static Result consulta1a1(Graph graf, Node a, Node b) {
+        Result res = new Result(3);
         return res;
     }
 
@@ -72,8 +72,8 @@ public class Consulta {
      * Consulta el HeteSim d'un node amb tots els del tipus especificat.
      * @return Un Resultat de dues columnes amb les files afegides i ordenat per segona columna descendent.
      */
-    public static Resultat consulta1aN(Graph graf, Node node, String type) {
-        Resultat res = new Resultat(2);
+    public static Result consulta1aN(Graph graf, Node node, String type) {
+        Result res = new Result(2);
         return res;
     }
 
@@ -82,8 +82,8 @@ public class Consulta {
      * El node a ha de ser del mateix tipus que el c.
      * @return Un Resultat de dues columnes amb les files afegides i ordenat per segona columna descendent.
      */
-    public static Resultat consultaReferencia(Graph graf, Node a, Node b, Node c) {
-        Resultat res = new Resultat(2);
+    public static Result consultaReferencia(Graph graf, Node a, Node b, Node c) {
+        Result res = new Result(2);
         return res;
     }
 
@@ -91,8 +91,8 @@ public class Consulta {
      * Fa una taula de nodes per HeteSim (per decidir)
      * @return Un Resultat de tres columnes amb les files afegides i ordenat per tercera columna descendent.
      */
-    public static Resultat consultaNaN(Graph graf, String type1, String type2) {
-        Resultat res = new Resultat(3);
+    public static Result consultaNaN(Graph graf, String type1, String type2) {
+        Result res = new Result(3);
         return res;
     }
 

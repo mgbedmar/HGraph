@@ -75,7 +75,7 @@ public class Result {
     }
 
     /**
-     * Afegeix una fila amb nomes el node a
+     * Afegeix una fila amb nomes el node <em>a</em>
      * @param a: node de la fila
      */
     public void addRow(Node a) {
@@ -84,9 +84,9 @@ public class Result {
     }
 
     /**
-     * Afegeix una fila amb el node a i el seu HS
+     * Afegeix una fila amb el node <em>a</em> i el seu HS
      * @param a: node de la fila
-     * @param hs: mesura HeteSim del node a
+     * @param hs: mesura HeteSim del node <em>a</em>
      */
     public void addRow(Node a, float hs) {
         RowWithHS f = new RowWithHS(a, hs);
@@ -97,7 +97,7 @@ public class Result {
      * Afegeix una fila amb dos nodes i el seu HS.
      * @param a: primer node de la fila
      * @param b: segon node de la fila
-     * @param hs: mesura HeteSim del node a
+     * @param hs: mesura HeteSim del node <em>a</em> amb el <em>b</em>
      */
     public void addRow(Node a, Node b, float hs) {
         Row3Cols f = new Row3Cols(a, b, hs);
@@ -150,7 +150,7 @@ public class Result {
      * @return El primer element del ArrayList es un 
      * enter unic per identificar la fila, els seguents 
      * son n dades (el nom del node si es un node, el float 
-     * en String si es el HS). Retorna null si no queden files.
+     * en String si es el HS). Retorna <em>null</em> si no queden files.
      */
     public ArrayList<String> getRow() {
         if (moveIndex()) {
@@ -173,7 +173,7 @@ public class Result {
 
     /**
      * Ordena el resultat segons el valor de la columna 
-     * numCol, ascendentment si ascend es cert i 
+     * <em>numCol</em>, ascendentment si <em>ascend</em> es cert i
      * descendentment si es fals.
      */
     public void sort(int numCol, boolean ascend) {
@@ -206,9 +206,9 @@ public class Result {
 
     /**
      * Filtra per nom, nomes es mostren els resultats 
-     * on apareix el nom.
+     * on apareix el nom <em>nom</em>.
      */
-    public void applyFilter(String nom) {
+    public void filter(String nom) {
         desiredNames.add(nom);
         currentIndex = 0;
     }
@@ -216,13 +216,13 @@ public class Result {
     /**
      * Treu el filtre per nom.
      */
-    public void unapplyFilter(String nom) {
+    public void unfilter(String nom) {
         desiredNames.remove(nom);
         currentIndex = 0;
     }
 
     /**
-     * Amaga els resultats on apareix el nom.
+     * Amaga els resultats on apareix el nom <em>nom</em>.
      */
     public void hide(String nom) {
         undesiredNames.add(nom);
@@ -230,7 +230,7 @@ public class Result {
     }
 
     /**
-     * Desmaga els resultats on apareix el nom.
+     * Desamaga els resultats on apareix el nom.
      */
     public void unhide(String nom) {
         undesiredNames.remove(nom);
@@ -247,7 +247,7 @@ public class Result {
     }
 
     /**
-     * Desmaga una fila.
+     * Desamaga una fila.
      * @param index: numero de la fila que es vol desamagar
      */
     public void unhide(int index) {

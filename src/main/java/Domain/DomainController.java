@@ -6,7 +6,7 @@ import Domain.Graph.*;
 public class DomainController
 {
     private Graph g;
-    private Resultat r;
+    private Result r;
 
     /**
      * @param name Nom del node
@@ -102,7 +102,7 @@ public class DomainController
      */
     public void queryByType(String type)
     {
-        r = Consulta.consultaTipus(g, type);
+        r = Query.consultaTipus(g, type);
     }
 
     /**
@@ -117,7 +117,7 @@ public class DomainController
     {
         Node source = createNode(nomSource, typeSource);
         Node end = createNode(nomEnd, typeEnd);
-        r = Consulta.consulta1a1(g, source, end);
+        r = Query.consulta1a1(g, source, end);
     }
 
     /**
@@ -128,7 +128,7 @@ public class DomainController
     public void queryNeighbours(String name, String type)
     {
         Node source = createNode(name, type);
-        r = Consulta.consultaVeins(g, source);
+        r = Query.consultaVeins(g, source);
     }
 
     /**
@@ -140,7 +140,7 @@ public class DomainController
     public void query1toN(String sourceName, String sourceType, String typeEnd)
     {
         Node source = createNode(sourceName, sourceType);
-        r = Consulta.consulta1aN(g, source, typeEnd);
+        r = Query.consulta1aN(g, source, typeEnd);
     }
 
     /**
@@ -150,7 +150,7 @@ public class DomainController
      */
     public void queryNtoN(String typeA, String typeB)
     {
-        r = Consulta.consultaNaN(g, typeA, typeB);
+        r = Query.consultaNaN(g, typeA, typeB);
     }
 
     /**
@@ -170,6 +170,6 @@ public class DomainController
         Node refSource = createNode(nodeRefSourceName, nodeRefSourceType);
         Node refEnd = createNode(nodeRefEndName, nodeRefEndType);
         Node source = createNode(nodeSourceName, nodeSourceType);
-        r = Consulta.consultaReferencia(g, refSource, refEnd, source);
+        r = Query.consultaReferencia(g, refSource, refEnd, source);
     }
 }
