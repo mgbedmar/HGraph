@@ -10,6 +10,10 @@ import java.util.Set;
  */
 public class Graph {
 	private HashMap<String,HashSet<? extends Node>> elements;
+	private final String AUTORS = "author";
+	private final String ARTICLES = "paper";
+	private final String CONFERENCIES = "conf";
+	private final String TERMES = "term";
 	
 	
 	
@@ -154,7 +158,34 @@ public class Graph {
 	 */
 	
 	public void afegirNode(int id, String name, String type) {
-		Node ele = new Node(id,name)
+		Node ele = null;
+		
+		switch (type) {
+		
+		case "author":
+			ele = new Author(id,name);
+			break;
+		case "paper":
+			ele = new Paper(id,name);
+			break;
+		case "conf":
+			ele = new Conf(id,name);
+			break;
+		case "term":
+			ele = new Term(id,name);
+			break;
+			
+		default:
+					
+		}
+		
+		if (ele != null) this
+		
+		
+		
+		
+		
+		
 		
 	}
 	
