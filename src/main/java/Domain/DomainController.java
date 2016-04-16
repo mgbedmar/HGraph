@@ -3,6 +3,9 @@ package Domain;
 
 import Domain.Graph.*;
 
+import java.util.ArrayList;
+import java.util.Map;
+
 public class DomainController
 {
     private Graph g;
@@ -171,5 +174,9 @@ public class DomainController
         Node refEnd = createNode(nodeRefEndName, nodeRefEndType);
         Node source = createNode(nodeSourceName, nodeSourceType);
         r = Query.queryByReference(g, refSource, refEnd, source);
+    }
+
+    public Map<String,ArrayList<String>> getFilters() {
+        return r.getFilters();
     }
 }

@@ -3,6 +3,8 @@ package Presentation;
 
 import Domain.DomainController;
 
+import java.util.ArrayList;
+import java.util.Map;
 import java.util.Scanner;
 
 public class PresentationController
@@ -102,8 +104,57 @@ public class PresentationController
 
 
         dc.queryByReference(nRefSource.name, nRefSource.type, nRefEnd.name, nRefEnd.type, nSource.name, nSource.type);
-        //TODO request result
-        System.out.println("<Resultat>");
+        goToResultMenu();
+    }
+
+    private static void goToResultMenu() {
+        Scanner entrada = new Scanner(System.in);
+        Integer x;
+        do{
+            showResultMenu();
+            x = entrada.nextInt();
+            switch(x)
+            {
+                case 1:
+                    queryByType();
+                    break;
+
+            }
+        }while(x != 0);
+    }
+
+    private static void showResultMenu() {
+        String[] opts = {
+                "tornar",
+                "Amagar una fila",
+                "Amagar un rang",
+                "Mostrar un rang",
+                "Amagar per nom",
+                "Mostrar per nom",
+                "Ordenar per columna",
+                "Treure tots els filtres"
+        };
+        System.out.println("======Resultat de la consulta======");
+        Map<String, ArrayList<String>> filters =  dc.getFilters();
+        Integer filteredNamesSize = filters.get("filteredNames").size();
+        Integer filteredLinesSize = filters.get("filteredLines").size();
+        Integer selectedNamesSize = filters.get("selectedNames").size();
+
+        if(filteredLinesSize > 0 ||
+                filteredNamesSize > 0 ||
+                selectedNamesSize > 0)
+        {
+            System.out.println("Filtres:");
+            if(filteredLinesSize> 0)
+            {
+                System.out.println("Linies amagades:");
+                for(int i = 0; i < filteredLinesSize; i++)
+                {
+                    //TODO
+                }
+            }
+        }
+        printMenu(opts);
     }
 
     private static void queryNtoN() {
