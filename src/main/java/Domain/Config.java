@@ -14,6 +14,12 @@ public class Config {
     protected static final String ghostType = "ghost";
 
 
+    /* Aixo es una opcio, seria un diccionari doble que al fer l'init de la classe
+     * es posaria amb els valors que posa mes a baix. El problema es que per accedir-hi
+     * cal una instancia de Config, pero si ho fem al Controlador aixo esta be. */
+    public TreeMap<String, TreeMap<String, ArrayList<String>>> defaultPath;
+
+
     /* Camins per defecte Author-? */
     public static final ArrayList<String> defaultPathAuthorToAuthor =
             new ArrayList<>(Arrays.asList(authorType, paperType, authorType));
