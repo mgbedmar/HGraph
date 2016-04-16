@@ -10,41 +10,41 @@ public class HeteSim {
      * tipus pel que comenca el cami i tots els nodes 
      * del tipus pel que acaba el cami
      */
-    public static MatriuHeteSim calcul(Graph graf, ArrayList<String> cami) {
+    public static HeteSimMatrix calcul(Graph graf, ArrayList<String> cami) {
         ArrayList<String> cami1 = new ArrayList<String>();
         ArrayList<String> cami2 = new ArrayList<String>();
         subdividirCami(cami, cami1, cami2);
-        MatriuHeteSim pm1, pm2;
-        pm1 = calcularPM(graf, cami1, cami2.get(1));
-        pm2 = calcularPM(graf, cami2, cami1.get(cami1.size()-2));
-        MatriuHeteSim resultat = new MatriuHeteSim();
-        resultat.productePM(pm1, pm2);
-        return resultat;
+        HeteSimMatrix pm1, pm2;
+        pm1 = calculatePM(graf, cami1, cami2.get(1));
+        pm2 = calculatePM(graf, cami2, cami1.get(cami1.size()-2));
+        HeteSimMatrix result = new HeteSimMatrix();
+        result.productPM(pm1, pm2);
+        return result;
     }
 
     /* Retorna la matriu PM del cami cami */
-    private static MatriuHeteSim calcularPM(Graph graf,
+    private static HeteSimMatrix calculatePM(Graph graf,
                                             ArrayList<String> cami,
                                             String tNextE) {
-        MatriuHeteSim uini, ufi, uprod;
+        HeteSimMatrix uini, ufi, uprod;
         boolean interm = cami.get(cami.size()-1).equals("E");
 
         /*Si el cami nomes te 2 tipus i un intermig anem ja a intermig */
         if (cami.size() == 2 && interm) {
-            uini = new MatriuHeteSim(graf, cami.get(0), tNextE, true);
+            uini = new IntermediateHeteSimMatrix(graf, cami.get(0), tNextE);
         }
         else {
-            uini = new MatriuHeteSim(false, graf, cami.get(0), cami.get(1));
+            uini = new HeteSimMatrix(false, graf, cami.get(0), cami.get(1));
         }
 
-        int numMatriusNormals = cami.size()-1;
-        if (interm) numMatriusNormals--;
-        for (int i = 1; i < numMatriusNormals; i++) {
+        int numNormalMat = cami.size()-1;
+        if (interm) numNormalMat--;
+        for (int i = 1; i < numNormalMat; i++) {
             /* Calculem la U_i,i+1 */
-            ufi = new MatriuHeteSim(true, graf, cami.get(i), cami.get(i+1));
+            ufi = new HeteSimMatrix(true, graf, cami.get(i), cami.get(i+1));
             /* Multipliquem pel que ja portem */
-            uprod = new MatriuHeteSim();
-            uprod.productePerFiles(uini, ufi);
+            uprod = new HeteSimMatrix();
+            uprod.rowProduct(uini, ufi);
             /* El que portem ara es el resultat del producte*/
             uini = uprod;
         }
@@ -54,9 +54,9 @@ public class HeteSim {
         /* Cas contrari, calculem la ultima */
         else {
             /* La matriu final es la intermitja de size-2,tNextE */
-            ufi = new MatriuHeteSim(graf, cami.get(cami.size()-2), tNextE, true);
-            uprod = new MatriuHeteSim();
-            uprod.producteHabitualIntermitja(uini, ufi);
+            IntermediateHeteSimMatrix ufinter = new IntermediateHeteSimMatrix(graf, cami.get(cami.size()-2), tNextE);
+            uprod = new HeteSimMatrix();
+            uprod.intermediateProduct(uini, ufinter);
             return uprod;
         }
 

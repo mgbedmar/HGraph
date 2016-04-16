@@ -101,7 +101,7 @@ public class PresentationController
         NodeReference nSource = readNode();
 
 
-        dc.consultaReferencia(nRefSource.name, nRefSource.type, nRefEnd.name, nRefEnd.type, nSource.name, nSource.type);
+        dc.queryByReference(nRefSource.name, nRefSource.type, nRefEnd.name, nRefEnd.type, nSource.name, nSource.type);
         //TODO request result
         System.out.println("<Resultat>");
     }
