@@ -1,12 +1,13 @@
 package Presentation;
 
 
-import java.util.ArrayList;
+import Domain.DomainController;
+
 import java.util.Scanner;
 
 public class PresentationController
 {
-
+    private static DomainController dc;
     private static class NodeReference
     {
         public String name;
@@ -43,6 +44,7 @@ public class PresentationController
 
     public static void main(String[] args)
     {
+        dc = new DomainController();
         Scanner entrada = new Scanner(System.in);
         Integer x;
         do{
@@ -98,9 +100,10 @@ public class PresentationController
         System.out.println("Indica el node font: ");
         NodeReference nSource = readNode();
 
-        //TODO controller call
-        //consultaReferencia(nRefSource.name, nRefSource.type, nRefEnd.name, nRefEnd.type, nSource.name, nSource.type)
 
+        dc.consultaReferencia(nRefSource.name, nRefSource.type, nRefEnd.name, nRefEnd.type, nSource.name, nSource.type);
+        //TODO request result
+        System.out.println("<Resultat>");
     }
 
     private static void queryNtoN() {
@@ -109,8 +112,9 @@ public class PresentationController
         System.out.println("Destí:");
         String typeEnd = readType();
 
-        //TODO controller call
-        //consultaNaN(typeSource, typeEnd)
+
+        dc.queryNtoN(typeSource, typeEnd);
+        //TODO request result
     }
 
     private static void query1toN() {
@@ -118,8 +122,9 @@ public class PresentationController
         NodeReference nsource = readNode();
         String typeEnd = readType();
 
-        //TODO controller call
-        //consulta1aN(nsource.name, nsource.type, typeEnd)
+
+        dc.query1toN(nsource.name, nsource.type, typeEnd);
+        //TODO request result
     }
 
     private static void query1to1() {
@@ -128,21 +133,22 @@ public class PresentationController
         System.out.println("Indica la informació del node destí:");
         NodeReference nend = readNode();
 
-        //TODO controller call
-        //consultaVeins(n.name, n.type)
+        dc.query1to1(nsource.name, nsource.type, nend.name, nend.type);
+        //TODO request result
     }
 
     private static void queryNeighbours() {
         NodeReference n = readNode();
-        //TODO controller call
-        //consultaVeins(n.name, n.type)
+
+        dc.queryNeighbours(n.name, n.type);
+        //TODO request result
     }
 
     private static void queryByType() {
         String type = readType();
 
-        //TODO controller call
-        //consultaTipus(type)
+        dc.queryByType(type);
+        //TODO request result
     }
 
     private static String readType() {
@@ -178,7 +184,7 @@ public class PresentationController
                     addNode();
                     break;
                 case 2:
-                    eraseNode();
+                    removeNode();
                     break;
                 case 3:
                     modifyNode();
@@ -197,18 +203,15 @@ public class PresentationController
 
     private static void removeEdge() {
         EdgeReference e = readEdge();
-        //TODO: controller call
-        //esborrarAresta(e.nA.name, e.nA.type, e.nB.name, e.nB.type)
 
+        dc.removeEdge(e.nA.name, e.nA.type, e.nB.name, e.nB.type);
         System.out.println("Aresta " +e.toString()+" esborrada.");
     }
 
     private static void addEdge() {
         EdgeReference e = readEdge();
 
-        //TODO: controller call
-        //afegirAresta(e.nA.name, e.nA.type, e.nB.name, e.nB.type)
-
+        dc.addEdge(e.nA.name, e.nA.type, e.nB.name, e.nB.type);
         System.out.println("Aresta " +e.toString()+" afegida.");
     }
 
@@ -226,24 +229,23 @@ public class PresentationController
         Scanner entrada = new Scanner(System.in);
         NodeReference n = readNode();
         String newName = entrada.nextLine();
-        //TODO: controller call
-        //modificarNode(n.name, n.type, newName)
+
+        dc.modifyNode(n.name, n.type, newName);
         System.out.println("Node "+n.toString() + " modificat.");
     }
 
-    private static void eraseNode() {
+    private static void removeNode() {
         NodeReference n = readNode();
 
-        //TODO: controller call
-        //esborrarNode(n.name, n.type)
+        dc.removeNode(n.name, n.type);
         System.out.println("Node "+n.toString() + " esborrat.");
     }
 
     private static void addNode() {
         NodeReference n = readNode();
 
-        //TODO: controller call
-        //afegirNode(n.name, n.type)
+
+        dc.addNode(n.name, n.type);
         System.out.println("Node "+n.toString() + " afegit.");
     }
 
@@ -260,7 +262,7 @@ public class PresentationController
     private static void printMenu(String[] opts) {
         for(int i = 0; i < opts.length; i++)
         {
-            System.out.printf("%d - %s", i, opts[i]);
+            System.out.printf("%d - %s\n", i, opts[i]);
         }
     }
 
