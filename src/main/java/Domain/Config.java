@@ -5,8 +5,13 @@ import java.util.*;
 
 public class Config {
 
-    public int numRowsResult = 10;
+    /* Nombre de resultats que es mostren */
+    public static int numRowsResult = 10;
 
+    /* Tolerancia per la queryByReference */
+    public static float tol = 0.1f;
+
+    /* Noms dels tipus */
     public static final String authorType = "author";
     public static final String paperType = "paper";
     public static final String termType = "term";
