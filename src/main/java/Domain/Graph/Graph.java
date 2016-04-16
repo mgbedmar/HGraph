@@ -82,7 +82,7 @@ public class Graph {
 	}
 	/**
 	 * 
-	 * @param tipus: tipus de Node
+	 * @param type: tipus de Node
 	 * @return: Tots els nodes del graf del tipus dessitjat. Null si el tipus no existeix
 	 */
 	
@@ -173,7 +173,7 @@ public class Graph {
 	 * @return
 	 */
 	
-	//AVÍS --> S'ha d'implementar el constructor Node(nom) amb generacio automatica de ID's
+	//AVï¿½S --> S'ha d'implementar el constructor Node(nom) amb generacio automatica de ID's
 	
 	public int afegirNode(String name, String type ) {
 		switch (type) {
@@ -191,7 +191,7 @@ public class Graph {
 			this.elements.get(TERMS).add(new Term(name));
 			break;			
 		default:
-			//aquí hi haura una Excepció
+			//aquï¿½ hi haura una Excepciï¿½
 					
 		}
 	}
@@ -220,7 +220,7 @@ public class Graph {
 			this.elements.get(TERMS).add(new Term(id,name));
 			break;			
 		default:
-			//aquí hi haura una Excepció
+			//aqui hi haura una Excepcio
 					
 		}
 		
