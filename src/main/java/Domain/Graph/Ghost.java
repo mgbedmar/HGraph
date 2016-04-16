@@ -1,13 +1,13 @@
 package Domain.Graph;
 
-public class Fantasma extends Node {
+public class Ghost extends Node {
     private final static String type = "E";
     //Este atributo solo esta una vez por subclasse. Los nombres
     //serian "author", "term", "conf", "paper"
 
-    public Fantasma(int id, String name) { }
+    public Ghost(int id, String name) { }
 
-    public Fantasma(int id) {
+    public Ghost(int id) {
 
     }
     /**
@@ -15,10 +15,10 @@ public class Fantasma extends Node {
      * @return type: tipus del node
      */
     public String getType() {
-	return Fantasma.type;//retorna el atributo static type
+	return Ghost.type;//retorna el atributo static type
     }
 
-    public boolean equals(Fantasma fant) {
+    public boolean equals(Ghost fant) {
 	return this.getID() == fant.getID();//iguales si y solo si tienen la misma id
     }
    

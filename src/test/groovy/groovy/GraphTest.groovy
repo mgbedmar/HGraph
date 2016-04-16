@@ -4,7 +4,8 @@ import Domain.Graph.Graph
 import spock.lang.Specification
 
 class GraphTest extends Specification {
-    /*TODO: Graph & node
+    /*TODO: Graph & node pull
+
     def"adds a node, retrieves with name"(){
         given:
             def g = new Graph()

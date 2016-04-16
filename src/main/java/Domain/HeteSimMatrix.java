@@ -3,33 +3,33 @@ import java.util.*;
 import Domain.Graph.*;
 
 
-public class MatriuHeteSim {
-    private HashMap<Node, HashMap<Node, Float>> m;
-    private int numRows;
-    private int numCols;
+public class HeteSimMatrix {
+    protected HashMap<Node, HashMap<Node, Float>> m;
+    protected int numRows;
+    protected int numCols;
 
 
     /**
      * Constructora. Crea una matriu buida per poder fer un producte
      * a dins.
      */
-    public MatriuHeteSim() {
+    public HeteSimMatrix() {
         this.numRows = this.numCols = 0;
         this.m = new HashMap<Node, HashMap<Node, Float>>();
     }
 
     /**
-     * Constructora (cas en que no es matriu intermitja). 
+     * Constructora.
      * Crea la matriu U_tRow,TCol (transposada si i nomes 
      * si tr es cert)
      */
-    public MatriuHeteSim(boolean tr, Graph graf,
+    public HeteSimMatrix(boolean tr, Graph graf,
                          String tRow, String tCol) {
-        if (tr) initMatriu(graf, tCol, tRow);
-        else initMatriu(graf, tRow, tCol);
+        if (tr) initMatrix(graf, tCol, tRow);
+        else initMatrix(graf, tRow, tCol);
     }
 
-    private void initMatriu(Graph graf, String tRow, String tCol) {
+    private void initMatrix(Graph graf, String tRow, String tCol) {
         Set<Node> rows = graf.getSetOfNodes(tRow);
         this.numRows = rows.size();
         Set<Node> cols = graf.getSetOfNodes(tCol);
@@ -53,46 +53,6 @@ public class MatriuHeteSim {
             this.m.put(i, dicCol);
         }
     }
-
-    /**
-     * Constructora. Crea la matriu U_tRow,E si u es cert, 
-     * i crea 
-     * V_E,TCol transposta si u es fals.
-     */
-    public MatriuHeteSim(Graph graf, String tRow, String tCol, boolean u) {
-        if (u) initMatriuIntermitja(graf, tRow, tCol);
-        else initMatriuIntermitja(graf, tCol, tRow); //transposta
-    }
-
-    private void initMatriuIntermitja(Graph graf, String tRow, String tCol) {
-	/* Agafem el conjunt que indexa les files */
-        Set<Node> rows = graf.getSetOfNodes(tRow);
-        this.numRows = rows.size();
-        Set<Node> cols;
-
-	/* Inicialitzem hashmap */
-        this.m = new HashMap<Node, HashMap<Node, Float>>(this.numRows);
-        float one = 1;
-        int k = 0;
-
-        for (Node i: rows) {
-            HashMap<Node, Float> dicCol =
-                    new HashMap<Node, Float>(/* parametres */);
-            cols = graf.getNeighbours(i, tCol);
-            if (!cols.isEmpty()) {
-		/* Normalitzar per files */
-                Float v = new Float(one/((float)cols.size()));
-                for (Node j: cols) {
-                    Fantasma index = new Fantasma(k);
-                    dicCol.put(index, v);
-                    k++;
-                }
-            }
-            this.m.put(i, dicCol);
-            this.numCols = k;
-        }
-    }
-
 
     /**
      * Getter.
@@ -156,7 +116,7 @@ public class MatriuHeteSim {
      * Guarda al p.i. el producte per files de A i B, es a dir, 
      * el producte de A per B transposta. 
      */
-    public void productePerFiles(MatriuHeteSim A, MatriuHeteSim B) {
+    public void rowProduct(HeteSimMatrix A, HeteSimMatrix B) {
         this.numRows = A.numRows();
         this.numCols = B.numRows();
         this.m = new HashMap<Node, HashMap<Node, Float>>(this.numRows);
@@ -180,7 +140,7 @@ public class MatriuHeteSim {
     }
 
     /* A es la que te menys cols en i */
-    private float cij(MatriuHeteSim A, MatriuHeteSim B, Node i, Node j) {
+    private float cij(HeteSimMatrix A, HeteSimMatrix B, Node i, Node j) {
         float cij = 0;
         for (Node k: A.cols(i)) {
             cij += A.value(i,k) * B.value(j,k);
@@ -189,21 +149,21 @@ public class MatriuHeteSim {
     }
 
     /**
-     * Guarda al p.i. el producte de A i B. B ha de ser una matriu 
+     * Guarda al p.i. el producte de A i B. B ha de ser una matriu
      * intermitja de la forma U_t,E
      */
-    public void producteHabitualIntermitja(MatriuHeteSim A, MatriuHeteSim B) {
+    public void intermediateProduct(HeteSimMatrix A, IntermediateHeteSimMatrix B) {
         this.numRows = A.numRows();
         this.numCols = B.numCols();
         this.m = new HashMap<Node, HashMap<Node, Float>>(this.numRows);
         float cij;
-        Fantasma j;
+        Ghost j;
 
         for (Node i: A.rowKeys()) {
             HashMap<Node, Float> dicCols = new HashMap<Node, Float>();
             for (int jint = 0; jint < B.numCols(); jint++) {
                 cij = 0;
-                j = new Fantasma(jint);
+                j = new Ghost(jint);
                 for (Node k: A.cols(i)) {
                     cij += A.value(i,k) * B.value(k,j);
                 }
@@ -221,7 +181,7 @@ public class MatriuHeteSim {
      * Guarda al p.i. el producte per files de A i B, es a dir, 
      * el producte de A per B transposta, normalitzat.
      */
-    public void productePM(MatriuHeteSim A, MatriuHeteSim B) {
+    public void productPM(HeteSimMatrix A, HeteSimMatrix B) {
         this.numRows = A.numRows();
         this.numCols = B.numRows();
         this.m = new HashMap<Node, HashMap<Node, Float>>(this.numRows);
@@ -242,7 +202,7 @@ public class MatriuHeteSim {
     }
 
 
-    private float cijnorm(MatriuHeteSim A, MatriuHeteSim B, Node i, Node j) {
+    private float cijnorm(HeteSimMatrix A, HeteSimMatrix B, Node i, Node j) {
         float cij = 0, normi = 0, normj = 0;
         for (Node k: A.cols(i)) {
             cij += A.value(i,k) * B.value(j,k);
