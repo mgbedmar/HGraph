@@ -102,7 +102,7 @@ public class DomainController
      */
     public void queryByType(String type)
     {
-        r = Query.consultaTipus(g, type);
+        r = Query.queryByType(g, type);
     }
 
     /**
@@ -117,7 +117,7 @@ public class DomainController
     {
         Node source = createNode(nomSource, typeSource);
         Node end = createNode(nomEnd, typeEnd);
-        r = Query.consulta1a1(g, source, end);
+        r = Query.query1to1(g, source, end);
     }
 
     /**
@@ -128,7 +128,7 @@ public class DomainController
     public void queryNeighbours(String name, String type)
     {
         Node source = createNode(name, type);
-        r = Query.consultaVeins(g, source);
+        r = Query.queryNeighbours(g, source);
     }
 
     /**
@@ -140,7 +140,7 @@ public class DomainController
     public void query1toN(String sourceName, String sourceType, String typeEnd)
     {
         Node source = createNode(sourceName, sourceType);
-        r = Query.consulta1aN(g, source, typeEnd);
+        r = Query.query1toN(g, source, typeEnd);
     }
 
     /**
@@ -150,7 +150,7 @@ public class DomainController
      */
     public void queryNtoN(String typeA, String typeB)
     {
-        r = Query.consultaNaN(g, typeA, typeB);
+        r = Query.queryNtoN(g, typeA, typeB);
     }
 
     /**
@@ -162,14 +162,14 @@ public class DomainController
      * @param nodeSourceName Nom del node font
      * @param nodeSourceType Tipus del node font
      */
-    public void consultaReferencia(String nodeRefSourceName, String nodeRefSourceType,
-                                   String nodeRefEndName, String nodeRefEndType,
-                                   String nodeSourceName, String nodeSourceType)
+    public void queryByReference(String nodeRefSourceName, String nodeRefSourceType,
+                                 String nodeRefEndName, String nodeRefEndType,
+                                 String nodeSourceName, String nodeSourceType)
     {
 
         Node refSource = createNode(nodeRefSourceName, nodeRefSourceType);
         Node refEnd = createNode(nodeRefEndName, nodeRefEndType);
         Node source = createNode(nodeSourceName, nodeSourceType);
-        r = Query.consultaReferencia(g, refSource, refEnd, source);
+        r = Query.queryByReference(g, refSource, refEnd, source);
     }
 }
