@@ -10,7 +10,7 @@ public class HeteSim {
      * tipus pel que comenca el cami i tots els nodes 
      * del tipus pel que acaba el cami
      */
-    public static HeteSimMatrix calcul(Graph graf, ArrayList<String> cami) {
+    public static HeteSimMatrix run(Graph graf, ArrayList<String> cami) {
         ArrayList<String> cami1 = new ArrayList<String>();
         ArrayList<String> cami2 = new ArrayList<String>();
         subdividirCami(cami, cami1, cami2);
