@@ -50,7 +50,7 @@ public class Paper extends Node {
 	  a todos los otros tipos. Solo habria que mirar que 
 	  el que te pasan no es otro Paper y llamar a la super
 	*/
-    	if(!node.getType().equals("paper"))
+    	if(!node.getType().equals("paper")){
     		switch(node.getType()){
     		case "Conf":
     			this.confadj.add(node);
@@ -63,6 +63,7 @@ public class Paper extends Node {
     		    break;
     		    
     		}
+    	}
     }
     protected Set<Node> getNeighbours(String type) {
     	
