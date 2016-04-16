@@ -7,14 +7,18 @@ public abstract class Node {
     private String name;
     private HashSet<Node> adj;
     
-    /**x
+    /**
      * Constructor.
      * @param id: identificador
      * @param name: el nom del node
      */
-    /*public Node(int id, String name) {
-	
-    }*/
+    /*
+    */
+    public Node(int id, String name) {
+	this.id=id;
+    this.name=name;
+    adj=new HashSet<Node>();
+    }
 
     /**
      * Getter.
@@ -43,7 +47,7 @@ public abstract class Node {
      * @param name: nom nou del node
      */
     public void setName(String name) {
-
+    this.name= name;
     }
 
     /* public boolean equals(Node node) {
@@ -61,8 +65,10 @@ public abstract class Node {
 	 *fuera. La copia tiene que ser shallow copy: es decir, 
 	 *tiene que hacer copia del HashSet pero no de los nodos.
 	 *Sirve con un clone() */
-	return null;
-    }
+    
+    	
+    	return adj;
+   }
 
     /**
      * Getter.
@@ -75,19 +81,24 @@ public abstract class Node {
 	  sus vecinos son de otros tipos. En ese caso hay que 
 	  explorar el HashSet y devolver los que toquen.
 	*/
-	return null;
+    	
+    	if(type.equals(this.getType().equals("paper")))
+    		return this.getNeighbours(type);
+    	else return this.getNeighbours();
     }
 
     /**
      * Afegeix una aresta del p.i. a node. No afegeix l'aresta
      * simetrica!
      */
-    protected void afegirAresta(Node node) {
+    protected void addRelationship(Node node) {
 	/* Cuidado, este metodo es delicado. Aqui se anade la 
 	   arista sin mas, se anade node al HashSet y ya esta.
 	   Despues, en las subclases hay que tener cuidado de
 	   controlar que el tipo sea el correcto.
 	 */
+    this.adj.add(node);
+    
     }
 
     /**
@@ -95,9 +106,10 @@ public abstract class Node {
      * simetrica!
      * @return TRUE si i nomes si l'aresta existia
      */
-    protected boolean esborrarAresta(Node node) {
-	return true; //En principio esta se implementaria solo aqui
+    protected boolean deleteRelationship(Node node) {
+//En principio esta se implementaria solo aqui
+    this.adj.remove(node);
+   
+    return true;
     }
 }
-
-

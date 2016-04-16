@@ -5,10 +5,11 @@ public class Fantasma extends Node {
     //Este atributo solo esta una vez por subclasse. Los nombres
     //serian "author", "term", "conf", "paper"
 
-    public Fantasma(int id, String name) { }
-
+    public Fantasma(int id, String name) { 
+       super(id,name);
+    }
     public Fantasma(int id) {
-
+       
     }
     /**
      * Getter.
