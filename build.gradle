@@ -18,6 +18,6 @@ dependencies {
 jar{
 
 	manifest{
-		attributes 'Main-Class': 'hello.HelloWorld'
+		attributes 'Main-Class': 'Presentation.PresentationController'
 	}
 }

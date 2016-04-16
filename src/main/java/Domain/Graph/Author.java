@@ -6,7 +6,9 @@ public class Author extends Node {
     //serian "author", "term", "conf", "paper"
 
     public Author(int id, String name) {
+
     super(id,name);
+
     }
 
     /**
