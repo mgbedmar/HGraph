@@ -5,7 +5,9 @@ public class Author extends Node {
     //Este atributo solo esta una vez por subclasse. Los nombres
     //serian "author", "term", "conf", "paper"
 
-    public Author(int id, String name) { }
+    public Author(int id, String name) {
+
+    }
 
     /**
      * Getter.

@@ -7,7 +7,7 @@ public abstract class Node {
     private String name;
     private HashSet<Node> adj;
     
-    /**x
+    /**
      * Constructor.
      * @param id: identificador
      * @param name: el nom del node

@@ -33,7 +33,7 @@ public class Consulta {
      * Consulta tots els veins d'un node del graf.
      * @param graf: Graph sobre el que es consulta.
      * @param node: Node del que es consulten els veins.
-     * @return Un Resultat d'una columna amb les files afegides i ordenat per primera columna ascendent.
+     * @return Un Resultat d'unajavjava columna amb les files afegides i ordenat per primera columna ascendent.
      */
     public static Resultat consultaVeins(Graph graf, Node node) {
         Set<Node> set = graf.getNeighbours(node);

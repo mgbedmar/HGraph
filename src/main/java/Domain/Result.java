@@ -3,21 +3,55 @@ import java.util.*;
 import Domain.Graph.*;
 
 
-public class Resultat {
+public class Result {
 
-    protected class Fila {
+    protected class Row {
         protected String node1;
-        protected String node2;
-        protected float hs;
 
-        public Fila(Node a, Node b, float hs) {
+        protected Row(Node a) {
             this.node1 = a.getName();
-            this.hs = hs;
-            this.node2 = b.getName();
+        }
+
+        protected String getFirstNode() {
+            return node1;
+        }
+
+        protected String getSecondNode() {
+            return null;
+        }
+
+        protected float getHeteSim() {
+            return -1;
         }
     }
 
-    private ArrayList<Fila> res;
+    protected class RowWithHS extends Row{
+        protected float hs;
+
+        protected RowWithHS(Node a, float hs) {
+            super(a);
+            this.hs = hs;
+        }
+
+        protected float getHeteSim() {
+            return this.hs;
+        }
+    }
+
+    protected class Row3Cols extends RowWithHS{
+        protected String node2;
+
+        protected Row3Cols(Node a, Node b, float hs) {
+            super(a, hs);
+            this.node2 = b.getName();
+        }
+
+        protected String getSecondNode() {
+            return this.node2;
+        }
+    }
+
+    private ArrayList<Row> res;
     private int nCols; //nombre de columnes
     private int nNodes; //nombre de nodes
     private int currentIndex; //l'index del que s'ha de retornar
@@ -29,8 +63,8 @@ public class Resultat {
      * Constructora. 
      * @param n: nombre de columnes 
      */
-    public Resultat(int n) {
-        this.res = new ArrayList<Fila>();
+    public Result(int n) {
+        this.res = new ArrayList<Row>();
         this.nCols = n;
         this.currentIndex = 0;
         if (n == 3) this.nNodes = 2;
@@ -44,8 +78,8 @@ public class Resultat {
      * Afegeix una fila amb nomes el node a
      * @param a: node de la fila
      */
-    public void afegirFila(Node a) {
-        Fila f = new Fila(a, null, -1);
+    public void addRow(Node a) {
+        Row f = new Row(a);
         this.res.add(f);
     }
 
@@ -54,8 +88,8 @@ public class Resultat {
      * @param a: node de la fila
      * @param hs: mesura HeteSim del node a
      */
-    public void afegirFila(Node a, float hs) {
-        Fila f = new Fila(a, null, hs);
+    public void addRow(Node a, float hs) {
+        RowWithHS f = new RowWithHS(a, hs);
         this.res.add(f);
     }
 
@@ -65,32 +99,32 @@ public class Resultat {
      * @param b: segon node de la fila
      * @param hs: mesura HeteSim del node a
      */
-    public void afegirFila(Node a, Node b, float hs) {
-        Fila f = new Fila(a, b, hs);
+    public void addRow(Node a, Node b, float hs) {
+        Row3Cols f = new Row3Cols(a, b, hs);
         this.res.add(f);
     }
 
     /**
      * Comprova si la fila compleix restriccions per mostrarla...
      */
-    private boolean esValida(int index) {
+    private boolean isValid(int index) {
         if (undesiredRows.contains(index)) return false;
 
-        Fila factual = res.get(index);
-        if (!desiredNames.isEmpty() && (!desiredNames.contains(factual.node1))) {
+        Row factual = res.get(index);
+        if (!desiredNames.isEmpty() && (!desiredNames.contains(factual.getFirstNode()))) {
         /* no es buit i no esta el primer nom */
             if (nNodes == 1) return false; //si no te altre node ja esta
-            else if (!desiredNames.contains(factual.node2)) {
+            else if (!desiredNames.contains(factual.getSecondNode())) {
                 /* el segon node existeix pero no esta en els desitjats */
                 return false;
             }
         }
 
-        if (undesiredNames.contains(factual.node1)) {
+        if (undesiredNames.contains(factual.getFirstNode())) {
             /* si el primer node es indesitjat */
             return false;
         }
-        if (nNodes == 2 && undesiredNames.contains(factual.node2)) {
+        if (nNodes == 2 && undesiredNames.contains(factual.getSecondNode())) {
             /* si hi ha segon node i es indesitjat */
             return false;
         }
@@ -103,8 +137,8 @@ public class Resultat {
      * be sortir de rang.
      * @return true si i nomes si esta dins de rang
      */
-    private boolean avancarIndex() {
-        while (currentIndex < res.size() && !esValida(currentIndex)) {
+    private boolean moveIndex() {
+        while (currentIndex < res.size() && !isValid(currentIndex)) {
             ++currentIndex;
         }
         return currentIndex < res.size();
@@ -118,21 +152,21 @@ public class Resultat {
      * son n dades (el nom del node si es un node, el float 
      * en String si es el HS). Retorna null si no queden files.
      */
-    public ArrayList<String> obtenirFila() {
-        if (avancarIndex()) {
+    public ArrayList<String> getRow() {
+        if (moveIndex()) {
             /* Muntem la fila... */
-            ArrayList<String> filaReturn = new ArrayList<>(1+this.nCols);
-            filaReturn.add(String.valueOf(currentIndex));
-            filaReturn.add(res.get(currentIndex).node1);
+            ArrayList<String> rowReturn = new ArrayList<>(1+this.nCols);
+            rowReturn.add(String.valueOf(currentIndex));
+            rowReturn.add(res.get(currentIndex).node1);
             if (nNodes == 2)
-                filaReturn.add(res.get(currentIndex).node2);
+                rowReturn.add(res.get(currentIndex).getSecondNode());
             if (nCols - nNodes == 1)
-                filaReturn.add(String.valueOf(res.get(currentIndex).hs));
+                rowReturn.add(String.valueOf(res.get(currentIndex).getHeteSim()));
 
             /* Avancem l'index per la seguent obtenirFila */
             ++currentIndex;
 
-            return filaReturn;
+            return rowReturn;
         }
         else return null;
     }
@@ -142,29 +176,29 @@ public class Resultat {
      * numCol, ascendentment si ascend es cert i 
      * descendentment si es fals.
      */
-    public void ordenar(int numCol, boolean ascend) {
+    public void sort(int numCol, boolean ascend) {
         if (numCol == 1) {
             /* Ordenar pel primer node */
             if (ascend)
-                res.sort(new FilaByFirstNameAscend());
+                res.sort(new RowByFirstNameAscend());
             else
-                res.sort(new FilaByFirstNameDescend());
+                res.sort(new RowByFirstNameDescend());
         }
 
         else if (numCol == 2 && this.nNodes == 2) {
             /* Ordenar pel segon node */
             if (ascend)
-                res.sort(new FilaBySecondNameAscend());
+                res.sort(new RowBySecondNameAscend());
             else
-                res.sort(new FilaBySecondNameDescend());
+                res.sort(new RowBySecondNameDescend());
         }
 
         else {
             /* Ordenar pel HeteSim */
             if (ascend)
-                res.sort(new FilaByHeteSimAscend());
+                res.sort(new RowByHeteSimAscend());
             else
-                res.sort(new FilaByHeteSimDescend());
+                res.sort(new RowByHeteSimDescend());
         }
 
         currentIndex = 0;
@@ -174,7 +208,7 @@ public class Resultat {
      * Filtra per nom, nomes es mostren els resultats 
      * on apareix el nom.
      */
-    public void filtrar(String nom) {
+    public void applyFilter(String nom) {
         desiredNames.add(nom);
         currentIndex = 0;
     }
@@ -182,7 +216,7 @@ public class Resultat {
     /**
      * Treu el filtre per nom.
      */
-    public void desfiltrar(String nom) {
+    public void unapplyFilter(String nom) {
         desiredNames.remove(nom);
         currentIndex = 0;
     }
@@ -190,7 +224,7 @@ public class Resultat {
     /**
      * Amaga els resultats on apareix el nom.
      */
-    public void amagar(String nom) {
+    public void hide(String nom) {
         undesiredNames.add(nom);
         currentIndex = 0;
     }
@@ -198,7 +232,7 @@ public class Resultat {
     /**
      * Desmaga els resultats on apareix el nom.
      */
-    public void desamagar(String nom) {
+    public void unhide(String nom) {
         undesiredNames.remove(nom);
         currentIndex = 0;
     }
@@ -207,7 +241,7 @@ public class Resultat {
      * Amaga una fila.
      * @param index: numero de la fila que es vol amagar
      */
-    public void amagar(int index) {
+    public void hide(int index) {
         undesiredRows.add(index);
         currentIndex = 0;
     }
@@ -216,49 +250,49 @@ public class Resultat {
      * Desmaga una fila.
      * @param index: numero de la fila que es vol desamagar
      */
-    public void desamagar(int index) {
+    public void unhide(int index) {
         undesiredRows.remove(index);
         currentIndex = 0;
     }
 }
 
 
-class FilaByFirstNameAscend implements Comparator<Resultat.Fila> {
-    public int compare(Resultat.Fila one, Resultat.Fila another) {
-        return one.node1.compareTo(another.node1);
+class RowByFirstNameAscend implements Comparator<Result.Row> {
+    public int compare(Result.Row one, Result.Row another) {
+        return (one.getFirstNode()).compareTo(another.getFirstNode());
     }
 }
 
-class FilaByFirstNameDescend implements Comparator<Resultat.Fila> {
-    public int compare(Resultat.Fila one, Resultat.Fila another) {
-        return -one.node1.compareTo(another.node1);
+class RowByFirstNameDescend implements Comparator<Result.Row> {
+    public int compare(Result.Row one, Result.Row another) {
+        return -(one.getFirstNode()).compareTo(another.getFirstNode());
     }
 }
 
-class FilaBySecondNameAscend implements Comparator<Resultat.Fila> {
-    public int compare(Resultat.Fila one, Resultat.Fila another) {
-        return one.node2.compareTo(another.node2);
+class RowBySecondNameAscend implements Comparator<Result.Row> {
+    public int compare(Result.Row one, Result.Row another) {
+        return (one.getSecondNode()).compareTo(another.getSecondNode());
     }
 }
 
-class FilaBySecondNameDescend implements Comparator<Resultat.Fila> {
-    public int compare(Resultat.Fila one, Resultat.Fila another) {
-        return -one.node2.compareTo(another.node2);
+class RowBySecondNameDescend implements Comparator<Result.Row> {
+    public int compare(Result.Row one, Result.Row another) {
+        return -(one.getSecondNode()).compareTo(another.getSecondNode());
     }
 }
 
-class FilaByHeteSimAscend implements Comparator<Resultat.Fila> {
-    public int compare(Resultat.Fila one, Resultat.Fila another) {
-        if (one.hs < another.hs) return -1;
-        else if (one.hs == another.hs) return 0;
+class RowByHeteSimAscend implements Comparator<Result.Row> {
+    public int compare(Result.Row one, Result.Row another) {
+        if (one.getHeteSim() < another.getHeteSim()) return -1;
+        else if (one.getHeteSim() == another.getHeteSim()) return 0;
         else return 1;
     }
 }
 
-class FilaByHeteSimDescend implements Comparator<Resultat.Fila> {
-    public int compare(Resultat.Fila one, Resultat.Fila another) {
-        if (one.hs < another.hs) return 1;
-        else if (one.hs == another.hs) return 0;
+class RowByHeteSimDescend implements Comparator<Result.Row> {
+    public int compare(Result.Row one, Result.Row another) {
+        if (one.getHeteSim() < another.getHeteSim()) return 1;
+        else if (one.getHeteSim() == another.getHeteSim()) return 0;
         else return -1;
     }
 }
