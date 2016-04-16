@@ -18,11 +18,11 @@ public class Query {
 
     /**
      * Consulta de tots els nodes d'un tipus
-     * @param graf: Graph on es fa la consulta.
+     * @param graf: <em>Graph</em> on es fa la consulta.
      * @param type: el tipus que es vol consultar.
-     * @return Un Resultat d'una columna amb les files afegides i ordenat per primera columna ascendent.
+     * @return Un <em>Result</em> d'una columna amb les files afegides i ordenat per primera columna ascendent.
      */
-    public static Result consultaTipus(Graph graf, String type) {
+    public static Result queryType(Graph graf, String type) {
         Set<Node> set = graf.getSetOfNodes(type);
         Result res = fillWithSet(set);
         res.sort(1, true);
@@ -31,11 +31,11 @@ public class Query {
 
     /**
      * Consulta tots els veins d'un node del graf.
-     * @param graf: Graph sobre el que es consulta.
-     * @param node: Node del que es consulten els veins.
-     * @return Un Resultat d'unajavjava columna amb les files afegides i ordenat per primera columna ascendent.
+     * @param graf: <em>Graph</em> sobre el que es consulta.
+     * @param node: <em>Node</em> del que es consulten els veins.
+     * @return Un <em>Result</em> d'unajavjava columna amb les files afegides i ordenat per primera columna ascendent.
      */
-    public static Result consultaVeins(Graph graf, Node node) {
+    public static Result queryNeighbours(Graph graf, Node node) {
         Set<Node> set = graf.getNeighbours(node);
         Result res = fillWithSet(set);
         res.sort(1, true);
@@ -44,12 +44,12 @@ public class Query {
 
     /**
      * Consulta tots els veins d'un node del graf.
-     * @param graf: Graph sobre el que es consulta.
-     * @param node: Node del que es consulten els veins.
+     * @param graf: <em>Graph</em> sobre el que es consulta.
+     * @param node: <em>Node</em> del que es consulten els veins.
      * @param type: tipus que es vol consultar
-     * @return Un Resultat d'una columna amb les files afegides i ordenat per primera columna ascendent.
+     * @return Un <em>Result</em> d'una columna amb les files afegides i ordenat per primera columna ascendent.
      */
-    public static Result consultaVeins(Graph graf, Node node, String type) {
+    public static Result queryNeighbours(Graph graf, Node node, String type) {
         Set<Node> set = graf.getNeighbours(node, type);
         Result res = fillWithSet(set);
         res.sort(1, true);
@@ -58,40 +58,40 @@ public class Query {
 
     /**
      * Consulta el HeteSim de dos nodes (cami obvi)
-     * @param graf: Graph sobre el que es consulta.
+     * @param graf: <em>Graph</em> sobre el que es consulta.
      * @param a: Un dels nodes.
      * @param b: L'altre.
-     * @return Un Resultat de tres columnes amb el HeteSim dels dos nodes.
+     * @return Un <em>Result</em> de tres columnes amb el HeteSim dels dos nodes.
      */
-    public static Result consulta1a1(Graph graf, Node a, Node b) {
+    public static Result query1a1(Graph graf, Node a, Node b) {
         Result res = new Result(3);
         return res;
     }
 
     /**
      * Consulta el HeteSim d'un node amb tots els del tipus especificat.
-     * @return Un Resultat de dues columnes amb les files afegides i ordenat per segona columna descendent.
+     * @return Un <em>Result</em> de dues columnes amb les files afegides i ordenat per segona columna descendent.
      */
-    public static Result consulta1aN(Graph graf, Node node, String type) {
+    public static Result query1aN(Graph graf, Node node, String type) {
         Result res = new Result(2);
         return res;
     }
 
     /**
-     * Troba parelles del tipus de b per c tan HeteSim com b ho és per a.
-     * El node a ha de ser del mateix tipus que el c.
-     * @return Un Resultat de dues columnes amb les files afegides i ordenat per segona columna descendent.
+     * Troba parelles del tipus de <em>b</em> per <em>c</em> tan HeteSim com <em>b</em> ho és per <em>a</em>.
+     * El node <em>a</em> ha de ser del mateix tipus que el <em>c</em>.
+     * @return Un <em>Result</em> de dues columnes amb les files afegides i ordenat per segona columna descendent.
      */
-    public static Result consultaReferencia(Graph graf, Node a, Node b, Node c) {
+    public static Result queryReference(Graph graf, Node a, Node b, Node c) {
         Result res = new Result(2);
         return res;
     }
 
     /**
      * Fa una taula de nodes per HeteSim (per decidir)
-     * @return Un Resultat de tres columnes amb les files afegides i ordenat per tercera columna descendent.
+     * @return Un <em>Result</em> de tres columnes amb les files afegides i ordenat per tercera columna descendent.
      */
-    public static Result consultaNaN(Graph graf, String type1, String type2) {
+    public static Result queryNaN(Graph graf, String type1, String type2) {
         Result res = new Result(3);
         return res;
     }
