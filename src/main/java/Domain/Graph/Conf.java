@@ -9,7 +9,7 @@ public class Conf extends Node {
 
     public Conf(int id, String name) { 
     	
-    super(id,name);
+    	super(id,name);
     }
     /**
      * Getter.
@@ -17,11 +17,11 @@ public class Conf extends Node {
      */
     
     public String getType() {
-	return Conf.type;//retorna el atributo static type
+    	return Conf.type;//retorna el atributo static type
     }
 
     public boolean equals(Conf conf) {
-	return this.getID() == conf.getID();//iguales si y solo si tienen la misma id
+    	return this.getID() == conf.getID();//iguales si y solo si tienen la misma id
     }
 
     /**
@@ -36,7 +36,7 @@ public class Conf extends Node {
 	  a todos los otros tipos. Solo habria que mirar que 
 	  el que te pasan no es otro Paper y llamar a la super
 	*/
-    super.addRelationship(node);
+    	super.addRelationship(node);
     }
    
 }
