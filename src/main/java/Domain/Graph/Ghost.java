@@ -5,9 +5,14 @@ public class Ghost extends Node {
     //Este atributo solo esta una vez por subclasse. Los nombres
     //serian "author", "term", "conf", "paper"
 
-    public Ghost(int id, String name) { }
+       
 
+    public Ghost(int id, String name) { 
+    	super(id,name);
+    }
+      
     public Ghost(int id) {
+
 
     }
     /**
