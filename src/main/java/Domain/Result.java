@@ -1,4 +1,5 @@
 package Domain;
+import java.lang.reflect.Array;
 import java.util.*;
 import Domain.Graph.*;
 
@@ -55,9 +56,9 @@ public class Result {
     private int nCols; //nombre de columnes
     private int nNodes; //nombre de nodes
     private int currentIndex; //l'index del que s'ha de retornar
-    private ArrayList<String> desiredNames;
-    private ArrayList<Integer> undesiredRows;
-    private ArrayList<String> undesiredNames;
+    private ArrayList<String> selectedNames;
+    private ArrayList<Integer> filteredRows;
+    private ArrayList<String> filteredNames;
 
     /**
      * Constructora. 
@@ -69,9 +70,17 @@ public class Result {
         this.currentIndex = 0;
         if (n == 3) this.nNodes = 2;
         else this.nNodes = 1;
-        this.desiredNames = new ArrayList<String>();
-        this.undesiredRows = new ArrayList<Integer>();
-        this.undesiredNames = new ArrayList<String>();
+        this.selectedNames = new ArrayList<String>();
+        this.filteredRows = new ArrayList<Integer>();
+        this.filteredNames = new ArrayList<String>();
+    }
+
+    /**
+     * Per consultar la mida del resultats.
+     * @return Retorna el nombre de files total.
+     */
+    public int size() {
+        return res.size();
     }
 
     /**
@@ -108,23 +117,23 @@ public class Result {
      * Comprova si la fila compleix restriccions per mostrarla...
      */
     private boolean isValid(int index) {
-        if (undesiredRows.contains(index)) return false;
+        if (filteredRows.contains(index)) return false;
 
         Row factual = res.get(index);
-        if (!desiredNames.isEmpty() && (!desiredNames.contains(factual.getFirstNode()))) {
+        if (!selectedNames.isEmpty() && (!selectedNames.contains(factual.getFirstNode()))) {
         /* no es buit i no esta el primer nom */
             if (nNodes == 1) return false; //si no te altre node ja esta
-            else if (!desiredNames.contains(factual.getSecondNode())) {
+            else if (!selectedNames.contains(factual.getSecondNode())) {
                 /* el segon node existeix pero no esta en els desitjats */
                 return false;
             }
         }
 
-        if (undesiredNames.contains(factual.getFirstNode())) {
+        if (filteredNames.contains(factual.getFirstNode())) {
             /* si el primer node es indesitjat */
             return false;
         }
-        if (nNodes == 2 && undesiredNames.contains(factual.getSecondNode())) {
+        if (nNodes == 2 && filteredNames.contains(factual.getSecondNode())) {
             /* si hi ha segon node i es indesitjat */
             return false;
         }
@@ -146,7 +155,7 @@ public class Result {
 
     /**
      * Retorna la fila que toca des de la darrera 
-     * vegada que es va ordenar o filtrar. 
+     * vegada que es va ordenar, filtrar o fer reset.
      * @return El primer element del ArrayList es un 
      * enter unic per identificar la fila, els seguents 
      * son n dades (el nom del node si es un node, el float 
@@ -208,32 +217,40 @@ public class Result {
      * Filtra per nom, nomes es mostren els resultats 
      * on apareix el nom <em>nom</em>.
      */
-    public void filter(String nom) {
-        desiredNames.add(nom);
+    public void select(String nom) {
+        selectedNames.add(nom);
         currentIndex = 0;
     }
 
     /**
      * Treu el filtre per nom.
      */
-    public void unfilter(String nom) {
-        desiredNames.remove(nom);
+    public void unselect(String nom) {
+        selectedNames.remove(nom);
+        currentIndex = 0;
+    }
+
+    /**
+     * Treu tots els filtres per nom.
+     */
+    public void unselectAll() {
+        this.selectedNames.clear();
         currentIndex = 0;
     }
 
     /**
      * Amaga els resultats on apareix el nom <em>nom</em>.
      */
-    public void hide(String nom) {
-        undesiredNames.add(nom);
+    public void filter(String nom) {
+        filteredNames.add(nom);
         currentIndex = 0;
     }
 
     /**
      * Desamaga els resultats on apareix el nom.
      */
-    public void unhide(String nom) {
-        undesiredNames.remove(nom);
+    public void unfilter(String nom) {
+        filteredNames.remove(nom);
         currentIndex = 0;
     }
 
@@ -241,8 +258,8 @@ public class Result {
      * Amaga una fila.
      * @param index: numero de la fila que es vol amagar
      */
-    public void hide(int index) {
-        undesiredRows.add(index);
+    public void filter(int index) {
+        filteredRows.add(index);
         currentIndex = 0;
     }
 
@@ -250,10 +267,50 @@ public class Result {
      * Desamaga una fila.
      * @param index: numero de la fila que es vol desamagar
      */
-    public void unhide(int index) {
-        undesiredRows.remove(index);
+    public void unfilter(int index) {
+        filteredRows.remove(index);
         currentIndex = 0;
     }
+
+    /**
+     * Treu tots els filtres
+     */
+    public void unfilterAll() {
+        filteredNames.clear();
+        filteredRows.clear();
+        currentIndex = 0;
+    }
+
+    /**
+     * Retorna una estructura amb tots els filtres.
+     * @return: Un map amb claus "filteredNames", "filteredLines" i 
+     * "selectedNames" associades cadascuna a un ArrayList<String>
+     */
+    public Map<String, ArrayList<String>> getFilters() {
+        Map<String, ArrayList<String>> map = new HashMap<>();
+        map.put("filteredNames", filteredNames);
+        map.put("selectedNames", selectedNames);
+
+        ArrayList<String> filteredLines = new ArrayList<>();
+        for (Integer i: filteredRows) {
+            filteredLines.add(String.valueOf(i));
+        }
+
+        map.put("filteredLines", filteredLines);
+
+        return map;
+    }
+
+    /**
+     * Despres d'executar aquest metode, getRow() comencara
+     * a donar files per la primera segons l'ultim ordre escollit
+     * i tenint en compte tots els filtres imposats.
+     */
+    public void resetIndex() {
+        currentIndex = 0;
+    }
+
+
 }
 
 
