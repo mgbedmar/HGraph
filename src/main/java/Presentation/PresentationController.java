@@ -3,6 +3,7 @@ package Presentation;
 
 import Domain.DomainController;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Scanner;
@@ -96,15 +97,27 @@ public class PresentationController
     }
 
     private static void queryByReference() {
-        System.out.println("Indica la parella refèrencia: ");
+        System.out.println("Indica la parella referència: ");
         NodeReference nRefSource = readNode();
         NodeReference nRefEnd = readNode();
         System.out.println("Indica el node font: ");
         NodeReference nSource = readNode();
 
+        ArrayList<Integer> nRefSourceIds = dc.getNodes(nRefSource.name, nRefSource.type);
+        ArrayList<Integer> nRefEndIds = dc.getNodes(nRefEnd.name, nRefEnd.type);
+        ArrayList<Integer> nSourceIds = dc.getNodes(nSource.name, nSource.type);
+        if(nRefSourceIds.isEmpty() || nRefEndIds.isEmpty() || nSourceIds.isEmpty())
+        {
+            System.out.println("Algun dels noms introduits no es correcte");
+        }
+        else
+        {
+            dc.queryByReference(nRefSourceIds.get(0), nRefSource.type,
+                    nRefEndIds.get(0), nRefEnd.type,
+                    nSourceIds.get(0), nSource.type);
+            goToResultMenu();
+        }
 
-        dc.queryByReference(nRefSource.name, nRefSource.type, nRefEnd.name, nRefEnd.type, nSource.name, nSource.type);
-        goToResultMenu();
     }
 
     private static void goToResultMenu() {
@@ -285,9 +298,17 @@ public class PresentationController
         NodeReference nsource = readNode();
         String typeEnd = readType();
 
+        ArrayList<Integer> nsourceIds = dc.getNodes(nsource.name, nsource.type);
+        if(nsourceIds.isEmpty())
+        {
+            System.out.println("El node amb nom "+nsource.name+" no existeix al graf.");
+        }
+        else
+        {
+            dc.query1toN(nsourceIds.get(0), nsource.type, typeEnd);
+            goToResultMenu();
+        }
 
-        dc.query1toN(nsource.name, nsource.type, typeEnd);
-        goToResultMenu();
     }
 
     private static void query1to1() {
@@ -296,15 +317,35 @@ public class PresentationController
         System.out.println("Indica la informació del node destí:");
         NodeReference nend = readNode();
 
-        dc.query1to1(nsource.name, nsource.type, nend.name, nend.type);
-        goToResultMenu();
+        ArrayList<Integer> nsourceIds = dc.getNodes(nsource.name, nsource.type);
+        ArrayList<Integer> nendIds = dc.getNodes(nend.name, nend.type);
+        if(nsourceIds.isEmpty() || nendIds.isEmpty())
+        {
+            System.out.println("Algun dels noms escrits no es troba al graf");
+        }
+        else
+        {
+            dc.query1to1(nsourceIds.get(0), nsource.type,
+                    nendIds.get(0), nend.type);
+            goToResultMenu();
+        }
+
     }
 
     private static void queryNeighbours() {
         NodeReference n = readNode();
 
-        dc.queryNeighbours(n.name, n.type);
-        goToResultMenu();
+        ArrayList<Integer> nIds = dc.getNodes(n.name, n.type);
+        if(nIds.isEmpty())
+        {
+            System.out.println("El node amb nom "+n.name+" no existeix al graf.");
+        }
+        else
+        {
+            dc.queryNeighbours(nIds.get(0), n.type);
+            goToResultMenu();
+        }
+
     }
 
     private static void queryByType() {
@@ -367,15 +408,37 @@ public class PresentationController
     private static void removeEdge() {
         EdgeReference e = readEdge();
 
-        dc.removeEdge(e.nA.name, e.nA.type, e.nB.name, e.nB.type);
-        System.out.println("Aresta " +e.toString()+" esborrada.");
+        ArrayList<Integer> naIds = dc.getNodes(e.nA.name, e.nA.type);
+        ArrayList<Integer> nbIds = dc.getNodes(e.nB.name, e.nB.type);
+        if(naIds.isEmpty() || nbIds.isEmpty())
+        {
+            System.out.println("Algun dels noms es incorrecte.");
+        }
+        else
+        {
+            dc.removeEdge(naIds.get(0), e.nA.type,
+                    nbIds.get(0), e.nB.type);
+            System.out.println("Aresta " +e.toString()+" esborrada.");
+        }
+
+
     }
 
     private static void addEdge() {
         EdgeReference e = readEdge();
 
-        dc.addEdge(e.nA.name, e.nA.type, e.nB.name, e.nB.type);
-        System.out.println("Aresta " +e.toString()+" afegida.");
+        ArrayList<Integer> naIds = dc.getNodes(e.nA.name, e.nA.type);
+        ArrayList<Integer> nbIds = dc.getNodes(e.nB.name, e.nB.type);
+        if(naIds.isEmpty() || nbIds.isEmpty())
+        {
+            System.out.println("Algun dels noms es incorrecte.");
+        }
+        else
+        {
+            dc.addEdge(naIds.get(0), e.nA.type,
+                    nbIds.get(0), e.nB.type);
+            System.out.println("Aresta " +e.toString()+" esborrada.");
+        }
     }
 
     private static EdgeReference readEdge() {
@@ -392,21 +455,37 @@ public class PresentationController
         Scanner entrada = new Scanner(System.in);
         NodeReference n = readNode();
         String newName = entrada.nextLine();
+        ArrayList<Integer> nIds =dc.getNodes(n.name, n.type);
+        if(nIds.isEmpty())
+        {
+            System.out.println("El nom introduit no es troba al graf.");
+        }
+        else
+        {
+            dc.modifyNode(nIds.get(0), n.type, newName);
+            System.out.println("Node "+n.toString() + " modificat.");
+        }
 
-        dc.modifyNode(n.name, n.type, newName);
-        System.out.println("Node "+n.toString() + " modificat.");
     }
 
     private static void removeNode() {
         NodeReference n = readNode();
+        ArrayList<Integer> nIds =dc.getNodes(n.name, n.type);
+        if(nIds.isEmpty())
+        {
+            System.out.println("El nom introduit no es troba al graf.");
+        }
+        else
+        {
+            dc.removeNode(nIds.get(0), n.type);
+            System.out.println("Node "+n.toString() + " esborrat.");
+        }
 
-        dc.removeNode(n.name, n.type);
-        System.out.println("Node "+n.toString() + " esborrat.");
+
     }
 
     private static void addNode() {
         NodeReference n = readNode();
-
 
         dc.addNode(n.name, n.type);
         System.out.println("Node "+n.toString() + " afegit.");
