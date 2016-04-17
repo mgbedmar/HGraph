@@ -160,7 +160,7 @@ public class Graph {
 	 */
 	
 	public Set<Node> getNeighbours(Node node, String type) {
-		if (elements.get(node.getType()).contains(node) && checkType(type)!= WRONG_TYPE) {
+		if (checkType(type)!= WRONG_TYPE && elements.get(node.getType()).contains(node)) {
 			return node.getNeighbours(type);
 		}
 		return null;
@@ -253,18 +253,27 @@ public class Graph {
 	
 	/**
 	 * 
-	 * @param name1
-	 * @param type1
-	 * @param name2
-	 * @param type2
-	 * @return
+	 * @param name1, type1: nom i tipus del primer node
+	 * @param name2, type2: nom i tipus del segon node
+	 * @return : true si s'ha creat la relacio entre els dos nodes.
+	 * 			 false si:
+	 * 					- Ja existia la relacio en ambdos nodes
+	 * 					- Un o els dos nodes no existeixen al graf
+	 * 					
 	 */
 	
 	public boolean afegirAresta(String name1, String type1, String name2, String type2) {
 		if (containsNode(name1,type1) && containsNode(name2,type2)) {
-			this.getNode(name1, type1).addRelationship(this.getNode(name2, type2));
-			this.getNode(name2, type2).addRelationship(this.getNode(name1, type1));
-			return true;
+			
+			Node a = this.getNode(name1, type1);
+			Node b = this.getNode(name2, type2);
+			boolean repe = a.getNeighbours(type2).contains(b) || b.getNeighbours(type1).contains(a);			
+			if (!repe){
+				a.addRelationship(b);
+				b.addRelationship(a);
+				return true;
+			}
+			return false;
 		}		
 		return false;
 	}
@@ -273,7 +282,7 @@ public class Graph {
 	 * 
 	 * @param id
 	 * @param type
-	 * @return
+	 * @return : true si el node ha estat borrat correctement. False si el tipus era invalid o no estaba al graf
 	 */
 	public boolean esborrarNode(int id, String type) {
 		Iterator<Node> it = this.elements.get(type).iterator();
@@ -289,31 +298,40 @@ public class Graph {
 	
 	/**
 	 * 
-	 * @param name
-	 * @param type
-	 * @return
+	 * @param name : nom del Node
+	 * @param type : tipus del Node
+	 * @return : true si el node ha estat borrat correctement. False si el tipus era invalid o no estaba al graf
 	 */
 	public boolean esborrarNode(String name, String type) {
-		Iterator<Node> it = this.elements.get(type).iterator();
-		boolean finish = false;
-		while (it.hasNext() && !finish) {
-			if (it.next().getName() == name) {
-				finish = true;
-				it.remove();
+		if (checkType(type)!= WRONG_TYPE) {
+			Iterator<Node> it = this.elements.get(type).iterator();
+			boolean finish = false;
+			while (it.hasNext() && !finish) {
+				if (it.next().getName() == name) {
+					finish = true;
+					it.remove();
+				}
 			}
+			return finish;			
 		}
-		return finish;
+		//Aquí hi hauria una Exception
+		return false;
+		
 	}
 	
 	/**
 	 * 
-	 * @param node1
-	 * @param node2
-	 * @return
+	 * @param node1: Node a
+	 * @param node2: Node b
+	 * @return true si ambdos nodes existien al Graf abans de la crida.
 	 */
 	
 	public boolean esborrarAresta(Node node1, Node node2) {
-		return true;
+		if (elements.get(node1.getType()).contains(node1) && elements.get(node2.getType()).contains(node2)) {
+			node1.deleteRelationship(node2); node2.deleteRelationship(node1);
+			return true;
+		}
+		return false;
 	}
 	
 	
