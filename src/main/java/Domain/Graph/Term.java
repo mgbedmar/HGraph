@@ -12,11 +12,15 @@ public class Term extends Node {
      * @param name
      */
     public Term(String name) {
-        super(name, Term.TYPE);
+        super(name);
     }
 
     public Term(int id, String name) {
-        super(id, name, Term.TYPE);
+        super(id, name);
+    }
+
+    public String getType() {
+        return Term.TYPE;
     }
 
     void addEdge(Node node)

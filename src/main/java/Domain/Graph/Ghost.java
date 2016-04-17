@@ -8,7 +8,7 @@ public class Ghost extends Node {
        
 
     public Ghost(int id) {
-    	super(id, null, Ghost.TYPE);
+    	super(id, null);
     }
 
 

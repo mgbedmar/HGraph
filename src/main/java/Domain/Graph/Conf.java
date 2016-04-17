@@ -12,11 +12,15 @@ public class Conf extends Node {
      * @param name
      */
     public Conf(String name) {
-        super(name, Conf.TYPE);
+        super(name);
     }
 
     public Conf(int id, String name) {
-        super(id, name, Conf.TYPE);
+        super(id, name);
+    }
+
+    public String getType() {
+        return Conf.TYPE;
     }
 
     void addEdge(Node node)
