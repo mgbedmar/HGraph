@@ -11,13 +11,25 @@ import java.util.TreeMap;
  */
 public class Graph {
 	private TreeMap<String,HashSet<Node>> elements;
-	private final String AUTHORS = "author";
-	private final String ARTICLES = "paper";
-	private final String CONFERENCES = "conf";
-	private final String TERMS = "term";
-	private final String  WRONG_TYPE = "error";
 	
 	
+	//Claus fixes per agrupar els nodes segons el tipus
+	
+	private final String AUTHORS = "author"; //Clau pels autors
+	private final String ARTICLES = "paper"; //Clau per els articles
+	private final String CONFERENCES = "conf"; //Clau per les conferencies
+	private final String TERMS = "term";     //Clau per els termes
+	
+	
+	private final String  WRONG_TYPE = "error"; //Clau que farem servir per saber si hi ha hagut un error de tipus
+	
+	//Metodes privats per garantir la redundancia
+	
+	/**
+	 * 
+	 * @param t: tipus de node
+	 * @return: retorna WRONG_TYPE si el tipus t no existeix o es incorrecte
+	 */
 	private String checkType(String t) {
 		String tip;
 		switch (t) {		
@@ -31,6 +43,12 @@ public class Graph {
 		return tip;		
 	}
 	
+	/**
+	 * 
+	 * @param id: ID del node
+	 * @param type: tipus de Node
+	 * @return: true si el node de tipus type i ID id existeix al graf
+	 */
 	private boolean containsNode(int id, String type) {
 		if (checkType(type) != WRONG_TYPE) {
 			Iterator<Node> it = elements.get(type).iterator();
@@ -60,9 +78,9 @@ public class Graph {
 	}
 	
 	
+	//Metodes Publics
 	
 	
-	//Constructora del Graf
 	public Graph () {
 		elements = new TreeMap<String,HashSet< Node>>();
 		elements.put(AUTHORS, new HashSet<Node>() );
@@ -70,7 +88,10 @@ public class Graph {
 		elements.put(CONFERENCES,new HashSet<Node>());
 		elements.put(TERMS,new HashSet<Node>());		
 	}
-	
+	/**
+	 * 
+	 * @return: retorna tots els nodes del graf
+	 */
 	public HashSet<Node> getSetOfNodes() {
 		HashSet<Node> res = new HashSet<Node>();
 		res.addAll(elements.get(AUTHORS));
@@ -100,7 +121,7 @@ public class Graph {
 	 * 
 	 * @param id
 	 * @param type
-	 * @return
+	 * @return: si existeix, retorna el node de tipus type i ID id. Null si no existeix
 	 */
 	
 	public Node getNode(int id, String type) {
@@ -242,7 +263,14 @@ public class Graph {
 			return true;
 		}		
 		return false;		
-	}	
+	}
+	
+	/**
+	 * 
+	 * @param a
+	 * @param b
+	 * @return
+	 */
 	public boolean afegirAresta(Node a, Node b) {
 		if (this.elements.get(a.getType()).contains(a) && this.elements.get(b.getType()).contains(b)) {
 			a.addEdge(b); b.addEdge(a);
