@@ -86,7 +86,7 @@ public class Graph {
 	 * @return: Tots els nodes del graf del tipus dessitjat. Null si el tipus no existeix
 	 */
 	
-	public HashSet<? extends Node> getSetOfNodes(String type) {		
+	public HashSet<Node> getSetOfNodes(String type) {
 		String clauConsulta = checkType(type);
 		if (clauConsulta == WRONG_TYPE) {
 			System.err.print("No s'ha insertat un tipus correcte de Node");
