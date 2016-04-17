@@ -87,7 +87,7 @@ public class Config {
     }
 
     //Patro de Singleton
-    public Config getInstance() {
+    public static Config getInstance() {
         return instance;
     }
 

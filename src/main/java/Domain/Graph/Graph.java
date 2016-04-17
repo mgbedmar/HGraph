@@ -12,15 +12,6 @@ public class Graph {
 	private HashMap<String,ArrayList<Node>> dicNameNodes;
     private int maxID; //la id mes gran que s'ha ficat al graf
 	
-	
-	//Claus fixes per agrupar els nodes segons el tipus
-	
-	private final String AUTHORS = Config.authorType; //Clau pels autors
-	private final String ARTICLES = Config.paperType; //Clau per els articles
-	private final String CONFERENCES = Config.confType; //Clau per les conferencies
-	private final String TERMS = Config.termType;     //Clau per els termes
-	
-	
 	private final String  WRONG_TYPE = "error"; //Clau que farem servir per saber si hi ha hagut un error de tipus
 	
 	//Metodes privats per garantir la no redundancia
@@ -33,7 +24,7 @@ public class Graph {
 	private String checkType(String t) {
 		String tip;
 		switch (t) {		
-		case AUTHORS: case ARTICLES: case CONFERENCES: case TERMS:
+		case Config.authorType: case Config.paperType: case Config.confType: case Config.termType:
 			tip = t;
 			break;			
 		default:
@@ -48,13 +39,13 @@ public class Graph {
 
         switch(type)
         {
-            case AUTHORS:
+            case Config.authorType:
                 return new Author(id, null);
-            case TERMS:
+            case Config.termType:
                 return new Term(id, null);
-            case ARTICLES:
+            case Config.paperType:
                 return new Paper(id, null);
-            case CONFERENCES:
+            case Config.confType:
                 return new Conf(id, null);
         }
 
@@ -75,10 +66,10 @@ public class Graph {
      */
     public Graph () {
 		elements = new TreeMap<>();
-		elements.put(AUTHORS, new HashMap<>());
-		elements.put(ARTICLES, new HashMap<>());
-		elements.put(CONFERENCES,new HashMap<>());
-		elements.put(TERMS,new HashMap<>());
+		elements.put(Config.authorType, new HashMap<>());
+		elements.put(Config.paperType, new HashMap<>());
+		elements.put(Config.confType,new HashMap<>());
+		elements.put(Config.termType,new HashMap<>());
 
         dicNameNodes = new HashMap<>();
 
@@ -91,10 +82,10 @@ public class Graph {
 	 */
 	public Set<Node> getSetOfNodes() {
 		HashSet<Node> res = new HashSet<Node>();
-		res.addAll(elements.get(AUTHORS).keySet());
-		res.addAll(elements.get(ARTICLES).keySet());
-		res.addAll(elements.get(CONFERENCES).keySet());
-		res.addAll(elements.get(TERMS).keySet());
+		res.addAll(elements.get(Config.authorType).keySet());
+		res.addAll(elements.get(Config.paperType).keySet());
+		res.addAll(elements.get(Config.confType).keySet());
+		res.addAll(elements.get(Config.termType).keySet());
 		
 		return res;		
 	}
@@ -236,13 +227,13 @@ public class Graph {
      */
 	public void removeNode(Node node) {
         dicNameNodes.get(node.getName()).remove(node);
-        if (node.getType().equals(ARTICLES)) {
-            removeEdgeFromTypeToNode(node, TERMS);
-            removeEdgeFromTypeToNode(node, AUTHORS);
-            removeEdgeFromTypeToNode(node, CONFERENCES);
+        if (node.getType().equals(Config.paperType)) {
+            removeEdgeFromTypeToNode(node, Config.termType);
+            removeEdgeFromTypeToNode(node, Config.authorType);
+            removeEdgeFromTypeToNode(node, Config.confType);
         }
         else {
-            removeEdgeFromTypeToNode(node, ARTICLES);
+            removeEdgeFromTypeToNode(node, Config.paperType);
         }
         elements.get(node.getType()).remove(node);
     }

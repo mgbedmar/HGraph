@@ -211,6 +211,7 @@ public class Result {
         }
 
         currentIndex = 0;
+        filteredRows.clear();
     }
 
     /**
