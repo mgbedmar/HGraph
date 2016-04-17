@@ -223,23 +223,18 @@ public class Graph {
      *          o be <em>getNodes()</em>
 	 * @param b Node extret directament del graf (amb <em>getNode()</em>
      *          o be <em>getNodes()</em>
-	 * @return <em>true</em> si l'aresta s'ha afegit i <em>false</em>
-     * en cas contrari.
 	 */
-	public boolean addEdge(Node a, Node b) {
+	public void addEdge(Node a, Node b) {
         a.addEdge(b);
         b.addEdge(a);
-        //TODO Node ha de retornar tambe true i false si volem conservar el boolean
-		return true;
 	}
 
     /**
      * Esborra un node del graf.
      * @param node Node extret directament del graf (amb <em>getNode()</em>
      *             o be <em>getNodes()</em>
-     * @return TODO no caldria return
      */
-	public boolean removeNode(Node node) {
+	public void removeNode(Node node) {
         dicNameNodes.get(node.getName()).remove(node);
         if (node.getType().equals(ARTICLES)) {
             removeEdgeFromTypeToNode(node, TERMS);
@@ -250,7 +245,6 @@ public class Graph {
             removeEdgeFromTypeToNode(node, ARTICLES);
         }
         elements.get(node.getType()).remove(node);
-        return true;
     }
 
     /**
@@ -259,12 +253,10 @@ public class Graph {
      *          o be <em>getNodes()</em>
      * @param b Node extret directament del graf (amb <em>getNode()</em>
      *          o be <em>getNodes()</em>
-     * @return TODO si volem aixo s'ha de fer als nodes
      */
-	public boolean removeEdge(Node a, Node b) {
+	public void removeEdge(Node a, Node b) {
         a.removeEdge(b);
         b.removeEdge(a);
-        return true;
 	}
 
 }
