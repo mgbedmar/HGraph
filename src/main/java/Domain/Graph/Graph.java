@@ -237,15 +237,15 @@ public class Graph {
 	
 	public boolean afegirAresta(int id1, String type1, int id2, String type2) {
 		if (containsNode(id1,type1) && containsNode(id2,type2)) {
-			this.getNode(id1, type1).addRelationship(this.getNode(id2, type2));
-			this.getNode(id2, type2).addRelationship(this.getNode(id1, type1));
+			this.getNode(id1, type1).addEdge(this.getNode(id2, type2));
+			this.getNode(id2, type2).addEdge(this.getNode(id1, type1));
 			return true;
 		}		
 		return false;		
 	}	
 	public boolean afegirAresta(Node a, Node b) {
 		if (this.elements.get(a.getType()).contains(a) && this.elements.get(b.getType()).contains(b)) {
-			a.addRelationship(b); b.addRelationship(a);
+			a.addEdge(b); b.addEdge(a);
 			return true;
 		}		
 		return false;
@@ -255,7 +255,7 @@ public class Graph {
 	 * 
 	 * @param name1, type1: nom i tipus del primer node
 	 * @param name2, type2: nom i tipus del segon node
-	 * @return : true si s'ha creat la relacio entre els dos nodes.
+	 * @return : true si s'ha creat la relacio entre els dos nodes de forma simetrica.
 	 * 			 false si:
 	 * 					- Ja existia la relacio en ambdos nodes
 	 * 					- Un o els dos nodes no existeixen al graf
@@ -269,8 +269,8 @@ public class Graph {
 			Node b = this.getNode(name2, type2);
 			boolean repe = a.getNeighbours(type2).contains(b) || b.getNeighbours(type1).contains(a);			
 			if (!repe){
-				a.addRelationship(b);
-				b.addRelationship(a);
+				a.addEdge(b);
+				b.addEdge(a);
 				return true;
 			}
 			return false;
@@ -328,7 +328,7 @@ public class Graph {
 	
 	public boolean esborrarAresta(Node node1, Node node2) {
 		if (elements.get(node1.getType()).contains(node1) && elements.get(node2.getType()).contains(node2)) {
-			node1.deleteRelationship(node2); node2.deleteRelationship(node1);
+			node1.deleteEdge(node2); node2.deleteEdge(node1);
 			return true;
 		}
 		return false;
