@@ -76,7 +76,7 @@ public class Query {
      * Consulta el HeteSim d'un node amb tots els del tipus especificat (que tinguin HS > 0).
      * @return Un <em>Result</em> de dues columnes amb les files afegides i ordenat per segona columna descendent.
      */
-    public static Result query1toN(Graph graph, Node node, String type, ArrayList<String> path) {
+    public static Result query1toN(Graph graph, Node node, ArrayList<String> path) {
         Result res = new Result(2);
         HeteSimMatrix mat = HeteSim.run(graph, path);
         for (Node j: mat.cols(node)) {
@@ -105,7 +105,7 @@ public class Query {
      * Fa una taula de nodes per HeteSim (per decidir)
      * @return Un <em>Result</em> de tres columnes amb les files afegides i ordenat per tercera columna descendent.
      */
-    public static Result queryNtoN(Graph graph, String type1, String type2, ArrayList<String> path) {
+    public static Result queryNtoN(Graph graph, ArrayList<String> path) {
         Result res = new Result(3);
         HeteSimMatrix mat = HeteSim.run(graph, path);
         for (Node a: mat.rowKeys()) {

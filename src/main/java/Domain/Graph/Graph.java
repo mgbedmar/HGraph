@@ -1,24 +1,24 @@
 package Domain.Graph;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
-import java.util.TreeMap;
+import Domain.Config;
+
+import java.util.*;
 
 /**
  * @author Dani
  *
  */
 public class Graph {
-	private TreeMap<String,HashSet<Node>> elements;
+	private TreeMap<String,HashMap<Node,Node>> elements;
+	private HashMap<String,ArrayList<Node>> dicNameNodes;
+    private int maxID; //la id mes gran que s'ha assignat
 	
 	
 	//Claus fixes per agrupar els nodes segons el tipus
 	
-	private final String AUTHORS = "author"; //Clau pels autors
-	private final String ARTICLES = "paper"; //Clau per els articles
-	private final String CONFERENCES = "conf"; //Clau per les conferencies
-	private final String TERMS = "term";     //Clau per els termes
+	private final String AUTHORS = Config.authorType; //Clau pels autors
+	private final String ARTICLES = Config.paperType; //Clau per els articles
+	private final String CONFERENCES = Config.confType; //Clau per les conferencies
+	private final String TERMS = Config.termType;     //Clau per els termes
 	
 	
 	private final String  WRONG_TYPE = "error"; //Clau que farem servir per saber si hi ha hagut un error de tipus
@@ -50,7 +50,7 @@ public class Graph {
 	 * @return: true si el node de tipus type i ID id existeix al graf
 	 */
 	private boolean containsNode(int id, String type) {
-		if (checkType(type) != WRONG_TYPE) {
+		if (!checkType(type).equals(WRONG_TYPE)) { //TODO
 			Iterator<Node> it = elements.get(type).iterator();
 			boolean found = false;
 			while(it.hasNext() && !found) {
@@ -64,7 +64,7 @@ public class Graph {
 	}
 	
 	private boolean containsNode(String name, String type) {
-		if (checkType(type) != WRONG_TYPE) {
+		if (checkType(type) != WRONG_TYPE) { //TODO
 			Iterator<Node> it = elements.get(type).iterator();
 			boolean found = false;
 			while(it.hasNext() && !found) {
@@ -76,47 +76,72 @@ public class Graph {
 		return false;
 		
 	}
+
+    private Node createNode(int id, String type)
+    {
+
+        switch(type)
+        {
+            case AUTHORS:
+                return new Author(id, null);
+            case TERMS:
+                return new Term(id, null);
+            case ARTICLES:
+                return new Paper(id, null);
+            case CONFERENCES:
+                return new Conf(id, null);
+        }
+
+        return null;
+    }
 	
 	
 	//Metodes Publics
 	
 	
 	public Graph () {
-		elements = new TreeMap<String,HashSet< Node>>();
-		elements.put(AUTHORS, new HashSet<Node>() );
-		elements.put(ARTICLES, new HashSet<Node>());
-		elements.put(CONFERENCES,new HashSet<Node>());
-		elements.put(TERMS,new HashSet<Node>());		
+		elements = new TreeMap<>();
+		elements.put(AUTHORS, new HashMap<>() );
+		elements.put(ARTICLES, new HashMap<>());
+		elements.put(CONFERENCES,new HashMap<>());
+		elements.put(TERMS,new HashMap<>());
+
+        dicNameNodes = new HashMap<>();
+
+        maxID = 0;
 	}
+
 	/**
 	 * 
 	 * @return: retorna tots els nodes del graf
 	 */
-	public HashSet<Node> getSetOfNodes() {
+	public Set<Node> getSetOfNodes() {
 		HashSet<Node> res = new HashSet<Node>();
-		res.addAll(elements.get(AUTHORS));
-		res.addAll(elements.get(ARTICLES));
-		res.addAll(elements.get(CONFERENCES));
-		res.addAll(elements.get(TERMS));
+		res.addAll(elements.get(AUTHORS).keySet());
+		res.addAll(elements.get(ARTICLES).keySet());
+		res.addAll(elements.get(CONFERENCES).keySet());
+		res.addAll(elements.get(TERMS).keySet());
 		
 		return res;		
 	}
+
 	/**
 	 * 
 	 * @param type: tipus de Node
-	 * @return: Tots els nodes del graf del tipus dessitjat. Null si el tipus no existeix
+	 * @return: Tots els nodes del graf del tipus desitjat. Null si el tipus no existeix
 	 */
 	
-	public HashSet<Node> getSetOfNodes(String type) {
+	public Set<Node> getSetOfNodes(String type) {
 		String clauConsulta = checkType(type);
-		if (clauConsulta == WRONG_TYPE) {
+		if (clauConsulta.equals(WRONG_TYPE)) {
 			System.err.print("No s'ha insertat un tipus correcte de Node");
 			return null;
 		}
 		else {
-			return elements.get(clauConsulta);			
+			return elements.get(clauConsulta).keySet();
 		}		
 	}
+
 	/**
 	 * 
 	 * @param id
@@ -126,62 +151,65 @@ public class Graph {
 	
 	public Node getNode(int id, String type) {
 		String clauConsulta = checkType(type);
-		if (clauConsulta == WRONG_TYPE) {
+		if (clauConsulta.equals(WRONG_TYPE)) {
 			System.err.print("No s'ha insertat un tipus correcte de Node");
 			return null;
 		}
-		else {			
-			for (Node nod : elements.get(clauConsulta)) {
-				if (nod.getID() == id) return nod;				
-			}
-			return null;
+		else {
+            Node aux = createNode(id, type);
+			return elements.get(type).get(aux);
 		}
 	    
 	}
+
 	/**
 	 * 
 	 * @param name
 	 * @param type
 	 * @return
 	 */
-	public Node getNode(String name, String type) {
+	public ArrayList<Node> getNodes(String name, String type) {
 		String clauConsulta = checkType(type);
-		if (clauConsulta == WRONG_TYPE) {
+		if (clauConsulta.equals(WRONG_TYPE)) {
 			System.err.print("No s'ha insertat un tipus correcte de Node");
 			return null;
 		}
-		else {			
-			for (Node nod : elements.get(clauConsulta)) {
-				if (nod.getName() == name) return nod;				
-			}
-			return null;
+		else {
+            ArrayList<Node> intern = dicNameNodes.get(name);
+            if (intern == null) return null;
+            else {
+                ArrayList<Node> forRet = new ArrayList<>();
+                for (int i = 0; i < intern.size(); i++) {
+                    if (intern.get(i).getType().equals(type)) {
+                        forRet.add(intern.get(i));
+                    }
+                }
+                if (forRet.size() == 0) return null;
+                else return forRet;
+            }
 		}
 	}
-	
+
+
 	/**
-	 * 
-	 * @param node
-	 * @pre
-	 * @return
+	 * Consultora dels veins d'un node.
+	 * @param node node del que es volen consultar els veins. Ha de ser un node
+     *             obtingut del graf amb <em>getNode()</em>o <em>getNodes()</em>
+	 * @return conjunt de veins de <em>node</em>
 	 */
-	
 	public Set<Node> getNeighbours(Node node) {
-		if (elements.get(node.getType()).contains(node)) {
-			return node.getNeighbours();
-		}
-		return null;
-		
+        return node.getNeighbours();
 	}
 	
 	/**
-	 * 
-	 * @param node
-	 * @param type
-	 * @return
+	 * Consultora dels veins d'un cert tipus d'un node.
+	 * @param node node del que es volen consultar els veins. Ha de ser un node
+     *             obtingut del graf amb <em>getNode()</em>o <em>getNodes()</em>
+	 * @param type tipus dels nodes retornats
+	 * @return un conjunt amb els veins de tipus <em>type</em> del node <em>node</em>
 	 */
-	
 	public Set<Node> getNeighbours(Node node, String type) {
-		if (checkType(type)!= WRONG_TYPE && elements.get(node.getType()).contains(node)) {
+		if (!checkType(type).equals(WRONG_TYPE)) {
 			return node.getNeighbours(type);
 		}
 		return null;
@@ -196,7 +224,7 @@ public class Graph {
 	
 	//AVIS --> S'ha d'implementar el constructor Node(nom) amb generacio automatica de ID's
 	
-	public void afegirNode(String name, String type ) {
+	public void addNode(String name, String type) {
 		switch (type) {
 		
 		case AUTHORS:
@@ -212,7 +240,7 @@ public class Graph {
 			this.elements.get(TERMS).add(new Term(name));
 			break;			
 		default:
-			//aqu� hi haura una Excepci�
+            //excepcio
 					
 		}
 	}
