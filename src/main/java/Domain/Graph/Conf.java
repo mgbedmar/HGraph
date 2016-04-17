@@ -2,9 +2,10 @@ package Domain.Graph;
 
 import java.util.HashSet;
 import java.util.Set;
+import Domain.Config;
 
 public class Conf extends Node {
-    public final static String TYPE = "conf";
+    public final static String TYPE = Config.confType;
     private HashSet<Node> paperadj;
 
     /**

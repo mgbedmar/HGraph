@@ -5,6 +5,8 @@ import java.util.*;
 
 public class Config {
 
+    private static Config instance = new Config();
+
     /* Nombre de resultats que es mostren */
     public static int numRowsResult = 10;
 
@@ -16,7 +18,7 @@ public class Config {
     public static final String paperType = "paper";
     public static final String termType = "term";
     public static final String confType = "conf";
-    protected static final String ghostType = "ghost";
+    public static final String ghostType = "ghost";
 
 
     /* Aixo es una opcio, seria un diccionari doble que al fer l'init de la classe
@@ -24,7 +26,7 @@ public class Config {
      * cal una instancia de Config, pero si ho fem al Controlador aixo esta be. */
     public TreeMap<String, TreeMap<String, ArrayList<String>>> defaultPath;
 
-    public Config() {
+    private Config() {
         defaultPath = new TreeMap<>();
         TreeMap<String, ArrayList<String>> aux;
 
@@ -82,6 +84,11 @@ public class Config {
         aux.put(confType, new ArrayList<>(Arrays.asList(confType, paperType, confType))); //?
         /* Posem al defaultPath */
         defaultPath.put(confType, aux);
+    }
+
+    //Patro de Singleton
+    public Config getInstance() {
+        return instance;
     }
 
 }

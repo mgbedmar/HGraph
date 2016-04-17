@@ -71,7 +71,8 @@ public abstract class Node {
     }
 
     public int hashCode() {
-        return Integer.hashCode(this.id);
+        Integer a = new Integer(this.id);
+        return a.hashCode();
     }
 
     /**

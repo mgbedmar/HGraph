@@ -2,9 +2,10 @@ package Domain.Graph;
 
 import java.util.HashSet;
 import java.util.Set;
+import Domain.Config;
 
 public class Paper extends Node {
-    public final static String TYPE = "paper";
+    public final static String TYPE = Config.paperType;
     private HashSet<Node> termadj;
     private HashSet<Node> confadj;
 	private HashSet<Node> authoradj;
