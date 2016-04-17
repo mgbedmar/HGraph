@@ -173,9 +173,9 @@ public class Graph {
 	 * @return
 	 */
 	
-	//AV�S --> S'ha d'implementar el constructor Node(nom) amb generacio automatica de ID's
+	//AVIS --> S'ha d'implementar el constructor Node(nom) amb generacio automatica de ID's
 	
-	public int afegirNode(String name, String type ) {
+	public void afegirNode(String name, String type ) {
 		switch (type) {
 		
 		case AUTHORS:

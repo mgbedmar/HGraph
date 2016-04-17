@@ -1,42 +1,61 @@
 package Domain.Graph;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public class Author extends Node {
-    private final static String type = "author";
-    //Este atributo solo esta una vez por subclasse. Los nombres
-    //serian "author", "term", "conf", "paper"
+    public final static String TYPE = "author";
+    private HashSet<Node> paperadj;
+
+    /**
+     *
+     * @param name
+     */
+    public Author(String name) {
+        super(name, Author.TYPE);
+    }
 
     public Author(int id, String name) {
-
-    	super(id,name);
-
+        super(id, name, Author.TYPE);
+    }
+    void addRelationship(Node node)
+    {
+        if(node.getType().equals(Paper.TYPE))
+            paperadj.add(node);
     }
 
     /**
-     * Getter.
-     * @return type: tipus del node
+     *
+     * @param node
      */
-    public String getType() {
-    	return Author.type;//retorna el atributo static type
-    }
-
-    public boolean equals(Author author) {
-    	return this.getID() == author.getID();//iguales si y solo si tienen la misma id
+    void deleteRelationship(Node node)
+    {
+        if(node.getType().equals(Paper.TYPE))
+            paperadj.remove(node);
     }
 
     /**
-     * Afegeix una aresta del p.i. a node. No afegeix l'aresta
-     * simetrica!
+     *
+     * @return
      */
-    protected void addRelationship(Node node) {
-	/*En el caso de Author, solo se comprobaria que 
-	  el node que te pasan es de tipo Paper y se llamaria 
-	  a super addRelationship. Esto solo cambia en el caso 
-	  de la subclase Paper, donde se pueden anadir aristas 
-	  a todos los otros tipos. Solo habria que mirar que 
-	  el que te pasan no es otro Paper y llamar a la super
-	*/
-    if(node.getType().equals("paper"))super.addRelationship(node);
-    
+    Set<Node> getNeighbours()
+    {
+        return paperadj;
     }
-   
+
+    /**
+     *
+     * @param type
+     * @return
+     */
+    Set<Node> getNeighbours(String type)
+    {
+        if(type == Paper.TYPE)
+            return paperadj;
+        else
+            return null;
+    }
+
+
+
 }

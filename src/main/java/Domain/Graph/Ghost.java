@@ -1,18 +1,19 @@
 package Domain.Graph;
 
+import java.util.Set;
+
 public class Ghost extends Node {
-    private final static String type = "E";
-    //Este atributo solo esta una vez por subclasse. Los nombres
-    //serian "author", "term", "conf", "paper"
+    public final static String TYPE = "E";
 
        
 
-    public Ghost(int id, String name) { 
-    	super(id,name);
+    public Ghost(String name) {
+    	super(name, Ghost.TYPE);
     }
-      
-    public Ghost(int id) {
 
+    public Ghost(int id) {
+        super("",Ghost.TYPE);
+        this.setID(id);
 
     }
     /**
@@ -20,11 +21,28 @@ public class Ghost extends Node {
      * @return type: tipus del node
      */
     public String getType() {
-	return Ghost.type;//retorna el atributo static type
+	return Ghost.TYPE;//retorna el atributo static type
     }
 
-    public boolean equals(Ghost fant) {
-	return this.getID() == fant.getID();//iguales si y solo si tienen la misma id
+
+    Set<Node> getNeighbours() {
+        return null;
     }
-   
+
+
+    Set<Node> getNeighbours(String type) {
+        return null;
+    }
+
+
+    void addRelationship(Node node) {
+
+    }
+
+
+    void deleteRelationship(Node node) {
+
+    }
+
+
 }

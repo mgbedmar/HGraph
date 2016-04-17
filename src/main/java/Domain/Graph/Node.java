@@ -5,19 +5,26 @@ import java.util.Set;
 public abstract class Node {
     private int id;
     private String name;
-    private HashSet<Node> adj;
+    private String type;
     
     /**
      * Constructor.
-     * @param id: identificador
      * @param name: el nom del node
      */
-    /*
-    */
-    public Node(int id, String name) {
-    	this.id=id;
+    public Node(String name, String type) {
     	this.name=name;
-    	adj=new HashSet<Node>();
+        this.id = -1;
+        this.type = type;
+    }
+
+    /**
+     * Constructor.
+     * @param name: el nom del node
+     */
+    public Node(int id, String name, String type) {
+        this.name=name;
+        this.id = id;
+        this.type = type;
     }
 
     /**
@@ -29,10 +36,22 @@ public abstract class Node {
     }
 
     /**
+     * Setter. Només un Graph pot editar la id
+     * @param id
+     */
+    public void setID(Integer id)
+    {
+        this.id = id;
+    }
+
+    /**
      * Getter.
      * @return type: tipus del node
      */
-    public abstract String getType();
+    public String getType()
+    {
+        return this.type;
+    }
 
     /**
      * Getter.
@@ -50,65 +69,40 @@ public abstract class Node {
     	this.name= name;
     }
 
-    /* public boolean equals(Node node) {
+    //dos nodes són iguals si són del mateix tipus i tenen la mateixa id
+    public boolean equals(Node node)
+    {
+        return node.getType().equals(this.getType()) &&
+                node.getID() == this.getID();
+    }
 
-    } //implementada a les subclasses
-    //dos nodes són iguals si són del mateix tipus i tenen la mateixa id*/
 
     /**
      * Getter.
      * @return conjunt de veins
      */
-    protected Set<Node> getNeighbours() {
+    abstract Set<Node> getNeighbours();
 	/*ojo! tiene que retornar una copia del Set privado,
 	 *porque si no se podrían modificar los vecinos desde
 	 *fuera. La copia tiene que ser shallow copy: es decir, 
 	 *tiene que hacer copia del HashSet pero no de los nodos.
 	 *Sirve con un clone() */
-    
-    	
-    	return adj;
-   }
 
     /**
      * Getter.
      * @return conjunt de veins de tipus type
      */
-    protected Set<Node> getNeighbours(String type) {
-	/*aqui solo se comprueba si el type es paper, y si lo 
-	  es, se llama a getNeighbours(). Este metodo hay 
-	  que reimplementarlo en la subclase Paper, porque 
-	  sus vecinos son de otros tipos. En ese caso hay que 
-	  explorar el HashSet y devolver los que toquen.
-	*/
-    	
-    	if(type.equals(type.equals("paper")))
-    			return this.getNeighbours();
-    }
+    abstract Set<Node> getNeighbours(String type);
 
     /**
      * Afegeix una aresta del p.i. a node. No afegeix l'aresta
      * simetrica!
      */
-    protected void addRelationship(Node node) {
-	/* Cuidado, este metodo es delicado. Aqui se anade la 
-	   arista sin mas, se anade node al HashSet y ya esta.
-	   Despues, en las subclases hay que tener cuidado de
-	   controlar que el tipo sea el correcto.
-	 */
-    	this.adj.add(node);
-    
-    }
+    abstract void addRelationship(Node node);
 
     /**
      * Esborra l'aresta del p.i. a node. No esborra l'aresta
      * simetrica!
-     * @return TRUE si i nomes si l'aresta existia
      */
-    protected boolean deleteRelationship(Node node) {
-//En principio esta se implementaria solo aqui
-    	this.adj.remove(node);
-   
-    	return true;
-    }
+    abstract void deleteRelationship(Node node);
 }

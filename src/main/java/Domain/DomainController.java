@@ -18,7 +18,7 @@ public class DomainController
      */
     private Node createNode(String name, String type)
     {
-        /* TODO: no es pot crear node sense una id
+
         switch(type)
         {
             case "author":
@@ -30,7 +30,7 @@ public class DomainController
             case "conf":
                 return new Conf(name);
         }
-        */
+
         return null;
     }
 

@@ -1,41 +1,61 @@
 package Domain.Graph;
 
-
+import java.util.HashSet;
+import java.util.Set;
 
 public class Term extends Node {
-    private final static String type = "term";
-    //Este atributo solo esta una vez por subclasse. Los nombres
-    //serian "author", "term", "conf", "paper"
+    public final static String TYPE = "term";
+    private HashSet<Node> paperadj;
 
-    public Term(int id, String name) { 
-     super(id,name);
+    /**
+     *
+     * @param name
+     */
+    public Term(String name) {
+        super(name, Term.TYPE);
+    }
+
+    public Term(int id, String name) {
+        super(id, name, Term.TYPE);
+    }
+    void addRelationship(Node node)
+    {
+        if(node.getType().equals(Paper.TYPE))
+            paperadj.add(node);
     }
 
     /**
-     * Getter.
-     * @return type: tipus del node
+     *
+     * @param node
      */
-    public String getType() {
-    	return Term.type; /*retorna el atributo static type*/
-    }
-
-    public boolean equals(Term term) {
-    	return this.getID() == term.getID(); /*iguales si y solo si tienen la misma id*/
+    void deleteRelationship(Node node)
+    {
+        if(node.getType().equals(Paper.TYPE))
+            paperadj.remove(node);
     }
 
     /**
-     * Afegeix una aresta del p.i. a node. No afegeix l'aresta
-     * simetrica!
+     *
+     * @return
      */
-    protected void addRelationship(Node node) {
-	/*En el caso de Author, solo se comprobaria que 
-	  el node que te pasan es de tipo Paper y se llamaria 
-	  a super addRelationship. Esto solo cambia en el caso 
-	  de la subclase Paper, donde se pueden anadir aristas 
-	  a todos los otros tipos. Solo habria que mirar que 
-	  el que te pasan no es otro Paper y llamar a la super
-	*/
-    	super.addRelationship(node);
+    Set<Node> getNeighbours()
+    {
+        return paperadj;
     }
-   
+
+    /**
+     *
+     * @param type
+     * @return
+     */
+    Set<Node> getNeighbours(String type)
+    {
+        if(type == Paper.TYPE)
+            return paperadj;
+        else
+            return null;
+    }
+
+
+
 }
