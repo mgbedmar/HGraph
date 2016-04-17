@@ -116,11 +116,84 @@ public class PresentationController
             switch(x)
             {
                 case 1:
-                    queryByType();
+                    hideRow();
                     break;
-
+                case 2:
+                    hideRows();
+                    break;
+                case 3:
+                    filterName();
+                    break;
+                case 4:
+                    selectName();
+                    break;
+                case 5:
+                    sortByRow();
+                    break;
+                case 6:
+                    clearFilters();
+                    break;
+                default:
+                    break;
             }
         }while(x != 0);
+    }
+
+    private static void clearFilters()
+    {
+        dc.clearResultFilters();
+    }
+
+    private static void sortByRow()
+    {
+        Scanner entrada = new Scanner(System.in);
+        System.out.println("Escriu el numero de columna:");
+        Integer col = entrada.nextInt();
+        System.out.println("Ascendentment(0) o descendentment(1):");
+        Integer dir = entrada.nextInt();
+        dc.sortResultByRow(col, dir);
+    }
+
+    private static void selectName()
+    {
+        Scanner entrada = new Scanner(System.in);
+        System.out.println("Escriu el nom a seleccionar:");
+        String x = entrada.nextLine();
+        dc.selectResultName(x);
+    }
+
+    private static void filterName()
+    {
+        Scanner entrada = new Scanner(System.in);
+        System.out.println("Escriu el nom a amagar:");
+        String x = entrada.nextLine();
+        dc.hideResultName(x);
+    }
+
+    /*
+        private static void selectRows() {
+            Scanner entrada = new Scanner(System.in);
+            System.out.println("Escriu el primer numero del rang:");
+            Integer x1 = entrada.nextInt();
+            System.out.println("Escriu el segon numero del rang:");
+            Integer x2 = entrada.nextInt();
+            dc.selectResultRows(x1, x2);
+        }
+    */
+    private static void hideRows() {
+        Scanner entrada = new Scanner(System.in);
+        System.out.println("Escriu el primer numero del rang:");
+        Integer x1 = entrada.nextInt();
+        System.out.println("Escriu el segon numero del rang:");
+        Integer x2 = entrada.nextInt();
+        dc.hideResultRows(x1, x2);
+    }
+
+    private static void hideRow() {
+        Scanner entrada = new Scanner(System.in);
+        System.out.println("Escriu el numero de fila a amagar:");
+        Integer x = entrada.nextInt();
+        dc.hideResultRow(x);
     }
 
     private static void showResultMenu() {
@@ -128,7 +201,7 @@ public class PresentationController
                 "tornar",
                 "Amagar una fila",
                 "Amagar un rang",
-                "Mostrar un rang",
+                //"Mostrar un rang",
                 "Amagar per nom",
                 "Mostrar per nom",
                 "Ordenar per columna",
@@ -150,10 +223,49 @@ public class PresentationController
                 System.out.println("Linies amagades:");
                 for(int i = 0; i < filteredLinesSize; i++)
                 {
-                    //TODO
+                    if(i%6 == 0)
+                        System.out.println();
+                    System.out.print(filters.get("filteredLines").get(i)+", ");
+                }
+            }
+
+            if(selectedNamesSize > 0)
+            {
+                System.out.println("Noms seleccionats:");
+                for(int i = 0; i < selectedNamesSize; i++)
+                {
+                    System.out.println("-"+filters.get("selectedNames").get(i));
+                }
+            }
+            else if(filteredNamesSize > 0)
+            {
+                System.out.println("Noms amagats:");
+                for(int i = 0; i < filteredNamesSize; i++)
+                {
+                    System.out.println("-"+filters.get("filteredNames").get(i));
                 }
             }
         }
+        System.out.println("Resultat:");
+        Integer resultSize = dc.getResultSize();
+        if(resultSize > 0)
+        {
+            for(int i = 0; i < resultSize; i++)
+            {
+                ArrayList<String> fila = dc.getResultRow();
+                for(int j = 0; j < fila.size(); j++)
+                {
+                    System.out.printf(fila.get(j));
+                }
+                System.out.println();
+            }
+        }
+        else
+        {
+            System.out.println("<buit>");
+        }
+
+
         printMenu(opts);
     }
 
@@ -165,7 +277,7 @@ public class PresentationController
 
 
         dc.queryNtoN(typeSource, typeEnd);
-        //TODO request result
+        goToResultMenu();
     }
 
     private static void query1toN() {
@@ -175,7 +287,7 @@ public class PresentationController
 
 
         dc.query1toN(nsource.name, nsource.type, typeEnd);
-        //TODO request result
+        goToResultMenu();
     }
 
     private static void query1to1() {
@@ -185,21 +297,21 @@ public class PresentationController
         NodeReference nend = readNode();
 
         dc.query1to1(nsource.name, nsource.type, nend.name, nend.type);
-        //TODO request result
+        goToResultMenu();
     }
 
     private static void queryNeighbours() {
         NodeReference n = readNode();
 
         dc.queryNeighbours(n.name, n.type);
-        //TODO request result
+        goToResultMenu();
     }
 
     private static void queryByType() {
         String type = readType();
 
         dc.queryByType(type);
-        //TODO request result
+        goToResultMenu();
     }
 
     private static String readType() {

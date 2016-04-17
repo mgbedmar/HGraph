@@ -79,9 +79,8 @@ public class DomainController
     {
         Node A = createNode(nameA, typeA);
         Node B = createNode(nameB, typeB);
-        //TODO normalize afegirAresta/esborrarAresta parameters
-        //g.afegirAresta(A, B);
-        g.afegirAresta(nameA, typeA, nameB, typeB);
+
+        g.afegirAresta(A, B);
     }
 
     /**
@@ -120,7 +119,9 @@ public class DomainController
     {
         Node source = createNode(nomSource, typeSource);
         Node end = createNode(nomEnd, typeEnd);
-        r = Query.query1to1(g, source, end);
+
+        //TODO path
+        //r = Query.query1to1(g, source, end);
     }
 
     /**
@@ -143,7 +144,8 @@ public class DomainController
     public void query1toN(String sourceName, String sourceType, String typeEnd)
     {
         Node source = createNode(sourceName, sourceType);
-        r = Query.query1toN(g, source, typeEnd);
+        //TODO path
+        //r = Query.query1toN(g, source, typeEnd);
     }
 
     /**
@@ -153,7 +155,8 @@ public class DomainController
      */
     public void queryNtoN(String typeA, String typeB)
     {
-        r = Query.queryNtoN(g, typeA, typeB);
+        //TODO path
+        //r = Query.queryNtoN(g, typeA, typeB);
     }
 
     /**
@@ -173,10 +176,50 @@ public class DomainController
         Node refSource = createNode(nodeRefSourceName, nodeRefSourceType);
         Node refEnd = createNode(nodeRefEndName, nodeRefEndType);
         Node source = createNode(nodeSourceName, nodeSourceType);
-        r = Query.queryByReference(g, refSource, refEnd, source);
+        //TODO path
+        //r = Query.queryByReference(g, refSource, refEnd, source);
     }
 
     public Map<String,ArrayList<String>> getFilters() {
         return r.getFilters();
     }
+
+    public Integer getResultSize() {
+        return r.size();
+    }
+
+
+    public ArrayList<String> getResultRow() {
+        return r.getRow();
+    }
+
+    public void hideResultRow(Integer x) {
+        r.filter(x);
+    }
+
+    public void hideResultRows(Integer x1, Integer x2) {
+        for(int i = x1; i < x2; i++)
+            r.filter(i);
+    }
+
+    public void hideResultName(String x) {
+        r.filter(x);
+    }
+
+    public void selectResultName(String x) {
+        r.select(x);
+    }
+
+    public void sortResultByRow(Integer col, Integer dir) {
+        r.sort(col, (dir != 0));
+    }
+
+    public void clearResultFilters() {
+        r.unfilterAll();
+    }
+/*
+    public void selectResultRows(Integer x1, Integer x2) {
+        //TODO
+    }
+    */
 }
