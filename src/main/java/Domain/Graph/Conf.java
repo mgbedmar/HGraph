@@ -14,10 +14,12 @@ public class Conf extends Node {
     public Conf(String name) {
         super(name, Conf.TYPE);
     }
+
     public Conf(int id, String name) {
         super(id, name, Conf.TYPE);
     }
-    void addRelationship(Node node)
+
+    void addEdge(Node node)
     {
         if(node.getType().equals(Paper.TYPE))
             paperadj.add(node);
@@ -27,7 +29,7 @@ public class Conf extends Node {
      *
      * @param node
      */
-    void deleteRelationship(Node node)
+    void deleteEdge(Node node)
     {
         if(node.getType().equals(Paper.TYPE))
             paperadj.remove(node);
@@ -49,7 +51,7 @@ public class Conf extends Node {
      */
     Set<Node> getNeighbours(String type)
     {
-        if(type == Paper.TYPE)
+        if(type.equals(Paper.TYPE))
             return paperadj;
         else
             return null;

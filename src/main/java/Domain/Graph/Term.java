@@ -18,7 +18,8 @@ public class Term extends Node {
     public Term(int id, String name) {
         super(id, name, Term.TYPE);
     }
-    void addRelationship(Node node)
+
+    void addEdge(Node node)
     {
         if(node.getType().equals(Paper.TYPE))
             paperadj.add(node);
@@ -28,7 +29,7 @@ public class Term extends Node {
      *
      * @param node
      */
-    void deleteRelationship(Node node)
+    void deleteEdge(Node node)
     {
         if(node.getType().equals(Paper.TYPE))
             paperadj.remove(node);
@@ -50,7 +51,7 @@ public class Term extends Node {
      */
     Set<Node> getNeighbours(String type)
     {
-        if(type == Paper.TYPE)
+        if(type.equals(Paper.TYPE))
             return paperadj;
         else
             return null;

@@ -12,7 +12,7 @@ public abstract class Node {
      * @param name: el nom del node
      */
     public Node(String name, String type) {
-    	this.name=name;
+    	this.name = name;
         this.id = -1;
         this.type = type;
     }
@@ -22,7 +22,7 @@ public abstract class Node {
      * @param name: el nom del node
      */
     public Node(int id, String name, String type) {
-        this.name=name;
+        this.name = name;
         this.id = id;
         this.type = type;
     }
@@ -66,7 +66,7 @@ public abstract class Node {
      * @param name: nom nou del node
      */
     public void setName(String name) {
-    	this.name= name;
+    	this.name = name;
     }
 
     //dos nodes són iguals si són del mateix tipus i tenen la mateixa id
@@ -82,11 +82,6 @@ public abstract class Node {
      * @return conjunt de veins
      */
     abstract Set<Node> getNeighbours();
-	/*ojo! tiene que retornar una copia del Set privado,
-	 *porque si no se podrían modificar los vecinos desde
-	 *fuera. La copia tiene que ser shallow copy: es decir, 
-	 *tiene que hacer copia del HashSet pero no de los nodos.
-	 *Sirve con un clone() */
 
     /**
      * Getter.
@@ -98,11 +93,11 @@ public abstract class Node {
      * Afegeix una aresta del p.i. a node. No afegeix l'aresta
      * simetrica!
      */
-    abstract void addRelationship(Node node);
+    abstract void addEdge(Node node);
 
     /**
      * Esborra l'aresta del p.i. a node. No esborra l'aresta
      * simetrica!
      */
-    abstract void deleteRelationship(Node node);
+    abstract void deleteEdge(Node node);
 }

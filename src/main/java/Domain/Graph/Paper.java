@@ -21,7 +21,7 @@ public class Paper extends Node {
         super(id, name, Paper.TYPE);
     }
 
-	void addRelationship(Node node)
+	void addEdge(Node node)
     {
         switch(node.getType())
         {
@@ -41,7 +41,7 @@ public class Paper extends Node {
      *
      * @param node
      */
-    void deleteRelationship(Node node)
+    void deleteEdge(Node node)
     {
         switch(node.getType())
         {
