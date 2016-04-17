@@ -10,7 +10,7 @@ import java.util.*;
 public class Graph {
 	private TreeMap<String,HashMap<Node,Node>> elements;
 	private HashMap<String,ArrayList<Node>> dicNameNodes;
-    private int maxID; //la id mes gran que s'ha assignat
+    private int maxID; //la id mes gran que s'ha ficat al graf
 	
 	
 	//Claus fixes per agrupar els nodes segons el tipus
@@ -23,7 +23,7 @@ public class Graph {
 	
 	private final String  WRONG_TYPE = "error"; //Clau que farem servir per saber si hi ha hagut un error de tipus
 	
-	//Metodes privats per garantir la redundancia
+	//Metodes privats per garantir la no redundancia
 	
 	/**
 	 * 
@@ -42,7 +42,7 @@ public class Graph {
 		}
 		return tip;		
 	}
-    
+
     private Node createNode(int id, String type)
     {
 
@@ -60,17 +60,22 @@ public class Graph {
 
         return null;
     }
+
+    private void removeEdgeFromTypeToNode(Node node, String type) {
+        for (Node a: elements.get(type).keySet()) {
+            a.removeEdge(node);
+        }
+    }
 	
 	
 	//Metodes Publics
-
 
     /**
      * Constructora. Crea un graf buit.
      */
     public Graph () {
 		elements = new TreeMap<>();
-		elements.put(AUTHORS, new HashMap<>() );
+		elements.put(AUTHORS, new HashMap<>());
 		elements.put(ARTICLES, new HashMap<>());
 		elements.put(CONFERENCES,new HashMap<>());
 		elements.put(TERMS,new HashMap<>());
@@ -100,7 +105,6 @@ public class Graph {
 	 * @return: Tots els nodes del graf del tipus <em>type</em>, <em>null</em> si el tipus no existeix.
      * Modificacions en el conjunt de retorn canviaran l'estat del graf.
 	 */
-	
 	public Set<Node> getSetOfNodes(String type) {
 		String clauConsulta = checkType(type);
 		if (clauConsulta.equals(WRONG_TYPE)) {
@@ -108,7 +112,7 @@ public class Graph {
 			return null;
 		}
 		else {
-			return elements.get(clauConsulta).keySet();
+			return elements.get(type).keySet();
 		}		
 	}
 
@@ -118,7 +122,6 @@ public class Graph {
 	 * @param type tipus del node que es busca
 	 * @return: el node de tipus <em>type</em> i id <em>id</em>, <em>null</em> si no existeix
 	 */
-	
 	public Node getNode(int id, String type) {
 		String clauConsulta = checkType(type);
 		if (clauConsulta.equals(WRONG_TYPE)) {
@@ -151,7 +154,7 @@ public class Graph {
                 ArrayList<Node> forRet = new ArrayList<>();
                 for (int i = 0; i < intern.size(); i++) {
                     if (intern.get(i).getType().equals(type)) {
-                        forRet.add(intern.get(i));
+                        forRet.add(intern.get(i)); //si es del tipus indicat
                     }
                 }
                 if (forRet.size() == 0) return null;
@@ -207,7 +210,7 @@ public class Graph {
             dicNameNodes.get(node.getName()).add(node);
         }
         else {
-            ArrayList<Node> forDic = new ArrayList<>(1);
+            ArrayList<Node> forDic = new ArrayList<>(1); //1 per estalviar memoria
             forDic.add(node);
             dicNameNodes.put(node.getName(), forDic);
         }
@@ -229,12 +232,6 @@ public class Graph {
         //TODO Node ha de retornar tambe true i false si volem conservar el boolean
 		return true;
 	}
-
-    private void removeEdgeFromTypeToNode(Node node, String type) {
-        for (Node a: elements.get(type).keySet()) {
-            a.removeEdge(node);
-        }
-    }
 
     /**
      * Esborra un node del graf.
