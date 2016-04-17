@@ -5,26 +5,23 @@ import java.util.Set;
 public abstract class Node {
     private int id;
     private String name;
-    private String type;
     
     /**
      * Constructor.
      * @param name: el nom del node
      */
-    public Node(String name, String type) {
+    public Node(String name) {
     	this.name = name;
         this.id = -1;
-        this.type = type;
     }
 
     /**
      * Constructor.
      * @param name: el nom del node
      */
-    public Node(int id, String name, String type) {
+    public Node(int id, String name) {
         this.name = name;
         this.id = id;
-        this.type = type;
     }
 
     /**
@@ -48,10 +45,7 @@ public abstract class Node {
      * Getter.
      * @return type: tipus del node
      */
-    public String getType()
-    {
-        return this.type;
-    }
+    public abstract String getType();
 
     /**
      * Getter.
@@ -76,6 +70,9 @@ public abstract class Node {
                 node.getID() == this.getID();
     }
 
+    public int hashCode() {
+        return Integer.hashCode(this.id);
+    }
 
     /**
      * Getter.

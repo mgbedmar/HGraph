@@ -14,11 +14,15 @@ public class Paper extends Node {
      * @param name
      */
     public Paper(String name) {
-    	super(name, Paper.TYPE);
+    	super(name);
     }
 
     public Paper(int id, String name) {
-        super(id, name, Paper.TYPE);
+        super(id, name);
+    }
+
+    public String getType() {
+        return Paper.TYPE;
     }
 
 	void addEdge(Node node)

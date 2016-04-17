@@ -12,11 +12,15 @@ public class Author extends Node {
      * @param name
      */
     public Author(String name) {
-        super(name, Author.TYPE);
+        super(name);
     }
 
     public Author(int id, String name) {
-        super(id, name, Author.TYPE);
+        super(id, name);
+    }
+
+    public String getType() {
+        return Author.TYPE;
     }
 
     void addEdge(Node node)
@@ -56,7 +60,6 @@ public class Author extends Node {
         else
             return null;
     }
-
 
 
 }
