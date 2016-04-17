@@ -42,41 +42,7 @@ public class Graph {
 		}
 		return tip;		
 	}
-	
-	/**
-	 * 
-	 * @param id: ID del node
-	 * @param type: tipus de Node
-	 * @return: true si el node de tipus type i ID id existeix al graf
-	 */
-	private boolean containsNode(int id, String type) {
-		if (!checkType(type).equals(WRONG_TYPE)) { //TODO
-			Iterator<Node> it = elements.get(type).iterator();
-			boolean found = false;
-			while(it.hasNext() && !found) {
-				found = (it.next().getID() == id);
-			}
-			return found;
-		}
-		//Excepcio Tipus erroni
-		return false;
-		
-	}
-	
-	private boolean containsNode(String name, String type) {
-		if (checkType(type) != WRONG_TYPE) { //TODO
-			Iterator<Node> it = elements.get(type).iterator();
-			boolean found = false;
-			while(it.hasNext() && !found) {
-				found = (it.next().getName() == name);
-			}
-			return found;
-		}
-		//Excepcio Tipus erroni
-		return false;
-		
-	}
-
+    
     private Node createNode(int id, String type)
     {
 
@@ -97,9 +63,12 @@ public class Graph {
 	
 	
 	//Metodes Publics
-	
-	
-	public Graph () {
+
+
+    /**
+     * Constructora. Crea un graf buit.
+     */
+    public Graph () {
 		elements = new TreeMap<>();
 		elements.put(AUTHORS, new HashMap<>() );
 		elements.put(ARTICLES, new HashMap<>());
@@ -112,8 +81,8 @@ public class Graph {
 	}
 
 	/**
-	 * 
-	 * @return: retorna tots els nodes del graf
+	 * Consultora dels nodes del graf.
+	 * @return: un conjunt amb tots els nodes del graf
 	 */
 	public Set<Node> getSetOfNodes() {
 		HashSet<Node> res = new HashSet<Node>();
@@ -126,9 +95,10 @@ public class Graph {
 	}
 
 	/**
-	 * 
-	 * @param type: tipus de Node
-	 * @return: Tots els nodes del graf del tipus desitjat. Null si el tipus no existeix
+	 * Consultora dels nodes d'un tipus donat.
+	 * @param type: tipus de node
+	 * @return: Tots els nodes del graf del tipus <em>type</em>, <em>null</em> si el tipus no existeix.
+     * Modificacions en el conjunt de retorn canviaran l'estat del graf.
 	 */
 	
 	public Set<Node> getSetOfNodes(String type) {
@@ -143,10 +113,10 @@ public class Graph {
 	}
 
 	/**
-	 * 
-	 * @param id
-	 * @param type
-	 * @return: si existeix, retorna el node de tipus type i ID id. Null si no existeix
+	 * Obte un node a partir de la id i el tipus.
+	 * @param id id del node que es busca
+	 * @param type tipus del node que es busca
+	 * @return: el node de tipus <em>type</em> i id <em>id</em>, <em>null</em> si no existeix
 	 */
 	
 	public Node getNode(int id, String type) {
@@ -163,10 +133,10 @@ public class Graph {
 	}
 
 	/**
-	 * 
-	 * @param name
-	 * @param type
-	 * @return
+	 * Obte tots els nodes d'un determinat tipus i nom.
+	 * @param name nom dels nodes buscats
+	 * @param type tipus dels nodes buscats
+	 * @return llista de nodes que tenen nom <em>name</em> i tipus <em>type</em>
 	 */
 	public ArrayList<Node> getNodes(String name, String type) {
 		String clauConsulta = checkType(type);
@@ -195,7 +165,8 @@ public class Graph {
 	 * Consultora dels veins d'un node.
 	 * @param node node del que es volen consultar els veins. Ha de ser un node
      *             obtingut del graf amb <em>getNode()</em>o <em>getNodes()</em>
-	 * @return conjunt de veins de <em>node</em>
+	 * @return conjunt de veins de <em>node</em>. Modificacions en el conjunt de retorn
+     * canviaran l'estat del graf.
 	 */
 	public Set<Node> getNeighbours(Node node) {
         return node.getNeighbours();
@@ -206,191 +177,97 @@ public class Graph {
 	 * @param node node del que es volen consultar els veins. Ha de ser un node
      *             obtingut del graf amb <em>getNode()</em>o <em>getNodes()</em>
 	 * @param type tipus dels nodes retornats
-	 * @return un conjunt amb els veins de tipus <em>type</em> del node <em>node</em>
+	 * @return un conjunt amb els veins de tipus <em>type</em> del node <em>node</em>.
+     * Modificacions en el conjunt de retorn
+     * canviaran l'estat del graf.
 	 */
 	public Set<Node> getNeighbours(Node node, String type) {
 		if (!checkType(type).equals(WRONG_TYPE)) {
 			return node.getNeighbours(type);
 		}
 		return null;
-	} 
-	
-	/**
-	 * 
-	 * @param name
-	 * @param type
-	 * @return
-	 */
-	
-	//AVIS --> S'ha d'implementar el constructor Node(nom) amb generacio automatica de ID's
-	
-	public void addNode(String name, String type) {
-		switch (type) {
-		
-		case AUTHORS:
-			this.elements.get(AUTHORS).add(new Author(name));			
-			break;
-		case ARTICLES:
-			this.elements.get(ARTICLES).add(new Paper(name));
-			break;
-		case CONFERENCES:
-			this.elements.get(CONFERENCES).add(new Conf(name));
-			break;
-		case TERMS:
-			this.elements.get(TERMS).add(new Term(name));
-			break;			
-		default:
-            //excepcio
-					
-		}
 	}
+
+    /**
+     * Afegeix un node al graf.
+     * @param node Node que es vol afegir al graf. Si te <em>id</em> negativa,
+     *             es genera una id unica per ell. Si no, es presuposa que
+     *             la id es unica i s'afegeix.
+     */
+    public void addNode(Node node) {
+        if (node.getID() < 0) {
+            ++maxID;
+            node.setID(maxID);
+        }
+        else if (node.getID() > maxID)
+            maxID = node.getID();
+
+        elements.get(node.getType()).put(node, node);
+        if (dicNameNodes.containsKey(node.getName())) {
+            dicNameNodes.get(node.getName()).add(node);
+        }
+        else {
+            ArrayList<Node> forDic = new ArrayList<>(1);
+            forDic.add(node);
+            dicNameNodes.put(node.getName(), forDic);
+        }
+    }
 	
+
 	/**
-	 * 
-	 * @param id
-	 * @param name
-	 * @param type
+	 * Afegeix una aresta de <em>a</em> a <em>b</em> (i la simetrica).
+	 * @param a Node extret directament del graf (amb <em>getNode()</em>
+     *          o be <em>getNodes()</em>
+	 * @param b Node extret directament del graf (amb <em>getNode()</em>
+     *          o be <em>getNodes()</em>
+	 * @return <em>true</em> si l'aresta s'ha afegit i <em>false</em>
+     * en cas contrari.
 	 */
-	
-	public void afegirNode(int id, String name, String type) {
-				
-		switch (type) {
-		
-		case AUTHORS:
-			this.elements.get(AUTHORS).add(new Author(id,name));			
-			break;
-		case ARTICLES:
-			this.elements.get(ARTICLES).add(new Paper(id,name));
-			break;
-		case CONFERENCES:
-			this.elements.get(CONFERENCES).add(new Conf(id,name));
-			break;
-		case TERMS:
-			this.elements.get(TERMS).add(new Term(id,name));
-			break;			
-		default:
-			//aqui hi haura una Excepcio
-					
-		}
-		
+	public boolean addEdge(Node a, Node b) {
+        a.addEdge(b);
+        b.addEdge(a);
+        //TODO Node ha de retornar tambe true i false si volem conservar el boolean
+		return true;
 	}
-	
-	/**
-	 * 
-	 * @param id1
-	 * @param type1
-	 * @param id2
-	 * @param type2
-	 * @return
-	 */
-	
-	public boolean afegirAresta(int id1, String type1, int id2, String type2) {
-		if (containsNode(id1,type1) && containsNode(id2,type2)) {
-			this.getNode(id1, type1).addEdge(this.getNode(id2, type2));
-			this.getNode(id2, type2).addEdge(this.getNode(id1, type1));
-			return true;
-		}		
-		return false;		
+
+    private void removeEdgeFromTypeToNode(Node node, String type) {
+        for (Node a: elements.get(type).keySet()) {
+            a.removeEdge(node);
+        }
+    }
+
+    /**
+     * Esborra un node del graf.
+     * @param node Node extret directament del graf (amb <em>getNode()</em>
+     *             o be <em>getNodes()</em>
+     * @return TODO no caldria return
+     */
+	public boolean removeNode(Node node) {
+        dicNameNodes.get(node.getName()).remove(node);
+        if (node.getType().equals(ARTICLES)) {
+            removeEdgeFromTypeToNode(node, TERMS);
+            removeEdgeFromTypeToNode(node, AUTHORS);
+            removeEdgeFromTypeToNode(node, CONFERENCES);
+        }
+        else {
+            removeEdgeFromTypeToNode(node, ARTICLES);
+        }
+        elements.get(node.getType()).remove(node);
+        return true;
+    }
+
+    /**
+     * Esborra, si existeix, l'aresta de <em>a</em> a <em>b</em>.
+     * @param a Node extret directament del graf (amb <em>getNode()</em>
+     *          o be <em>getNodes()</em>
+     * @param b Node extret directament del graf (amb <em>getNode()</em>
+     *          o be <em>getNodes()</em>
+     * @return TODO si volem aixo s'ha de fer als nodes
+     */
+	public boolean removeEdge(Node a, Node b) {
+        a.removeEdge(b);
+        b.removeEdge(a);
+        return true;
 	}
-	
-	/**
-	 * 
-	 * @param a
-	 * @param b
-	 * @return
-	 */
-	public boolean afegirAresta(Node a, Node b) {
-		if (this.elements.get(a.getType()).contains(a) && this.elements.get(b.getType()).contains(b)) {
-			a.addEdge(b); b.addEdge(a);
-			return true;
-		}		
-		return false;
-	}
-	
-	/**
-	 * 
-	 * @param name1, type1: nom i tipus del primer node
-	 * @param name2, type2: nom i tipus del segon node
-	 * @return : true si s'ha creat la relacio entre els dos nodes de forma simetrica.
-	 * 			 false si:
-	 * 					- Ja existia la relacio en ambdos nodes
-	 * 					- Un o els dos nodes no existeixen al graf
-	 * 					
-	 */
-	
-	public boolean afegirAresta(String name1, String type1, String name2, String type2) {
-		if (containsNode(name1,type1) && containsNode(name2,type2)) {
-			
-			Node a = this.getNode(name1, type1);
-			Node b = this.getNode(name2, type2);
-			boolean repe = a.getNeighbours(type2).contains(b) || b.getNeighbours(type1).contains(a);			
-			if (!repe){
-				a.addEdge(b);
-				b.addEdge(a);
-				return true;
-			}
-			return false;
-		}		
-		return false;
-	}
-	
-	/**
-	 * 
-	 * @param id
-	 * @param type
-	 * @return : true si el node ha estat borrat correctement. False si el tipus era invalid o no estaba al graf
-	 */
-	public boolean esborrarNode(int id, String type) {
-		Iterator<Node> it = this.elements.get(type).iterator();
-		boolean finish = false;
-		while (it.hasNext() && !finish) {
-			if (it.next().getID() == id) {
-				finish = true;
-				it.remove();
-			}
-		}
-		return finish;
-	}
-	
-	/**
-	 * 
-	 * @param name : nom del Node
-	 * @param type : tipus del Node
-	 * @return : true si el node ha estat borrat correctement. False si el tipus era invalid o no estaba al graf
-	 */
-	public boolean esborrarNode(String name, String type) {
-		if (checkType(type)!= WRONG_TYPE) {
-			Iterator<Node> it = this.elements.get(type).iterator();
-			boolean finish = false;
-			while (it.hasNext() && !finish) {
-				if (it.next().getName() == name) {
-					finish = true;
-					it.remove();
-				}
-			}
-			return finish;			
-		}
-		//Aquí hi hauria una Exception
-		return false;
-		
-	}
-	
-	/**
-	 * 
-	 * @param node1: Node a
-	 * @param node2: Node b
-	 * @return true si ambdos nodes existien al Graf abans de la crida.
-	 */
-	
-	public boolean esborrarAresta(Node node1, Node node2) {
-		if (elements.get(node1.getType()).contains(node1) && elements.get(node2.getType()).contains(node2)) {
-			node1.deleteEdge(node2); node2.deleteEdge(node1);
-			return true;
-		}
-		return false;
-	}
-	
-	
-	
 
 }

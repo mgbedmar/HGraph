@@ -34,7 +34,7 @@ public class Author extends Node {
      *
      * @param node
      */
-    void deleteEdge(Node node)
+    void removeEdge(Node node)
     {
         if(node.getType().equals(Paper.TYPE))
             paperadj.remove(node);

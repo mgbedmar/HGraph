@@ -46,7 +46,7 @@ public class Paper extends Node {
      *
      * @param node
      */
-    void deleteEdge(Node node)
+    void removeEdge(Node node)
     {
         switch(node.getType())
         {

@@ -97,5 +97,5 @@ public abstract class Node {
      * Esborra l'aresta del p.i. a node. No esborra l'aresta
      * simetrica!
      */
-    abstract void deleteEdge(Node node);
+    abstract void removeEdge(Node node);
 }

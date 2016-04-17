@@ -37,7 +37,7 @@ public class Ghost extends Node {
     }
 
 
-    void deleteEdge(Node node) {
+    void removeEdge(Node node) {
 
     }
 
