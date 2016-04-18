@@ -226,7 +226,9 @@ public class Graph {
      *             o be <em>getNodes()</em>
      */
 	public void removeNode(Node node) {
-        dicNameNodes.get(node.getName()).remove(node);
+        if (dicNameNodes.containsKey(node.getName())) {
+			dicNameNodes.get(node.getName()).remove(node);
+		}
         if (node.getType().equals(Config.paperType)) {
             removeEdgeFromTypeToNode(node, Config.termType);
             removeEdgeFromTypeToNode(node, Config.authorType);
