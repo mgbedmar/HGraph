@@ -1,6 +1,7 @@
 package Presentation;
 
 
+import Domain.Config;
 import Domain.DomainController;
 
 import java.lang.reflect.Array;
@@ -363,10 +364,10 @@ public class PresentationController
                 "Conferència"
         };
         String[] types = {
-                "author",
-                "paper",
-                "therm",
-                "conference"
+                Config.authorType,
+                Config.paperType,
+                Config.termType,
+                Config.confType
         };
 
         Scanner entrada = new Scanner(System.in);
@@ -437,7 +438,7 @@ public class PresentationController
         {
             dc.addEdge(naIds.get(0), e.nA.type,
                     nbIds.get(0), e.nB.type);
-            System.out.println("Aresta " +e.toString()+" esborrada.");
+            System.out.println("Aresta " +e.toString()+" afegida.");
         }
     }
 
