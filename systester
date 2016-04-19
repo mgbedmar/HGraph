@@ -1,0 +1,54 @@
+#!/bin/bash
+#Color scheme
+######
+# Reset
+Color_Off='\e[0m'       # Text Reset
+
+# Regular Colors
+Yellow='\e[0;33m'       # Yellow
+Red='\e[0;31m'          # Red
+Green='\e[0;32m'        # Green
+#######
+program="build/libs/HGraph.jar"
+
+  declare -i total
+  total=0
+  declare -i ok
+  ok=0
+
+  if [ ! -d systest/output ]; then
+    mkdir systest/output
+  fi
+  if [ -f $program ]; then
+    echo "###Testing file: $program ###" 
+    for f in systest/tests/*.in; do
+      testFileName=${f%.*}
+      testFileName=${testFileName##*/}
+      java -jar $program noverbose < "systest/tests/$testFileName.in" > systest/output/$testFileName.out
+      cat "systest/output/$testFileName.out" > outputP.temp
+      cat "systest/tests/$testFileName.out" > outputW.temp
+      total=total+1
+      result=$(diff -y outputW.temp outputP.temp)
+      if [ $? -eq 0 ]
+      then
+         ok=ok+1
+         echo "$testFileName - OK"
+      else
+         echo -e "${Red}$testFileName - FAILED:"
+         echo "$result"
+         echo -e "${Color_Off}"
+      fi
+      rm outputP.temp outputW.temp
+    done
+  
+    if [ $total -eq $ok ]; then
+         echo -e "${Green}";
+    else
+         echo -e "${Red}";
+    fi
+    echo "PASSED: $ok/$total"
+    echo -en "${Color_Off}"
+  fi
+
+echo -ne "${Color_Off}"
+

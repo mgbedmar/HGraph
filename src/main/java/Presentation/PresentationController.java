@@ -12,6 +12,7 @@ import java.util.Scanner;
 public class PresentationController
 {
     private static DomainController dc;
+    private static boolean verbose;
     private static class NodeReference
     {
         public String name;
@@ -45,15 +46,18 @@ public class PresentationController
                     "tipusB: "+nB.type+", nomB: "+nB.name+")";
         }
     }
-
+    private static Scanner in;
     public static void main(String[] args)
     {
+        verbose = !(args.length > 0 && args[0].equals("noverbose"));
+
         dc = new DomainController();
-        Scanner entrada = new Scanner(System.in);
+        in = new Scanner(System.in);
         Integer x;
         do{
             showMainMenu();
-            x = entrada.nextInt();
+            x = in.nextInt();
+            in.nextLine(); //Consume '\n'
             switch(x)
             {
                 case 1:
@@ -68,11 +72,11 @@ public class PresentationController
     }
 
     private static void goToQueryGraph() {
-        Scanner entrada = new Scanner(System.in);
         Integer x;
         do{
             showQueryMenu();
-            x = entrada.nextInt();
+            x = in.nextInt();
+            in.nextLine(); //Consume '\n'
             switch(x)
             {
                 case 1:
@@ -98,10 +102,10 @@ public class PresentationController
     }
 
     private static void queryByReference() {
-        System.out.println("Indica la parella referència: ");
+        info("Indica la parella referència: ");
         NodeReference nRefSource = readNode();
         NodeReference nRefEnd = readNode();
-        System.out.println("Indica el node font: ");
+        info("Indica el node font: ");
         NodeReference nSource = readNode();
 
         ArrayList<Integer> nRefSourceIds = dc.getNodes(nRefSource.name, nRefSource.type);
@@ -121,12 +125,18 @@ public class PresentationController
 
     }
 
+    private static void info(String s) {
+        if(verbose)
+            System.out.println(s);
+
+    }
+
     private static void goToResultMenu() {
-        Scanner entrada = new Scanner(System.in);
         Integer x;
         do{
             showResultMenu();
-            x = entrada.nextInt();
+            x = in.nextInt();
+            in.nextLine(); //Consume '\n'
             switch(x)
             {
                 case 1:
@@ -160,53 +170,54 @@ public class PresentationController
 
     private static void sortByRow()
     {
-        Scanner entrada = new Scanner(System.in);
-        System.out.println("Escriu el numero de columna:");
-        Integer col = entrada.nextInt();
-        System.out.println("Ascendentment(0) o descendentment(1):");
-        Integer dir = entrada.nextInt();
+        info("Escriu el numero de columna:");
+        Integer col = in.nextInt();
+        in.nextLine(); //Consume '\n'
+        info("Ascendentment(0) o descendentment(1):");
+        Integer dir = in.nextInt();
+        in.nextLine(); //Consume '\n'
         dc.sortResultByRow(col, dir);
     }
 
     private static void selectName()
     {
-        Scanner entrada = new Scanner(System.in);
-        System.out.println("Escriu el nom a seleccionar:");
-        String x = entrada.nextLine();
+        info("Escriu el nom a seleccionar:");
+        String x = in.nextLine();
         dc.selectResultName(x);
     }
 
     private static void filterName()
     {
-        Scanner entrada = new Scanner(System.in);
-        System.out.println("Escriu el nom a amagar:");
-        String x = entrada.nextLine();
+        info("Escriu el nom a amagar:");
+        String x = in.nextLine();
         dc.hideResultName(x);
     }
 
     /*
         private static void selectRows() {
-            Scanner entrada = new Scanner(System.in);
-            System.out.println("Escriu el primer numero del rang:");
-            Integer x1 = entrada.nextInt();
-            System.out.println("Escriu el segon numero del rang:");
-            Integer x2 = entrada.nextInt();
+            info("Escriu el primer numero del rang:");
+            Integer x1 = in.nextInt();
+            in.nextLine(); //Consume '\n'
+            info("Escriu el segon numero del rang:");
+            Integer x2 = in.nextInt();
+            in.nextLine(); //Consume '\n'
             dc.selectResultRows(x1, x2);
         }
     */
     private static void hideRows() {
-        Scanner entrada = new Scanner(System.in);
-        System.out.println("Escriu el primer numero del rang:");
-        Integer x1 = entrada.nextInt();
-        System.out.println("Escriu el segon numero del rang:");
-        Integer x2 = entrada.nextInt();
+        info("Escriu el primer numero del rang:");
+        Integer x1 = in.nextInt();
+        in.nextLine(); //Consume '\n'
+        info("Escriu el segon numero del rang:");
+        Integer x2 = in.nextInt();
+        in.nextLine(); //Consume '\n'
         dc.hideResultRows(x1, x2);
     }
 
     private static void hideRow() {
-        Scanner entrada = new Scanner(System.in);
-        System.out.println("Escriu el numero de fila a amagar:");
-        Integer x = entrada.nextInt();
+        info("Escriu el numero de fila a amagar:");
+        Integer x = in.nextInt();
+        in.nextLine(); //Consume '\n'
         dc.hideResultRow(x);
     }
 
@@ -221,7 +232,7 @@ public class PresentationController
                 "Ordenar per columna",
                 "Treure tots els filtres"
         };
-        System.out.println("======Resultat de la consulta======");
+        info("======Resultat de la consulta======");
         Map<String, ArrayList<String>> filters =  dc.getFilters();
         Integer filteredNamesSize = filters.get("filteredNames").size();
         Integer filteredLinesSize = filters.get("filteredLines").size();
@@ -231,10 +242,10 @@ public class PresentationController
                 filteredNamesSize > 0 ||
                 selectedNamesSize > 0)
         {
-            System.out.println("Filtres:");
+            info("Filtres:");
             if(filteredLinesSize> 0)
             {
-                System.out.println("Linies amagades:");
+                info("Linies amagades:");
                 for(int i = 0; i < filteredLinesSize; i++)
                 {
                     if(i%6 == 0)
@@ -245,7 +256,7 @@ public class PresentationController
 
             if(selectedNamesSize > 0)
             {
-                System.out.println("Noms seleccionats:");
+                info("Noms seleccionats:");
                 for(int i = 0; i < selectedNamesSize; i++)
                 {
                     System.out.println("-"+filters.get("selectedNames").get(i));
@@ -253,14 +264,14 @@ public class PresentationController
             }
             else if(filteredNamesSize > 0)
             {
-                System.out.println("Noms amagats:");
+                info("Noms amagats:");
                 for(int i = 0; i < filteredNamesSize; i++)
                 {
                     System.out.println("-"+filters.get("filteredNames").get(i));
                 }
             }
         }
-        System.out.println("Resultat:");
+        info("Resultat:");
         Integer resultSize = dc.getResultSize();
         if(resultSize > 0)
         {
@@ -284,9 +295,9 @@ public class PresentationController
     }
 
     private static void queryNtoN() {
-        System.out.println("Font:");
+        info("Font:");
         String typeSource = readType();
-        System.out.println("Destí:");
+        info("Destí:");
         String typeEnd = readType();
 
 
@@ -295,7 +306,7 @@ public class PresentationController
     }
 
     private static void query1toN() {
-        System.out.println("Indica la informació del node font:");
+        info("Indica la informació del node font:");
         NodeReference nsource = readNode();
         String typeEnd = readType();
 
@@ -313,9 +324,9 @@ public class PresentationController
     }
 
     private static void query1to1() {
-        System.out.println("Indica la informació del node font:");
+        info("Indica la informació del node font:");
         NodeReference nsource = readNode();
-        System.out.println("Indica la informació del node destí:");
+        info("Indica la informació del node destí:");
         NodeReference nend = readNode();
 
         ArrayList<Integer> nsourceIds = dc.getNodes(nsource.name, nsource.type);
@@ -370,19 +381,19 @@ public class PresentationController
                 Config.confType
         };
 
-        Scanner entrada = new Scanner(System.in);
-        System.out.println("Escull un tipus:");
+        info("Escull un tipus:");
         printMenu(localizedTypes);
-        Integer x = entrada.nextInt();
+        Integer x = in.nextInt();
+        in.nextLine(); //Consume '\n'
         return types[x];
     }
 
     private static void goToEditGraph() {
-        Scanner entrada = new Scanner(System.in);
         Integer x;
         do{
             showGraphMenu();
-            x = entrada.nextInt();
+            x = in.nextInt();
+            in.nextLine(); //Consume '\n'
             switch(x)
             {
                 case 1:
@@ -443,7 +454,7 @@ public class PresentationController
     }
 
     private static EdgeReference readEdge() {
-        System.out.println("Indica els nodes que formen l'aresta:");
+        info("Indica els nodes que formen l'aresta:");
         NodeReference A = readNode();
         NodeReference B = readNode();
 
@@ -453,9 +464,8 @@ public class PresentationController
     }
 
     private static void modifyNode() {
-        Scanner entrada = new Scanner(System.in);
         NodeReference n = readNode();
-        String newName = entrada.nextLine();
+        String newName = in.nextLine();
         ArrayList<Integer> nIds =dc.getNodes(n.name, n.type);
         if(nIds.isEmpty())
         {
@@ -494,16 +504,15 @@ public class PresentationController
 
     private static NodeReference readNode() {
 
-        Scanner entrada = new Scanner(System.in);
-        System.out.println("Introdueix el nom del node: ");
-        String name = entrada.nextLine();
+        info("Introdueix el nom del node: ");
+        String name = in.nextLine();
         String type = readType();
         NodeReference nr = new NodeReference(name, type);
         return nr;
     }
 
     private static void printMenu(String[] opts) {
-        for(int i = 0; i < opts.length; i++)
+        for(int i = 0; i < opts.length && verbose; i++)
         {
             System.out.printf("%d - %s\n", i, opts[i]);
         }
@@ -515,7 +524,7 @@ public class PresentationController
                 "Editar graf",
                 "Consultar graf"
         };
-        System.out.println("Menu:");
+        info("Menu:");
         printMenu(opts);
     }
 
@@ -528,7 +537,7 @@ public class PresentationController
                 "Afegir aresta",
                 "Esborrar aresta"
         };
-        System.out.println("Escull una opció:");
+        info("Escull una opció:");
         printMenu(opts);
     }
 
@@ -542,7 +551,7 @@ public class PresentationController
                 "N a N",
                 "Per referencia"
         };
-        System.out.println("Selecciona el tipus de consulta:");
+        info("Selecciona el tipus de consulta:");
         printMenu(opts);
     }
 
