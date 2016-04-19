@@ -174,7 +174,7 @@ public class PresentationController
         info("Escriu el numero de columna:");
         Integer col = in.nextInt();
         in.nextLine(); //Consume '\n'
-        info("Ascendentment(0) o descendentment(1):");
+        info("Ascendentment(1) o descendentment(0):");
         Integer dir = in.nextInt();
         in.nextLine(); //Consume '\n'
         dc.sortResultByRow(col, dir);
@@ -273,6 +273,19 @@ public class PresentationController
             }
         }
         info("Resultat:");
+
+        ArrayList<String> fila = dc.getResultRow();
+        if (fila == null) System.out.println("<buit>");
+        while (fila != null)
+        {
+            for(int j = 0; j < fila.size(); j++)
+            {
+                System.out.printf(fila.get(j) + " ");
+            }
+            System.out.println();
+            fila = dc.getResultRow();
+        }
+        /*
         Integer resultSize = dc.getResultSize();
         if(resultSize > 0)
         {
@@ -290,7 +303,7 @@ public class PresentationController
         {
             System.out.println("<buit>");
         }
-
+        */
 
         printMenu(opts);
     }
