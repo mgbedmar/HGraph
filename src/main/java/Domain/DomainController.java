@@ -103,7 +103,7 @@ public class DomainController
      * @param typeB
      */
     public void addEdge(int idA, String typeA,
-                        int idB, String typeB)
+                        int idB, String typeB) throws DomainException
     {
         Node a = g.getNode(idA, typeA);
         Node b = g.getNode(idB, typeB);

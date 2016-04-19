@@ -3,6 +3,7 @@ package Presentation;
 
 import Domain.Config;
 import Domain.DomainController;
+import Domain.DomainException;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -447,9 +448,13 @@ public class PresentationController
         }
         else
         {
-            dc.addEdge(naIds.get(0), e.nA.type,
-                    nbIds.get(0), e.nB.type);
-            System.out.println("Aresta " +e.toString()+" afegida.");
+            try {
+                dc.addEdge(naIds.get(0), e.nA.type,
+                        nbIds.get(0), e.nB.type);
+                System.out.println("Aresta " +e.toString()+" afegida.");
+            } catch (DomainException e1) {
+                System.out.println(e1.getFriendlyMessage());
+            }
         }
     }
 

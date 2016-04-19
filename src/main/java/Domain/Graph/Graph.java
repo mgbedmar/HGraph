@@ -1,5 +1,6 @@
 package Domain.Graph;
 import Domain.Config;
+import Domain.DomainException;
 
 import java.util.*;
 
@@ -215,7 +216,7 @@ public class Graph {
 	 * @param b Node extret directament del graf (amb <em>getNode()</em>
      *          o be <em>getNodes()</em>
 	 */
-	public void addEdge(Node a, Node b) {
+	public void addEdge(Node a, Node b) throws DomainException {
         a.addEdge(b);
         b.addEdge(a);
 	}

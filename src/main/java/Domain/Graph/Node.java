@@ -1,4 +1,6 @@
 package Domain.Graph;
+import Domain.DomainException;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -95,7 +97,7 @@ public abstract class Node {
      * Afegeix una aresta del p.i. a node. No afegeix l'aresta
      * simetrica!
      */
-    abstract void addEdge(Node node);
+    abstract void addEdge(Node node) throws DomainException;
 
     /**
      * Esborra l'aresta del p.i. a node. No esborra l'aresta

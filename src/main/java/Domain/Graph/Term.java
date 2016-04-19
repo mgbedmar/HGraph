@@ -3,6 +3,7 @@ package Domain.Graph;
 import java.util.HashSet;
 import java.util.Set;
 import Domain.Config;
+import Domain.DomainException;
 
 public class Term extends Node {
     public final static String TYPE = Config.termType;
@@ -25,10 +26,13 @@ public class Term extends Node {
         return Term.TYPE;
     }
 
-    void addEdge(Node node)
+    void addEdge(Node node) throws DomainException
     {
         if(node.getType().equals(Paper.TYPE))
             paperadj.add(node);
+        else
+            throw new DomainException("No es pot afegir una aresta amb node font tipus '"+
+            this.TYPE+"' i node destí '"+node.getType()+"'");
     }
 
     /**

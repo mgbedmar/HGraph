@@ -10,6 +10,7 @@ public class DomainException extends Exception {
 
     public DomainException(String message) {
         super(message);
+        this.friendlyMessage = message;
     }
 
     public DomainException(String message, String friendlyMessage) {
