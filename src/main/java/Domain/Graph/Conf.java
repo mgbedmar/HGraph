@@ -20,6 +20,7 @@ public class Conf extends Node {
 
     public Conf(int id, String name) {
         super(id, name);
+        paperadj = new HashSet<>();
     }
 
     public String getType() {
@@ -63,7 +64,7 @@ public class Conf extends Node {
         if(type.equals(Paper.TYPE))
             return paperadj;
         else
-            return null;
+            return new HashSet<Node>();
     }
 
 

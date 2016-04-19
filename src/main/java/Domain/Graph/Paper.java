@@ -24,6 +24,9 @@ public class Paper extends Node {
 
     public Paper(int id, String name) {
         super(id, name);
+        termadj = new HashSet<>();
+        confadj = new HashSet<>();
+        authoradj = new HashSet<>();
     }
 
     public String getType() {
@@ -98,7 +101,7 @@ public class Paper extends Node {
     		case Term.TYPE:
     	        return termadj;
     	    default:
-    	    	return null;
+                return new HashSet<Node>();
     	}
     }
 

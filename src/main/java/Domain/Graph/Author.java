@@ -20,6 +20,7 @@ public class Author extends Node {
 
     public Author(int id, String name) {
         super(id, name);
+        paperadj = new HashSet<>();
     }
 
     public String getType() {
@@ -60,10 +61,10 @@ public class Author extends Node {
      */
     Set<Node> getNeighbours(String type)
     {
-        if(type.equals(Paper.TYPE))
+        if (type.equals(Paper.TYPE))
             return paperadj;
         else
-            return null;
+            return new HashSet<Node>();
     }
 
 

@@ -20,6 +20,7 @@ public class Term extends Node {
 
     public Term(int id, String name) {
         super(id, name);
+        paperadj = new HashSet<>();
     }
 
     public String getType() {
@@ -64,7 +65,7 @@ public class Term extends Node {
         if(type.equals(Paper.TYPE))
             return paperadj;
         else
-            return null;
+            return new HashSet<Node>();
     }
 
 

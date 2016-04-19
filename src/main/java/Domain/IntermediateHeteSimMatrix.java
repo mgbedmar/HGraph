@@ -23,13 +23,12 @@ public class IntermediateHeteSimMatrix extends HeteSimMatrix {
         Set<Node> cols;
 
 	/* Inicialitzem hashmap */
-        this.m = new HashMap<Node, HashMap<Node, Float>>(this.numRows);
+        this.m = new HashMap<>(this.numRows);
         float one = 1;
         int k = 0;
 
         for (Node i : rows) {
-            HashMap<Node, Float> dicCol =
-                    new HashMap<Node, Float>(/* parametres */);
+            HashMap<Node, Float> dicCol = new HashMap<>();
             cols = graf.getNeighbours(i, tCol);
             if (!cols.isEmpty()) {
 		/* Normalitzar per files */

@@ -149,6 +149,7 @@ public class DomainController
 
         r = Query.query1to1(g, source, end, config.defaultPath.get(typeSource).get(typeEnd));
 
+
     }
 
     /**
