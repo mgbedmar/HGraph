@@ -16,6 +16,9 @@ public class Paper extends Node {
      */
     public Paper(String name) {
     	super(name);
+        termadj = new HashSet<>();
+        confadj = new HashSet<>();
+        authoradj = new HashSet<>();
     }
 
     public Paper(int id, String name) {

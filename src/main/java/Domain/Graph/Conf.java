@@ -14,6 +14,7 @@ public class Conf extends Node {
      */
     public Conf(String name) {
         super(name);
+        paperadj = new HashSet<>();
     }
 
     public Conf(int id, String name) {

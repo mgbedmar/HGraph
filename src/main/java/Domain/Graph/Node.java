@@ -64,8 +64,12 @@ public abstract class Node {
     }
 
     //dos nodes són iguals si són del mateix tipus i tenen la mateixa id
-    public boolean equals(Node node)
+    public boolean equals(Object obj)
     {
+        if (obj == null) return false;
+        if (obj == this) return true;
+        if (!(obj instanceof Node)) return false;
+        Node node = (Node) obj;
         return node.getType().equals(this.getType()) &&
                 node.getID() == this.getID();
     }

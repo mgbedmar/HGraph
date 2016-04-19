@@ -14,6 +14,7 @@ public class Author extends Node {
      */
     public Author(String name) {
         super(name);
+        paperadj = new HashSet<>();
     }
 
     public Author(int id, String name) {

@@ -14,6 +14,7 @@ public class Term extends Node {
      */
     public Term(String name) {
         super(name);
+        paperadj = new HashSet<>();
     }
 
     public Term(int id, String name) {
