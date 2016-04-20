@@ -12,11 +12,11 @@ public class IntermediateHeteSimMatrix extends HeteSimMatrix {
     /**
      * Constructora. Crea la matriu U_tRow,E si u es cert.
      */
-    public IntermediateHeteSimMatrix(Graph graf, String tRow, String tCol) {
+    public IntermediateHeteSimMatrix(Graph graf, String tRow, String tCol) throws DomainException {
         initIntermediateMatrix(graf, tRow, tCol);
     }
 
-    private void initIntermediateMatrix(Graph graf, String tRow, String tCol) {
+    private void initIntermediateMatrix(Graph graf, String tRow, String tCol) throws DomainException {
 	/* Agafem el conjunt que indexa les files */
         Set<Node> rows = graf.getSetOfNodes(tRow);
         this.numRows = rows.size();

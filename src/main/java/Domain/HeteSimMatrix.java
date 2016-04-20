@@ -23,13 +23,12 @@ public class HeteSimMatrix {
      * Crea la matriu U_tRow,TCol (transposada si i nomes 
      * si tr es cert)
      */
-    public HeteSimMatrix(boolean tr, Graph graf,
-                         String tRow, String tCol) {
+    public HeteSimMatrix(boolean tr, Graph graf, String tRow, String tCol) throws DomainException {
         if (tr) initMatrix(graf, tCol, tRow);
         else initMatrix(graf, tRow, tCol);
     }
 
-    private void initMatrix(Graph graf, String tRow, String tCol) {
+    private void initMatrix(Graph graf, String tRow, String tCol) throws DomainException {
         Set<Node> rows = graf.getSetOfNodes(tRow);
         this.numRows = rows.size();
         Set<Node> cols = graf.getSetOfNodes(tCol);

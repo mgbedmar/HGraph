@@ -10,7 +10,7 @@ public class HeteSim {
      * tipus pel que comenca el cami i tots els nodes 
      * del tipus pel que acaba el cami
      */
-    public static HeteSimMatrix run(Graph graf, ArrayList<String> cami) {
+    public static HeteSimMatrix run(Graph graf, ArrayList<String> cami) throws DomainException {
         ArrayList<String> cami1 = new ArrayList<String>();
         ArrayList<String> cami2 = new ArrayList<String>();
         subdividirCami(cami, cami1, cami2);
@@ -25,7 +25,7 @@ public class HeteSim {
     /* Retorna la matriu PM del cami cami */
     private static HeteSimMatrix calculatePM(Graph graf,
                                             ArrayList<String> cami,
-                                            String tNextE) {
+                                            String tNextE) throws DomainException{
         HeteSimMatrix uini, ufi, uprod;
         boolean interm = cami.get(cami.size()-1).equals(Config.ghostType);
 
