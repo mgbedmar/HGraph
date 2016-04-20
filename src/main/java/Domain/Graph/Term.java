@@ -40,10 +40,12 @@ public class Term extends Node {
      *
      * @param node
      */
-    void removeEdge(Node node)
-    {
+    void removeEdge(Node node) throws DomainException {
         if(node.getType().equals(Paper.TYPE))
             paperadj.remove(node);
+        else
+            throw new DomainException("No es pot esborrar una aresta amb node font tipus '"+
+                    this.TYPE+"' i node destí '"+node.getType()+"'");
     }
 
     /**

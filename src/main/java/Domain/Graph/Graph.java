@@ -64,8 +64,7 @@ public class Graph {
      * @param node
      * @param type
      */
-    private void removeEdgeFromTypeToNode(Node node, String type)
-    {
+    private void removeEdgeFromTypeToNode(Node node, String type) throws DomainException {
         for (Node a: elements.get(type).keySet())
         {
             a.removeEdge(node);
@@ -268,7 +267,7 @@ public class Graph {
      * @param b Node extret directament del graf (amb <em>getNode()</em>
      *          o be <em>getNodes()</em>
      */
-	public void removeEdge(Node a, Node b) {
+	public void removeEdge(Node a, Node b) throws DomainException {
         a.removeEdge(b);
         b.removeEdge(a);
 	}

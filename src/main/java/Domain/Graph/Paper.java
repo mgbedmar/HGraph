@@ -55,8 +55,7 @@ public class Paper extends Node {
      *
      * @param node
      */
-    void removeEdge(Node node)
-    {
+    void removeEdge(Node node) throws DomainException {
         switch(node.getType())
         {
             case Conf.TYPE:
@@ -68,6 +67,9 @@ public class Paper extends Node {
             case Term.TYPE:
                 termadj.remove(node);
                 break;
+            default:
+                throw new DomainException("No es pot esborrar una aresta amb node font tipus '"+
+                        this.TYPE+"' i node destí '"+node.getType()+"'");
         }
     }
 

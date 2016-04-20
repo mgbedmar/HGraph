@@ -102,5 +102,5 @@ public abstract class Node {
      * Esborra l'aresta del p.i. a node. No esborra l'aresta
      * simetrica!
      */
-    abstract void removeEdge(Node node);
+    abstract void removeEdge(Node node) throws DomainException;
 }
