@@ -5,7 +5,6 @@ import Domain.Config;
 import Domain.DomainController;
 import Domain.DomainException;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Scanner;
@@ -285,25 +284,6 @@ public class PresentationController
             System.out.println();
             fila = dc.getResultRow();
         }
-        /*
-        Integer resultSize = dc.getResultSize();
-        if(resultSize > 0)
-        {
-            for(int i = 0; i < resultSize; i++)
-            {
-                ArrayList<String> fila = dc.getResultRow();
-                for(int j = 0; j < fila.size(); j++)
-                {
-                    System.out.printf(fila.get(j));
-                }
-                System.out.println();
-            }
-        }
-        else
-        {
-            System.out.println("<buit>");
-        }
-        */
 
         printMenu(opts);
     }
