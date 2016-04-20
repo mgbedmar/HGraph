@@ -101,27 +101,30 @@ public class PresentationController
         }while(x != 0);
     }
 
-    private static void queryByReference() {
+    private static void queryByReference()
+    {
         info("Indica la parella referència: ");
         NodeReference nRefSource = readNode();
         NodeReference nRefEnd = readNode();
         info("Indica el node font: ");
         NodeReference nSource = readNode();
+        try
+        {
+            ArrayList<Integer> nRefSourceIds = dc.getNodes(nRefSource.name, nRefSource.type);
+            ArrayList<Integer> nRefEndIds = dc.getNodes(nRefEnd.name, nRefEnd.type);
+            ArrayList<Integer> nSourceIds = dc.getNodes(nSource.name, nSource.type);
 
-        ArrayList<Integer> nRefSourceIds = dc.getNodes(nRefSource.name, nRefSource.type);
-        ArrayList<Integer> nRefEndIds = dc.getNodes(nRefEnd.name, nRefEnd.type);
-        ArrayList<Integer> nSourceIds = dc.getNodes(nSource.name, nSource.type);
-        if(nRefSourceIds.isEmpty() || nRefEndIds.isEmpty() || nSourceIds.isEmpty())
-        {
-            System.out.println("Algun dels noms introduits no es correcte");
-        }
-        else
-        {
             dc.queryByReference(nRefSourceIds.get(0), nRefSource.type,
                     nRefEndIds.get(0), nRefEnd.type,
                     nSourceIds.get(0), nSource.type);
             goToResultMenu();
         }
+        catch(DomainException de)
+        {
+            System.out.println(de.getFriendlyMessage());
+        }
+
+
 
     }
 
@@ -295,8 +298,13 @@ public class PresentationController
         String typeEnd = readType();
 
 
-        dc.queryNtoN(typeSource, typeEnd);
-        goToResultMenu();
+        try {
+            dc.queryNtoN(typeSource, typeEnd);
+            goToResultMenu();
+        } catch (DomainException e) {
+            System.out.println(e.getFriendlyMessage());
+        }
+
     }
 
     private static void query1toN() {
@@ -304,16 +312,20 @@ public class PresentationController
         NodeReference nsource = readNode();
         String typeEnd = readType();
 
-        ArrayList<Integer> nsourceIds = dc.getNodes(nsource.name, nsource.type);
-        if(nsourceIds.isEmpty())
+        try
         {
-            System.out.println("El node amb nom "+nsource.name+" no existeix al graf.");
-        }
-        else
-        {
+            ArrayList<Integer> nsourceIds = dc.getNodes(nsource.name, nsource.type);
             dc.query1toN(nsourceIds.get(0), nsource.type, typeEnd);
             goToResultMenu();
         }
+        catch(DomainException de)
+        {
+            System.out.println(de.getFriendlyMessage());
+        }
+
+
+
+
 
     }
 
@@ -323,17 +335,17 @@ public class PresentationController
         info("Indica la informació del node destí:");
         NodeReference nend = readNode();
 
-        ArrayList<Integer> nsourceIds = dc.getNodes(nsource.name, nsource.type);
-        ArrayList<Integer> nendIds = dc.getNodes(nend.name, nend.type);
-        if(nsourceIds.isEmpty() || nendIds.isEmpty())
+        try
         {
-            System.out.println("Algun dels noms escrits no es troba al graf");
-        }
-        else
-        {
+            ArrayList<Integer> nsourceIds = dc.getNodes(nsource.name, nsource.type);
+            ArrayList<Integer> nendIds = dc.getNodes(nend.name, nend.type);
             dc.query1to1(nsourceIds.get(0), nsource.type,
                     nendIds.get(0), nend.type);
             goToResultMenu();
+        }
+        catch(DomainException de)
+        {
+            System.out.println(de.getFriendlyMessage());
         }
 
     }
@@ -341,24 +353,31 @@ public class PresentationController
     private static void queryNeighbours() {
         NodeReference n = readNode();
 
-        ArrayList<Integer> nIds = dc.getNodes(n.name, n.type);
-        if(nIds.isEmpty())
+        try
         {
-            System.out.println("El node amb nom "+n.name+" no existeix al graf.");
-        }
-        else
-        {
+            ArrayList<Integer> nIds = dc.getNodes(n.name, n.type);
             dc.queryNeighbours(nIds.get(0), n.type);
             goToResultMenu();
+        }
+        catch(DomainException de)
+        {
+            System.out.println(de.getFriendlyMessage());
         }
 
     }
 
     private static void queryByType() {
         String type = readType();
+        try
+        {
+            dc.queryByType(type);
+            goToResultMenu();
+        }
+        catch(DomainException de)
+        {
+            System.out.println(de.getFriendlyMessage());
+        }
 
-        dc.queryByType(type);
-        goToResultMenu();
     }
 
     private static String readType() {
@@ -411,43 +430,40 @@ public class PresentationController
         }while(x != 0);
     }
 
-    private static void removeEdge() {
+    private static void removeEdge()
+    {
         EdgeReference e = readEdge();
 
-        ArrayList<Integer> naIds = dc.getNodes(e.nA.name, e.nA.type);
-        ArrayList<Integer> nbIds = dc.getNodes(e.nB.name, e.nB.type);
-        if(naIds.isEmpty() || nbIds.isEmpty())
+        try
         {
-            System.out.println("Algun dels noms es incorrecte.");
-        }
-        else
-        {
+            ArrayList<Integer> naIds = dc.getNodes(e.nA.name, e.nA.type);
+            ArrayList<Integer> nbIds = dc.getNodes(e.nB.name, e.nB.type);
             dc.removeEdge(naIds.get(0), e.nA.type,
                     nbIds.get(0), e.nB.type);
             System.out.println("Aresta " +e.toString()+" esborrada.");
         }
-
+        catch(DomainException de)
+        {
+            System.out.println(de.getFriendlyMessage());
+        }
 
     }
 
-    private static void addEdge() {
+    private static void addEdge()
+    {
         EdgeReference e = readEdge();
 
-        ArrayList<Integer> naIds = dc.getNodes(e.nA.name, e.nA.type);
-        ArrayList<Integer> nbIds = dc.getNodes(e.nB.name, e.nB.type);
-        if(naIds.isEmpty() || nbIds.isEmpty())
+        try
         {
-            System.out.println("Algun dels noms es incorrecte.");
+            ArrayList<Integer> naIds = dc.getNodes(e.nA.name, e.nA.type);
+            ArrayList<Integer> nbIds = dc.getNodes(e.nB.name, e.nB.type);
+            dc.addEdge(naIds.get(0), e.nA.type,
+                    nbIds.get(0), e.nB.type);
+            System.out.println("Aresta " +e.toString()+" afegida.");
         }
-        else
+        catch(DomainException de)
         {
-            try {
-                dc.addEdge(naIds.get(0), e.nA.type,
-                        nbIds.get(0), e.nB.type);
-                System.out.println("Aresta " +e.toString()+" afegida.");
-            } catch (DomainException e1) {
-                System.out.println(e1.getFriendlyMessage());
-            }
+            System.out.println(de.getFriendlyMessage());
         }
     }
 
@@ -464,40 +480,46 @@ public class PresentationController
     private static void modifyNode() {
         NodeReference n = readNode();
         String newName = in.nextLine();
-        ArrayList<Integer> nIds =dc.getNodes(n.name, n.type);
-        if(nIds.isEmpty())
+        try
         {
-            System.out.println("El nom introduit no es troba al graf.");
-        }
-        else
-        {
+            ArrayList<Integer> nIds =dc.getNodes(n.name, n.type);
             dc.modifyNode(nIds.get(0), n.type, newName);
             System.out.println("Node "+n.toString() + " modificat.");
+        }
+        catch(DomainException de)
+        {
+            System.out.println(de.getFriendlyMessage());
         }
 
     }
 
     private static void removeNode() {
         NodeReference n = readNode();
-        ArrayList<Integer> nIds =dc.getNodes(n.name, n.type);
-        if(nIds.isEmpty())
+        try
         {
-            System.out.println("El nom introduit no es troba al graf.");
-        }
-        else
-        {
+            ArrayList<Integer> nIds =dc.getNodes(n.name, n.type);
             dc.removeNode(nIds.get(0), n.type);
             System.out.println("Node "+n.toString() + " esborrat.");
         }
-
+        catch(DomainException de)
+        {
+            System.out.println(de.getFriendlyMessage());
+        }
 
     }
 
     private static void addNode() {
         NodeReference n = readNode();
+        try
+        {
+            dc.addNode(n.name, n.type);
+            System.out.println("Node "+n.toString() + " afegit.");
+        }
+        catch(DomainException de)
+        {
+            System.out.println(de.getFriendlyMessage());
+        }
 
-        dc.addNode(n.name, n.type);
-        System.out.println("Node "+n.toString() + " afegit.");
     }
 
     private static NodeReference readNode() {
