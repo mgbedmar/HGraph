@@ -6,6 +6,7 @@ import Domain.DomainController;
 import Domain.DomainException;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Map;
 import java.util.Scanner;
 
@@ -13,6 +14,7 @@ public class PresentationController
 {
     private static DomainController dc;
     private static boolean verbose;
+    private static boolean debug;
     private static class NodeReference
     {
         public String name;
@@ -50,24 +52,37 @@ public class PresentationController
     public static void main(String[] args)
     {
         verbose = !(args.length > 0 && args[0].equals("noverbose"));
+        debug = (args.length > 1 && args[1].equals("debug"));
+        try
+        {
+            dc = new DomainController();
+            in = new Scanner(System.in);
+            Integer x;
+            do{
+                showMainMenu();
+                x = in.nextInt();
+                in.nextLine(); //Consume '\n'
+                switch(x)
+                {
+                    case 1:
+                        goToEditGraph();
+                        break;
+                    case 2:
+                        goToQueryGraph();
+                        break;
+                }
+            }while(x != 0);
 
-        dc = new DomainController();
-        in = new Scanner(System.in);
-        Integer x;
-        do{
-            showMainMenu();
-            x = in.nextInt();
-            in.nextLine(); //Consume '\n'
-            switch(x)
+        }
+        catch(Exception e)
+        {
+            System.out.println("PAM! ha petat.");
+            if(debug)
             {
-                case 1:
-                    goToEditGraph();
-                    break;
-                case 2:
-                    goToQueryGraph();
-                    break;
+                System.out.println(e.getMessage());
+                System.out.println(Arrays.toString(e.getStackTrace()));
             }
-        }while(x != 0);
+        }
 
     }
 
@@ -122,6 +137,9 @@ public class PresentationController
         catch(DomainException de)
         {
             System.out.println(de.getFriendlyMessage());
+            if(debug)
+                System.out.println(Arrays.toString(de.getStackTrace()));
+
         }
 
 
@@ -301,8 +319,10 @@ public class PresentationController
         try {
             dc.queryNtoN(typeSource, typeEnd);
             goToResultMenu();
-        } catch (DomainException e) {
-            System.out.println(e.getFriendlyMessage());
+        } catch (DomainException de) {
+            System.out.println(de.getFriendlyMessage());
+            if(debug)
+                System.out.println(Arrays.toString(de.getStackTrace()));
         }
 
     }
@@ -321,6 +341,8 @@ public class PresentationController
         catch(DomainException de)
         {
             System.out.println(de.getFriendlyMessage());
+            if(debug)
+                System.out.println(Arrays.toString(de.getStackTrace()));
         }
 
 
@@ -346,6 +368,8 @@ public class PresentationController
         catch(DomainException de)
         {
             System.out.println(de.getFriendlyMessage());
+            if(debug)
+                System.out.println(Arrays.toString(de.getStackTrace()));
         }
 
     }
@@ -362,6 +386,8 @@ public class PresentationController
         catch(DomainException de)
         {
             System.out.println(de.getFriendlyMessage());
+            if(debug)
+                System.out.println(Arrays.toString(de.getStackTrace()));
         }
 
     }
@@ -376,6 +402,8 @@ public class PresentationController
         catch(DomainException de)
         {
             System.out.println(de.getFriendlyMessage());
+            if(debug)
+                System.out.println(Arrays.toString(de.getStackTrace()));
         }
 
     }
@@ -445,6 +473,8 @@ public class PresentationController
         catch(DomainException de)
         {
             System.out.println(de.getFriendlyMessage());
+            if(debug)
+                System.out.println(Arrays.toString(de.getStackTrace()));
         }
 
     }
@@ -464,6 +494,8 @@ public class PresentationController
         catch(DomainException de)
         {
             System.out.println(de.getFriendlyMessage());
+            if(debug)
+                System.out.println(Arrays.toString(de.getStackTrace()));
         }
     }
 
@@ -489,6 +521,8 @@ public class PresentationController
         catch(DomainException de)
         {
             System.out.println(de.getFriendlyMessage());
+            if(debug)
+                System.out.println(Arrays.toString(de.getStackTrace()));
         }
 
     }
@@ -504,6 +538,8 @@ public class PresentationController
         catch(DomainException de)
         {
             System.out.println(de.getFriendlyMessage());
+            if(debug)
+                System.out.println(Arrays.toString(de.getStackTrace()));
         }
 
     }
@@ -518,6 +554,8 @@ public class PresentationController
         catch(DomainException de)
         {
             System.out.println(de.getFriendlyMessage());
+            if(debug)
+                System.out.println(Arrays.toString(de.getStackTrace()));
         }
 
     }
