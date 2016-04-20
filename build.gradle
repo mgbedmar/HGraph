@@ -3,6 +3,14 @@ apply plugin: 'groovy'
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
  
+
+task systest(type: Exec) {
+  executable "sh"
+  args "-c", "./systester"
+}
+
+build.finalizedBy(systest)
+
 repositories{
 	mavenCentral()
 }

@@ -44,7 +44,7 @@ public class TestNode {
     	for(int i=0;i<misnodos.size();i++){
     		for(int j=0;j<misnodos.size();j++){
     			System.out.println("Provant d'afegir"+misnodos.get(i).getID()+" "+misnodos.get(i).getName()+"de tipus"+misnodos.get(i).getType()+"amb el node"+misnodos.get(j).getID()+" "+misnodos.get(j).getName()+"de tipus"+ misnodos.get(j).getType());
-    			misnodos.get(i).addRelationship(misnodos.get(j));
+    			misnodos.get(i).eraseEdge();
     }
     		}
     	

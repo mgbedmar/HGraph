@@ -15,7 +15,7 @@ public class HeteSim {
         ArrayList<String> cami2 = new ArrayList<String>();
         subdividirCami(cami, cami1, cami2);
         HeteSimMatrix pm1, pm2;
-        pm1 = calculatePM(graf, cami1, cami2.get(1));
+        pm1 = calculatePM(graf, cami1, cami2.get(cami2.size()-2));
         pm2 = calculatePM(graf, cami2, cami1.get(cami1.size()-2));
         HeteSimMatrix result = new HeteSimMatrix();
         result.productPM(pm1, pm2);
@@ -27,7 +27,7 @@ public class HeteSim {
                                             ArrayList<String> cami,
                                             String tNextE) {
         HeteSimMatrix uini, ufi, uprod;
-        boolean interm = cami.get(cami.size()-1).equals("E");
+        boolean interm = cami.get(cami.size()-1).equals(Config.ghostType);
 
         /*Si el cami nomes te 2 tipus i un intermig anem ja a intermig */
         if (cami.size() == 2 && interm) {

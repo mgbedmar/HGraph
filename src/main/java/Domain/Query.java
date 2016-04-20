@@ -1,5 +1,7 @@
 package Domain;
 import Domain.Graph.*;
+
+import java.util.ArrayList;
 import java.util.Set;
 
 
@@ -18,12 +20,12 @@ public class Query {
 
     /**
      * Consulta de tots els nodes d'un tipus
-     * @param graf: <em>Graph</em> on es fa la consulta.
+     * @param graph: <em>Graph</em> on es fa la consulta.
      * @param type: el tipus que es vol consultar.
      * @return Un <em>Result</em> d'una columna amb les files afegides i ordenat per primera columna ascendent.
      */
-    public static Result queryByType(Graph graf, String type) {
-        Set<Node> set = graf.getSetOfNodes(type);
+    public static Result queryByType(Graph graph, String type) {
+        Set<Node> set = graph.getSetOfNodes(type);
         Result res = fillWithSet(set);
         res.sort(1, true);
         return res;
@@ -31,12 +33,12 @@ public class Query {
 
     /**
      * Consulta tots els veins d'un node del graf.
-     * @param graf: <em>Graph</em> sobre el que es consulta.
+     * @param graph: <em>Graph</em> sobre el que es consulta.
      * @param node: <em>Node</em> del que es consulten els veins.
      * @return Un <em>Result</em> d'unajavjava columna amb les files afegides i ordenat per primera columna ascendent.
      */
-    public static Result queryNeighbours(Graph graf, Node node) {
-        Set<Node> set = graf.getNeighbours(node);
+    public static Result queryNeighbours(Graph graph, Node node) {
+        Set<Node> set = graph.getNeighbours(node);
         Result res = fillWithSet(set);
         res.sort(1, true);
         return res;
@@ -44,13 +46,13 @@ public class Query {
 
     /**
      * Consulta tots els veins d'un node del graf.
-     * @param graf: <em>Graph</em> sobre el que es consulta.
+     * @param graph: <em>Graph</em> sobre el que es consulta.
      * @param node: <em>Node</em> del que es consulten els veins.
      * @param type: tipus que es vol consultar
      * @return Un <em>Result</em> d'una columna amb les files afegides i ordenat per primera columna ascendent.
      */
-    public static Result queryNeighbours(Graph graf, Node node, String type) {
-        Set<Node> set = graf.getNeighbours(node, type);
+    public static Result queryNeighbours(Graph graph, Node node, String type) {
+        Set<Node> set = graph.getNeighbours(node, type);
         Result res = fillWithSet(set);
         res.sort(1, true);
         return res;
@@ -58,22 +60,28 @@ public class Query {
 
     /**
      * Consulta el HeteSim de dos nodes (cami obvi)
-     * @param graf: <em>Graph</em> sobre el que es consulta.
+     * @param graph: <em>Graph</em> sobre el que es consulta.
      * @param a: Un dels nodes.
      * @param b: L'altre.
      * @return Un <em>Result</em> de tres columnes amb el HeteSim dels dos nodes.
      */
-    public static Result query1to1(Graph graf, Node a, Node b) {
+    public static Result query1to1(Graph graph, Node a, Node b, ArrayList<String> path) {
         Result res = new Result(3);
+        HeteSimMatrix mat = HeteSim.run(graph, path);
+        res.addRow(a, b, mat.value(a,b));
         return res;
     }
 
     /**
-     * Consulta el HeteSim d'un node amb tots els del tipus especificat.
+     * Consulta el HeteSim d'un node amb tots els del tipus especificat (que tinguin HS > 0).
      * @return Un <em>Result</em> de dues columnes amb les files afegides i ordenat per segona columna descendent.
      */
-    public static Result query1toN(Graph graf, Node node, String type) {
+    public static Result query1toN(Graph graph, Node node, ArrayList<String> path) {
         Result res = new Result(2);
+        HeteSimMatrix mat = HeteSim.run(graph, path);
+        for (Node j: mat.cols(node)) {
+            res.addRow(j, mat.value(node,j));
+        }
         return res;
     }
 
@@ -82,8 +90,14 @@ public class Query {
      * El node <em>a</em> ha de ser del mateix tipus que el <em>c</em>.
      * @return Un <em>Result</em> de dues columnes amb les files afegides i ordenat per segona columna descendent.
      */
-    public static Result queryByReference(Graph graf, Node a, Node b, Node c) {
+    public static Result queryByReference(Graph graph, Node a, Node b, Node c, ArrayList<String> path, float tol) {
         Result res = new Result(2);
+        HeteSimMatrix mat = HeteSim.run(graph, path);
+        for (Node d: mat.cols(c)) {
+            if (Math.abs(mat.value(c,d) - mat.value(a,b)) < tol) {
+                res.addRow(d, mat.value(c,d));
+            }
+        }
         return res;
     }
 
@@ -91,8 +105,14 @@ public class Query {
      * Fa una taula de nodes per HeteSim (per decidir)
      * @return Un <em>Result</em> de tres columnes amb les files afegides i ordenat per tercera columna descendent.
      */
-    public static Result queryNtoN(Graph graf, String type1, String type2) {
+    public static Result queryNtoN(Graph graph, ArrayList<String> path) {
         Result res = new Result(3);
+        HeteSimMatrix mat = HeteSim.run(graph, path);
+        for (Node a: mat.rowKeys()) {
+            for (Node b: mat.cols(a)) {
+                res.addRow(a, b, mat.value(a,b));
+            }
+        }
         return res;
     }
 

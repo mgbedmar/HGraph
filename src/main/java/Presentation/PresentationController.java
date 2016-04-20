@@ -1,8 +1,11 @@
 package Presentation;
 
 
+import Domain.Config;
 import Domain.DomainController;
+import Domain.DomainException;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Scanner;
@@ -10,6 +13,7 @@ import java.util.Scanner;
 public class PresentationController
 {
     private static DomainController dc;
+    private static boolean verbose;
     private static class NodeReference
     {
         public String name;
@@ -43,15 +47,18 @@ public class PresentationController
                     "tipusB: "+nB.type+", nomB: "+nB.name+")";
         }
     }
-
+    private static Scanner in;
     public static void main(String[] args)
     {
+        verbose = !(args.length > 0 && args[0].equals("noverbose"));
+
         dc = new DomainController();
-        Scanner entrada = new Scanner(System.in);
+        in = new Scanner(System.in);
         Integer x;
         do{
             showMainMenu();
-            x = entrada.nextInt();
+            x = in.nextInt();
+            in.nextLine(); //Consume '\n'
             switch(x)
             {
                 case 1:
@@ -66,11 +73,11 @@ public class PresentationController
     }
 
     private static void goToQueryGraph() {
-        Scanner entrada = new Scanner(System.in);
         Integer x;
         do{
             showQueryMenu();
-            x = entrada.nextInt();
+            x = in.nextInt();
+            in.nextLine(); //Consume '\n'
             switch(x)
             {
                 case 1:
@@ -96,31 +103,123 @@ public class PresentationController
     }
 
     private static void queryByReference() {
-        System.out.println("Indica la parella refèrencia: ");
+        info("Indica la parella referència: ");
         NodeReference nRefSource = readNode();
         NodeReference nRefEnd = readNode();
-        System.out.println("Indica el node font: ");
+        info("Indica el node font: ");
         NodeReference nSource = readNode();
 
+        ArrayList<Integer> nRefSourceIds = dc.getNodes(nRefSource.name, nRefSource.type);
+        ArrayList<Integer> nRefEndIds = dc.getNodes(nRefEnd.name, nRefEnd.type);
+        ArrayList<Integer> nSourceIds = dc.getNodes(nSource.name, nSource.type);
+        if(nRefSourceIds.isEmpty() || nRefEndIds.isEmpty() || nSourceIds.isEmpty())
+        {
+            System.out.println("Algun dels noms introduits no es correcte");
+        }
+        else
+        {
+            dc.queryByReference(nRefSourceIds.get(0), nRefSource.type,
+                    nRefEndIds.get(0), nRefEnd.type,
+                    nSourceIds.get(0), nSource.type);
+            goToResultMenu();
+        }
 
-        dc.queryByReference(nRefSource.name, nRefSource.type, nRefEnd.name, nRefEnd.type, nSource.name, nSource.type);
-        goToResultMenu();
+    }
+
+    private static void info(String s) {
+        if(verbose)
+            System.out.println(s);
+
     }
 
     private static void goToResultMenu() {
-        Scanner entrada = new Scanner(System.in);
         Integer x;
         do{
             showResultMenu();
-            x = entrada.nextInt();
+            x = in.nextInt();
+            in.nextLine(); //Consume '\n'
             switch(x)
             {
                 case 1:
-                    queryByType();
+                    hideRow();
                     break;
-
+                case 2:
+                    hideRows();
+                    break;
+                case 3:
+                    filterName();
+                    break;
+                case 4:
+                    selectName();
+                    break;
+                case 5:
+                    sortByRow();
+                    break;
+                case 6:
+                    clearFilters();
+                    break;
+                default:
+                    break;
             }
         }while(x != 0);
+    }
+
+    private static void clearFilters()
+    {
+        dc.clearResultFilters();
+    }
+
+    private static void sortByRow()
+    {
+        info("Escriu el numero de columna:");
+        Integer col = in.nextInt();
+        in.nextLine(); //Consume '\n'
+        info("Ascendentment(1) o descendentment(0):");
+        Integer dir = in.nextInt();
+        in.nextLine(); //Consume '\n'
+        dc.sortResultByRow(col, dir);
+    }
+
+    private static void selectName()
+    {
+        info("Escriu el nom a seleccionar:");
+        String x = in.nextLine();
+        dc.selectResultName(x);
+    }
+
+    private static void filterName()
+    {
+        info("Escriu el nom a amagar:");
+        String x = in.nextLine();
+        dc.hideResultName(x);
+    }
+
+    /*
+        private static void selectRows() {
+            info("Escriu el primer numero del rang:");
+            Integer x1 = in.nextInt();
+            in.nextLine(); //Consume '\n'
+            info("Escriu el segon numero del rang:");
+            Integer x2 = in.nextInt();
+            in.nextLine(); //Consume '\n'
+            dc.selectResultRows(x1, x2);
+        }
+    */
+    private static void hideRows() {
+        info("Escriu el primer numero del rang:");
+        Integer x1 = in.nextInt();
+        in.nextLine(); //Consume '\n'
+        info("Escriu el segon numero del rang:");
+        Integer x2 = in.nextInt();
+        in.nextLine(); //Consume '\n'
+        dc.hideResultRows(x1, x2);
+    }
+
+    private static void hideRow() {
+        info("Escriu el numero de fila a amagar:");
+        Integer x = in.nextInt();
+        in.nextLine(); //Consume '\n'
+        dc.hideResultRow(x);
     }
 
     private static void showResultMenu() {
@@ -128,13 +227,13 @@ public class PresentationController
                 "tornar",
                 "Amagar una fila",
                 "Amagar un rang",
-                "Mostrar un rang",
+                //"Mostrar un rang",
                 "Amagar per nom",
                 "Mostrar per nom",
                 "Ordenar per columna",
                 "Treure tots els filtres"
         };
-        System.out.println("======Resultat de la consulta======");
+        info("======Resultat de la consulta======");
         Map<String, ArrayList<String>> filters =  dc.getFilters();
         Integer filteredNamesSize = filters.get("filteredNames").size();
         Integer filteredLinesSize = filters.get("filteredLines").size();
@@ -144,62 +243,142 @@ public class PresentationController
                 filteredNamesSize > 0 ||
                 selectedNamesSize > 0)
         {
-            System.out.println("Filtres:");
+            info("Filtres:");
             if(filteredLinesSize> 0)
             {
-                System.out.println("Linies amagades:");
+                info("Linies amagades:");
                 for(int i = 0; i < filteredLinesSize; i++)
                 {
-                    //TODO
+                    if(i%6 == 0)
+                        System.out.println();
+                    System.out.print(filters.get("filteredLines").get(i)+", ");
+                }
+            }
+
+            if(selectedNamesSize > 0)
+            {
+                info("Noms seleccionats:");
+                for(int i = 0; i < selectedNamesSize; i++)
+                {
+                    System.out.println("-"+filters.get("selectedNames").get(i));
+                }
+            }
+            else if(filteredNamesSize > 0)
+            {
+                info("Noms amagats:");
+                for(int i = 0; i < filteredNamesSize; i++)
+                {
+                    System.out.println("-"+filters.get("filteredNames").get(i));
                 }
             }
         }
+        info("Resultat:");
+
+        ArrayList<String> fila = dc.getResultRow();
+        if (fila == null) System.out.println("<buit>");
+        while (fila != null)
+        {
+            for(int j = 0; j < fila.size(); j++)
+            {
+                System.out.printf(fila.get(j) + " ");
+            }
+            System.out.println();
+            fila = dc.getResultRow();
+        }
+        /*
+        Integer resultSize = dc.getResultSize();
+        if(resultSize > 0)
+        {
+            for(int i = 0; i < resultSize; i++)
+            {
+                ArrayList<String> fila = dc.getResultRow();
+                for(int j = 0; j < fila.size(); j++)
+                {
+                    System.out.printf(fila.get(j));
+                }
+                System.out.println();
+            }
+        }
+        else
+        {
+            System.out.println("<buit>");
+        }
+        */
+
         printMenu(opts);
     }
 
     private static void queryNtoN() {
-        System.out.println("Font:");
+        info("Font:");
         String typeSource = readType();
-        System.out.println("Destí:");
+        info("Destí:");
         String typeEnd = readType();
 
 
         dc.queryNtoN(typeSource, typeEnd);
-        //TODO request result
+        goToResultMenu();
     }
 
     private static void query1toN() {
-        System.out.println("Indica la informació del node font:");
+        info("Indica la informació del node font:");
         NodeReference nsource = readNode();
         String typeEnd = readType();
 
+        ArrayList<Integer> nsourceIds = dc.getNodes(nsource.name, nsource.type);
+        if(nsourceIds.isEmpty())
+        {
+            System.out.println("El node amb nom "+nsource.name+" no existeix al graf.");
+        }
+        else
+        {
+            dc.query1toN(nsourceIds.get(0), nsource.type, typeEnd);
+            goToResultMenu();
+        }
 
-        dc.query1toN(nsource.name, nsource.type, typeEnd);
-        //TODO request result
     }
 
     private static void query1to1() {
-        System.out.println("Indica la informació del node font:");
+        info("Indica la informació del node font:");
         NodeReference nsource = readNode();
-        System.out.println("Indica la informació del node destí:");
+        info("Indica la informació del node destí:");
         NodeReference nend = readNode();
 
-        dc.query1to1(nsource.name, nsource.type, nend.name, nend.type);
-        //TODO request result
+        ArrayList<Integer> nsourceIds = dc.getNodes(nsource.name, nsource.type);
+        ArrayList<Integer> nendIds = dc.getNodes(nend.name, nend.type);
+        if(nsourceIds.isEmpty() || nendIds.isEmpty())
+        {
+            System.out.println("Algun dels noms escrits no es troba al graf");
+        }
+        else
+        {
+            dc.query1to1(nsourceIds.get(0), nsource.type,
+                    nendIds.get(0), nend.type);
+            goToResultMenu();
+        }
+
     }
 
     private static void queryNeighbours() {
         NodeReference n = readNode();
 
-        dc.queryNeighbours(n.name, n.type);
-        //TODO request result
+        ArrayList<Integer> nIds = dc.getNodes(n.name, n.type);
+        if(nIds.isEmpty())
+        {
+            System.out.println("El node amb nom "+n.name+" no existeix al graf.");
+        }
+        else
+        {
+            dc.queryNeighbours(nIds.get(0), n.type);
+            goToResultMenu();
+        }
+
     }
 
     private static void queryByType() {
         String type = readType();
 
         dc.queryByType(type);
-        //TODO request result
+        goToResultMenu();
     }
 
     private static String readType() {
@@ -210,25 +389,25 @@ public class PresentationController
                 "Conferència"
         };
         String[] types = {
-                "author",
-                "paper",
-                "therm",
-                "conference"
+                Config.authorType,
+                Config.paperType,
+                Config.termType,
+                Config.confType
         };
 
-        Scanner entrada = new Scanner(System.in);
-        System.out.println("Escull un tipus:");
+        info("Escull un tipus:");
         printMenu(localizedTypes);
-        Integer x = entrada.nextInt();
+        Integer x = in.nextInt();
+        in.nextLine(); //Consume '\n'
         return types[x];
     }
 
     private static void goToEditGraph() {
-        Scanner entrada = new Scanner(System.in);
         Integer x;
         do{
             showGraphMenu();
-            x = entrada.nextInt();
+            x = in.nextInt();
+            in.nextLine(); //Consume '\n'
             switch(x)
             {
                 case 1:
@@ -255,19 +434,45 @@ public class PresentationController
     private static void removeEdge() {
         EdgeReference e = readEdge();
 
-        dc.removeEdge(e.nA.name, e.nA.type, e.nB.name, e.nB.type);
-        System.out.println("Aresta " +e.toString()+" esborrada.");
+        ArrayList<Integer> naIds = dc.getNodes(e.nA.name, e.nA.type);
+        ArrayList<Integer> nbIds = dc.getNodes(e.nB.name, e.nB.type);
+        if(naIds.isEmpty() || nbIds.isEmpty())
+        {
+            System.out.println("Algun dels noms es incorrecte.");
+        }
+        else
+        {
+            dc.removeEdge(naIds.get(0), e.nA.type,
+                    nbIds.get(0), e.nB.type);
+            System.out.println("Aresta " +e.toString()+" esborrada.");
+        }
+
+
     }
 
     private static void addEdge() {
         EdgeReference e = readEdge();
 
-        dc.addEdge(e.nA.name, e.nA.type, e.nB.name, e.nB.type);
-        System.out.println("Aresta " +e.toString()+" afegida.");
+        ArrayList<Integer> naIds = dc.getNodes(e.nA.name, e.nA.type);
+        ArrayList<Integer> nbIds = dc.getNodes(e.nB.name, e.nB.type);
+        if(naIds.isEmpty() || nbIds.isEmpty())
+        {
+            System.out.println("Algun dels noms es incorrecte.");
+        }
+        else
+        {
+            try {
+                dc.addEdge(naIds.get(0), e.nA.type,
+                        nbIds.get(0), e.nB.type);
+                System.out.println("Aresta " +e.toString()+" afegida.");
+            } catch (DomainException e1) {
+                System.out.println(e1.getFriendlyMessage());
+            }
+        }
     }
 
     private static EdgeReference readEdge() {
-        System.out.println("Indica els nodes que formen l'aresta:");
+        info("Indica els nodes que formen l'aresta:");
         NodeReference A = readNode();
         NodeReference B = readNode();
 
@@ -277,24 +482,39 @@ public class PresentationController
     }
 
     private static void modifyNode() {
-        Scanner entrada = new Scanner(System.in);
         NodeReference n = readNode();
-        String newName = entrada.nextLine();
+        String newName = in.nextLine();
+        ArrayList<Integer> nIds =dc.getNodes(n.name, n.type);
+        if(nIds.isEmpty())
+        {
+            System.out.println("El nom introduit no es troba al graf.");
+        }
+        else
+        {
+            dc.modifyNode(nIds.get(0), n.type, newName);
+            System.out.println("Node "+n.toString() + " modificat.");
+        }
 
-        dc.modifyNode(n.name, n.type, newName);
-        System.out.println("Node "+n.toString() + " modificat.");
     }
 
     private static void removeNode() {
         NodeReference n = readNode();
+        ArrayList<Integer> nIds =dc.getNodes(n.name, n.type);
+        if(nIds.isEmpty())
+        {
+            System.out.println("El nom introduit no es troba al graf.");
+        }
+        else
+        {
+            dc.removeNode(nIds.get(0), n.type);
+            System.out.println("Node "+n.toString() + " esborrat.");
+        }
 
-        dc.removeNode(n.name, n.type);
-        System.out.println("Node "+n.toString() + " esborrat.");
+
     }
 
     private static void addNode() {
         NodeReference n = readNode();
-
 
         dc.addNode(n.name, n.type);
         System.out.println("Node "+n.toString() + " afegit.");
@@ -302,16 +522,15 @@ public class PresentationController
 
     private static NodeReference readNode() {
 
-        Scanner entrada = new Scanner(System.in);
-        System.out.println("Introdueix el nom del node: ");
-        String name = entrada.nextLine();
+        info("Introdueix el nom del node: ");
+        String name = in.nextLine();
         String type = readType();
         NodeReference nr = new NodeReference(name, type);
         return nr;
     }
 
     private static void printMenu(String[] opts) {
-        for(int i = 0; i < opts.length; i++)
+        for(int i = 0; i < opts.length && verbose; i++)
         {
             System.out.printf("%d - %s\n", i, opts[i]);
         }
@@ -323,7 +542,7 @@ public class PresentationController
                 "Editar graf",
                 "Consultar graf"
         };
-        System.out.println("Menu:");
+        info("Menu:");
         printMenu(opts);
     }
 
@@ -336,7 +555,7 @@ public class PresentationController
                 "Afegir aresta",
                 "Esborrar aresta"
         };
-        System.out.println("Escull una opció:");
+        info("Escull una opció:");
         printMenu(opts);
     }
 
@@ -350,7 +569,7 @@ public class PresentationController
                 "N a N",
                 "Per referencia"
         };
-        System.out.println("Selecciona el tipus de consulta:");
+        info("Selecciona el tipus de consulta:");
         printMenu(opts);
     }
 

@@ -1,20 +1,17 @@
-└── src
-    ├── main
-    │   ├── java
-    │   │   ├── Domini
-    │   │   │   └── Graf
-    │   │   ├── Persistencia
-    │   │   └── Vista
-    │   └── resources
-    └── test
-        ├── java
-        │   ├── Domini
-        │   │   └── Graf
-        │   ├── Persistencia
-        │   └── Vista
-        └── resources
+├── src
+│   ├── main
+│   │   ├── java
+│   │   │   ├── Domain
+│   │   │   │   └── Graph
+│   │   │   ├── Persistence
+│   │   │   └── Presentation
+│   │   └── resources
+│   └── test
+└── systest
+    └── tests
 
 
 src/main/java: Packages, dentro de los packages su codigo correspondiente
 src/main/resources: Recursos del codigo
 src/test/java: Tests, un fichero por cada clase 
+systest/tests: tests de sistema

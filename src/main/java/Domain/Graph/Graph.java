@@ -1,27 +1,31 @@
 package Domain.Graph;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
-import java.util.TreeMap;
+import Domain.Config;
+import Domain.DomainException;
+
+import java.util.*;
 
 /**
  * @author Dani
  *
  */
 public class Graph {
-	private TreeMap<String,HashSet<Node>> elements;
-	private final String AUTHORS = "author";
-	private final String ARTICLES = "paper";
-	private final String CONFERENCES = "conf";
-	private final String TERMS = "term";
-	private final String  WRONG_TYPE = "error";
+	private TreeMap<String,HashMap<Node,Node>> elements;
+	private HashMap<String,ArrayList<Node>> dicNameNodes;
+    private int maxID; //la id mes gran que s'ha ficat al graf
 	
+	private final String  WRONG_TYPE = "error"; //Clau que farem servir per saber si hi ha hagut un error de tipus
 	
+	//Metodes privats per garantir la no redundancia
+	
+	/**
+	 * 
+	 * @param t: tipus de node
+	 * @return: retorna WRONG_TYPE si el tipus t no existeix o es incorrecte
+	 */
 	private String checkType(String t) {
 		String tip;
 		switch (t) {		
-		case AUTHORS: case ARTICLES: case CONFERENCES: case TERMS:
+		case Config.authorType: case Config.paperType: case Config.confType: case Config.termType:
 			tip = t;
 			break;			
 		default:
@@ -30,293 +34,223 @@ public class Graph {
 		}
 		return tip;		
 	}
+
+    private Node createNode(int id, String type)
+    {
+
+        switch(type)
+        {
+            case Config.authorType:
+                return new Author(id, null);
+            case Config.termType:
+                return new Term(id, null);
+            case Config.paperType:
+                return new Paper(id, null);
+            case Config.confType:
+                return new Conf(id, null);
+        }
+
+        return null;
+    }
+
+    private void removeEdgeFromTypeToNode(Node node, String type) {
+        for (Node a: elements.get(type).keySet()) {
+            a.removeEdge(node);
+        }
+    }
 	
-	private boolean containsNode(int id, String type) {
-		if (checkType(type) != WRONG_TYPE) {
-			Iterator<Node> it = elements.get(type).iterator();
-			boolean found = false;
-			while(it.hasNext() && !found) {
-				found = (it.next().getID() == id);
-			}
-			return found;
-		}
-		//Excepcio Tipus erroni
-		return false;
-		
+	
+	//Metodes Publics
+
+    /**
+     * Constructora. Crea un graf buit.
+     */
+    public Graph () {
+		elements = new TreeMap<>();
+		elements.put(Config.authorType, new HashMap<>());
+		elements.put(Config.paperType, new HashMap<>());
+		elements.put(Config.confType,new HashMap<>());
+		elements.put(Config.termType,new HashMap<>());
+
+        dicNameNodes = new HashMap<>();
+
+        maxID = 0;
 	}
-	
-	private boolean containsNode(String name, String type) {
-		if (checkType(type) != WRONG_TYPE) {
-			Iterator<Node> it = elements.get(type).iterator();
-			boolean found = false;
-			while(it.hasNext() && !found) {
-				found = (it.next().getName() == name);
-			}
-			return found;
-		}
-		//Excepcio Tipus erroni
-		return false;
-		
-	}
-	
-	
-	
-	
-	//Constructora del Graf
-	public Graph () {
-		elements = new TreeMap<String,HashSet< Node>>();
-		elements.put(AUTHORS, new HashSet<Node>() );
-		elements.put(ARTICLES, new HashSet<Node>());
-		elements.put(CONFERENCES,new HashSet<Node>());
-		elements.put(TERMS,new HashSet<Node>());		
-	}
-	
-	public HashSet<Node> getSetOfNodes() {
+
+	/**
+	 * Consultora dels nodes del graf.
+	 * @return: un conjunt amb tots els nodes del graf
+	 */
+	public Set<Node> getSetOfNodes() {
 		HashSet<Node> res = new HashSet<Node>();
-		res.addAll(elements.get(AUTHORS));
-		res.addAll(elements.get(ARTICLES));
-		res.addAll(elements.get(CONFERENCES));
-		res.addAll(elements.get(TERMS));
+		res.addAll(elements.get(Config.authorType).keySet());
+		res.addAll(elements.get(Config.paperType).keySet());
+		res.addAll(elements.get(Config.confType).keySet());
+		res.addAll(elements.get(Config.termType).keySet());
 		
 		return res;		
 	}
+
 	/**
-	 * 
-	 * @param type: tipus de Node
-	 * @return: Tots els nodes del graf del tipus dessitjat. Null si el tipus no existeix
+	 * Consultora dels nodes d'un tipus donat.
+	 * @param type: tipus de node
+	 * @return: Tots els nodes del graf del tipus <em>type</em>, <em>null</em> si el tipus no existeix.
+     * Modificacions en el conjunt de retorn canviaran l'estat del graf.
 	 */
-	
-	public HashSet<? extends Node> getSetOfNodes(String type) {		
+	public Set<Node> getSetOfNodes(String type) {
 		String clauConsulta = checkType(type);
-		if (clauConsulta == WRONG_TYPE) {
+		if (clauConsulta.equals(WRONG_TYPE)) {
 			System.err.print("No s'ha insertat un tipus correcte de Node");
 			return null;
 		}
 		else {
-			return elements.get(clauConsulta);			
+			return elements.get(type).keySet();
 		}		
 	}
+
 	/**
-	 * 
-	 * @param id
-	 * @param type
-	 * @return
+	 * Obte un node a partir de la id i el tipus.
+	 * @param id id del node que es busca
+	 * @param type tipus del node que es busca
+	 * @return: el node de tipus <em>type</em> i id <em>id</em>, <em>null</em> si no existeix
 	 */
-	
 	public Node getNode(int id, String type) {
 		String clauConsulta = checkType(type);
-		if (clauConsulta == WRONG_TYPE) {
+		if (clauConsulta.equals(WRONG_TYPE)) {
 			System.err.print("No s'ha insertat un tipus correcte de Node");
 			return null;
 		}
-		else {			
-			for (Node nod : elements.get(clauConsulta)) {
-				if (nod.getID() == id) return nod;				
-			}
-			return null;
+		else {
+            Node aux = createNode(id, type);
+			return elements.get(type).get(aux);
 		}
 	    
 	}
+
 	/**
-	 * 
-	 * @param name
-	 * @param type
-	 * @return
+	 * Obte tots els nodes d'un determinat tipus i nom.
+	 * @param name nom dels nodes buscats
+	 * @param type tipus dels nodes buscats
+	 * @return llista de nodes que tenen nom <em>name</em> i tipus <em>type</em>
 	 */
-	public Node getNode(String name, String type) {
+	public ArrayList<Node> getNodes(String name, String type) {
 		String clauConsulta = checkType(type);
-		if (clauConsulta == WRONG_TYPE) {
+		if (clauConsulta.equals(WRONG_TYPE)) {
 			System.err.print("No s'ha insertat un tipus correcte de Node");
 			return null;
 		}
-		else {			
-			for (Node nod : elements.get(clauConsulta)) {
-				if (nod.getName() == name) return nod;				
-			}
-			return null;
+		else {
+            ArrayList<Node> intern = dicNameNodes.get(name);
+            if (intern == null) return null;
+            else {
+                ArrayList<Node> forRet = new ArrayList<>();
+                for (int i = 0; i < intern.size(); i++) {
+                    if (intern.get(i).getType().equals(type)) {
+                        forRet.add(intern.get(i)); //si es del tipus indicat
+                    }
+                }
+                if (forRet.size() == 0) return null;
+                else return forRet;
+            }
 		}
 	}
-	
+
+
 	/**
-	 * 
-	 * @param node
-	 * @pre
-	 * @return
+	 * Consultora dels veins d'un node.
+	 * @param node node del que es volen consultar els veins. Ha de ser un node
+     *             obtingut del graf amb <em>getNode()</em>o <em>getNodes()</em>
+	 * @return conjunt de veins de <em>node</em>. Modificacions en el conjunt de retorn
+     * canviaran l'estat del graf.
 	 */
-	
 	public Set<Node> getNeighbours(Node node) {
-		if (elements.get(node.getType()).contains(node)) {
-			return node.getNeighbours();
-		}
-		return null;
-		
+        return node.getNeighbours();
 	}
 	
 	/**
-	 * 
-	 * @param node
-	 * @param type
-	 * @return
+	 * Consultora dels veins d'un cert tipus d'un node.
+	 * @param node node del que es volen consultar els veins. Ha de ser un node
+     *             obtingut del graf amb <em>getNode()</em>o <em>getNodes()</em>
+	 * @param type tipus dels nodes retornats
+	 * @return un conjunt amb els veins de tipus <em>type</em> del node <em>node</em>.
+     * Modificacions en el conjunt de retorn
+     * canviaran l'estat del graf.
 	 */
-	
 	public Set<Node> getNeighbours(Node node, String type) {
-		if (elements.get(node.getType()).contains(node) && checkType(type)!= WRONG_TYPE) {
+		if (!checkType(type).equals(WRONG_TYPE)) {
 			return node.getNeighbours(type);
 		}
 		return null;
-	} 
+	}
+
+    /**
+     * Afegeix un node al graf.
+     * @param node Node que es vol afegir al graf. Si te <em>id</em> negativa,
+     *             es genera una id unica per ell. Si no, es presuposa que
+     *             la id es unica i s'afegeix.
+     */
+    public void addNode(Node node) {
+        if (node.getID() < 0) {
+            ++maxID;
+            node.setID(maxID);
+        }
+        else if (node.getID() > maxID)
+            maxID = node.getID();
+
+        elements.get(node.getType()).put(node, node);
+        if (dicNameNodes.containsKey(node.getName())) {
+            dicNameNodes.get(node.getName()).add(node);
+        }
+        else {
+            ArrayList<Node> forDic = new ArrayList<>(1); //1 per estalviar memoria
+            forDic.add(node);
+            dicNameNodes.put(node.getName(), forDic);
+        }
+    }
 	
+
 	/**
-	 * 
-	 * @param name
-	 * @param type
-	 * @return
+	 * Afegeix una aresta de <em>a</em> a <em>b</em> (i la simetrica).
+	 * @param a Node extret directament del graf (amb <em>getNode()</em>
+     *          o be <em>getNodes()</em>
+	 * @param b Node extret directament del graf (amb <em>getNode()</em>
+     *          o be <em>getNodes()</em>
 	 */
-	
-	//AV�S --> S'ha d'implementar el constructor Node(nom) amb generacio automatica de ID's
-	
-	public int afegirNode(String name, String type ) {
-		switch (type) {
-		
-		case AUTHORS:
-			this.elements.get(AUTHORS).add(new Author(name));			
-			break;
-		case ARTICLES:
-			this.elements.get(ARTICLES).add(new Paper(name));
-			break;
-		case CONFERENCES:
-			this.elements.get(CONFERENCES).add(new Conf(name));
-			break;
-		case TERMS:
-			this.elements.get(TERMS).add(new Term(name));
-			break;			
-		default:
-			//aqu� hi haura una Excepci�
-					
+	public void addEdge(Node a, Node b) throws DomainException {
+        a.addEdge(b);
+        b.addEdge(a);
+	}
+
+    /**
+     * Esborra un node del graf.
+     * @param node Node extret directament del graf (amb <em>getNode()</em>
+     *             o be <em>getNodes()</em>
+     */
+	public void removeNode(Node node) {
+        if (dicNameNodes.containsKey(node.getName())) {
+			dicNameNodes.get(node.getName()).remove(node);
 		}
+        if (node.getType().equals(Config.paperType)) {
+            removeEdgeFromTypeToNode(node, Config.termType);
+            removeEdgeFromTypeToNode(node, Config.authorType);
+            removeEdgeFromTypeToNode(node, Config.confType);
+        }
+        else {
+            removeEdgeFromTypeToNode(node, Config.paperType);
+        }
+        elements.get(node.getType()).remove(node);
+    }
+
+    /**
+     * Esborra, si existeix, l'aresta de <em>a</em> a <em>b</em>.
+     * @param a Node extret directament del graf (amb <em>getNode()</em>
+     *          o be <em>getNodes()</em>
+     * @param b Node extret directament del graf (amb <em>getNode()</em>
+     *          o be <em>getNodes()</em>
+     */
+	public void removeEdge(Node a, Node b) {
+        a.removeEdge(b);
+        b.removeEdge(a);
 	}
-	
-	/**
-	 * 
-	 * @param id
-	 * @param name
-	 * @param type
-	 */
-	
-	public void afegirNode(int id, String name, String type) {
-				
-		switch (type) {
-		
-		case AUTHORS:
-			this.elements.get(AUTHORS).add(new Author(id,name));			
-			break;
-		case ARTICLES:
-			this.elements.get(ARTICLES).add(new Paper(id,name));
-			break;
-		case CONFERENCES:
-			this.elements.get(CONFERENCES).add(new Conf(id,name));
-			break;
-		case TERMS:
-			this.elements.get(TERMS).add(new Term(id,name));
-			break;			
-		default:
-			//aqui hi haura una Excepcio
-					
-		}
-		
-	}
-	
-	/**
-	 * 
-	 * @param id1
-	 * @param type1
-	 * @param id2
-	 * @param type2
-	 * @return
-	 */
-	
-	public boolean afegirAresta(int id1, String type1, int id2, String type2) {
-		if (containsNode(id1,type1) && containsNode(id2,type2)) {
-			this.getNode(id1, type1).addRelationship(this.getNode(id2, type2));
-			this.getNode(id2, type2).addRelationship(this.getNode(id1, type1));
-			return true;
-		}		
-		return false;		
-	}	
-	public boolean afegirAresta(Node a, Node b) {
-		if (this.elements.get(a.getType()).contains(a) && this.elements.get(b.getType()).contains(b)) {
-			a.addRelationship(b); b.addRelationship(a);
-			return true;
-		}		
-		return false;
-	}
-	
-	/**
-	 * 
-	 * @param name1
-	 * @param type1
-	 * @param name2
-	 * @param type2
-	 * @return
-	 */
-	
-	public boolean afegirAresta(String name1, String type1, String name2, String type2) {
-		if (containsNode(name1,type1) && containsNode(name2,type2)) {
-			this.getNode(name1, type1).addRelationship(this.getNode(name2, type2));
-			this.getNode(name2, type2).addRelationship(this.getNode(name1, type1));
-			return true;
-		}		
-		return false;
-	}
-	
-	/**
-	 * 
-	 * @param id
-	 * @param type
-	 * @return
-	 */
-	public boolean esborrarNode(int id, String type) {
-		Iterator<Node> it = this.elements.get(type).iterator();
-		boolean finish = false;
-		while (it.hasNext() && !finish) {
-			if (it.next().getID() == id) {
-				finish = true;
-				it.remove();
-			}
-		}
-		return finish;
-	}
-	
-	/**
-	 * 
-	 * @param name
-	 * @param type
-	 * @return
-	 */
-	public boolean esborrarNode(String name, String type) {
-		Iterator<Node> it = this.elements.get(type).iterator();
-		boolean finish = false;
-		while (it.hasNext() && !finish) {
-			if (it.next().getName() == name) {
-				finish = true;
-				it.remove();
-			}
-		}
-		return finish;
-	}
-	
-	/**
-	 * 
-	 * @param node1
-	 * @param node2
-	 * @return
-	 */
-	
-	public boolean esborrarAresta(Node node1, Node node2) {
-		return true;
-	}
-	
-	
-	
 
 }
