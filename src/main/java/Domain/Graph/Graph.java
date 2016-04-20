@@ -14,28 +14,37 @@ public class Graph {
     private int maxID; //la id mes gran que s'ha ficat al graf
 	
 	//Metodes privats per garantir la no redundancia
-	
-	/**
-	 * 
-	 * @param t: tipus de node
-	 * @return: retorna WRONG_TYPE si el tipus t no existeix o es incorrecte
-	 */
-	private String checkType(String t) throws DomainException {
-		String tip;
-		switch (t) {		
-			case Config.authorType: case Config.paperType: case Config.confType: case Config.termType:
-				tip = t;
+
+    /**
+     * Comprova si el tipus es correcte
+     * @param t
+     * @return
+     * @throws DomainException
+     */
+	private void checkType(String t) throws DomainException
+    {
+		switch (t)
+        {
+			case Config.authorType:
+            case Config.paperType:
+            case Config.confType:
+            case Config.termType:
 				break;
 			default:
 				throw new DomainException("El tipus '"+t+"' no existeix.");
-					
 		}
-		return tip;		
 	}
 
-    private Node createNode(int id, String type)
+    /**
+     * Crea un node i l'afegeix al graf
+     * @param id
+     * @param type
+     * @return
+     * @throws DomainException
+     */
+    private Node createNode(int id, String type) throws DomainException
     {
-
+        checkType(type);
         switch(type)
         {
             case Config.authorType:
@@ -44,15 +53,21 @@ public class Graph {
                 return new Term(id, null);
             case Config.paperType:
                 return new Paper(id, null);
-            case Config.confType:
+            default:
                 return new Conf(id, null);
         }
 
-        return null;
     }
 
-    private void removeEdgeFromTypeToNode(Node node, String type) {
-        for (Node a: elements.get(type).keySet()) {
+    /**
+     * TODO
+     * @param node
+     * @param type
+     */
+    private void removeEdgeFromTypeToNode(Node node, String type)
+    {
+        for (Node a: elements.get(type).keySet())
+        {
             a.removeEdge(node);
         }
     }
@@ -79,7 +94,8 @@ public class Graph {
 	 * Consultora dels nodes del graf.
 	 * @return: un conjunt amb tots els nodes del graf
 	 */
-	public Set<Node> getSetOfNodes() {
+	public Set<Node> getSetOfNodes()
+    {
 		HashSet<Node> res = new HashSet<Node>();
 		res.addAll(elements.get(Config.authorType).keySet());
 		res.addAll(elements.get(Config.paperType).keySet());
@@ -89,13 +105,15 @@ public class Graph {
 		return res;		
 	}
 
-	/**
-	 * Consultora dels nodes d'un tipus donat.
-	 * @param type: tipus de node
-	 * @return: Tots els nodes del graf del tipus <em>type</em>, <em>null</em> si el tipus no existeix.
+    /**
+     * Consultora dels nodes d'un tipus donat.
+     * @param type tipus de node
+     * @return Tots els nodes del graf del tipus <em>type</em>
      * Modificacions en el conjunt de retorn canviaran l'estat del graf.
-	 */
-	public Set<Node> getSetOfNodes(String type) throws DomainException{
+     * @throws DomainException Si el tipus no existeix
+     */
+	public Set<Node> getSetOfNodes(String type) throws DomainException
+    {
 		checkType(type);
 		return elements.get(type).keySet();
 	}
@@ -104,12 +122,18 @@ public class Graph {
 	 * Obte un node a partir de la id i el tipus.
 	 * @param id id del node que es busca
 	 * @param type tipus del node que es busca
-	 * @return: el node de tipus <em>type</em> i id <em>id</em>, <em>null</em> si no existeix
+	 * @return: el node de tipus <em>type</em> i id <em>id</em>
+     * @throws DomainException Si el tipus no existeix
 	 */
-	public Node getNode(int id, String type) throws DomainException{
+	public Node getNode(int id, String type) throws DomainException
+    {
 		checkType(type);
 		Node aux = createNode(id, type);
-		return elements.get(type).get(aux);
+		Node g = elements.get(type).get(aux);
+        if(g == null)
+            throw new DomainException("El node amb id '"+id+"' i tipus '"+type+"' no existeix");
+
+        return g;
 	    
 	}
 
@@ -118,21 +142,26 @@ public class Graph {
 	 * @param name nom dels nodes buscats
 	 * @param type tipus dels nodes buscats
 	 * @return llista de nodes que tenen nom <em>name</em> i tipus <em>type</em>
+     * @throws DomainException si el tipus no existeix
 	 */
-	public ArrayList<Node> getNodes(String name, String type) throws DomainException {
+	public ArrayList<Node> getNodes(String name, String type) throws DomainException
+    {
 		checkType(type);
 		ArrayList<Node> intern = dicNameNodes.get(name);
-		if (intern == null) return null;
-		else {
-			ArrayList<Node> forRet = new ArrayList<>();
-			for (int i = 0; i < intern.size(); i++) {
-				if (intern.get(i).getType().equals(type)) {
-					forRet.add(intern.get(i)); //si es del tipus indicat
-				}
-			}
-			if (forRet.size() == 0) return null;
-			else return forRet;
-		}
+
+        ArrayList<Node> forRet = new ArrayList<>();
+        for (int i = 0; i < intern.size(); i++)
+        {
+            if (intern.get(i).getType().equals(type))
+            {
+                forRet.add(intern.get(i)); //si es del tipus indicat
+            }
+        }
+        if(forRet.isEmpty())
+            throw new DomainException("El nom '"+name+"' no correspon a cap node de tipus '"+type+"'.");
+
+        return forRet;
+
 	}
 
 
@@ -156,7 +185,8 @@ public class Graph {
      * Modificacions en el conjunt de retorn
      * canviaran l'estat del graf.
 	 */
-	public Set<Node> getNeighbours(Node node, String type) throws DomainException {
+	public Set<Node> getNeighbours(Node node, String type) throws DomainException
+    {
 		checkType(type);
 		return node.getNeighbours(type);
 
@@ -168,8 +198,10 @@ public class Graph {
      *             es genera una id unica per ell. Si no, es presuposa que
      *             la id es unica i s'afegeix.
      */
-    public void addNode(Node node) {
-        if (node.getID() < 0) {
+    public void addNode(Node node)
+    {
+        if (node.getID() < 0)
+        {
             ++maxID;
             node.setID(maxID);
         }
@@ -177,10 +209,12 @@ public class Graph {
             maxID = node.getID();
 
         elements.get(node.getType()).put(node, node);
-        if (dicNameNodes.containsKey(node.getName())) {
+        if (dicNameNodes.containsKey(node.getName()))
+        {
             dicNameNodes.get(node.getName()).add(node);
         }
-        else {
+        else
+        {
             ArrayList<Node> forDic = new ArrayList<>(1); //1 per estalviar memoria
             forDic.add(node);
             dicNameNodes.put(node.getName(), forDic);
@@ -195,7 +229,8 @@ public class Graph {
 	 * @param b Node extret directament del graf (amb <em>getNode()</em>
      *          o be <em>getNodes()</em>
 	 */
-	public void addEdge(Node a, Node b) throws DomainException {
+	public void addEdge(Node a, Node b) throws DomainException
+    {
         a.addEdge(b);
         b.addEdge(a);
 	}
@@ -205,19 +240,25 @@ public class Graph {
      * @param node Node extret directament del graf (amb <em>getNode()</em>
      *             o be <em>getNodes()</em>
      */
-	public void removeNode(Node node) {
-        if (dicNameNodes.containsKey(node.getName())) {
+	public void removeNode(Node node) throws DomainException {
+        if (dicNameNodes.containsKey(node.getName()))
+        {
 			dicNameNodes.get(node.getName()).remove(node);
 		}
-        if (node.getType().equals(Config.paperType)) {
+        else
+            throw new DomainException("No existeix un node amb nom '"+node.getName()+"'");
+        if (node.getType().equals(Config.paperType))
+        {
             removeEdgeFromTypeToNode(node, Config.termType);
             removeEdgeFromTypeToNode(node, Config.authorType);
             removeEdgeFromTypeToNode(node, Config.confType);
         }
-        else {
+        else
+        {
             removeEdgeFromTypeToNode(node, Config.paperType);
         }
-        elements.get(node.getType()).remove(node);
+        if(null == elements.get(node.getType()).remove(node))
+            throw new DomainException("No existeix un node amb nom '"+node.getName()+"' i tipus '"+node.getType()+"'");
     }
 
     /**
