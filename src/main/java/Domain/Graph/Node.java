@@ -107,6 +107,7 @@ public abstract class Node {
      */
     protected boolean deleteRelationship(Node node) {
 //En principio esta se implementaria solo aqui
+    	if(this.adj.contains(node))
     	this.adj.remove(node);
    
     	return true;
