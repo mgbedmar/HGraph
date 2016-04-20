@@ -51,8 +51,7 @@ public class PresentationController
     private static Scanner in;
     public static void main(String[] args)
     {
-        verbose = !(args.length > 0 && args[0].equals("noverbose"));
-        debug = (args.length > 1 && args[1].equals("debug"));
+        initParams(args);
         try
         {
             dc = new DomainController();
@@ -79,11 +78,29 @@ public class PresentationController
             System.out.println("PAM! ha petat.");
             if(debug)
             {
-                System.out.println(e.getMessage());
-                System.out.println(Arrays.toString(e.getStackTrace()));
+                e.printStackTrace(System.err);
             }
         }
 
+    }
+
+    private static void initParams(String[] args)
+    {
+        //defaults
+        verbose = true;
+        debug = false;
+        for(String arg : args)
+        {
+            switch(arg)
+            {
+                case "noverbose":
+                    verbose = false;
+                    break;
+                case "debug":
+                    debug = true;
+                    break;
+            }
+        }
     }
 
     private static void goToQueryGraph() {
@@ -138,7 +155,7 @@ public class PresentationController
         {
             System.out.println(de.getFriendlyMessage());
             if(debug)
-                System.out.println(Arrays.toString(de.getStackTrace()));
+                de.printStackTrace(System.err);
 
         }
 
@@ -322,7 +339,7 @@ public class PresentationController
         } catch (DomainException de) {
             System.out.println(de.getFriendlyMessage());
             if(debug)
-                System.out.println(Arrays.toString(de.getStackTrace()));
+                de.printStackTrace(System.err);
         }
 
     }
@@ -342,7 +359,7 @@ public class PresentationController
         {
             System.out.println(de.getFriendlyMessage());
             if(debug)
-                System.out.println(Arrays.toString(de.getStackTrace()));
+                de.printStackTrace(System.err);
         }
 
 
@@ -369,7 +386,7 @@ public class PresentationController
         {
             System.out.println(de.getFriendlyMessage());
             if(debug)
-                System.out.println(Arrays.toString(de.getStackTrace()));
+                de.printStackTrace(System.err);
         }
 
     }
@@ -387,7 +404,7 @@ public class PresentationController
         {
             System.out.println(de.getFriendlyMessage());
             if(debug)
-                System.out.println(Arrays.toString(de.getStackTrace()));
+                de.printStackTrace(System.err);
         }
 
     }
@@ -403,7 +420,7 @@ public class PresentationController
         {
             System.out.println(de.getFriendlyMessage());
             if(debug)
-                System.out.println(Arrays.toString(de.getStackTrace()));
+                de.printStackTrace(System.err);
         }
 
     }
@@ -474,7 +491,7 @@ public class PresentationController
         {
             System.out.println(de.getFriendlyMessage());
             if(debug)
-                System.out.println(Arrays.toString(de.getStackTrace()));
+                de.printStackTrace(System.err);
         }
 
     }
@@ -495,7 +512,7 @@ public class PresentationController
         {
             System.out.println(de.getFriendlyMessage());
             if(debug)
-                System.out.println(Arrays.toString(de.getStackTrace()));
+                de.printStackTrace(System.err);
         }
     }
 
@@ -522,7 +539,7 @@ public class PresentationController
         {
             System.out.println(de.getFriendlyMessage());
             if(debug)
-                System.out.println(Arrays.toString(de.getStackTrace()));
+                de.printStackTrace(System.err);
         }
 
     }
@@ -539,7 +556,7 @@ public class PresentationController
         {
             System.out.println(de.getFriendlyMessage());
             if(debug)
-                System.out.println(Arrays.toString(de.getStackTrace()));
+                de.printStackTrace(System.err);
         }
 
     }
@@ -555,7 +572,7 @@ public class PresentationController
         {
             System.out.println(de.getFriendlyMessage());
             if(debug)
-                System.out.println(Arrays.toString(de.getStackTrace()));
+                de.printStackTrace(System.err);
         }
 
     }
