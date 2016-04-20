@@ -17,9 +17,8 @@ public class Graph {
 
     /**
      * Comprova si el tipus es correcte
-     * @param t
-     * @return
-     * @throws DomainException
+     * @param t El String que cal comprovar si correspon a un tipus valid
+     * @throws DomainException si el tipus no es valid
      */
 	private void checkType(String t) throws DomainException
     {
@@ -36,11 +35,11 @@ public class Graph {
 	}
 
     /**
-     * Crea un node i l'afegeix al graf
-     * @param id
-     * @param type
-     * @return
-     * @throws DomainException
+     * Crea un node auxiliar per fer cerca
+     * @param id la id del node
+     * @param type tipus del node
+     * @return un node amb id <em>id</em>, tipus <em>type</em> i nom <em>null</em>
+     * @throws DomainException si el tipus no es valid
      */
     private Node createNode(int id, String type) throws DomainException
     {
@@ -60,9 +59,9 @@ public class Graph {
     }
 
     /**
-     * TODO
-     * @param node
-     * @param type
+     * Esborra totes les arestes de nodes de tipus <em>type</em> cap a <em>node</em>
+     * @param node el node desti
+     * @param type el tipus font
      */
     private void removeEdgeFromTypeToNode(Node node, String type) throws DomainException {
         for (Node a: elements.get(type).keySet())
@@ -77,7 +76,7 @@ public class Graph {
     /**
      * Constructora. Crea un graf buit.
      */
-    public Graph () {
+    public Graph() {
 		elements = new TreeMap<>();
 		elements.put(Config.authorType, new HashMap<>());
 		elements.put(Config.paperType, new HashMap<>());
