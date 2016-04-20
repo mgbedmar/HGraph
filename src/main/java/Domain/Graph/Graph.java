@@ -13,8 +13,6 @@ public class Graph {
 	private HashMap<String,ArrayList<Node>> dicNameNodes;
     private int maxID; //la id mes gran que s'ha ficat al graf
 	
-	private final String  WRONG_TYPE = "error"; //Clau que farem servir per saber si hi ha hagut un error de tipus
-	
 	//Metodes privats per garantir la no redundancia
 	
 	/**
@@ -22,14 +20,14 @@ public class Graph {
 	 * @param t: tipus de node
 	 * @return: retorna WRONG_TYPE si el tipus t no existeix o es incorrecte
 	 */
-	private String checkType(String t) {
+	private String checkType(String t) throws DomainException {
 		String tip;
 		switch (t) {		
-		case Config.authorType: case Config.paperType: case Config.confType: case Config.termType:
-			tip = t;
-			break;			
-		default:
-			tip = WRONG_TYPE;
+			case Config.authorType: case Config.paperType: case Config.confType: case Config.termType:
+				tip = t;
+				break;
+			default:
+				throw new DomainException("El tipus '"+t+"' no existeix.");
 					
 		}
 		return tip;		
@@ -97,15 +95,9 @@ public class Graph {
 	 * @return: Tots els nodes del graf del tipus <em>type</em>, <em>null</em> si el tipus no existeix.
      * Modificacions en el conjunt de retorn canviaran l'estat del graf.
 	 */
-	public Set<Node> getSetOfNodes(String type) {
-		String clauConsulta = checkType(type);
-		if (clauConsulta.equals(WRONG_TYPE)) {
-			System.err.print("No s'ha insertat un tipus correcte de Node");
-			return null;
-		}
-		else {
-			return elements.get(type).keySet();
-		}		
+	public Set<Node> getSetOfNodes(String type) throws DomainException{
+		checkType(type);
+		return elements.get(type).keySet();
 	}
 
 	/**
@@ -114,16 +106,10 @@ public class Graph {
 	 * @param type tipus del node que es busca
 	 * @return: el node de tipus <em>type</em> i id <em>id</em>, <em>null</em> si no existeix
 	 */
-	public Node getNode(int id, String type) {
-		String clauConsulta = checkType(type);
-		if (clauConsulta.equals(WRONG_TYPE)) {
-			System.err.print("No s'ha insertat un tipus correcte de Node");
-			return null;
-		}
-		else {
-            Node aux = createNode(id, type);
-			return elements.get(type).get(aux);
-		}
+	public Node getNode(int id, String type) throws DomainException{
+		checkType(type);
+		Node aux = createNode(id, type);
+		return elements.get(type).get(aux);
 	    
 	}
 
@@ -133,25 +119,19 @@ public class Graph {
 	 * @param type tipus dels nodes buscats
 	 * @return llista de nodes que tenen nom <em>name</em> i tipus <em>type</em>
 	 */
-	public ArrayList<Node> getNodes(String name, String type) {
-		String clauConsulta = checkType(type);
-		if (clauConsulta.equals(WRONG_TYPE)) {
-			System.err.print("No s'ha insertat un tipus correcte de Node");
-			return null;
-		}
+	public ArrayList<Node> getNodes(String name, String type) throws DomainException {
+		checkType(type);
+		ArrayList<Node> intern = dicNameNodes.get(name);
+		if (intern == null) return null;
 		else {
-            ArrayList<Node> intern = dicNameNodes.get(name);
-            if (intern == null) return null;
-            else {
-                ArrayList<Node> forRet = new ArrayList<>();
-                for (int i = 0; i < intern.size(); i++) {
-                    if (intern.get(i).getType().equals(type)) {
-                        forRet.add(intern.get(i)); //si es del tipus indicat
-                    }
-                }
-                if (forRet.size() == 0) return null;
-                else return forRet;
-            }
+			ArrayList<Node> forRet = new ArrayList<>();
+			for (int i = 0; i < intern.size(); i++) {
+				if (intern.get(i).getType().equals(type)) {
+					forRet.add(intern.get(i)); //si es del tipus indicat
+				}
+			}
+			if (forRet.size() == 0) return null;
+			else return forRet;
 		}
 	}
 
@@ -176,11 +156,10 @@ public class Graph {
      * Modificacions en el conjunt de retorn
      * canviaran l'estat del graf.
 	 */
-	public Set<Node> getNeighbours(Node node, String type) {
-		if (!checkType(type).equals(WRONG_TYPE)) {
-			return node.getNeighbours(type);
-		}
-		return null;
+	public Set<Node> getNeighbours(Node node, String type) throws DomainException {
+		checkType(type);
+		return node.getNeighbours(type);
+
 	}
 
     /**
