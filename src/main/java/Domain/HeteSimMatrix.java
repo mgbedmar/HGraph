@@ -15,7 +15,7 @@ public class HeteSimMatrix {
      */
     public HeteSimMatrix() {
         this.numRows = this.numCols = 0;
-        this.m = new HashMap<Node, HashMap<Node, Float>>();
+        this.m = new HashMap<>();
     }
 
     /**
@@ -35,12 +35,12 @@ public class HeteSimMatrix {
         Set<Node> cols = graf.getSetOfNodes(tCol);
         this.numCols = cols.size();
 
-        this.m = new HashMap<Node, HashMap<Node, Float>>(this.numRows);
+        this.m = new HashMap<>(this.numRows);
         float one = 1;
 
         for (Node i: rows) {
             HashMap<Node, Float> dicCol =
-                    new HashMap<Node, Float>(/* parametres */);
+                    new HashMap<>(/* parametres */);
             cols = graf.getNeighbours(i, tCol);
             if (!cols.isEmpty()) {
                 Float v = new Float(one/((float)cols.size()));
@@ -119,11 +119,11 @@ public class HeteSimMatrix {
     public void rowProduct(HeteSimMatrix A, HeteSimMatrix B) {
         this.numRows = A.numRows();
         this.numCols = B.numRows();
-        this.m = new HashMap<Node, HashMap<Node, Float>>(this.numRows);
+        this.m = new HashMap<>(this.numRows);
         float cij;
 
         for (Node i: A.rowKeys()) {
-            HashMap<Node, Float> dicCols = new HashMap<Node, Float>();
+            HashMap<Node, Float> dicCols = new HashMap<>();
             for (Node j: B.rowKeys()) {
                 if (A.cols(i).size() < B.cols(j).size())
                     cij = cij(A, B, i, j);

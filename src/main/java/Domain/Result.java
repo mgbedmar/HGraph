@@ -166,7 +166,7 @@ public class Result {
             /* Muntem la fila... */
             ArrayList<String> rowReturn = new ArrayList<>(1+this.nCols);
             rowReturn.add(String.valueOf(currentIndex));
-            rowReturn.add(res.get(currentIndex).node1);
+            rowReturn.add(res.get(currentIndex).getFirstNode());
             if (nNodes == 2)
                 rowReturn.add(res.get(currentIndex).getSecondNode());
             if (nCols - nNodes == 1)
