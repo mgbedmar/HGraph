@@ -144,7 +144,14 @@ public class TestNode {
     	System.out.println("No tiene más adyacentes");
     }
     private Node getNeighbour(int i,int id,String type){
-      Iterator itr=misnodos.get(i).getNeighbours(type).
+      Iterator itr=misnodos.get(i).getNeighbours(type).iterator();
+      Node n=null;
+      if (itr.hasNext())
+    
+      for(int j=0;j<i;j++){
+       n=(Node)itr.next();
+      }
+      return n;
     }
     private void ShowNeighbours(int i){
     	Iterator<Node> itr = misnodos.get(i).getNeighbours().iterator();
@@ -160,14 +167,14 @@ public class TestNode {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
      TestNode mitest=new TestNode();
-     
+     Node n=null;
      Scanner miscan=new Scanner(System.in);
      int option=0;
      int id,tipus,source,desti,aresta;
      String nombre;
      
      while(option!=7){
-    	 System.out.println("Tria una opcio:1 Crear node\n2Afegir aresta\3Esborrar aresta 4 Mostrar info tots els nodes creats \n5 Esborrar totes les arestes,\n6 Afegir totes les arestes\n7 Sortir");
+    	 System.out.println("Tria una opcio:1 Crear node\n2Afegir aresta\3Esborrar aresta 4 Mostrar info tots els nodes creats \n5 Esborrar totes les arestes,\n6 Afegir totes les arestes\n7 Consultar adjiacencies\n8Sortir");
     	 option=miscan.nextInt();
     	 
     	 switch(option){
@@ -212,30 +219,58 @@ public class TestNode {
     		 System.out.println("Tria el node source per esborrar l'aresta");
     		 mitest.listNode();
     		 source=miscan.nextInt();
-    		 if(mitest.getNode(source).getType().equals(Config.paperType))
+    		 if(mitest.getNode(source).getType().equals(Config.paperType)){
     			 System.out.println("tria el tipus d'aresta que vols eliminar \n 1 Author \n 2 Conferència \n 3 Terme ");
     		     aresta=miscan.nextInt();
     		     switch(aresta){
     		     case 1:
     		    	 mitest.ShowNeighbours(source,Config.authorType);
     		    	 desti=miscan.nextInt();
+    		    	 mitest.getNeighbour(desti, source, Config.authorType);
+    		    	 n=mitest.getNeighbour(desti, source, Config.authorType);
+    		    	 try{
+    		    	 mitest.getNode(source).removeEdge(n);
+    		    	 }catch(Exception ex){
+    		    		 
+    		    	 }
     		    	 break;
     		    	 
     		     case 2:
     		    	 mitest.ShowNeighbours(source,Config.confType);
     		    	 desti=miscan.nextInt();
+    		    	 try{
+    		    		 n=mitest.getNeighbour(desti, source, Config.termType);
+        		    	 mitest.getNode(source).removeEdge(n);
+    		    	 
+    		    	 }catch(Exception ex){
+    		    		 
+    		    	 }
     		    	 break;
     		     case 3:
     		    	 mitest.ShowNeighbours(source,Config.termType);
     		    	 desti=miscan.nextInt();
+    		    	 mitest.getNeighbour(desti, source, Config.termType);
+    		    	 try{
+    		    		 n=mitest.getNeighbour(desti, source, Config.termType);
+        		    	 mitest.getNode(source).removeEdge(n);
+        		    	 }catch(Exception ex){
+        		    		 
+        		    	 }
     		    	 break;
 
     		     }
+    		 
+    		 System.out.println("S'ha esborrat l'aresta "+mitest.getNode(source)+" "+n.getID()+" "+n.getName()+" "+n.getType());
+    		 }
+    		 else{
     			 
+    		 
     		 System.out.println("Tria el node desti per esborrar l'aresta");
+    		 
     		 desti=miscan.nextInt();
     		 mitest.removeEdge(source, desti);
-    	 case 4:
+    		 }
+    		 case 4:
     		 mitest.ShowContent();
     	 case 5:
     		 
