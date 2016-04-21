@@ -9,7 +9,7 @@ public class Author extends Node {
     private HashSet<Node> paperadj;
 
     /**
-     * Crea un autor
+     * Crea un node de tipus autor
      * @param name
      */
     public Author(String name) {
@@ -18,7 +18,7 @@ public class Author extends Node {
     }
 
     /**
-     * Crea un autor. La <em>id</em> l'identifica inequivocament d'un altre autor
+     * Crea un node de tipus autor. La <em>id</em> l'identifica inequivocament d'un altre autor
      * @param id ID unica d'autor
      * @param name
      */
@@ -35,6 +35,11 @@ public class Author extends Node {
         return Author.TYPE;
     }
 
+    /**
+     * Afegeix una aresta que va desde el p.i. a <em>node</em>
+     * @param node
+     * @throws DomainException Si el node no es de tipus paper
+     */
     void addEdge(Node node) throws DomainException {
         if(node.getType().equals(Paper.TYPE))
             paperadj.add(node);
