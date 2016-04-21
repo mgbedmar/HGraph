@@ -6,7 +6,7 @@ import Domain.DomainController;
 import Domain.DomainException;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.InputMismatchException;
 import java.util.Map;
 import java.util.Scanner;
 
@@ -59,15 +59,20 @@ public class PresentationController
             Integer x;
             do{
                 showMainMenu();
-                x = in.nextInt();
+                x = readInt();
                 in.nextLine(); //Consume '\n'
                 switch(x)
                 {
+                    case 0:
+                        break;
                     case 1:
                         goToEditGraph();
                         break;
                     case 2:
                         goToQueryGraph();
+                        break;
+                    default:
+                        System.out.println("Si us plau, escriu una opció vàlida.");
                         break;
                 }
             }while(x != 0);
@@ -81,6 +86,25 @@ public class PresentationController
                 e.printStackTrace(System.err);
             }
         }
+
+    }
+
+    private static Integer readInt() {
+        while(true)
+        {
+            try
+            {
+                Integer x = in.nextInt();
+                return x;
+            }
+            catch(InputMismatchException e)
+            {
+                in.nextLine(); //Consume '\n'
+                System.out.println("Si us plau, introdueix un numero.");
+            }
+        }
+
+
 
     }
 
@@ -107,10 +131,12 @@ public class PresentationController
         Integer x;
         do{
             showQueryMenu();
-            x = in.nextInt();
+            x = readInt();
             in.nextLine(); //Consume '\n'
             switch(x)
             {
+                case 0:
+                    break;
                 case 1:
                     queryByType();
                     break;
@@ -129,6 +155,8 @@ public class PresentationController
                 case 6:
                     queryByReference();
                     break;
+                default:
+                    System.out.println("Si us plau, escriu una opció vàlida.");
             }
         }while(x != 0);
     }
@@ -173,10 +201,12 @@ public class PresentationController
         Integer x;
         do{
             showResultMenu();
-            x = in.nextInt();
+            x = readInt();
             in.nextLine(); //Consume '\n'
             switch(x)
             {
+                case 0 :
+                    break;
                 case 1:
                     hideRow();
                     break;
@@ -196,6 +226,8 @@ public class PresentationController
                     clearFilters();
                     break;
                 default:
+                    System.out.println("Si us plau, escriu una opció vàlida.");
+                    dc.resetResult();
                     break;
             }
         }while(x != 0);
@@ -254,7 +286,7 @@ public class PresentationController
 
     private static void hideRow() {
         info("Escriu el numero de fila a amagar:");
-        Integer x = in.nextInt();
+        Integer x = readInt();
         in.nextLine(); //Consume '\n'
         dc.hideResultRow(x);
     }
@@ -441,8 +473,14 @@ public class PresentationController
 
         info("Escull un tipus:");
         printMenu(localizedTypes);
-        Integer x = in.nextInt();
-        in.nextLine(); //Consume '\n'
+        Integer x;
+        do{
+            x = readInt();
+            in.nextLine(); //Consume '\n'
+            if(x > types.length || x < 0)
+                System.out.println("Escriu un numero del 0 al 3");
+        }while(x > types.length || x < 0);
+
         return types[x];
     }
 
@@ -450,10 +488,12 @@ public class PresentationController
         Integer x;
         do{
             showGraphMenu();
-            x = in.nextInt();
+            x = readInt();
             in.nextLine(); //Consume '\n'
             switch(x)
             {
+                case 0:
+                    break;
                 case 1:
                     addNode();
                     break;
@@ -470,6 +510,7 @@ public class PresentationController
                     removeEdge();
                     break;
                 default:
+                    System.out.println("Si us plau, escriu una opció vàlida.");
                     break;
             }
         }while(x != 0);

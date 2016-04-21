@@ -265,6 +265,10 @@ public class DomainController
         r.unfilterAll();
         r.unselectAll();
     }
+
+    public void resetResult() {
+        r.resetIndex();
+    }
 /*
     public void selectResultRows(Integer x1, Integer x2) {
         //TODO
