@@ -1,7 +1,6 @@
 package ResultTest;
 
-import Domain.Graph.*;
-import Domain.Result;
+import GraphTest.Graph.*;
 
 import java.util.ArrayList;
 import java.util.InputMismatchException;

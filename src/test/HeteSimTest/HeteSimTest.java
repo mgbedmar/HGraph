@@ -135,20 +135,74 @@ public class HeteSimTest {
 
     }
 
+    private static ArrayList<String> readPath() {
+        info("Quina longitud tindra el cami? Introdueix un enter:");
+        Integer n = readInt();
+        ArrayList<String> cami = new ArrayList<>(n);
+        int i = 0;
+        while (i < n) {
+            String type = readType();
+            cami.add(type);
+            ++i;
+        }
+        return cami;
+    }
+
+
+    private static boolean checkPath(ArrayList<String> cami, String typeA, String typeB) {
+        int n = cami.size()-1;
+
+        if (!typeA.equals(cami.get(0)) || !typeB.equals(cami.get(n))) {
+            return false;
+        }
+
+        for (int i = 0; i < n; ++i) {
+            if (cami.get(i).equals(Config.paperType)) {
+                if (cami.get(i+1).equals(Config.paperType)) {
+                    return false;
+                }
+            }
+            else {
+                if (!cami.get(i+1).equals(Config.paperType)) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
 
     private static void queryHetesim() {
-        Node source = readNode();
-        Node end = readNode();
-
         try
         {
-            ArrayList<Node> nIds = g.getNodes(source.getName(), source.getType());
+            Node source = readNode();
+            Node end = readNode();
+
+            ArrayList<Node> nIdsSource = g.getNodes(source.getName(), source.getType());
+            ArrayList<Node> nIdsEnd = g.getNodes(end.getName(), end.getType());
+
+            source = nIdsSource.get(0);
+            end = nIdsEnd.get(0);
+
+            ArrayList<String> cami = readPath();
+            while (!checkPath(cami, source.getType(), end.getType())) {
+                System.err.println("Cami no valid. Torna a intentar-ho.");
+                cami = readPath();
+            }
+
+            HeteSimMatrix resultat = HeteSim.run(g, cami);
+
+            System.out.println(source.getName()+" "+end.getName()+" "+resultat.value(source, end));
         }
-        catch(DomainException e)
+        catch(DomainException de)
         {
-            
+            System.out.println(de.getFriendlyMessage());
+            if(debug)
+                de.printStackTrace(System.err);
         }
     }
+
 
     private static void queryNeighbours() {
         Node n = readNode();
@@ -376,7 +430,8 @@ public class HeteSimTest {
         String[] opts = {
                 "tornar",
                 "Nodes d'un cert tipus",
-                "Veins d'un node"
+                "Veins d'un node",
+                "HeteSim entre dos nodes"
         };
         info("Selecciona el tipus de consulta:");
         printMenu(opts);
