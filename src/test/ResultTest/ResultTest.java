@@ -1,47 +1,163 @@
 package ResultTest;
 
-import GraphTest.Graph.*;
+import Domain.Graph.*;
+import Domain.Result;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.InputMismatchException;
+import java.util.Scanner;
 
-public class ResultTest {
-    private static Graph g;
+public class ResultTest
+{
+
+    private static Scanner in;
+    private static Result r;
     private static boolean verbose;
     private static boolean debug;
-    private static Scanner in;
+    private static int cols;
 
-    private static class EdgeReference
+
+    public static void main(String args[])
     {
-        public Node nA;
-        public Node nB;
+        initParams(args);
+        in = new Scanner(System.in);
+        r = new Result(0);
+        try
+        {
 
-        public EdgeReference(Node A, Node B)
-        {
-            this.nA = A;
-            this.nB = B;
-        }
-        @Override
-        public String toString(){
-            return "(tipusA: "+nA.getType()+", nomA: "+nA.getName()+", "+
-                    "tipusB: "+nB.getType()+", nomB: "+nB.getName()+")";
-        }
-    }
-    private static Integer readInt() {
-        while(true)
-        {
-            try
-            {
-                Integer x = in.nextInt();
-                return x;
-            }
-            catch(InputMismatchException e)
-            {
+            Integer x;
+            do{
+                showMainMenu();
+                x = readInt();
                 in.nextLine(); //Consume '\n'
-                System.out.println("Si us plau, introdueix un numero.");
+                switch(x)
+                {
+                    case 0:
+                        break;
+                    case 1:
+                        goToEditResult();
+                        break;
+                    case 2:
+                        goToShowResult();
+                        break;
+                    default:
+                        System.out.println("Si us plau, escriu una opció vàlida.");
+                        break;
+                }
+            }while(x != 0);
+
+        }
+        catch(Exception e)
+        {
+            System.out.println("PAM! ha petat.");
+            if(debug)
+            {
+                e.printStackTrace(System.err);
             }
         }
+    }
+
+
+    private static void clearFilters()
+    {
+        r.unfilterAll();
+    }
+
+    private static void sortByRow()
+    {
+        info("Escriu el numero de columna:");
+        Integer col = in.nextInt();
+        in.nextLine(); //Consume '\n'
+        info("Ascendentment(1) o descendentment(0):");
+        Integer dir = in.nextInt();
+        in.nextLine(); //Consume '\n'
+        r.sort(col, (dir != 0));
+    }
+
+    private static void selectName()
+    {
+        info("Escriu el nom a seleccionar:");
+        String x = in.nextLine();
+        r.select(x);
+    }
+
+    private static void filterName()
+    {
+        info("Escriu el nom a amagar:");
+        String x = in.nextLine();
+        r.filter(x);
+    }
+
+
+    private static void hideRow() {
+        info("Escriu el numero de fila a amagar:");
+        Integer x = readInt();
+        in.nextLine(); //Consume '\n'
+        r.filter(x);
+    }
+
+
+    private static void goToShowResult(){
+        Integer x;
+        do{
+            showResultMenu();
+            x = readInt();
+            in.nextLine(); //Consume '\n'
+            switch(x)
+            {
+                case 0 :
+                    break;
+                case 1:
+                    hideRow();
+                    break;
+                case 2:
+                    filterName();
+                    break;
+                case 3:
+                    selectName();
+                    break;
+                case 4:
+                    sortByRow();
+                    break;
+                case 5:
+                    clearFilters();
+                    break;
+                default:
+                    System.out.println("Si us plau, escriu una opció vàlida.");
+                    r.resetIndex();
+                    break;
+            }
+        }while(x != 0);
 
     }
+
+    private static void showResultMenu() {
+        String[] opts = {
+                "tornar",
+                "Amagar una fila",
+                "Amagar un rang",
+                "Amagar per nom",
+                "Mostrar per nom",
+                "Ordenar per columna",
+                "Treure tots els filtres"
+        };
+        info("Resultat:");
+
+        ArrayList<String> fila = r.getRow();
+        if (fila == null) System.out.println("<buit>");
+        while (fila != null)
+        {
+            for(int j = 0; j < fila.size(); j++)
+            {
+                System.out.printf(fila.get(j) + " ");
+            }
+            System.out.println();
+            fila = r.getRow();
+        }
+
+        printMenu(opts);
+    }
+
     private static void initParams(String[] args)
     {
         //defaults
@@ -60,69 +176,31 @@ public class ResultTest {
             }
         }
     }
-    public static void main(String[] args)
+
+    private static void printMenu(String[] opts) {
+        for(int i = 0; i < opts.length && verbose; i++)
+        {
+            System.out.printf("%d - %s\n", i, opts[i]);
+        }
+    }
+
+    private static Integer readInt()
     {
-        initParams(args);
-        g = new Graph();
-        try
+        while(true)
         {
-            in = new Scanner(System.in);
-            Integer x;
-            do{
-                showMainMenu();
-                x = readInt();
+            try
+            {
+                Integer x = in.nextInt();
+                return x;
+            }
+            catch(InputMismatchException e)
+            {
                 in.nextLine(); //Consume '\n'
-                switch(x)
-                {
-                    case 0:
-                        break;
-                    case 1:
-                        goToEditGraph();
-                        break;
-                    case 2:
-                        goToQueryGraph();
-                        break;
-                    default:
-                        System.out.println("Si us plau, escriu una opció vàlida.");
-                        break;
-                }
-            }while(x != 0);
-
-        }
-        catch(Exception e)
-        {
-            System.out.println("PAM! ha petat.");
-            if(debug)
-            {
-                e.printStackTrace(System.err);
+                System.out.println("Si us plau, introdueix un numero.");
             }
         }
 
     }
-
-    private static void goToQueryGraph() {
-        Integer x;
-        do{
-            showQueryMenu();
-            x = readInt();
-            in.nextLine(); //Consume '\n'
-            switch(x)
-            {
-                case 0:
-                    break;
-                case 1:
-                    queryByType();
-                    break;
-                case 2:
-                    queryNeighbours();
-                    break;
-                default:
-                    System.out.println("Si us plau, escriu una opció vàlida.");
-
-            }
-        }while(x != 0);
-    }
-
 
     private static void info(String s) {
         if(verbose)
@@ -130,44 +208,81 @@ public class ResultTest {
 
     }
 
-
-    private static void queryNeighbours() {
-        Node n = readNode();
-
-        try
-        {
-            ArrayList<Node> nIds = g.getNodes(n.getName(), n.getType());
-            Set<Node> set = g.getNeighbours(nIds.get(0));
-            printSet(set);
-        }
-        catch(DomainException de)
-        {
-            System.out.println(de.getFriendlyMessage());
-            if(debug)
-                de.printStackTrace(System.err);
-        }
-
+    private static void showMainMenu() {
+        String[] opts = {
+                "Sortir",
+                "Editar Resueltat",
+                "Mostrar Resultat"
+        };
+        info("Menu:");
+        printMenu(opts);
     }
 
-    private static void queryByType() {
-        String type = readType();
-        try
-        {
-            Set<Node> nodes = g.getSetOfNodes(type);
-            printSet(nodes);
-        }
-        catch(DomainException de)
-        {
-            System.out.println(de.getFriendlyMessage());
-            if(debug)
-                de.printStackTrace(System.err);
-        }
 
+    private static void goToEditResult()
+    {
+        Integer x;
+        do{
+            showEditResultMenu();
+            x = readInt();
+            in.nextLine(); //Consume '\n'
+            switch(x)
+            {
+                case 0:
+                    break;
+                case 1:
+                    initResult();
+                    break;
+                case 2:
+                    addRow();
+                    break;
+                default:
+                    System.out.println("Si us plau, escriu una opció vàlida.");
+                    break;
+            }
+        }while(x != 0);
     }
 
-    private static void printSet(Set<Node> set) {
-        for (Node a: set) {
-            System.out.println(a.getID()+" "+a.getName()+" "+a.getType()+" ");
+    private static void addRow() {
+        Node a, b;
+        Integer x;
+        switch(cols){
+            case 1:
+                info("Afegint fila (Node):");
+                a = readNode();
+                r.addRow(a);
+                break;
+            case 2:
+                info("Afegint fila (Node, Hetesim):");
+                a = readNode();
+                x = readInt();
+                in.nextLine();
+                r.addRow(a, x);
+                break;
+            case 3:
+                info("Afegint fila (Node, Node, Hetesim):");
+                a = readNode();
+                b = readNode();
+                x = readInt();
+                in.nextLine();
+                r.addRow(a, b, x);
+                break;
+        }
+    }
+
+    private static Node createNode(String name, String type)
+    {
+
+        switch(type)
+        {
+            case Author.TYPE:
+                return new Author(name);
+            case Term.TYPE:
+                return new Term(name);
+            case Paper.TYPE:
+                return new Paper(name);
+            default:
+                return new Conf(name);
         }
     }
 
@@ -179,10 +294,10 @@ public class ResultTest {
                 "Conferència"
         };
         String[] types = {
-                Config.authorType,
-                Config.paperType,
-                Config.termType,
-                Config.confType
+                Author.TYPE,
+                Paper.TYPE,
+                Term.TYPE,
+                Conf.TYPE
         };
 
         info("Escull un tipus:");
@@ -194,129 +309,11 @@ public class ResultTest {
             if(x > types.length || x < 0)
                 System.out.println("Escriu un numero del 0 al 3");
         }while(x > types.length || x < 0);
+
         return types[x];
     }
 
-    private static void goToEditGraph() {
-        Integer x;
-        do{
-            showGraphMenu();
-            x = readInt();
-            in.nextLine(); //Consume '\n'
-            switch(x)
-            {
-                case 0:
-                    break;
-                case 1:
-                    addNode();
-                    break;
-                case 2:
-                    removeNode();
-                    break;
-                case 3:
-                    addEdge();
-                    break;
-                case 4:
-                    removeEdge();
-                    break;
-                default:
-                    System.out.println("Si us plau, escriu una opció vàlida.");
-                    break;
-            }
-        }while(x != 0);
-    }
-
-    private static void removeEdge()
-    {
-        EdgeReference e = readEdge();
-
-        try
-        {
-            ArrayList<Node> naIds = g.getNodes(e.nA.getName(), e.nA.getType());
-            ArrayList<Node> nbIds = g.getNodes(e.nB.getName(), e.nB.getType());
-            g.removeEdge(naIds.get(0), nbIds.get(0));
-            System.out.println("Aresta " +e.toString()+" esborrada.");
-        }
-        catch(DomainException de)
-        {
-            System.out.println(de.getFriendlyMessage());
-            if(debug)
-                de.printStackTrace(System.err);
-        }
-
-    }
-
-    private static void addEdge()
-    {
-        EdgeReference e = readEdge();
-
-        try
-        {
-            ArrayList<Node> naIds = g.getNodes(e.nA.getName(), e.nA.getType());
-            ArrayList<Node> nbIds = g.getNodes(e.nB.getName(), e.nB.getType());
-            g.addEdge(naIds.get(0), nbIds.get(0));
-            System.out.println("Aresta " +e.toString()+" afegida.");
-        }
-        catch(DomainException de)
-        {
-            System.out.println(de.getFriendlyMessage());
-            if(debug)
-                de.printStackTrace(System.err);
-        }
-    }
-
-    private static EdgeReference readEdge() {
-        info("Indica els nodes que formen l'aresta:");
-        Node A = readNode();
-        Node B = readNode();
-
-        EdgeReference e = new EdgeReference(A, B);
-
-        return e;
-    }
-
-    private static void removeNode() {
-        Node n = readNode();
-        try
-        {
-            ArrayList<Node> nIds = g.getNodes(n.getName(), n.getType());
-            g.removeNode(nIds.get(0));
-            System.out.println("Node "+n.getName() + " esborrat.");
-        }
-        catch(DomainException de)
-        {
-            System.out.println(de.getFriendlyMessage());
-            if(debug)
-                de.printStackTrace(System.err);
-        }
-
-    }
-
-    private static void addNode() {
-        Node n = readNode();
-        g.addNode(n);
-        System.out.println("Node "+n.getName() + " afegit.");
-
-    }
-
-    private static Node createNode(String name, String type)
-    {
-
-        switch(type)
-        {
-            case Config.authorType:
-                return new Author(name);
-            case Config.termType:
-                return new Term(name);
-            case Config.paperType:
-                return new Paper(name);
-            default:
-                return new Conf(name);
-        }
-    }
-
     private static Node readNode() {
-
         info("Introdueix el nom del node: ");
         String name = in.nextLine();
         String type = readType();
@@ -324,43 +321,26 @@ public class ResultTest {
         return nr;
     }
 
-    private static void printMenu(String[] opts) {
-        for(int i = 0; i < opts.length && verbose; i++)
+    private static void initResult() {
+        info("Inicialitzar result:");
+
+        Integer x;
+        do
         {
-            System.out.printf("%d - %s\n", i, opts[i]);
-        }
+            info("Numero de columnes (0..3):");
+            x =readInt();
+        }while(x > 3 || x < 0);
+        cols = x;
+        r = new Result(cols);
     }
 
-    private static void showMainMenu() {
+    private static void showEditResultMenu() {
         String[] opts = {
-                "Sortir",
-                "Editar graf",
-                "Consultar graf"
+                "tornar",
+                "Inicialitzar Result",
+                "Afegir fila"
         };
         info("Menu:");
         printMenu(opts);
     }
-
-    private static void showGraphMenu(){
-        String[] opts = {
-                "tornar",
-                "Afegir node",
-                "Esborrar node",
-                "Afegir aresta",
-                "Esborrar aresta"
-        };
-        info("Escull una opció:");
-        printMenu(opts);
-    }
-
-    private static void showQueryMenu(){
-        String[] opts = {
-                "tornar",
-                "Nodes d'un cert tipus",
-                "Veins d'un node"
-        };
-        info("Selecciona el tipus de consulta:");
-        printMenu(opts);
-    }
-
 }
