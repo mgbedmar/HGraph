@@ -3,10 +3,6 @@ import Domain.DomainException;
 
 import java.util.*;
 
-/**
- * @author Dani
- *
- */
 public class Graph {
 	private TreeMap<String,HashMap<Node,Node>> elements;
 	private HashMap<String,ArrayList<Node>> dicNameNodes;
@@ -16,8 +12,8 @@ public class Graph {
 
     /**
      * Comprova si el tipus es correcte
-     * @param t El String que cal comprovar si correspon a un tipus valid
-     * @throws DomainException si el tipus no es valid
+     * @param t el <em>String</em> que cal comprovar si correspon a un tipus valid
+     * @throws DomainException si el tipus <em>t</em> no es valid
      */
 	private void checkType(String t) throws DomainException
     {
@@ -37,7 +33,7 @@ public class Graph {
      * Crea un node auxiliar per fer cerca
      * @param id la id del node
      * @param type tipus del node
-     * @return un node amb id <em>id</em>, tipus <em>type</em> i nom <em>null</em>
+     * @return Un node amb id <em>id</em>, tipus <em>type</em> i nom <em>null</em>
      * @throws DomainException si el tipus no es valid
      */
     private Node createNode(int id, String type) throws DomainException
@@ -58,13 +54,12 @@ public class Graph {
     }
 
     /**
-     * Esborra totes les arestes de nodes de tipus <em>type</em> cap a <em>node</em>
+     * Esborra totes les arestes de nodes cap a <em>node</em>
      * @param node el node desti
-     * @param type el tipus font
-     * @throws DomainException
+     * @throws DomainException si l'aresta no existeix (impossible)
      */
-    private void removeEdgeFromTypeToNode(Node node, String type) throws DomainException {
-        for (Node a: elements.get(type).keySet())
+    private void removeEdgesToNode(Node node) throws DomainException {
+        for (Node a: node.getNeighbours())
         {
             a.removeEdge(node);
         }
@@ -90,7 +85,7 @@ public class Graph {
 
 	/**
 	 * Consultora dels nodes del graf.
-	 * @return: un conjunt amb tots els nodes del graf
+	 * @return Un conjunt amb tots els nodes del graf
 	 */
 	public Set<Node> getSetOfNodes()
     {
@@ -108,7 +103,7 @@ public class Graph {
      * @param type tipus de node
      * @return Tots els nodes del graf del tipus <em>type</em>
      * Modificacions en el conjunt de retorn canviaran l'estat del graf.
-     * @throws DomainException Si el tipus no existeix
+     * @throws DomainException si el tipus no existeix
      */
 	public Set<Node> getSetOfNodes(String type) throws DomainException
     {
@@ -120,8 +115,8 @@ public class Graph {
 	 * Obte un node a partir de la id i el tipus.
 	 * @param id id del node que es busca
 	 * @param type tipus del node que es busca
-	 * @return: el node de tipus <em>type</em> i id <em>id</em>
-     * @throws DomainException Si el tipus no existeix
+	 * @return El node de tipus <em>type</em> i id <em>id</em>
+     * @throws DomainException si el tipus no existeix
 	 */
 	public Node getNode(int id, String type) throws DomainException
     {
@@ -139,8 +134,9 @@ public class Graph {
 	 * Obte tots els nodes d'un determinat tipus i nom.
 	 * @param name nom dels nodes buscats
 	 * @param type tipus dels nodes buscats
-	 * @return llista de nodes que tenen nom <em>name</em> i tipus <em>type</em>
-     * @throws DomainException si el tipus no existeix
+	 * @return Llista de nodes que tenen nom <em>name</em> i tipus <em>type</em>
+     * @throws DomainException si el tipus no existeix o no hi ha cap node amb
+     * nom <em>name</em> i tipus <em>type</em>
 	 */
 	public ArrayList<Node> getNodes(String name, String type) throws DomainException
     {
@@ -169,8 +165,8 @@ public class Graph {
 	/**
 	 * Consultora dels veins d'un node.
 	 * @param node node del que es volen consultar els veins. Ha de ser un node
-     *             obtingut del graf amb <em>getNode()</em>o <em>getNodes()</em>
-	 * @return conjunt de veins de <em>node</em>. Modificacions en el conjunt de retorn
+     *             obtingut del graf amb <em>getNode()</em> o <em>getNodes()</em>
+	 * @return Conjunt de veins de <em>node</em>. Modificacions en el conjunt de retorn
      * canviaran l'estat del graf.
 	 */
 	public Set<Node> getNeighbours(Node node) {
@@ -182,7 +178,7 @@ public class Graph {
 	 * @param node node del que es volen consultar els veins. Ha de ser un node
      *             obtingut del graf amb <em>getNode()</em>o <em>getNodes()</em>
 	 * @param type tipus dels nodes retornats
-	 * @return un conjunt amb els veins de tipus <em>type</em> del node <em>node</em>.
+	 * @return Un conjunt amb els veins de tipus <em>type</em> del node <em>node</em>.
      * Modificacions en el conjunt de retorn
      * canviaran l'estat del graf.
 	 */
@@ -195,7 +191,7 @@ public class Graph {
 
     /**
      * Afegeix un node al graf.
-     * @param node Node que es vol afegir al graf. Si te <em>id</em> negativa,
+     * @param node node que es vol afegir al graf. Si te <em>id</em> negativa,
      *             es genera una id unica per ell. Si no, es presuposa que
      *             la id es unica i s'afegeix.
      */
@@ -225,9 +221,9 @@ public class Graph {
 
 	/**
 	 * Afegeix una aresta de <em>a</em> a <em>b</em> (i la simetrica).
-	 * @param a Node extret directament del graf (amb <em>getNode()</em>
+	 * @param a node extret directament del graf (amb <em>getNode()</em>
      *          o be <em>getNodes()</em>
-	 * @param b Node extret directament del graf (amb <em>getNode()</em>
+	 * @param b node extret directament del graf (amb <em>getNode()</em>
      *          o be <em>getNodes()</em>
 	 */
 	public void addEdge(Node a, Node b) throws DomainException
@@ -238,7 +234,7 @@ public class Graph {
 
     /**
      * Esborra un node del graf.
-     * @param node Node extret directament del graf (amb <em>getNode()</em>
+     * @param node node extret directament del graf (amb <em>getNode()</em>
      *             o be <em>getNodes()</em>
      */
 	public void removeNode(Node node) throws DomainException {
@@ -248,25 +244,19 @@ public class Graph {
 		}
         else
             throw new DomainException("No existeix un node amb nom '"+node.getName()+"'");
-        if (node.getType().equals(Paper.TYPE))
-        {
-            removeEdgeFromTypeToNode(node, Term.TYPE);
-            removeEdgeFromTypeToNode(node, Author.TYPE);
-            removeEdgeFromTypeToNode(node, Conf.TYPE);
-        }
-        else
-        {
-            removeEdgeFromTypeToNode(node, Paper.TYPE);
-        }
+
         if(null == elements.get(node.getType()).remove(node))
             throw new DomainException("No existeix un node amb nom '"+node.getName()+"' i tipus '"+node.getType()+"'");
+
+        removeEdgesToNode(node);
+
     }
 
     /**
      * Esborra, si existeix, l'aresta de <em>a</em> a <em>b</em>.
-     * @param a Node extret directament del graf (amb <em>getNode()</em>
+     * @param a node extret directament del graf (amb <em>getNode()</em>
      *          o be <em>getNodes()</em>
-     * @param b Node extret directament del graf (amb <em>getNode()</em>
+     * @param b node extret directament del graf (amb <em>getNode()</em>
      *          o be <em>getNodes()</em>
      */
 	public void removeEdge(Node a, Node b) throws DomainException {
