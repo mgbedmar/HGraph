@@ -146,6 +146,8 @@ public class Graph {
     {
 		checkType(type);
 		ArrayList<Node> intern = dicNameNodes.get(name);
+        if(intern == null)
+            throw new DomainException("El nom '"+name+"' no correspon a cap node");
 
         ArrayList<Node> forRet = new ArrayList<>();
         for (int i = 0; i < intern.size(); i++)
@@ -155,6 +157,7 @@ public class Graph {
                 forRet.add(intern.get(i)); //si es del tipus indicat
             }
         }
+
         if(forRet.isEmpty())
             throw new DomainException("El nom '"+name+"' no correspon a cap node de tipus '"+type+"'.");
 
