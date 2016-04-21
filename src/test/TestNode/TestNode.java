@@ -1,18 +1,13 @@
 package TestNode;
-
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Scanner;
-
-import Domain.Config;
-import Domain.DomainException;
-import Domain.Graph.Author;
-import Domain.Graph.Conf;
-import Domain.Graph.Ghost;
-import Domain.Graph.Node;
-import Domain.Graph.Paper;
-import Domain.Graph.Term;
-
+import TestNode.Term;
+import TestNode.Paper;
+import TestNode.Node;
+import TestNode.Author;
+import TestNode.Conf;
+import TestNode.Ghost;
 public class TestNode {
 	ArrayList<Node> misnodos;
 	public TestNode(){
