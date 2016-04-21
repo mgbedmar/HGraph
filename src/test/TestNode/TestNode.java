@@ -36,7 +36,56 @@ public class TestNode {
 		}
     	
     }
-    	
+    private void eraseAllEdges(){
+    	Iterator itr;
+    	Node n=null;
+    	for(int i=0;i<misnodos.size();i++){
+    		itr=misnodos.get(i).getNeighbours().iterator();
+    		n=misnodos.get(i);
+    		if (n.getType().equals(Config.paperType)){
+    			itr=misnodos.get(i).getNeighbours(Config.authorType).iterator();
+    			while(itr.hasNext()){
+    				try{
+    				misnodos.get(i).removeEdge((Node)itr.next());
+    				}catch(Exception ex){
+    					ex.printStackTrace();
+    					
+    				}
+    			}
+    			itr=misnodos.get(i).getNeighbours(Config.confType).iterator();
+        		while(itr.hasNext()){
+        			try{
+        			misnodos.get(i).removeEdge((Node)itr.next());
+        			}catch(Exception ex){
+        				ex.printStackTrace();
+        					
+        			}
+        			
+        		}
+        		itr=misnodos.get(i).getNeighbours(Config.termType).iterator();
+        		while(itr.hasNext()){
+        			try{
+        			misnodos.get(i).removeEdge((Node)itr.next());
+        			}catch(Exception ex){
+        				ex.printStackTrace();
+        					
+        			}
+        			
+        		}
+    				
+    			}
+    		
+    		else{
+    		while(itr.hasNext())
+    		    
+    			try{
+    			misnodos.get(i).removeEdge((Node)itr.next());
+    			}catch(Exception ex){
+    				
+    			}
+    		}
+    			}
+    }
     
     public void ShowContent(){
     	for(int i=0;i<misnodos.size();i++){
@@ -71,7 +120,7 @@ public class TestNode {
     }catch(Exception ex){
     }
     }
-    private void addallRelationships(){
+    private void addallEdges(){
     	for(int i=0;i<misnodos.size();i++){
     		for(int j=0;j<misnodos.size();j++){
     			System.out.println("Provant d'afegir"+misnodos.get(i).getID()+" "+misnodos.get(i).getName()+"de tipus"+misnodos.get(i).getType()+"amb el node"+misnodos.get(j).getID()+" "+misnodos.get(j).getName()+"de tipus"+ misnodos.get(j).getType());
@@ -104,7 +153,7 @@ public class TestNode {
     private void ShowNeighbours(int i,String type){
     	Iterator<Node> itr = misnodos.get(i).getNeighbours(type).iterator();
     	System.out.println("Su lista de adyacencias por tipos es ");
-    	int i=1;
+    	int j=1;
     	Node n;
     	switch(type){
     		 
@@ -112,11 +161,11 @@ public class TestNode {
     		System.out.println("Autores");
     		while(itr.hasNext()){
     			n=itr.next();
-    			System.out.println(i+" "+n.getID());
+    			System.out.println(j+" "+n.getID());
         		System.out.println(n.getName());
         		System.out.println(n.getType());
         		System.out.println("\n");
-        		i++;
+        		j++;
     		}
     	case "conf":
     		System.out.println("Conferencias");
@@ -148,18 +197,32 @@ public class TestNode {
       Node n=null;
       if (itr.hasNext())
     
-      for(int j=0;j<i;j++){
+      for(int j=1;j<=i;j++){
        n=(Node)itr.next();
       }
       return n;
     }
+    private Node getNeighbour(int i,int id){
+        Iterator itr=misnodos.get(i).getNeighbours().iterator();
+        Node n=null;
+        if (itr.hasNext())
+      
+        for(int j=1;j<=i;j++){
+         n=(Node)itr.next();
+        }
+        return n;
+      }
     private void ShowNeighbours(int i){
     	Iterator<Node> itr = misnodos.get(i).getNeighbours().iterator();
     	System.out.println("Su lista de adyacencias es ");
+    	Node n=null;
+    	int j=1;
     	while(itr.hasNext()){
-    		System.out.println(itr.next().getID());
-    		System.out.println(itr.next().getName());
+    		n=(Node)itr.next();
+    		System.out.println(j+" "+n.getID());
+    		System.out.println(n.getName());
     		System.out.println("\n");
+    		i++;
     	}
         System.out.println("No tiene mas adyacentes");    
     	}
@@ -266,23 +329,51 @@ public class TestNode {
     			 
     		 
     		 System.out.println("Tria el node desti per esborrar l'aresta");
-    		 
+    		 mitest.ShowNeighbours(source);
     		 desti=miscan.nextInt();
+    		 n=mitest.getNeighbour(source,desti);
     		 mitest.removeEdge(source, desti);
     		 }
+    		 break;
     		 case 4:
     		 mitest.ShowContent();
-    	 case 5:
-    		 
-    	 case 6:
+    		 break;
+    	     case 5:
+    	    	 mitest.eraseAllEdges();
+    	    	 System.out.println("Totes les llistes d'adjiacències estan buides");
+    	    	 
+    		 break;
+    	     case 6:
+    	    	 mitest.addallEdges();
+    	    	 break;
+    	     case 7:
+    	    	 System.out.println("Tria el node source per consultar la llista d'adjacències");
+        		 mitest.listNode();
+        		 source=miscan.nextInt();
+        		 if(mitest.getNode(source).getType().equals(Config.paperType)){
+        			 System.out.println("tria el tipus de la llista d'adjacències \n 1 Author \n 2 Conferència \n 3 Terme ");
+        		     aresta=miscan.nextInt();
+        		     switch(aresta){
+        		     case 1:
+        		    	 mitest.ShowNeighbours(source,Config.authorType);
+        		    	 
+        		    	 break;
+        		    	 
+        		     case 2:
+        		    	 mitest.ShowNeighbours(source,Config.confType);
+        		    	 
+        		    	 break;
+        		     case 3:
+        		    	 mitest.ShowNeighbours(source,Config.termType);
+        		    	 
+        		    	 break;
+
+        		     }
+    	    	 
+    		    break;
     	 }
-     
-    	 mitest.ShowContent();
-    	 System.out.println("Añadiremos aristas entre ellos todos entre todos ");
-    	 mitest.addallRelationships();
-    	 mitest.ShowContent();
+    	 }
     	 
-    	 System.out.println("Ara esborrarem arestes una rera l'altra");
 	}
 
 }
