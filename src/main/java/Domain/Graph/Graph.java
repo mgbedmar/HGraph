@@ -1,5 +1,4 @@
 package Domain.Graph;
-import Domain.Config;
 import Domain.DomainException;
 
 import java.util.*;
@@ -24,10 +23,10 @@ public class Graph {
     {
 		switch (t)
         {
-			case Config.authorType:
-            case Config.paperType:
-            case Config.confType:
-            case Config.termType:
+			case Author.TYPE:
+            case Paper.TYPE:
+            case Conf.TYPE:
+            case Term.TYPE:
 				break;
 			default:
 				throw new DomainException("El tipus '"+t+"' no existeix.");
@@ -46,11 +45,11 @@ public class Graph {
         checkType(type);
         switch(type)
         {
-            case Config.authorType:
+            case Author.TYPE:
                 return new Author(id, null);
-            case Config.termType:
+            case Term.TYPE:
                 return new Term(id, null);
-            case Config.paperType:
+            case Paper.TYPE:
                 return new Paper(id, null);
             default:
                 return new Conf(id, null);
@@ -62,6 +61,7 @@ public class Graph {
      * Esborra totes les arestes de nodes de tipus <em>type</em> cap a <em>node</em>
      * @param node el node desti
      * @param type el tipus font
+     * @throws DomainException
      */
     private void removeEdgeFromTypeToNode(Node node, String type) throws DomainException {
         for (Node a: elements.get(type).keySet())
@@ -78,10 +78,10 @@ public class Graph {
      */
     public Graph() {
 		elements = new TreeMap<>();
-		elements.put(Config.authorType, new HashMap<>());
-		elements.put(Config.paperType, new HashMap<>());
-		elements.put(Config.confType,new HashMap<>());
-		elements.put(Config.termType,new HashMap<>());
+		elements.put(Author.TYPE, new HashMap<>());
+		elements.put(Paper.TYPE, new HashMap<>());
+		elements.put(Conf.TYPE,new HashMap<>());
+		elements.put(Term.TYPE,new HashMap<>());
 
         dicNameNodes = new HashMap<>();
 
@@ -95,10 +95,10 @@ public class Graph {
 	public Set<Node> getSetOfNodes()
     {
 		HashSet<Node> res = new HashSet<Node>();
-		res.addAll(elements.get(Config.authorType).keySet());
-		res.addAll(elements.get(Config.paperType).keySet());
-		res.addAll(elements.get(Config.confType).keySet());
-		res.addAll(elements.get(Config.termType).keySet());
+		res.addAll(elements.get(Author.TYPE).keySet());
+		res.addAll(elements.get(Paper.TYPE).keySet());
+		res.addAll(elements.get(Conf.TYPE).keySet());
+		res.addAll(elements.get(Term.TYPE).keySet());
 		
 		return res;		
 	}
@@ -248,15 +248,15 @@ public class Graph {
 		}
         else
             throw new DomainException("No existeix un node amb nom '"+node.getName()+"'");
-        if (node.getType().equals(Config.paperType))
+        if (node.getType().equals(Paper.TYPE))
         {
-            removeEdgeFromTypeToNode(node, Config.termType);
-            removeEdgeFromTypeToNode(node, Config.authorType);
-            removeEdgeFromTypeToNode(node, Config.confType);
+            removeEdgeFromTypeToNode(node, Term.TYPE);
+            removeEdgeFromTypeToNode(node, Author.TYPE);
+            removeEdgeFromTypeToNode(node, Conf.TYPE);
         }
         else
         {
-            removeEdgeFromTypeToNode(node, Config.paperType);
+            removeEdgeFromTypeToNode(node, Paper.TYPE);
         }
         if(null == elements.get(node.getType()).remove(node))
             throw new DomainException("No existeix un node amb nom '"+node.getName()+"' i tipus '"+node.getType()+"'");

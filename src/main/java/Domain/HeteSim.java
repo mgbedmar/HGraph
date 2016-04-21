@@ -27,7 +27,7 @@ public class HeteSim {
                                             ArrayList<String> cami,
                                             String tNextE) throws DomainException{
         HeteSimMatrix uini, ufi, uprod;
-        boolean interm = cami.get(cami.size()-1).equals(Config.ghostType);
+        boolean interm = cami.get(cami.size()-1).equals(Ghost.TYPE);
 
         /*Si el cami nomes te 2 tipus i un intermig anem ja a intermig */
         if (cami.size() == 2 && interm) {
@@ -78,8 +78,8 @@ public class HeteSim {
             cami2.add(i, cami.get(cami.size()-1-i));
         }
         if (cami.size()%2 == 0) {
-            cami1.add(longitud-1, Config.ghostType);
-            cami2.add(longitud-1, Config.ghostType);
+            cami1.add(longitud-1, Ghost.TYPE);
+            cami2.add(longitud-1, Ghost.TYPE);
         }
         else {
             cami1.add(longitud-1, cami.get(longitud-1));

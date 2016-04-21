@@ -6,6 +6,8 @@ import Domain.Graph.*;
 
 public class Result {
 
+    public static int numRowsResult = 10;
+
     protected class Row {
         protected String node1;
 

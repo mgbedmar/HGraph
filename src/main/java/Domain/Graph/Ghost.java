@@ -1,10 +1,9 @@
 package Domain.Graph;
 
 import java.util.Set;
-import Domain.Config;
 
 public class Ghost extends Node {
-    public final static String TYPE = Config.ghostType;
+    public final static String TYPE = "ghost";
 
        
 

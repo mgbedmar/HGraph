@@ -2,7 +2,6 @@ package TestNode;
 
 import java.util.HashSet;
 import java.util.Set;
-import Domain.Config;
 import Domain.DomainException;
 
 public class Term extends Node {

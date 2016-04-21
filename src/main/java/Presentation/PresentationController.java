@@ -1,9 +1,12 @@
 package Presentation;
 
 
-import Domain.Config;
 import Domain.DomainController;
 import Domain.DomainException;
+import Domain.Graph.Author;
+import Domain.Graph.Conf;
+import Domain.Graph.Paper;
+import Domain.Graph.Term;
 
 import java.util.ArrayList;
 import java.util.InputMismatchException;
@@ -463,10 +466,10 @@ public class PresentationController
                 "Conferència"
         };
         String[] types = {
-                Config.authorType,
-                Config.paperType,
-                Config.termType,
-                Config.confType
+                Author.TYPE,
+                Paper.TYPE,
+                Term.TYPE,
+                Conf.TYPE
         };
 
         info("Escull un tipus:");

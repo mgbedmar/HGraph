@@ -10,7 +10,6 @@ public class DomainController
 {
     private Graph g;
     private Result r;
-    private Config config;
 
     /**
      * @param name Nom del node
@@ -22,13 +21,13 @@ public class DomainController
 
         switch(type)
         {
-            case Config.authorType:
+            case Author.TYPE:
                 return new Author(name);
-            case Config.termType:
+            case Term.TYPE:
                 return new Term(name);
-            case Config.paperType:
+            case Paper.TYPE:
                 return new Paper(name);
-            case Config.confType:
+            case Conf.TYPE:
                 return new Conf(name);
         }
 
@@ -41,7 +40,6 @@ public class DomainController
     public DomainController()
     {
         g = new Graph();
-        config = Config.getInstance();
     }
 
     /**
@@ -149,7 +147,7 @@ public class DomainController
         Node source = g.getNode(idSource, typeSource);
         Node end = g.getNode(idEnd, typeEnd);
 
-        r = Query.query1to1(g, source, end, config.defaultPath.get(typeSource).get(typeEnd));
+        r = Query.query1to1(g, source, end, Query.defaultPath.get(typeSource).get(typeEnd));
 
 
     }
@@ -186,7 +184,7 @@ public class DomainController
     public void query1toN(int idSource, String typeSource, String typeEnd) throws DomainException
     {
         Node source = g.getNode(idSource, typeSource);
-        r = Query.query1toN(g, source, config.defaultPath.get(typeSource).get(typeEnd));
+        r = Query.query1toN(g, source, Query.defaultPath.get(typeSource).get(typeEnd));
     }
 
     /**
@@ -196,7 +194,7 @@ public class DomainController
      */
     public void queryNtoN(String typeSource, String typeEnd) throws DomainException
     {
-        r = Query.queryNtoN(g, config.defaultPath.get(typeSource).get(typeEnd));
+        r = Query.queryNtoN(g, Query.defaultPath.get(typeSource).get(typeEnd));
     }
 
     /**
@@ -217,7 +215,7 @@ public class DomainController
         Node source = g.getNode(nodeSourceID, nodeSourceType);
 
         r = Query.queryByReference(g, refSource, refEnd, source,
-                config.defaultPath.get(nodeRefSourceType).get(nodeRefEndType), Config.tol);
+                Query.defaultPath.get(nodeRefSourceType).get(nodeRefEndType), Query.TOL);
     }
 
     public Map<String,ArrayList<String>> getFilters()

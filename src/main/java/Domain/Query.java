@@ -2,10 +2,78 @@ package Domain;
 import Domain.Graph.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Set;
+import java.util.TreeMap;
 
 
 public class Query {
+
+    /* Tolerancia per la queryByReference */
+    public static float TOL = 0.1f;
+    public static final TreeMap<String, TreeMap<String, ArrayList<String>>> defaultPath = createPaths();
+
+    private static TreeMap<String, TreeMap<String, ArrayList<String>>> createPaths() {
+        TreeMap map = new TreeMap<>();
+        TreeMap<String, ArrayList<String>> aux;
+
+        /* Camins per defecte Author-? */
+        aux = new TreeMap<>();
+        /* Author-Author*/
+        aux.put(Author.TYPE, new ArrayList<>(Arrays.asList(Author.TYPE, Paper.TYPE, Author.TYPE)));
+        /* Author-Paper */
+        aux.put(Paper.TYPE, new ArrayList<>(Arrays.asList(Author.TYPE, Paper.TYPE)));
+        /* Author-Term */
+        aux.put(Term.TYPE, new ArrayList<>(Arrays.asList(Author.TYPE, Paper.TYPE, Term.TYPE)));
+        /* Author-Conf */
+        aux.put(Conf.TYPE, new ArrayList<>(Arrays.asList(Author.TYPE, Paper.TYPE, Conf.TYPE)));
+        /* Posem al defaultPath */
+        map.put(Author.TYPE, aux);
+
+
+        /* Camins per defecte Paper-? */
+        aux = new TreeMap<>();
+        /* Paper-Author*/
+        aux.put(Author.TYPE, new ArrayList<>(Arrays.asList(Paper.TYPE, Author.TYPE)));
+        /* Paper-Paper */
+        aux.put(Paper.TYPE, new ArrayList<>(Arrays.asList(Paper.TYPE, Term.TYPE, Paper.TYPE))); //?
+        /* Paper-Term */
+        aux.put(Term.TYPE, new ArrayList<>(Arrays.asList(Paper.TYPE, Term.TYPE)));
+        /* Author-Conf */
+        aux.put(Conf.TYPE, new ArrayList<>(Arrays.asList(Paper.TYPE, Conf.TYPE)));
+        /* Posem al defaultPath */
+        map.put(Paper.TYPE, aux);
+
+
+        /* Camins per defecte Term-? */
+        aux = new TreeMap<>();
+        /* Term-Author*/
+        aux.put(Author.TYPE, new ArrayList<>(Arrays.asList(Term.TYPE, Paper.TYPE, Author.TYPE)));
+        /* Term-Paper */
+        aux.put(Paper.TYPE, new ArrayList<>(Arrays.asList(Term.TYPE, Paper.TYPE)));
+        /* Term-Term */
+        aux.put(Term.TYPE, new ArrayList<>(Arrays.asList(Term.TYPE, Paper.TYPE, Term.TYPE)));
+        /* Term-Conf */
+        aux.put(Conf.TYPE, new ArrayList<>(Arrays.asList(Term.TYPE, Paper.TYPE, Conf.TYPE)));
+        /* Posem al defaultPath */
+        map.put(Term.TYPE, aux);
+
+
+        /* Camins per defecte Conf-? */
+        aux = new TreeMap<>();
+        /* Conf-Author*/
+        aux.put(Author.TYPE, new ArrayList<>(Arrays.asList(Conf.TYPE, Paper.TYPE, Author.TYPE)));
+        /* Conf-Paper */
+        aux.put(Paper.TYPE, new ArrayList<>(Arrays.asList(Conf.TYPE, Paper.TYPE)));
+        /* Conf-Term */
+        aux.put(Term.TYPE, new ArrayList<>(Arrays.asList(Conf.TYPE, Paper.TYPE, Term.TYPE)));
+        /* Conf-Conf */
+        aux.put(Conf.TYPE, new ArrayList<>(Arrays.asList(Conf.TYPE, Paper.TYPE, Conf.TYPE))); //?
+        /* Posem al defaultPath */
+        map.put(Conf.TYPE, aux);
+
+        return map;
+    }
 
     private Query() {
         /* Constructor privat per evitar que s'instancii */
