@@ -4,18 +4,19 @@ import java.util.HashSet;
 import java.util.Set;
 import GraphTest.Graph.*;
 
+
 public class Paper extends Node {
     public final static String TYPE = Config.paperType;
     private HashSet<Node> termadj;
     private HashSet<Node> confadj;
-	private HashSet<Node> authoradj;
+    private HashSet<Node> authoradj;
 
     /**
      *
      * @param name
      */
     public Paper(String name) {
-    	super(name);
+        super(name);
         termadj = new HashSet<>();
         confadj = new HashSet<>();
         authoradj = new HashSet<>();
@@ -32,22 +33,22 @@ public class Paper extends Node {
         return Paper.TYPE;
     }
 
-	void addEdge(Node node) throws DomainException {
+    void addEdge(Node node) throws DomainException {
         switch(node.getType())
         {
-    		case Conf.TYPE:
-    			this.confadj.add(node);
-    			break;
-    		case Term.TYPE:
-    			this.termadj.add(node);
-    			break;
-    		case Author.TYPE:
-    			this.authoradj.add(node);
-    		    break;
+            case Conf.TYPE:
+                this.confadj.add(node);
+                break;
+            case Term.TYPE:
+                this.termadj.add(node);
+                break;
+            case Author.TYPE:
+                this.authoradj.add(node);
+                break;
             default:
                 throw new DomainException("No es pot afegir una aresta amb node font tipus '"+
                         this.TYPE+"' i node destí '"+node.getType()+"'");
-    	}
+        }
     }
 
     /**
@@ -55,21 +56,25 @@ public class Paper extends Node {
      * @param node
      */
     void removeEdge(Node node) throws DomainException {
+        boolean existia = false;
         switch(node.getType())
         {
             case Conf.TYPE:
-                confadj.remove(node);
+                if (confadj.remove(node)) existia = true;
                 break;
             case Author.TYPE:
-                authoradj.remove(node);
+                if (authoradj.remove(node)) existia = true;
                 break;
             case Term.TYPE:
-                termadj.remove(node);
+                if (termadj.remove(node)) existia = true;
                 break;
             default:
                 throw new DomainException("No es pot esborrar una aresta amb node font tipus '"+
                         this.TYPE+"' i node destí '"+node.getType()+"'");
         }
+
+        if (!existia)
+            throw new DomainException("No existeix una aresta entre els dos nodes");
     }
 
     /**
@@ -90,22 +95,22 @@ public class Paper extends Node {
      * @param type
      * @return
      */
-	Set<Node> getNeighbours(String type)
+    Set<Node> getNeighbours(String type)
     {
 
-    	switch(type)
+        switch(type)
         {
-    		case Conf.TYPE:
-    			return confadj;
-    		case Author.TYPE:
-    			return authoradj;
-    		case Term.TYPE:
-    	        return termadj;
-    	    default:
+            case Conf.TYPE:
+                return confadj;
+            case Author.TYPE:
+                return authoradj;
+            case Term.TYPE:
+                return termadj;
+            default:
                 return new HashSet<Node>();
-    	}
+        }
     }
 
 
-    
+
 }

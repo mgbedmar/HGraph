@@ -1,0 +1,31 @@
+1
+1
+c
+3
+1
+p
+1
+1
+t
+2
+3
+c
+3
+t
+2
+3
+a
+0
+p
+1
+2
+a
+0
+0
+0
+
+
+Afegeix una conf, un paper i un term. Intenta afegir una aresta entre 
+conf i term, surt missatge. Intenta afegir una aresta entre el paper 
+i un node autor inexistent, surt missatge. Intenta esborrar el node 
+inexistent, surt missatge.
