@@ -8,8 +8,9 @@ import TestNode.Node;
 import TestNode.Author;
 import TestNode.Conf;
 import TestNode.Ghost;
+import TestNode.DomainException;
 public class TestNode {
-	ArrayList<Node> misnodos;
+	private static ArrayList<Node> misnodos;
 	public TestNode(){
 		misnodos=new ArrayList<Node>();
 	}
@@ -26,7 +27,13 @@ public class TestNode {
     	misnodos.remove(node);
     }
     private void eraseEdge(int i, int j){
-    	misnodos.get(i).removeEdge(misnodos.get(j));
+    	
+    	try {
+			misnodos.get(i).removeEdge(misnodos.get(j));
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     	
     }
     	
@@ -51,10 +58,18 @@ public class TestNode {
     	}
     }
     private void addEdge(int i,int j){
-    	misnodos.get(i).addEdge(misnodos.get(j));
-    }
+    	try {
+			misnodos.get(i).addEdge(misnodos.get(j));
+		} catch (Domain.DomainException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	}
     private void removeEdge(int i,int j){
+    	try{
     	misnodos.get(i).removeEdge(misnodos.get(j));
+    }catch(Exception ex){
+    }
     }
     private void addallRelationships(){
     	for(int i=0;i<misnodos.size();i++){
@@ -63,55 +78,73 @@ public class TestNode {
     			try {
     			misnodos.get(i).addEdge(misnodos.get(j));
                 
-    			}catch(DomainException ex){
+    			}catch(Exception ex){
     				System.out.println(ex);
     			}
     		}
     	}
     }
     private void EraseAllRelationShips(){
-    	
+    	Iterator miiter;
+        Node n;
     	for(int i=0;i<misnodos.size();i++){
-    		for(int j=0;j<misnodos.get(i).getNeighbours().size();j++){
-    			System.out.println("Provant d'esborrar"+misnodos.get(i).getID()+" "+misnodos.get(i).getName()+"de tipus"+misnodos.get(i).getType()+"amb el node"+misnodos.get(j).getID()+" "+misnodos.get(j).getName()+"de tipus"+ misnodos.get(j).getType());
-    			misnodos.get(i).removeEdge(misnodos.get(i).getNeighbours());
-    }
+    		miiter=misnodos.get(i).getNeighbours().iterator();
+    		while(miiter.hasNext()){
+    			n=(Node)miiter.next();
+    			System.out.println("Provant d'esborrar"+misnodos.get(i).getID()+" "+misnodos.get(i).getName()+"de tipus"+misnodos.get(i).getType()+"amb el node"+n.getID()+" "+n.getName()+"de tipus"+ n.getType());
+    			try{
+    			misnodos.get(i).removeEdge(n);
+    			}catch(Exception ex){
+    				
+    			}
+    			}
     		}
     	
     }
     private void ShowNeighbours(int i,String type){
     	Iterator<Node> itr = misnodos.get(i).getNeighbours(type).iterator();
     	System.out.println("Su lista de adyacencias por tipos es ");
+    	int i=1;
+    	Node n;
     	switch(type){
     		 
     	case "author":
     		System.out.println("Autores");
     		while(itr.hasNext()){
-    			System.out.println(itr.next().getID());
-        		System.out.println(itr.next().getName());
-        		System.out.println(itr.next().getType());
+    			n=itr.next();
+    			System.out.println(i+" "+n.getID());
+        		System.out.println(n.getName());
+        		System.out.println(n.getType());
         		System.out.println("\n");
+        		i++;
     		}
     	case "conf":
     		System.out.println("Conferencias");
     		
     		while(itr.hasNext()){
-    			System.out.println(itr.next().getID());
-        		System.out.println(itr.next().getName());
-        		System.out.println(itr.next().getType());
+    			n=itr.next();
+    			System.out.println(i+" "+n.getID());
+        		System.out.println(n.getName());
+        		System.out.println(n.getType());
         		System.out.println("\n");
+        		i++;
     		}
     	case "term":
     		System.out.println("Termes");
     		while(itr.hasNext()){
-    			System.out.println(itr.next().getID());
-        		System.out.println(itr.next().getName());
-        		System.out.println(itr.next().getType());
+    			n=itr.next();
+    			System.out.println(i+" "+n.getID());
+        		System.out.println(n.getName());
+        		System.out.println(n.getType());
         		System.out.println("\n");
+        		i++;
     		}
     	
     	}
     	System.out.println("No tiene más adyacentes");
+    }
+    private Node getNeighbour(int i,int id,String type){
+      Iterator itr=misnodos.get(i).getNeighbours(type).
     }
     private void ShowNeighbours(int i){
     	Iterator<Node> itr = misnodos.get(i).getNeighbours().iterator();
@@ -123,6 +156,7 @@ public class TestNode {
     	}
         System.out.println("No tiene mas adyacentes");    
     	}
+  
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
      TestNode mitest=new TestNode();
@@ -183,8 +217,19 @@ public class TestNode {
     		     aresta=miscan.nextInt();
     		     switch(aresta){
     		     case 1:
-    		     case 2:
+    		    	 mitest.ShowNeighbours(source,Config.authorType);
+    		    	 desti=miscan.nextInt();
+    		    	 break;
     		    	 
+    		     case 2:
+    		    	 mitest.ShowNeighbours(source,Config.confType);
+    		    	 desti=miscan.nextInt();
+    		    	 break;
+    		     case 3:
+    		    	 mitest.ShowNeighbours(source,Config.termType);
+    		    	 desti=miscan.nextInt();
+    		    	 break;
+
     		     }
     			 
     		 System.out.println("Tria el node desti per esborrar l'aresta");

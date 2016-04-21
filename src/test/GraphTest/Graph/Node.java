@@ -6,19 +6,20 @@ import java.util.Set;
 public abstract class Node {
     private int id;
     private String name;
-    
+
     /**
-     * Constructor.
+     * Crea un node
      * @param name: el nom del node
      */
     public Node(String name) {
-    	this.name = name;
+        this.name = name;
         this.id = -1;
     }
 
     /**
-     * Constructor.
+     * Crea un node amb id
      * @param name: el nom del node
+     * @param id
      */
     public Node(int id, String name) {
         this.name = name;
@@ -26,11 +27,11 @@ public abstract class Node {
     }
 
     /**
-     * Getter.
+     * Getter. Retorna la id del node
      * @return id: identificador
      */
     public int getID() {
-    	return this.id;
+        return this.id;
     }
 
     /**
@@ -53,7 +54,7 @@ public abstract class Node {
      * @return name: nom del node
      */
     public String getName() {
-    	return this.name;
+        return this.name;
     }
 
     /**
@@ -61,10 +62,15 @@ public abstract class Node {
      * @param name: nom nou del node
      */
     public void setName(String name) {
-    	this.name = name;
+        this.name = name;
     }
 
-    //dos nodes són iguals si són del mateix tipus i tenen la mateixa id
+    /**
+     * Dos nodes són iguals si són del mateix tipus i tenen la mateixa id
+     * @param obj
+     * @return
+     */
+    @Override
     public boolean equals(Object obj)
     {
         if (obj == null) return false;
@@ -75,6 +81,11 @@ public abstract class Node {
                 node.getID() == this.getID();
     }
 
+    /**
+     *
+     * @return hashcode
+     */
+    @Override
     public int hashCode() {
         Integer a = new Integer(this.id);
         return a.hashCode();
@@ -93,14 +104,16 @@ public abstract class Node {
     abstract Set<Node> getNeighbours(String type);
 
     /**
-     * Afegeix una aresta del p.i. a node. No afegeix l'aresta
-     * simetrica!
+     * Afegeix una aresta del p.i. a <em>node</em>. <b>No afegeix l'aresta
+     * simetrica!</b>
+     * @param node destí
      */
     abstract void addEdge(Node node) throws DomainException;
 
     /**
-     * Esborra l'aresta del p.i. a node. No esborra l'aresta
-     * simetrica!
+     * Esborra l'aresta del p.i. a node. <b>No esborra l'aresta
+     * simetrica!</b>
+     * @param node destí
      */
     abstract void removeEdge(Node node) throws DomainException;
 }

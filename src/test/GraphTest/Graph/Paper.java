@@ -2,17 +2,15 @@ package GraphTest.Graph;
 
 import java.util.HashSet;
 import java.util.Set;
-import GraphTest.Graph.*;
-
 
 public class Paper extends Node {
-    public final static String TYPE = Config.paperType;
+    public final static String TYPE = "paper";
     private HashSet<Node> termadj;
     private HashSet<Node> confadj;
     private HashSet<Node> authoradj;
 
     /**
-     *
+     * Crea un node de tipus paper
      * @param name
      */
     public Paper(String name) {
@@ -22,6 +20,11 @@ public class Paper extends Node {
         authoradj = new HashSet<>();
     }
 
+    /**
+     * Crea un node de tipus paper. La <em>id</em> l'identifica inequivocament d'un altre paper
+     * @param id ID unica d'paper
+     * @param name
+     */
     public Paper(int id, String name) {
         super(id, name);
         termadj = new HashSet<>();
@@ -29,10 +32,19 @@ public class Paper extends Node {
         authoradj = new HashSet<>();
     }
 
+    /**
+     * Retorna una string que representa el tipus paper
+     * @return type
+     */
     public String getType() {
         return Paper.TYPE;
     }
 
+    /**
+     * Afegeix una aresta que va desde el p.i. a <em>node</em>
+     * @param node
+     * @throws DomainException Si el node no es de tipus correcte
+     */
     void addEdge(Node node) throws DomainException {
         switch(node.getType())
         {
@@ -52,8 +64,9 @@ public class Paper extends Node {
     }
 
     /**
-     *
+     * Esborra la areta formada per el p.i. i <em>node</em>
      * @param node
+     * @throws DomainException Si l'aresta es de tipus incompatibles o si no existeix l'aresta
      */
     void removeEdge(Node node) throws DomainException {
         boolean existia = false;
@@ -78,7 +91,7 @@ public class Paper extends Node {
     }
 
     /**
-     *
+     * Obté els veïns del p.i.
      * @return
      */
     Set<Node> getNeighbours()
@@ -91,7 +104,7 @@ public class Paper extends Node {
     }
 
     /**
-     *
+     * Obté els veïns d'un cert tipus
      * @param type
      * @return
      */
