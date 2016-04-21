@@ -134,7 +134,6 @@ public class ResultTest
         String[] opts = {
                 "tornar",
                 "Amagar una fila",
-                "Amagar un rang",
                 "Amagar per nom",
                 "Mostrar per nom",
                 "Ordenar per columna",
@@ -210,7 +209,7 @@ public class ResultTest
     private static void showMainMenu() {
         String[] opts = {
                 "Sortir",
-                "Editar Resueltat",
+                "Editar Resultat",
                 "Mostrar Resultat"
         };
         info("Menu:");
@@ -326,9 +325,9 @@ public class ResultTest
         Integer x;
         do
         {
-            info("Numero de columnes (0..3):");
+            info("Numero de columnes (1..3):");
             x =readInt();
-        }while(x > 3 || x < 0);
+        }while(x > 3 || x < 1);
         cols = x;
         r = new Result(cols);
     }
