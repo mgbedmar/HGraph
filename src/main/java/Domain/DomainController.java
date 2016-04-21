@@ -55,11 +55,11 @@ public class DomainController
     {
         ArrayList<Integer> ids = new ArrayList<>();
         ArrayList<Node> nodes = g.getNodes(name, type);
-        if (nodes != null) {
-            for (int i = 0; i < nodes.size(); i++) {
-                ids.add(nodes.get(i).getID());
-            }
+        for (int i = 0; i < nodes.size(); i++)
+        {
+            ids.add(nodes.get(i).getID());
         }
+
         return ids;
     }
 
