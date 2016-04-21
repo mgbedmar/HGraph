@@ -23,9 +23,8 @@ public class HeteSimMatrix {
      * Crea la matriu U_tRow,TCol (transposada si i nomes 
      * si tr es cert)
      */
-    public HeteSimMatrix(boolean tr, Graph graf, String tRow, String tCol) throws DomainException {
-        if (tr) initMatrix(graf, tCol, tRow);
-        else initMatrix(graf, tRow, tCol);
+    public HeteSimMatrix(Graph graf, String tRow, String tCol) throws DomainException {
+        initMatrix(graf, tRow, tCol);
     }
 
     private void initMatrix(Graph graf, String tRow, String tCol) throws DomainException {
@@ -52,6 +51,7 @@ public class HeteSimMatrix {
             this.m.put(i, dicCol);
         }
     }
+
 
     /**
      * Getter.
@@ -163,6 +163,29 @@ public class HeteSimMatrix {
             for (int jint = 0; jint < B.numCols(); jint++) {
                 cij = 0;
                 j = new Ghost(jint);
+                for (Node k: A.cols(i)) {
+                    cij += A.value(i,k) * B.value(k,j);
+                }
+
+                if (cij != 0) {
+                    Float v = new Float(cij);
+                    dicCols.put(j, v);
+                }
+            }
+            this.m.put(i, dicCols);
+        }
+    }
+
+    public void usualProduct(HeteSimMatrix A, HeteSimMatrix B, Set<Node> Bcols) {
+        this.numRows = A.numRows();
+        this.numCols = B.numRows();
+        this.m = new HashMap<>(this.numRows);
+        float cij;
+
+        for (Node i: A.rowKeys()) {
+            HashMap<Node, Float> dicCols = new HashMap<>();
+            for (Node j: Bcols) {
+                cij = 0;
                 for (Node k: A.cols(i)) {
                     cij += A.value(i,k) * B.value(k,j);
                 }

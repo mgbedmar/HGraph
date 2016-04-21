@@ -437,4 +437,14 @@ public class HeteSimTest {
         printMenu(opts);
     }
 
+    private static void printMatrix(HeteSimMatrix m, String typeA, String typeB) throws DomainException {
+        for (Node i: g.getSetOfNodes(typeA)) {
+            for (Node j: g.getSetOfNodes(typeB)) {
+                System.out.print(String.valueOf(m.value(i,j) + " "));
+            }
+            System.out.print("\n");
+        }
+        System.out.print("\n");
+    }
+
 }
