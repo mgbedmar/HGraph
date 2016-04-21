@@ -1,10 +1,10 @@
-package GraphTest;
+package ResultTest;
 
 import GraphTest.Graph.*;
 
 import java.util.*;
 
-public class GraphTest {
+public class ResultTest {
     private static Graph g;
     private static boolean verbose;
     private static boolean debug;
