@@ -41,11 +41,16 @@ public class Term extends Node {
      * @param node
      */
     void removeEdge(Node node) throws DomainException {
-        if(node.getType().equals(Paper.TYPE))
-            paperadj.remove(node);
-        else
+        if(node.getType().equals(Paper.TYPE)) {
+            if (!paperadj.remove(node)) {
+                throw new DomainException("No existeix una aresta entre els dos nodes");
+            }
+        }
+        else {
             throw new DomainException("No es pot esborrar una aresta amb node font tipus '"+
                     this.TYPE+"' i node destí '"+node.getType()+"'");
+
+        }
     }
 
     /**

@@ -63,6 +63,7 @@ public class GraphTest {
     public static void main(String[] args)
     {
         initParams(args);
+        g = new Graph();
         try
         {
             in = new Scanner(System.in);

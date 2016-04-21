@@ -56,21 +56,25 @@ public class Paper extends Node {
      * @param node
      */
     void removeEdge(Node node) throws DomainException {
+        boolean existia = false;
         switch(node.getType())
         {
             case Conf.TYPE:
-                confadj.remove(node);
+                if (confadj.remove(node)) existia = true;
                 break;
             case Author.TYPE:
-                authoradj.remove(node);
+                if (authoradj.remove(node)) existia = true;
                 break;
             case Term.TYPE:
-                termadj.remove(node);
+                if (termadj.remove(node)) existia = true;
                 break;
             default:
                 throw new DomainException("No es pot esborrar una aresta amb node font tipus '"+
                         this.TYPE+"' i node destí '"+node.getType()+"'");
         }
+
+        if (!existia)
+            throw new DomainException("No existeix una aresta entre els dos nodes");
     }
 
     /**
