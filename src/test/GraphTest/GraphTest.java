@@ -65,7 +65,6 @@ public class GraphTest {
         initParams(args);
         try
         {
-            dc = new DomainController();
             in = new Scanner(System.in);
             Integer x;
             do{
