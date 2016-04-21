@@ -26,27 +26,64 @@ public class GraphTest {
                     "tipusB: "+nB.getType()+", nomB: "+nB.getName()+")";
         }
     }
+    private static Integer readInt() {
+        while(true)
+        {
+            try
+            {
+                Integer x = in.nextInt();
+                return x;
+            }
+            catch(InputMismatchException e)
+            {
+                in.nextLine(); //Consume '\n'
+                System.out.println("Si us plau, introdueix un numero.");
+            }
+        }
 
+    }
+    private static void initParams(String[] args)
+    {
+        //defaults
+        verbose = true;
+        debug = false;
+        for(String arg : args)
+        {
+            switch(arg)
+            {
+                case "noverbose":
+                    verbose = false;
+                    break;
+                case "debug":
+                    debug = true;
+                    break;
+            }
+        }
+    }
     public static void main(String[] args)
     {
-        verbose = !(args.length > 0 && args[0].equals("noverbose"));
-        debug = (args.length > 1 && args[1].equals("debug"));
+        initParams(args);
         try
         {
-            g = new Graph();
+            dc = new DomainController();
             in = new Scanner(System.in);
             Integer x;
             do{
                 showMainMenu();
-                x = in.nextInt();
+                x = readInt();
                 in.nextLine(); //Consume '\n'
                 switch(x)
                 {
+                    case 0:
+                        break;
                     case 1:
                         goToEditGraph();
                         break;
                     case 2:
                         goToQueryGraph();
+                        break;
+                    default:
+                        System.out.println("Si us plau, escriu una opció vàlida.");
                         break;
                 }
             }while(x != 0);
@@ -57,8 +94,7 @@ public class GraphTest {
             System.out.println("PAM! ha petat.");
             if(debug)
             {
-                System.out.println(e.getMessage());
-                System.out.println(Arrays.toString(e.getStackTrace()));
+                e.printStackTrace(System.err);
             }
         }
 
@@ -68,16 +104,21 @@ public class GraphTest {
         Integer x;
         do{
             showQueryMenu();
-            x = in.nextInt();
+            x = readInt();
             in.nextLine(); //Consume '\n'
             switch(x)
             {
+                case 0:
+                    break;
                 case 1:
                     queryByType();
                     break;
                 case 2:
                     queryNeighbours();
                     break;
+                default:
+                    System.out.println("Si us plau, escriu una opció vàlida.");
+
             }
         }while(x != 0);
     }
@@ -103,7 +144,7 @@ public class GraphTest {
         {
             System.out.println(de.getFriendlyMessage());
             if(debug)
-                System.out.println(Arrays.toString(de.getStackTrace()));
+                de.printStackTrace(System.err);
         }
 
     }
@@ -119,7 +160,7 @@ public class GraphTest {
         {
             System.out.println(de.getFriendlyMessage());
             if(debug)
-                System.out.println(Arrays.toString(de.getStackTrace()));
+                de.printStackTrace(System.err);
         }
 
     }
@@ -146,8 +187,13 @@ public class GraphTest {
 
         info("Escull un tipus:");
         printMenu(localizedTypes);
-        Integer x = in.nextInt();
-        in.nextLine(); //Consume '\n'
+        Integer x;
+        do{
+            x = readInt();
+            in.nextLine(); //Consume '\n'
+            if(x > types.length || x < 0)
+                System.out.println("Escriu un numero del 0 al 3");
+        }while(x > types.length || x < 0);
         return types[x];
     }
 
@@ -155,10 +201,12 @@ public class GraphTest {
         Integer x;
         do{
             showGraphMenu();
-            x = in.nextInt();
+            x = readInt();
             in.nextLine(); //Consume '\n'
             switch(x)
             {
+                case 0:
+                    break;
                 case 1:
                     addNode();
                     break;
@@ -172,6 +220,7 @@ public class GraphTest {
                     removeEdge();
                     break;
                 default:
+                    System.out.println("Si us plau, escriu una opció vàlida.");
                     break;
             }
         }while(x != 0);
@@ -192,7 +241,7 @@ public class GraphTest {
         {
             System.out.println(de.getFriendlyMessage());
             if(debug)
-                System.out.println(Arrays.toString(de.getStackTrace()));
+                de.printStackTrace(System.err);
         }
 
     }
@@ -212,7 +261,7 @@ public class GraphTest {
         {
             System.out.println(de.getFriendlyMessage());
             if(debug)
-                System.out.println(Arrays.toString(de.getStackTrace()));
+                de.printStackTrace(System.err);
         }
     }
 
@@ -238,7 +287,7 @@ public class GraphTest {
         {
             System.out.println(de.getFriendlyMessage());
             if(debug)
-                System.out.println(Arrays.toString(de.getStackTrace()));
+                de.printStackTrace(System.err);
         }
 
     }

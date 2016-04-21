@@ -104,8 +104,6 @@ public class PresentationController
             }
         }
 
-
-
     }
 
     private static void initParams(String[] args)
