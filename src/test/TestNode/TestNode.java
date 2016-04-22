@@ -32,20 +32,13 @@ public class TestNode {
     	misnodos.remove(i);
     }
     private void reinitTest(){
-    	for(int i=0;i<=misnodos.size();i++){
+    	for(int i=0;i<misnodos.size();i++){
     		misnodos.remove(misnodos.get(i));
     	}
     }
-    private void eraseEdge(int i, int j){
+  
     	
-    	try {
-			misnodos.get(i).removeEdge(misnodos.get(j));
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-    	
-    }
+    
     private void eraseAllEdges(){
     	Iterator<Node> itr;
     	Node n=null;
@@ -114,7 +107,7 @@ public class TestNode {
     private void listNode(){
     	System.out.println("Id interno \t IdClase\tContingut\t Tipus");
     	for(int i=0;i<misnodos.size();i++){
-    		System.out.println(+i+"\t \t"+misnodos.get(i).getID()+"\t "+misnodos.get(i).getName()+" "+misnodos.get(i).getType());
+    		System.out.println(+i+"\t \t"+misnodos.get(i).getID()+"\t \t"+misnodos.get(i).getName()+"\t "+misnodos.get(i).getType());
     	}
     }
     private void addEdge(int i,int j){
@@ -259,7 +252,7 @@ public class TestNode {
      String nombre;
      
      while(option!=10){
-    	 System.out.println("Tria una opcio:\n1 Crear node\n2Afegir aresta\n3Esborrar aresta \n4 Mostrar info tots els nodes creats \n5 Esborrar totes les arestes,\n6 Afegir totes les arestes\n7 Consultar adjiacencies\n8 EsborrarNode\n9Esborrar tots els nodes\n10Sortir\n");
+    	 System.out.println("Tria una opcio:\n1 Crear node\n2 Afegir aresta\n3 Esborrar aresta \n4 Mostrar info tots els nodes creats \n5 Esborrar totes les arestes,\n6 Afegir totes les arestes\n7 Consultar adjiacencies\n8 EsborrarNode\n9 Esborrar tots els nodes\n10 Sortir\n");
     	 option=miscan.nextInt();
     	 
     	 switch(option){
@@ -401,10 +394,16 @@ public class TestNode {
         		    	 break;
 
         		     }
+        		     
+        		    	 
+        		     }
+        		 else{
+        			 mitest.ShowNeighbours(source);
+        		 }
     	    	 
     		    break;
     		   
-    	 }
+    	 
     	     case 8: System.out.println("Tria quin node vols esborrar indicant el seu id intern\n");
     	             mitest.listNode();
     	             esborrar=miscan.nextInt();
