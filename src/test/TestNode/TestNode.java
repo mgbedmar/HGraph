@@ -23,9 +23,7 @@ public class TestNode {
     public void afegirNode(Node node){
         misnodos.add(node);	
     }
-    public void borrarNode(Node node){
-    	misnodos.remove(node);
-    }
+    
     private void removeNode(Node n){
     	int i=0;
     	while (!n.equals(misnodos.get(i))){
@@ -101,7 +99,7 @@ public class TestNode {
     
     public void ShowContent(){
     	for(int i=0;i<misnodos.size();i++){
-    		System.out.println("Tenemos el siguiente nodo :" +misnodos.get(i).getID()+"del tipo "+misnodos.get(i).getType()+"y su contenido es "+misnodos.get(i).getName());
+    		System.out.println("Tenim el següent node :" +misnodos.get(i).getID()+"del tipo "+misnodos.get(i).getType()+"y su contenido es "+misnodos.get(i).getName());
     		if(!misnodos.get(i).getType().equals(Config.paperType))
     		this.ShowNeighbours(i);
     		else{
@@ -114,9 +112,9 @@ public class TestNode {
     		}
     }
     private void listNode(){
-    	System.out.println("Id interno \t IdClase\tContenido\t Tipo");
+    	System.out.println("Id interno \t IdClase\tContingut\t Tipus");
     	for(int i=0;i<misnodos.size();i++){
-    		System.out.println(+i+"\t "+misnodos.get(i).getID()+"\t "+misnodos.get(i).getName()+" "+misnodos.get(i).getType());
+    		System.out.println(+i+"\t \t"+misnodos.get(i).getID()+"\t "+misnodos.get(i).getName()+" "+misnodos.get(i).getType());
     	}
     }
     private void addEdge(int i,int j){
@@ -175,8 +173,8 @@ public class TestNode {
     		System.out.println("Autores");
     		while(itr.hasNext()){
     			n=itr.next();
-    			System.out.println("Id interno \t IdClase\tContenido");
-    			System.out.print(j+"\t "+n.getID()+"\t ");
+    			System.out.println("Id intern \t IdClase\tContingut");
+    			System.out.print(j+"\t\t \t"+n.getID()+"\t ");
         		System.out.print(n.getName()+"\t ");
         		System.out.print(n.getType()+"\t ");
         		System.out.print("\n");
@@ -188,10 +186,10 @@ public class TestNode {
     		
     		while(itr.hasNext()){
     			n=itr.next();
-    			System.out.println("Id interno \t IdClase\tContenido");
-    			System.out.print(i+" "+n.getID()+" ");
-        		System.out.print(n.getName()+" ");
-        		System.out.print(n.getType()+" ");
+    			System.out.println("Id intern \t IdClase\tContingut");
+    			System.out.print(i+"\t \t\t"+n.getID()+" ");
+        		System.out.print(n.getName()+"\t ");
+        		System.out.print(n.getType()+"\t ");
         		System.out.print("\n");
         		i++;
     		}
@@ -200,10 +198,10 @@ public class TestNode {
     		System.out.println("Termes");
     		while(itr.hasNext()){
     			n=itr.next();
-    			System.out.println("Id interno \t IdClase\tContenido");
-    			System.out.print(i+" "+n.getID());
-        		System.out.print(n.getName()+" ");
-        		System.out.print(n.getType()+" ");
+    			System.out.println("Id intern \t IdClase\tContingut\t ");
+    			System.out.print(i+"\t \t\t"+n.getID());
+        		System.out.print(n.getName()+"\t ");
+        		System.out.print(n.getType()+"\t ");
         		System.out.print("\n");
         		i++;
     		}
@@ -211,10 +209,10 @@ public class TestNode {
     		default: break;
     	
     	}
-    	System.out.println("No tiene más adyacentes");
+    	System.out.println("No té més adjacents");
     }
     private Node getNeighbour(int i,int id,String type){
-      Iterator itr=misnodos.get(i).getNeighbours(type).iterator();
+      Iterator<Node> itr=misnodos.get(i).getNeighbours(type).iterator();
       Node n=null;
       if (itr.hasNext())
     
@@ -242,8 +240,9 @@ public class TestNode {
     	int j=0;
     	while(itr.hasNext()){
     		n=(Node)itr.next();
-    		System.out.print(j+"\t "+n.getID()+" ");
-    		System.out.print("\t"+n.getName()+" ");
+    		System.out.print(j+"\t "+n.getID()+"");
+    		System.out.print("\t"+n.getName()+"\t ");
+    		System.out.print(""+n.getType());
     		System.out.print("\n");
     		j++;
     	}
@@ -322,7 +321,7 @@ public class TestNode {
     		     case 1:
     		    	 mitest.ShowNeighbours(source,Config.authorType);
     		    	 desti=miscan.nextInt();
-    		    	 mitest.getNeighbour(desti, source, Config.authorType);
+    		    	 //mitest.getNeighbour(desti, source, Config.authorType);
     		    	 n=mitest.getNeighbour(desti, source, Config.authorType);
     		    	 try{
     		    	 mitest.getNode(source).removeEdge(n);
@@ -345,7 +344,7 @@ public class TestNode {
     		     case 3:
     		    	 mitest.ShowNeighbours(source,Config.termType);
     		    	 desti=miscan.nextInt();
-    		    	 mitest.getNeighbour(desti, source, Config.termType);
+    		    	 //mitest.getNeighbour(desti, source, Config.termType);
     		    	 try{
     		    		 n=mitest.getNeighbour(desti, source, Config.termType);
         		    	 mitest.getNode(source).removeEdge(n);
