@@ -37,7 +37,7 @@ public class TestNode {
     	
     }
     private void eraseAllEdges(){
-    	Iterator itr;
+    	Iterator<Node> itr;
     	Node n=null;
     	for(int i=0;i<misnodos.size();i++){
     		itr=misnodos.get(i).getNeighbours().iterator();
@@ -90,14 +90,14 @@ public class TestNode {
     public void ShowContent(){
     	for(int i=0;i<misnodos.size();i++){
     		System.out.println("Tenemos el siguiente nodo :" +misnodos.get(i).getID()+"del tipo "+misnodos.get(i).getType()+"y su contenido es "+misnodos.get(i).getName());
-    		if(!misnodos.get(i).getType().equals("paper"))
+    		if(!misnodos.get(i).getType().equals(Config.paperType))
     		this.ShowNeighbours(i);
     		else{
+    			System.out.println("Su lista de adyacencias por tipos es ");
     			
-    			
-    			this.ShowNeighbours(i,"author");
-    			this.ShowNeighbours(i,"conf");
-    			this.ShowNeighbours(i,"term");
+    			this.ShowNeighbours(i,Config.authorType);
+    			this.ShowNeighbours(i,Config.confType);
+    			this.ShowNeighbours(i,Config.termType);
     		}
     		}
     }
@@ -152,42 +152,46 @@ public class TestNode {
     }
     private void ShowNeighbours(int i,String type){
     	Iterator<Node> itr = misnodos.get(i).getNeighbours(type).iterator();
-    	System.out.println("Su lista de adyacencias por tipos es ");
+    	
     	int j=1;
     	Node n;
     	switch(type){
     		 
-    	case "author":
+    	case Config.authorType:
     		System.out.println("Autores");
     		while(itr.hasNext()){
     			n=itr.next();
-    			System.out.println(j+" "+n.getID());
-        		System.out.println(n.getName());
-        		System.out.println(n.getType());
-        		System.out.println("\n");
+    			System.out.print(j+" "+n.getID()+" ");
+        		System.out.print(n.getName()+" ");
+        		System.out.print(n.getType()+" ");
+        		System.out.print("\n");
         		j++;
     		}
-    	case "conf":
+    		break;
+    	case Config.confType:
     		System.out.println("Conferencias");
     		
     		while(itr.hasNext()){
     			n=itr.next();
-    			System.out.println(i+" "+n.getID());
-        		System.out.println(n.getName());
-        		System.out.println(n.getType());
-        		System.out.println("\n");
+    			System.out.print(i+" "+n.getID()+" ");
+        		System.out.print(n.getName()+" ");
+        		System.out.print(n.getType()+" ");
+        		System.out.print("\n");
         		i++;
     		}
-    	case "term":
+    		break;
+    	case Config.termType:
     		System.out.println("Termes");
     		while(itr.hasNext()){
     			n=itr.next();
-    			System.out.println(i+" "+n.getID());
-        		System.out.println(n.getName());
-        		System.out.println(n.getType());
-        		System.out.println("\n");
+    			System.out.print(i+" "+n.getID());
+        		System.out.print(n.getName()+" ");
+        		System.out.print(n.getType()+" ");
+        		System.out.print("\n");
         		i++;
     		}
+    		break;
+    		default: break;
     	
     	}
     	System.out.println("No tiene más adyacentes");
@@ -197,17 +201,18 @@ public class TestNode {
       Node n=null;
       if (itr.hasNext())
     
-      for(int j=1;j<=i;j++){
+      for(int j=0;j<=i;j++){
        n=(Node)itr.next();
       }
       return n;
     }
     private Node getNeighbour(int i,int id){
-        Iterator itr=misnodos.get(i).getNeighbours().iterator();
-        Node n=null;
+    	 Node n=null;
+    	Iterator<Node> itr=misnodos.get(i).getNeighbours().iterator();
+       
         if (itr.hasNext())
       
-        for(int j=1;j<=i;j++){
+        for(int j=0;j<=i;j++){
          n=(Node)itr.next();
         }
         return n;
@@ -216,13 +221,13 @@ public class TestNode {
     	Iterator<Node> itr = misnodos.get(i).getNeighbours().iterator();
     	System.out.println("Su lista de adyacencias es ");
     	Node n=null;
-    	int j=1;
+    	int j=0;
     	while(itr.hasNext()){
     		n=(Node)itr.next();
-    		System.out.println(j+" "+n.getID());
-    		System.out.println(n.getName());
-    		System.out.println("\n");
-    		i++;
+    		System.out.print(j+" "+n.getID()+" ");
+    		System.out.print(n.getName()+" ");
+    		System.out.print("\n");
+    		j++;
     	}
         System.out.println("No tiene mas adyacentes");    
     	}
@@ -244,32 +249,39 @@ public class TestNode {
     	 case 1:
     		 System.out.println("Introduceix una id ");
     		 id=miscan.nextInt();
+    		 miscan.nextLine();
     		 System.out.println("Introdueix un nom ");
     	     nombre=miscan.nextLine();
     	     System.out.println("Tria un tipus\n 1 Paper\n 2 Author\n 3 Terme \n4Conferencia\n5 Fantasma");
     	     tipus=miscan.nextInt();
     	     switch(tipus){
     	     case 1:
-    	    	 mitest.afegirNode(new Paper(id,nombre));
+    	    	 n=new Paper(id,nombre);
+    	    	 mitest.afegirNode(n);
     	    	 break;
     	     case 2:
-    	    	 mitest.afegirNode(new Author(id,nombre));
+    	    	 n=new Author(id,nombre);
+    	    	 mitest.afegirNode(n);
     	         break;
     	     case 3:
-    	    	 mitest.afegirNode(new Term(id,nombre));
+    	    	 n=new Term(id,nombre);
+    	    	 mitest.afegirNode(n);
     	    	 break;
     	     case 4:
-    	    	 mitest.afegirNode(new Conf(id,nombre));
+    	    	 n=new Conf(id,nombre);
+    	    	 mitest.afegirNode(n);
     	    	 break;
     	     case 5:
-    	    	 mitest.afegirNode(new Ghost(id));
+    	    	 n=new Ghost(id);
+    	    	 mitest.afegirNode(n);
     	    	 break;
     	    default:
     	    	break;
     	     
     	     
     	     }
-    	     System.out.println("");
+    	     
+    	     System.out.println("S'ha creat el node "+n.getType()+" "+n.getID()+" "+n.getName()+"\n");
     	   break;
     	 case 2:
     		 System.out.println("Tria el node source per afegir l'aresta");
@@ -378,5 +390,6 @@ public class TestNode {
     	 
 	}
 System.out.println("Test terminado ");
+miscan.close();
 }
 }
