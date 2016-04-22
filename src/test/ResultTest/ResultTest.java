@@ -60,7 +60,6 @@ public class ResultTest
     private static void clearFilters()
     {
         r.unfilterAll();
-        r.unselectAll();
     }
 
     private static void sortByRow()
