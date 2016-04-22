@@ -63,8 +63,8 @@ public class Result {
     private ArrayList<String> filteredNames;
 
     /**
-     * Constructora. 
-     * @param n: nombre de columnes 
+     * Constructora.
+     * @param n: nombre de columnes
      */
     public Result(int n) {
         this.res = new ArrayList<Row>();
@@ -156,11 +156,11 @@ public class Result {
     }
 
     /**
-     * Retorna la fila que toca des de la darrera 
+     * Retorna la fila que toca des de la darrera
      * vegada que es va ordenar, filtrar o fer reset.
-     * @return El primer element del ArrayList es un 
-     * enter unic per identificar la fila, els seguents 
-     * son n dades (el nom del node si es un node, el float 
+     * @return El primer element del ArrayList es un
+     * enter unic per identificar la fila, els seguents
+     * son n dades (el nom del node si es un node, el float
      * en String si es el HS). Retorna <em>null</em> si no queden files.
      */
     public ArrayList<String> getRow() {
@@ -183,7 +183,7 @@ public class Result {
     }
 
     /**
-     * Ordena el resultat segons el valor de la columna 
+     * Ordena el resultat segons el valor de la columna
      * <em>numCol</em>, ascendentment si <em>ascend</em> es cert i
      * descendentment si es fals.
      */
@@ -217,7 +217,7 @@ public class Result {
     }
 
     /**
-     * Filtra per nom, nomes es mostren els resultats 
+     * Filtra per nom, nomes es mostren els resultats
      * on apareix el nom <em>nom</em>.
      */
     public void select(String nom) {
@@ -281,6 +281,7 @@ public class Result {
     public void unfilterAll() {
         filteredNames.clear();
         filteredRows.clear();
+        selectedNames.clear();
         currentIndex = 0;
     }
 

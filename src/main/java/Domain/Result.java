@@ -281,6 +281,7 @@ public class Result {
     public void unfilterAll() {
         filteredNames.clear();
         filteredRows.clear();
+        selectedNames.clear();
         currentIndex = 0;
     }
 
