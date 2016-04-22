@@ -114,7 +114,7 @@ public class TestNode {
     		}
     }
     private void listNode(){
-    	System.out.println("\tId interno \t IdClase\tContenido\t Tipo");
+    	System.out.println("Id interno \t IdClase\tContenido\t Tipo");
     	for(int i=0;i<misnodos.size();i++){
     		System.out.println(+i+"\t "+misnodos.get(i).getID()+"\t "+misnodos.get(i).getName()+" "+misnodos.get(i).getType());
     	}
@@ -168,13 +168,14 @@ public class TestNode {
     	
     	int j=1;
     	Node n;
-    	System.out.println("\tId interno \t IdClase\tContenido");
+    	
     	switch(type){
     		 
     	case Config.authorType:
     		System.out.println("Autores");
     		while(itr.hasNext()){
     			n=itr.next();
+    			System.out.println("Id interno \t IdClase\tContenido");
     			System.out.print(j+"\t "+n.getID()+"\t ");
         		System.out.print(n.getName()+"\t ");
         		System.out.print(n.getType()+"\t ");
@@ -187,6 +188,7 @@ public class TestNode {
     		
     		while(itr.hasNext()){
     			n=itr.next();
+    			System.out.println("Id interno \t IdClase\tContenido");
     			System.out.print(i+" "+n.getID()+" ");
         		System.out.print(n.getName()+" ");
         		System.out.print(n.getType()+" ");
@@ -198,6 +200,7 @@ public class TestNode {
     		System.out.println("Termes");
     		while(itr.hasNext()){
     			n=itr.next();
+    			System.out.println("Id interno \t IdClase\tContenido");
     			System.out.print(i+" "+n.getID());
         		System.out.print(n.getName()+" ");
         		System.out.print(n.getType()+" ");
@@ -234,7 +237,7 @@ public class TestNode {
     private void ShowNeighbours(int i){
     	Iterator<Node> itr = misnodos.get(i).getNeighbours().iterator();
     	System.out.println("Su lista de adyacencias es ");
-    	System.out.println("\tId interno \t IdClase\tContenido");
+    	System.out.println("Id interno \t IdClase\tContenido");
     	Node n=null;
     	int j=0;
     	while(itr.hasNext()){
@@ -257,7 +260,7 @@ public class TestNode {
      String nombre;
      
      while(option!=10){
-    	 System.out.println("Tria una opcio:\n1 Crear node\n2Afegir aresta\n3Esborrar aresta \n4 Mostrar info tots els nodes creats \n5 Esborrar totes les arestes,\n6 Afegir totes les arestes\n7 Consultar adjiacencies\n8 EsborrarNode\n9Esborrar tots els nodes\10Sortir\n");
+    	 System.out.println("Tria una opcio:\n1 Crear node\n2Afegir aresta\n3Esborrar aresta \n4 Mostrar info tots els nodes creats \n5 Esborrar totes les arestes,\n6 Afegir totes les arestes\n7 Consultar adjiacencies\n8 EsborrarNode\n9Esborrar tots els nodes\n10Sortir\n");
     	 option=miscan.nextInt();
     	 
     	 switch(option){
