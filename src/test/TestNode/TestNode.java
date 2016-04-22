@@ -227,19 +227,19 @@ public class TestNode {
       }
     private void ShowNeighbours(int i){
     	Iterator<Node> itr = misnodos.get(i).getNeighbours().iterator();
-    	System.out.println("Su lista de adyacencias es ");
-    	System.out.println("Id interno \t IdClase\tContenido");
+    	System.out.println("La seva llista d'adjacències és ");
+    	System.out.println("Id intern \t IdClase\tContingut\tTipus");
     	Node n=null;
     	int j=0;
     	while(itr.hasNext()){
     		n=(Node)itr.next();
-    		System.out.print(j+"\t "+n.getID()+"");
+    		System.out.print(j+"\t\t "+n.getID()+"");
     		System.out.print("\t"+n.getName()+"\t ");
     		System.out.print(""+n.getType());
     		System.out.print("\n");
     		j++;
     	}
-        System.out.println("No tiene mas adyacentes");    
+        System.out.println("No té més adjacents");    
     	}
   
 	public static void main(String[] args) {
@@ -257,7 +257,7 @@ public class TestNode {
     	 
     	 switch(option){
     	 case 1:
-    		 System.out.println("Introduceix una id ");
+    		 System.out.println("Introdueix una id ");
     		 id=miscan.nextInt();
     		 miscan.nextLine();
     		 System.out.println("Introdueix un nom ");
@@ -301,7 +301,7 @@ public class TestNode {
     		 mitest.listNode();
     		 desti=miscan.nextInt();
     		 mitest.addEdge(source, desti);
-    		 System.out.println("S'ha afegit l'aresta que va de "+mitest.getNode(source).getID()+" "+mitest.getNode(source).getName()+" "+mitest.getNode(source).getType() +" al node "+mitest.getNode(desti).getID()+""+mitest.getNode(desti).getName()+" "+mitest.getNode(desti).getType());
+    		 System.out.println("S'ha afegit l'aresta que va de "+mitest.getNode(source).getID()+" "+mitest.getNode(source).getName()+" "+mitest.getNode(source).getType() +" al node "+mitest.getNode(desti).getID()+" "+mitest.getNode(desti).getName()+" "+mitest.getNode(desti).getType());
     		break;
     	 case 3:
     		 System.out.println("Tria el node source per esborrar l'aresta indicant el seu id intern");
@@ -348,7 +348,7 @@ public class TestNode {
 
     		     }
     		 
-    		 System.out.println("S'ha esborrat l'aresta "+mitest.getNode(source)+" "+n.getID()+" "+n.getName()+" "+n.getType());
+    		 System.out.println("S'ha esborrat l'aresta "+mitest.getNode(source).getID()+" "+mitest.getNode(source).getName()+" "+mitest.getNode(source).getType()+" a "+n.getID()+" "+n.getName()+" "+n.getType());
     		 }
     		 else{
     			 
