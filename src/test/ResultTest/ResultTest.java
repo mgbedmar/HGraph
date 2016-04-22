@@ -60,6 +60,7 @@ public class ResultTest
     private static void clearFilters()
     {
         r.unfilterAll();
+        r.unselectAll();
     }
 
     private static void sortByRow()
@@ -200,6 +201,24 @@ public class ResultTest
 
     }
 
+    private static Float readFloat()
+    {
+        while(true)
+        {
+            try
+            {
+                Float x = in.nextFloat();
+                return x;
+            }
+            catch(InputMismatchException e)
+            {
+                in.nextLine(); //Consume '\n'
+                System.out.println("Si us plau, introdueix un numero decimal.");
+            }
+        }
+
+    }
+
     private static void info(String s) {
         if(verbose)
             System.out.println(s);
@@ -243,7 +262,7 @@ public class ResultTest
 
     private static void addRow() {
         Node a, b;
-        Integer x;
+        Float x;
         switch(cols){
             case 1:
                 info("Afegint fila (Node):");
@@ -253,7 +272,8 @@ public class ResultTest
             case 2:
                 info("Afegint fila (Node, Hetesim):");
                 a = readNode();
-                x = readInt();
+                info("Introdueix un valor HeteSim:");
+                x = readFloat();
                 in.nextLine();
                 r.addRow(a, x);
                 break;
@@ -261,7 +281,8 @@ public class ResultTest
                 info("Afegint fila (Node, Node, Hetesim):");
                 a = readNode();
                 b = readNode();
-                x = readInt();
+                info("Introdueix un valor HeteSim:");
+                x = readFloat();
                 in.nextLine();
                 r.addRow(a, b, x);
                 break;
