@@ -236,8 +236,8 @@ public class TestNode {
      int id,tipus,source,desti,aresta;
      String nombre;
      
-     while(option!=7){
-    	 System.out.println("Tria una opcio:1 Crear node\n2Afegir aresta\3Esborrar aresta 4 Mostrar info tots els nodes creats \n5 Esborrar totes les arestes,\n6 Afegir totes les arestes\n7 Consultar adjiacencies\n8Sortir");
+     while(option!=8){
+    	 System.out.println("Tria una opcio:\n1 Crear node\n2Afegir aresta\n3Esborrar aresta \n4 Mostrar info tots els nodes creats \n5 Esborrar totes les arestes,\n6 Afegir totes les arestes\n7 Consultar adjiacencies\n8Sortir\n");
     	 option=miscan.nextInt();
     	 
     	 switch(option){
@@ -246,7 +246,7 @@ public class TestNode {
     		 id=miscan.nextInt();
     		 System.out.println("Introdueix un nom ");
     	     nombre=miscan.nextLine();
-    	     System.out.println("Tria un tipus 1 Paper\n 2 Author\n 3 Terme \n4Conferencia\5 Fantasma");
+    	     System.out.println("Tria un tipus\n 1 Paper\n 2 Author\n 3 Terme \n4Conferencia\n5 Fantasma");
     	     tipus=miscan.nextInt();
     	     switch(tipus){
     	     case 1:
@@ -269,7 +269,8 @@ public class TestNode {
     	     
     	     
     	     }
-    	   
+    	     System.out.println("");
+    	   break;
     	 case 2:
     		 System.out.println("Tria el node source per afegir l'aresta");
     		 mitest.listNode();
@@ -278,6 +279,7 @@ public class TestNode {
     		 desti=miscan.nextInt();
     		 mitest.addEdge(source, desti);
     		 System.out.println("S'ha afegit l'aresta que va de "+mitest.getNode(source).getID()+" "+mitest.getNode(source).getName()+" "+mitest.getNode(source).getType() +" al node "+mitest.getNode(desti).getID()+""+mitest.getNode(desti).getName()+" "+mitest.getNode(desti).getType());
+    		break;
     	 case 3:
     		 System.out.println("Tria el node source per esborrar l'aresta");
     		 mitest.listNode();
@@ -375,6 +377,6 @@ public class TestNode {
     	 }
     	 
 	}
-
+System.out.println("Test terminado ");
 }
 }
