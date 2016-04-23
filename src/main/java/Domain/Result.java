@@ -231,10 +231,13 @@ public class Result {
         else return null;
     }
 
+
     /**
-     * Ordena el resultat segons el valor de la columna 
+     * Ordena el resultat segons el valor de la columna
      * <em>numCol</em>, ascendentment si <em>ascend</em> es cert i
-     * descendentment si es fals.
+     * descendentment si es fals
+     * @param numCol numero de columna pel que es vol ordenar
+     * @param ascend ascendent o no
      */
     public void sort(int numCol, boolean ascend) {
         if (numCol == 1) {
@@ -266,8 +269,9 @@ public class Result {
     }
 
     /**
-     * Filtra per nom, nomes es mostren els resultats 
+     * Filtra per nom, nomes es mostren els resultats
      * on apareix el nom <em>nom</em>.
+     * @param nom nom que se selecciona
      */
     public void select(String nom) {
         selectedNames.add(nom);
@@ -276,6 +280,7 @@ public class Result {
 
     /**
      * Treu el filtre per nom.
+     * @param nom nom que es des-selecciona
      */
     public void unselect(String nom) {
         selectedNames.remove(nom);
@@ -292,6 +297,7 @@ public class Result {
 
     /**
      * Amaga els resultats on apareix el nom <em>nom</em>.
+     * @param nom nom no desitjat
      */
     public void filter(String nom) {
         filteredNames.add(nom);
@@ -300,6 +306,7 @@ public class Result {
 
     /**
      * Desamaga els resultats on apareix el nom.
+     * @param nom nom que es torna a mostrar
      */
     public void unfilter(String nom) {
         filteredNames.remove(nom);
@@ -336,8 +343,8 @@ public class Result {
 
     /**
      * Retorna una estructura amb tots els filtres.
-     * @return: Un map amb claus "filteredNames", "filteredLines" i 
-     * "selectedNames" associades cadascuna a un ArrayList<String>
+     * @return Un map amb claus "filteredNames", "filteredLines" i
+     * "selectedNames" associades cadascuna a un ArrayList
      */
     public Map<String, ArrayList<String>> getFilters() {
         Map<String, ArrayList<String>> map = new HashMap<>();

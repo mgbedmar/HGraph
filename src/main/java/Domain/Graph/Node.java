@@ -35,8 +35,8 @@ public abstract class Node {
     }
 
     /**
-     * Setter. Només un Graph pot editar la id
-     * @param id
+     * Setter. Nomes un Graph pot editar la id
+     * @param id nova id
      */
     public void setID(Integer id)
     {
@@ -66,7 +66,7 @@ public abstract class Node {
     }
 
     /**
-     * Dos nodes són iguals si són del mateix tipus i tenen la mateixa id
+     * Dos nodes son iguals si son del mateix tipus i tenen la mateixa id
      * @param obj
      * @return
      */

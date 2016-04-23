@@ -27,7 +27,25 @@ public class IntermediateHeteSimMatrix extends HeteSimMatrix {
     /**
      * Constructora. Crea la matriu U_tRow,E i la seguent.
      */
+    /**
+     * Constructora. Crea la matriu U_tRow,E i la seguent.
+     * @param graf graf sobre el que es calcula
+     * @param tRow tipus que indexa files
+     * @param tCol tipus que indexa columnes
+     * @throws DomainException si es produeix a les capes inferiors
+     */
     public IntermediateHeteSimMatrix(Graph graf, String tRow, String tCol) throws DomainException {
+        initIntermediateMatrix(graf, tRow, tCol);
+    }
+
+    /**
+     * Inicialitza la matriu amb els valors U_tRow,E i U_TCol,E.
+     * @param graf graf sobre el que es calcula
+     * @param tRow tipus que indexa files
+     * @param tCol tipus que indexa columnes
+     * @throws DomainException si es produeix a les capes inferiors
+     */
+    public void initIntermediateMatrix(Graph graf, String tRow, String tCol) throws DomainException {
 	/* Agafem el conjunt que indexa les files */
         Set<Node> rows = graf.getSetOfNodes(tRow);
         this.numRows = rows.size();

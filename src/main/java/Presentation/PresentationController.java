@@ -243,7 +243,7 @@ public class PresentationController
      * @param name el nom
      * @param type el tipus
      * @return l'index del array que s'ha seleccionat
-     * @throws DomainException
+     * @throws DomainException si es genera en les capes inferiors
      */
     private static Integer selectId(ArrayList<Integer> nodes, String name, String type) throws DomainException {
         if(nodes.size() > 1)

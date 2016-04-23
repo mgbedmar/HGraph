@@ -38,7 +38,7 @@ public class HeteSimMatrix {
      * @param graf graf sobre el que es treballa
      * @param tRow tipus dels nodes que indexen files
      * @param tCol tipus dels nodes que indexen columnes
-     * @throws DomainException
+     * @throws DomainException si es produeix a les capes inferiors
      */
     public HeteSimMatrix(Graph graf, String tRow, String tCol) throws DomainException {
         initMatrix(graf, tRow, tCol);
@@ -89,6 +89,8 @@ public class HeteSimMatrix {
     /**
      * Getter. El node <em>i</em> ha de ser del tipus que indexa les files, el node <em>j</em> ha de ser del tipus
      * que indexa les columnes.
+     * @param i index de fila
+     * @param j index de columna
      * @return valor de l'entrada <em>i</em>, <em>j</em>
      */
     public float value(Node i, Node j) {
@@ -132,6 +134,8 @@ public class HeteSimMatrix {
     /**
      * Guarda al p.i. el producte per files de <em>A</em> i <em>B</em>, es a dir,
      * el producte de <em>A</em> per <em>B</em> transposta.
+     * @param A matriu
+     * @param B matriu
      */
     public void rowProduct(HeteSimMatrix A, HeteSimMatrix B) {
         this.numRows = A.numRows();
@@ -158,10 +162,10 @@ public class HeteSimMatrix {
 
     /**
      * Calcula el valor de l'entrada <em>i</em>, <em>j</em> en la matriu producte per files
-     * @param A
-     * @param B
-     * @param i
-     * @param j
+     * @param A matriu
+     * @param B matriu
+     * @param i node que indexa files de <em>A</em>
+     * @param j node que indexa columnes de <em>A</em>
      * @return el valor de c_ij
      */
     private float cij(HeteSimMatrix A, HeteSimMatrix B, Node i, Node j) {
@@ -265,10 +269,10 @@ public class HeteSimMatrix {
     /**
      * Calcula el valor de l'entrada <em>i</em>, <em>j</em> de la matriu producte per files de <em>A</em>
      * i <em>B</em>, normalitzat.
-     * @param A
-     * @param B
-     * @param i
-     * @param j
+     * @param A matriu
+     * @param B matriu
+     * @param i node que indexa files de <em>A</em>
+     * @param j node que indexa columnes de <em>A</em>
      * @return el valor
      */
     private float cijnorm(HeteSimMatrix A, HeteSimMatrix B, Node i, Node j) {

@@ -12,7 +12,7 @@ public class HeteSim {
      * @param graf graf sobre el que es fa el calcul
      * @param cami cami sobre el que es fa el calcul
      * @return una <em>HeteSimMatrix</em> amb tots els valors de HeteSim
-     * @throws DomainException
+     * @throws DomainException si es produeix a les capes inferiors
      */
     public static HeteSimMatrix run(Graph graf, ArrayList<String> cami) throws DomainException {
         ArrayList<String> cami1 = new ArrayList<String>();
@@ -28,10 +28,6 @@ public class HeteSim {
     }
 
     /**
-     *  Calcula la matriu PM del cami cami
-     *  */
-
-    /**
      * Calcula la matriu PM del cami <em>cami</em>
      * @param graf graf sobre el que es fa el calcul
      * @param cami cami sobre el que es fa el calcul
@@ -41,7 +37,7 @@ public class HeteSim {
      *             ja esta fet (i nomes cal fer un <em>getAnother()</em>
      * @param in matriu on s'ha de guardar la matriu intermitja que es calculi
      * @return la matriu PM del cami <em>cami</em>
-     * @throws DomainException
+     * @throws DomainException si es produeix a les capes inferiors
      */
     private static HeteSimMatrix calculatePM(Graph graf, ArrayList<String> cami, String tNextE,
                                              boolean calc, IntermediateHeteSimMatrix in) throws DomainException{

@@ -10,7 +10,7 @@ public class Author extends Node {
 
     /**
      * Crea un node de tipus autor
-     * @param name
+     * @param name nom de l'autor
      */
     public Author(String name) {
         super(name);
@@ -20,7 +20,7 @@ public class Author extends Node {
     /**
      * Crea un node de tipus autor. La <em>id</em> l'identifica inequivocament d'un altre autor
      * @param id ID unica d'autor
-     * @param name
+     * @param name nom de l'autor
      */
     public Author(int id, String name) {
         super(id, name);
@@ -37,7 +37,7 @@ public class Author extends Node {
 
     /**
      * Afegeix una aresta que va desde el p.i. a <em>node</em>
-     * @param node
+     * @param node node desti
      * @throws DomainException Si el node no es de tipus paper
      */
     void addEdge(Node node) throws DomainException {
@@ -49,8 +49,8 @@ public class Author extends Node {
     }
 
     /**
-     * Esborra la areta formada per el p.i. i <em>node</em>
-     * @param node
+     * Esborra la aresta formada per el p.i. i <em>node</em>
+     * @param node desti
      * @throws DomainException Si l'aresta es de tipus incompatibles o si no existeix l'aresta
      */
     void removeEdge(Node node) throws DomainException {
@@ -67,8 +67,8 @@ public class Author extends Node {
     }
 
     /**
-     * Obté els veïns del p.i.
-     * @return
+     * Obte els veins del p.i.
+     * @return conjunt de veins
      */
     Set<Node> getNeighbours()
     {
@@ -76,9 +76,9 @@ public class Author extends Node {
     }
 
     /**
-     * Obté els veïns d'un cert tipus
-     * @param type
-     * @return
+     * Obte els veins d'un cert tipus
+     * @param type tipus dels veins que es retornen
+     * @return conjunt de veins de tipus <em>type</em>
      */
     Set<Node> getNeighbours(String type)
     {
