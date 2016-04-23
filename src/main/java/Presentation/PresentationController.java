@@ -15,9 +15,24 @@ import java.util.Scanner;
 
 public class PresentationController
 {
+    /**
+     * El controlador de domini s'instancia al
+     * controlador de presentacio.
+     */
     private static DomainController dc;
+    /**
+     * Controla si esta activada l'opcio <em>verbose</em>, que permet no imprimir menus.
+     */
     private static boolean verbose;
+    /**
+     * Controla si esta activada l'opcio <em>debug</em>, que permet obtenir el stackTrace de
+     * les excepcions.
+     */
     private static boolean debug;
+
+    /**
+     * Inner class per referir-se als nodes.
+     */
     private static class NodeReference
     {
         public String name;
@@ -35,6 +50,9 @@ public class PresentationController
         }
     }
 
+    /**
+     * Inner class per referir-se a les arestes.
+     */
     private static class EdgeReference
     {
         public NodeReference nA;
@@ -51,7 +69,16 @@ public class PresentationController
                     "tipusB: "+nB.type+", nomB: "+nB.name+")";
         }
     }
+
+    /**
+     * Scanner per la lectura de dades de teclat.
+     */
     private static Scanner in;
+
+    /**
+     * Programa principal.
+     * @param args Pot contenir les opcions <em>debug</em> i <em>noverbose</em>
+     */
     public static void main(String[] args)
     {
         initParams(args);
@@ -92,6 +119,10 @@ public class PresentationController
 
     }
 
+    /**
+     * Llegeix un enter de teclat.
+     * @return l'enter llegit
+     */
     private static Integer readInt() {
         while(true)
         {
@@ -109,6 +140,10 @@ public class PresentationController
 
     }
 
+    /**
+     * Comprova les opcions amb que s'ha cridat i actualitza les variables corresponents
+     * @param args els arguments del main
+     */
     private static void initParams(String[] args)
     {
         //defaults
@@ -128,6 +163,9 @@ public class PresentationController
         }
     }
 
+    /**
+     * Mostra el menu de consultes i llegeix l'opcio marcada
+     */
     private static void goToQueryGraph() {
         Integer x;
         do{
@@ -162,6 +200,9 @@ public class PresentationController
         }while(x != 0);
     }
 
+    /**
+     * Llegeix les dades necessaries per la consulta i va al menu de resultat
+     */
     private static void queryByReference()
     {
         info("Indica la parella referència: ");
@@ -196,6 +237,14 @@ public class PresentationController
 
     }
 
+    /**
+     * Controla el cas en el que mes d'un node te el nom introduit
+     * @param nodes Llista de les ids dels nodes que tenen el nom i tipus donats
+     * @param name el nom
+     * @param type el tipus
+     * @return l'index del array que s'ha seleccionat
+     * @throws DomainException
+     */
     private static Integer selectId(ArrayList<Integer> nodes, String name, String type) throws DomainException {
         if(nodes.size() > 1)
         {
@@ -221,12 +270,19 @@ public class PresentationController
             return nodes.get(0);
     }
 
+    /**
+     * Escriu un string si l'opcio <em>verbose</em> esta activada
+     * @param s l'string que s'escriu
+     */
     private static void info(String s) {
         if(verbose)
             System.out.println(s);
 
     }
 
+    /**
+     * Mostra el menu de resultat i gestiona les opcions escollides
+     */
     private static void goToResultMenu() {
         Integer x;
         do{
@@ -263,11 +319,17 @@ public class PresentationController
         }while(x != 0);
     }
 
+    /**
+     * Demana al controlador de domini que tregui els filtres del resultat
+     */
     private static void clearFilters()
     {
         dc.clearResultFilters();
     }
 
+    /**
+     * Demana al controlador de domini que ordeni de la manera escollida per l'usuari
+     */
     private static void sortByRow()
     {
         info("Escriu el numero de columna:");
@@ -279,6 +341,9 @@ public class PresentationController
         dc.sortResultByRow(col, dir);
     }
 
+    /**
+     * Selecciona un nom del resultat per a que nomes surtin files que el contenen
+     */
     private static void selectName()
     {
         info("Escriu el nom a seleccionar:");
@@ -286,6 +351,9 @@ public class PresentationController
         dc.selectResultName(x);
     }
 
+    /**
+     * Filtra un nom del resultat per treure totes les files que el contenen
+     */
     private static void filterName()
     {
         info("Escriu el nom a amagar:");
@@ -293,6 +361,9 @@ public class PresentationController
         dc.hideResultName(x);
     }
 
+    /**
+     * Amaga un rang de files a partir del seu numero de files
+     */
     private static void hideRows() {
         info("Escriu el primer numero del rang:");
         Integer x1 = in.nextInt();
@@ -303,6 +374,9 @@ public class PresentationController
         dc.hideResultRows(x1, x2);
     }
 
+    /**
+     * Amaga una fila a partir del seu numero de fila
+     */
     private static void hideRow() {
         info("Escriu el numero de fila a amagar:");
         Integer x = readInt();
@@ -310,6 +384,9 @@ public class PresentationController
         dc.hideResultRow(x);
     }
 
+    /**
+     * Mostra el menu d'opcions d'un resultat i gestiona les opcions seleccionades
+     */
     private static void showResultMenu() {
         String[] opts = {
                 "tornar",
@@ -366,6 +443,9 @@ public class PresentationController
         printMenu(opts);
     }
 
+    /**
+     * Imprimeix el resultat
+     */
     private static void outputResult()
     {
         ArrayList<String> fila = dc.getResultRow();
@@ -381,6 +461,9 @@ public class PresentationController
         }
     }
 
+    /**
+     * Llegeix les dades necessaries per la consulta i va al menu de resultat
+     */
     private static void queryNtoN() {
         info("Font:");
         String typeSource = readType();
@@ -399,6 +482,9 @@ public class PresentationController
 
     }
 
+    /**
+     * Llegeix les dades necessaries per la consulta i va al menu de resultat
+     */
     private static void query1toN() {
         info("Indica la informació del node font:");
         NodeReference nSource = readNode();
@@ -421,6 +507,9 @@ public class PresentationController
 
     }
 
+    /**
+     * Llegeix les dades necessaries per la consulta i va al menu de resultat
+     */
     private static void query1to1() {
         info("Indica la informació del node font:");
         NodeReference nSource = readNode();
@@ -448,6 +537,9 @@ public class PresentationController
 
     }
 
+    /**
+     * Llegeix les dades necessaries per la consulta i va al menu de resultat
+     */
     private static void queryNeighbours() {
         NodeReference n = readNode();
 
@@ -468,6 +560,9 @@ public class PresentationController
 
     }
 
+    /**
+     * Llegeix les dades necessaries per la consulta i va al menu de resultat
+     */
     private static void queryByType() {
         String type = readType();
         try
@@ -484,6 +579,10 @@ public class PresentationController
 
     }
 
+    /**
+     * Llegeix un tipus
+     * @return el tipus llegit
+     */
     private static String readType() {
         String[] localizedTypes = {
                 "Autor",
@@ -511,6 +610,9 @@ public class PresentationController
         return types[x];
     }
 
+    /**
+     * Mostra el menu per editar el graf i gestiona les opcions
+     */
     private static void goToEditGraph() {
         Integer x;
         do{
@@ -543,6 +645,9 @@ public class PresentationController
         }while(x != 0);
     }
 
+    /**
+     * Demana les dades necessarias per esborrar una aresta i l'esborra
+     */
     private static void removeEdge()
     {
         EdgeReference e = readEdge();
@@ -568,6 +673,9 @@ public class PresentationController
 
     }
 
+    /**
+     * Demana les dades necessaries per afegir una aresta i l'afegeix
+     */
     private static void addEdge()
     {
         EdgeReference e = readEdge();
@@ -592,6 +700,10 @@ public class PresentationController
         }
     }
 
+    /**
+     * Llegeix una aresta.
+     * @return la referencia a l'aresta llegida
+     */
     private static EdgeReference readEdge() {
         info("Indica els nodes que formen l'aresta:");
         NodeReference A = readNode();
@@ -602,6 +714,9 @@ public class PresentationController
         return e;
     }
 
+    /**
+     * Modifica un node
+     */
     private static void modifyNode() {
         NodeReference n = readNode();
         String newName = in.nextLine();
@@ -622,6 +737,9 @@ public class PresentationController
 
     }
 
+    /**
+     * Llegeix la info per esborrar un node i l'esborra
+     */
     private static void removeNode() {
         NodeReference n = readNode();
         try
@@ -641,6 +759,9 @@ public class PresentationController
 
     }
 
+    /**
+     * Llegeix la info per afegir un node i l'afegeix.
+     */
     private static void addNode() {
         NodeReference n = readNode();
         try
@@ -657,6 +778,10 @@ public class PresentationController
 
     }
 
+    /**
+     * Llegeix les dades d'un node.
+     * @return retorna la info del node llegit
+     */
     private static NodeReference readNode() {
 
         info("Introdueix el nom del node: ");
@@ -666,6 +791,10 @@ public class PresentationController
         return nr;
     }
 
+    /**
+     * Mostra un menu
+     * @param opts nombre d'opcions del menu
+     */
     private static void printMenu(String[] opts) {
         for(int i = 0; i < opts.length && verbose; i++)
         {
@@ -673,6 +802,9 @@ public class PresentationController
         }
     }
 
+    /**
+     * Mostra el menu main
+     */
     private static void showMainMenu() {
         String[] opts = {
                 "Sortir",
@@ -683,6 +815,9 @@ public class PresentationController
         printMenu(opts);
     }
 
+    /**
+     * Mostra el menu d'editar el graf
+     */
     private static void showGraphMenu(){
         String[] opts = {
                 "tornar",
@@ -696,6 +831,9 @@ public class PresentationController
         printMenu(opts);
     }
 
+    /**
+     * Mostra el menu de les consultes
+     */
     private static void showQueryMenu(){
         String[] opts = {
                 "tornar",
