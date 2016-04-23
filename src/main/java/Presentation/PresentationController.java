@@ -171,13 +171,19 @@ public class PresentationController
         NodeReference nSource = readNode();
         try
         {
-            ArrayList<Integer> nRefSourceIds = dc.getNodes(nRefSource.name, nRefSource.type);
-            ArrayList<Integer> nRefEndIds = dc.getNodes(nRefEnd.name, nRefEnd.type);
-            ArrayList<Integer> nSourceIds = dc.getNodes(nSource.name, nSource.type);
+            Integer refSourceId = selectId(dc.getNodes(nRefSource.name, nRefSource.type),
+                nRefSource.name,
+                nRefSource.type);
+            Integer nRefEndId = selectId(dc.getNodes(nRefEnd.name, nRefEnd.type),
+                    nRefEnd.name,
+                    nRefEnd.type);
+            Integer nSourceId = selectId(dc.getNodes(nSource.name, nSource.type),
+                    nSource.name,
+                    nSource.type);
 
-            dc.queryByReference(nRefSourceIds.get(0), nRefSource.type,
-                    nRefEndIds.get(0), nRefEnd.type,
-                    nSourceIds.get(0), nSource.type);
+            dc.queryByReference(refSourceId, nRefSource.type,
+                    nRefEndId, nRefEnd.type,
+                    nSourceId, nSource.type);
             goToResultMenu();
         }
         catch(DomainException de)
@@ -190,6 +196,31 @@ public class PresentationController
 
 
 
+    }
+
+    private static Integer selectId(ArrayList<Integer> nodes, String name, String type) throws DomainException {
+        if(nodes.size() > 1)
+        {
+            System.out.println("Hi ha més d'un node amb el mateix nom ("+name+") i tipus ("+type+").");
+            System.out.println("Selecciona un dels següents:");
+            for(int i = 0; i < nodes.size(); i++)
+            {
+                System.out.print("---("+i+") Id: "+nodes.get(i)+" \nVeïns:");
+                dc.queryNeighbours(nodes.get(i), type);
+                outputResult();
+            }
+            Integer x;
+            do{
+                x = readInt();
+                in.nextLine(); //Consume '\n'
+                if(x > nodes.size() || x < 0)
+                    System.out.println("Escriu un numero del 0 al "+nodes.size());
+            }while(x > nodes.size()|| x < 0);
+
+            return nodes.get(x);
+        }
+        else
+            return nodes.get(0);
     }
 
     private static void info(String s) {
@@ -264,17 +295,6 @@ public class PresentationController
         dc.hideResultName(x);
     }
 
-    /*
-        private static void selectRows() {
-            info("Escriu el primer numero del rang:");
-            Integer x1 = in.nextInt();
-            in.nextLine(); //Consume '\n'
-            info("Escriu el segon numero del rang:");
-            Integer x2 = in.nextInt();
-            in.nextLine(); //Consume '\n'
-            dc.selectResultRows(x1, x2);
-        }
-    */
     private static void hideRows() {
         info("Escriu el primer numero del rang:");
         Integer x1 = in.nextInt();
@@ -297,7 +317,6 @@ public class PresentationController
                 "tornar",
                 "Amagar una fila",
                 "Amagar un rang",
-                //"Mostrar un rang",
                 "Amagar per nom",
                 "Mostrar per nom",
                 "Ordenar per columna",
@@ -344,6 +363,13 @@ public class PresentationController
         }
         info("Resultat:");
 
+        outputResult();
+
+        printMenu(opts);
+    }
+
+    private static void outputResult()
+    {
         ArrayList<String> fila = dc.getResultRow();
         if (fila == null) System.out.println("<buit>");
         while (fila != null)
@@ -355,8 +381,6 @@ public class PresentationController
             System.out.println();
             fila = dc.getResultRow();
         }
-
-        printMenu(opts);
     }
 
     private static void queryNtoN() {
@@ -379,13 +403,15 @@ public class PresentationController
 
     private static void query1toN() {
         info("Indica la informació del node font:");
-        NodeReference nsource = readNode();
+        NodeReference nSource = readNode();
         String typeEnd = readType();
 
         try
         {
-            ArrayList<Integer> nsourceIds = dc.getNodes(nsource.name, nsource.type);
-            dc.query1toN(nsourceIds.get(0), nsource.type, typeEnd);
+            Integer nSourceId = selectId(dc.getNodes(nSource.name, nSource.type),
+                    nSource.name,
+                    nSource.type);
+            dc.query1toN(nSourceId, nSource.type, typeEnd);
             goToResultMenu();
         }
         catch(DomainException de)
@@ -399,16 +425,20 @@ public class PresentationController
 
     private static void query1to1() {
         info("Indica la informació del node font:");
-        NodeReference nsource = readNode();
+        NodeReference nSource = readNode();
         info("Indica la informació del node destí:");
-        NodeReference nend = readNode();
+        NodeReference nEnd = readNode();
 
         try
         {
-            ArrayList<Integer> nsourceIds = dc.getNodes(nsource.name, nsource.type);
-            ArrayList<Integer> nendIds = dc.getNodes(nend.name, nend.type);
-            dc.query1to1(nsourceIds.get(0), nsource.type,
-                    nendIds.get(0), nend.type);
+            Integer nSourceId = selectId(dc.getNodes(nSource.name, nSource.type),
+                    nSource.name,
+                    nSource.type);
+            Integer nEndId = selectId(dc.getNodes(nEnd.name, nEnd.type),
+                    nEnd.name,
+                    nEnd.type);
+            dc.query1to1(nSourceId, nSource.type,
+                    nEndId, nEnd.type);
             goToResultMenu();
         }
         catch(DomainException de)
@@ -425,8 +455,10 @@ public class PresentationController
 
         try
         {
-            ArrayList<Integer> nIds = dc.getNodes(n.name, n.type);
-            dc.queryNeighbours(nIds.get(0), n.type);
+            Integer nId = selectId(dc.getNodes(n.name, n.type),
+                    n.name,
+                    n.type);
+            dc.queryNeighbours(nId, n.type);
             goToResultMenu();
         }
         catch(DomainException de)
@@ -519,10 +551,14 @@ public class PresentationController
 
         try
         {
-            ArrayList<Integer> naIds = dc.getNodes(e.nA.name, e.nA.type);
-            ArrayList<Integer> nbIds = dc.getNodes(e.nB.name, e.nB.type);
-            dc.removeEdge(naIds.get(0), e.nA.type,
-                    nbIds.get(0), e.nB.type);
+            Integer naId = selectId(dc.getNodes(e.nA.name, e.nA.type),
+                    e.nA.name,
+                    e.nA.type);
+            Integer nbId = selectId(dc.getNodes(e.nB.name, e.nB.type),
+                    e.nB.name,
+                    e.nB.type);
+            dc.removeEdge(naId, e.nA.type,
+                    nbId, e.nB.type);
             System.out.println("Aresta " +e.toString()+" esborrada.");
         }
         catch(DomainException de)
@@ -540,10 +576,14 @@ public class PresentationController
 
         try
         {
-            ArrayList<Integer> naIds = dc.getNodes(e.nA.name, e.nA.type);
-            ArrayList<Integer> nbIds = dc.getNodes(e.nB.name, e.nB.type);
-            dc.addEdge(naIds.get(0), e.nA.type,
-                    nbIds.get(0), e.nB.type);
+            Integer naId = selectId(dc.getNodes(e.nA.name, e.nA.type),
+                    e.nA.name,
+                    e.nA.type);
+            Integer nbId = selectId(dc.getNodes(e.nB.name, e.nB.type),
+                    e.nB.name,
+                    e.nB.type);
+            dc.addEdge(naId, e.nA.type,
+                    nbId, e.nB.type);
             System.out.println("Aresta " +e.toString()+" afegida.");
         }
         catch(DomainException de)
@@ -569,8 +609,10 @@ public class PresentationController
         String newName = in.nextLine();
         try
         {
-            ArrayList<Integer> nIds =dc.getNodes(n.name, n.type);
-            dc.modifyNode(nIds.get(0), n.type, newName);
+            Integer nId = selectId(dc.getNodes(n.name, n.type),
+                    n.name,
+                    n.type);
+            dc.modifyNode(nId, n.type, newName);
             System.out.println("Node "+n.toString() + " modificat.");
         }
         catch(DomainException de)
@@ -586,8 +628,10 @@ public class PresentationController
         NodeReference n = readNode();
         try
         {
-            ArrayList<Integer> nIds =dc.getNodes(n.name, n.type);
-            dc.removeNode(nIds.get(0), n.type);
+            Integer nId = selectId(dc.getNodes(n.name, n.type),
+                    n.name,
+                    n.type);
+            dc.removeNode(nId, n.type);
             System.out.println("Node "+n.toString() + " esborrat.");
         }
         catch(DomainException de)
