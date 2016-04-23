@@ -194,21 +194,19 @@ public class PresentationController
 
         }
 
-
-
     }
 
     private static Integer selectId(ArrayList<Integer> nodes, String name, String type) throws DomainException {
         if(nodes.size() > 1)
         {
-            System.out.println("Hi ha més d'un node amb el mateix nom ("+name+") i tipus ("+type+").");
-            System.out.println("Selecciona un dels següents:");
+            System.out.println("Hi ha més d'un node amb el mateix nom ("+name+") i tipus ("+type+"):");
             for(int i = 0; i < nodes.size(); i++)
             {
-                System.out.print("---("+i+") Id: "+nodes.get(i)+" \nVeïns:");
+                System.out.println("---("+i+") Id: "+nodes.get(i)+" \nVeïns:");
                 dc.queryNeighbours(nodes.get(i), type);
                 outputResult();
             }
+            info("Selecciona un d'ells:");
             Integer x;
             do{
                 x = readInt();
