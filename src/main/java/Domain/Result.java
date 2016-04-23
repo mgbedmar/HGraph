@@ -4,6 +4,9 @@ import java.util.*;
 import Domain.Graph.*;
 
 
+/**
+ * @author Mireia
+ */
 public class Result {
 
     /**

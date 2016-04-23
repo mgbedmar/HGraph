@@ -13,6 +13,9 @@ import java.util.InputMismatchException;
 import java.util.Map;
 import java.util.Scanner;
 
+/**
+ * @author Gerard
+ */
 public class PresentationController
 {
     /**

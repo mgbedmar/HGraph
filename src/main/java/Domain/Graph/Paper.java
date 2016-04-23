@@ -4,6 +4,9 @@ import java.util.HashSet;
 import java.util.Set;
 import Domain.DomainException;
 
+/**
+ * @author Alejandro i Gerard
+ */
 public class Paper extends Node {
     public final static String TYPE = "paper";
     private HashSet<Node> termadj;

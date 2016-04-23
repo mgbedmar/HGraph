@@ -8,6 +8,10 @@ import Domain.Graph.Node;
 import java.util.HashMap;
 import java.util.Set;
 
+
+/**
+ * @author Mireia
+ */
 public class IntermediateHeteSimMatrix extends HeteSimMatrix {
 
     /**

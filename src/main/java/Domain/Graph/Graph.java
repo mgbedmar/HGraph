@@ -3,6 +3,9 @@ import Domain.DomainException;
 
 import java.util.*;
 
+/**
+ * @author Dani i Mireia
+ */
 public class Graph {
     /**
      * Les entrades del <em>TreeMap</em> son "author", "term", "conf" i "paper". Cadascuna

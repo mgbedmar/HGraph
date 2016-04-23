@@ -4,6 +4,9 @@ import Domain.DomainException;
 
 import java.util.Set;
 
+/**
+ * @author Alejandro i Gerard
+ */
 public class Ghost extends Node {
     public final static String TYPE = "ghost";
 

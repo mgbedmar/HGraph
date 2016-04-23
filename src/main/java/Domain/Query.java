@@ -7,6 +7,9 @@ import java.util.Set;
 import java.util.TreeMap;
 
 
+/**
+ * @author Mireia
+ */
 public class Query {
 
     /**

@@ -3,6 +3,9 @@ import Domain.DomainException;
 
 import java.util.Set;
 
+/**
+ * @author Alejandro i Gerard
+ */
 public abstract class Node {
     private int id;
     private String name;

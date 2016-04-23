@@ -1,6 +1,8 @@
 package Domain;
 
-
+/**
+ * @author Gerard
+ */
 public class DomainException extends Exception {
     private String friendlyMessage;
 

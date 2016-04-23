@@ -6,6 +6,9 @@ import Domain.Graph.*;
 import java.util.ArrayList;
 import java.util.Map;
 
+/**
+ * @author Gerard
+ */
 public class DomainController
 {
     private Graph g;
