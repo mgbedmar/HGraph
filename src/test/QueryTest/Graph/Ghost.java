@@ -1,6 +1,6 @@
 package QueryTest.Graph;
 
-import Domain.DomainException;
+import QueryTest.DomainException;
 
 import java.util.Set;
 
