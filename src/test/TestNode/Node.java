@@ -1,5 +1,5 @@
 package TestNode;
-import Domain.DomainException;
+import TestNode.DomainException;
 
 import java.util.Set;
 
