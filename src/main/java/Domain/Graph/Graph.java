@@ -197,6 +197,7 @@ public class Graph {
 	 * @return Un conjunt amb els veins de tipus <em>type</em> del node <em>node</em>.
      * Modificacions en el conjunt de retorn
      * canviaran l'estat del graf.
+     * @throws DomainException si es produeix a les capes inferiors
 	 */
 	public Set<Node> getNeighbours(Node node, String type) throws DomainException
     {
@@ -241,6 +242,7 @@ public class Graph {
      *          o be <em>getNodes()</em>
 	 * @param b node extret directament del graf (amb <em>getNode()</em>
      *          o be <em>getNodes()</em>
+     * @throws DomainException si es produeix a les capes inferiors
 	 */
 	public void addEdge(Node a, Node b) throws DomainException
     {
@@ -252,6 +254,7 @@ public class Graph {
      * Esborra un node del graf.
      * @param node node extret directament del graf (amb <em>getNode()</em>
      *             o be <em>getNodes()</em>
+     * @throws DomainException si es produeix a les capes inferiors
      */
 	public void removeNode(Node node) throws DomainException {
         if (dicNameNodes.containsKey(node.getName()))
@@ -274,6 +277,7 @@ public class Graph {
      *          o be <em>getNodes()</em>
      * @param b node extret directament del graf (amb <em>getNode()</em>
      *          o be <em>getNodes()</em>
+     * @throws DomainException si es produeix a les capes inferiors
      */
 	public void removeEdge(Node a, Node b) throws DomainException {
         a.removeEdge(b);

@@ -15,6 +15,7 @@ public class DomainController
      * @param name Nom del node
      * @param type Tipus del node
      * @return Un node de tipus <em>type</em> amb nom <em>nom</em>
+     * @throws DomainException si es produeix a les capes inferiors
      */
     private Node createNode(String name, String type) throws DomainException
     {
@@ -48,6 +49,7 @@ public class DomainController
      * @param type Tipus del node
      * @return Una llista de les ids dels nodes que tenen nom <em>name</em>
      * i tipus <em>type</em>. Si no n'hi ha cap, retorna una llista buida.
+     * @throws DomainException si es produeix a les capes inferiors
      */
     public ArrayList<Integer> getNodes(String name, String type) throws DomainException
     {
@@ -65,6 +67,7 @@ public class DomainController
      * Afegeix un node
      * @param name Nom del node
      * @param type Tipus del node
+     * @throws DomainException si es produeix a les capes inferiors
      */
     public void addNode(String name, String type) throws DomainException
     {
@@ -76,6 +79,7 @@ public class DomainController
      * Esborra un node
      * @param id id del node
      * @param type Tipus del node
+     * @throws DomainException si es produeix a les capes inferiors
      */
     public void removeNode(int id, String type) throws DomainException
     {
@@ -88,6 +92,7 @@ public class DomainController
      * @param id id del node
      * @param type Tipus del node
      * @param newName Nou nom per al node
+     * @throws DomainException si es produeix a les capes inferiors
      */
     public void modifyNode(int id, String type, String newName) throws DomainException
     {
@@ -97,10 +102,11 @@ public class DomainController
 
     /**
      * Crea una aresta formada pels nodes <em>A</em> i <em>B</em>
-     * @param idA
-     * @param typeA
-     * @param idB
-     * @param typeB
+     * @param idA id del node A
+     * @param typeA tipus del node A
+     * @param idB id del node B
+     * @param typeB tipus del node B
+     * @throws DomainException si es produeix a les capes inferiors
      */
     public void addEdge(int idA, String typeA,
                         int idB, String typeB) throws DomainException
@@ -112,10 +118,11 @@ public class DomainController
 
     /**
      * Esborra l'aresta formada pels nodes <em>A</em> i <em>B</em>
-     * @param idA Nom del node A
-     * @param typeA Tipus del node A
-     * @param idB Nom del node B
-     * @param typeB Tipus de node B
+     * @param idA id del node A
+     * @param typeA tipus del node A
+     * @param idB id del node B
+     * @param typeB tipus de node B
+     * @throws DomainException si es produeix a les capes inferiors
      */
     public void removeEdge(int idA, String typeA,
                            int idB, String typeB) throws DomainException
@@ -127,7 +134,8 @@ public class DomainController
 
     /**
      * Coloca a <em>r</em> el resultat de fer una consulta de tipus
-     * @param type Nom del tipus a consultar
+     * @param type nom del tipus a consultar
+     * @throws DomainException si es produeix a les capes inferiors
      */
     public void queryByType(String type) throws DomainException
     {
@@ -138,8 +146,9 @@ public class DomainController
      * Coloca a <em>r</em> el resultat de fer una consulta 1 a 1
      * @param idSource Nom del node font
      * @param typeSource Tipus del node font
-     * @param idEnd Nom del node destí
-     * @param typeEnd Tipus del node destí
+     * @param idEnd Nom del node desti
+     * @param typeEnd Tipus del node desti
+     * @throws DomainException si es produeix a les capes inferiors
      */
     public void query1to1(int idSource, String typeSource,
                           int idEnd, String typeEnd) throws DomainException
@@ -156,6 +165,7 @@ public class DomainController
      * Coloca a <em>r</em> el resultat de consultar els veins del node
      * @param id Nom del node font
      * @param type Tipus del node font
+     * @throws DomainException si es produeix a les capes inferiors
      */
     public void queryNeighbours(int id, String type) throws DomainException
     {
@@ -168,6 +178,7 @@ public class DomainController
      * @param idSource Nom del node font
      * @param typeSource Tipus del node font
      * @param typeEnd Tipus dels nodes a consultar
+     * @throws DomainException si es produeix a les capes inferiors
      */
     public void queryNeighbours(int idSource, String typeSource, String typeEnd) throws DomainException
     {
@@ -179,7 +190,8 @@ public class DomainController
      * Coloca a <em>r</em> el resultat de fer una consulta 1 a N
      * @param idSource Nom del node font
      * @param typeSource Tipus del node font
-     * @param typeEnd Tipus destí
+     * @param typeEnd Tipus desti
+     * @throws DomainException si es produeix a les capes inferiors
      */
     public void query1toN(int idSource, String typeSource, String typeEnd) throws DomainException
     {
@@ -190,7 +202,8 @@ public class DomainController
     /**
      * Coloca a <em>r</em> el resultat de fer una consulta N a N
      * @param typeSource Tipus font
-     * @param typeEnd Tipus destí
+     * @param typeEnd Tipus desti
+     * @throws DomainException si es produeix a les capes inferiors
      */
     public void queryNtoN(String typeSource, String typeEnd) throws DomainException
     {
@@ -199,12 +212,13 @@ public class DomainController
 
     /**
      * Coloca a <em>r</em> el resultat de fer una consulta per referència
-     * @param nodeRefSourceID id del node referència font
-     * @param nodeRefSourceType Tipus del node referència font
-     * @param nodeRefEndID id del node referència destí
-     * @param nodeRefEndType Tipus del node referència destí
+     * @param nodeRefSourceID id del node referencia font
+     * @param nodeRefSourceType Tipus del node referencia font
+     * @param nodeRefEndID id del node referencia desti
+     * @param nodeRefEndType Tipus del node referencia desti
      * @param nodeSourceID id del node font
      * @param nodeSourceType Tipus del node font
+     * @throws DomainException si es produeix a les capes inferiors
      */
     public void queryByReference(int nodeRefSourceID, String nodeRefSourceType,
                                  int nodeRefEndID, String nodeRefEndType,

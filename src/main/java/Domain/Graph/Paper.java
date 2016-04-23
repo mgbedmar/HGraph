@@ -43,7 +43,7 @@ public class Paper extends Node {
 
     /**
      * Afegeix una aresta que va desde el p.i. a <em>node</em>
-     * @param node
+     * @param node desti
      * @throws DomainException Si el node no es de tipus correcte
      */
 	void addEdge(Node node) throws DomainException {

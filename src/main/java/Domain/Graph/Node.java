@@ -18,8 +18,8 @@ public abstract class Node {
 
     /**
      * Crea un node amb id
-     * @param name: el nom del node
-     * @param id
+     * @param name  el nom del node
+     * @param id id del node
      */
     public Node(int id, String name) {
         this.name = name;
@@ -67,8 +67,8 @@ public abstract class Node {
 
     /**
      * Dos nodes son iguals si son del mateix tipus i tenen la mateixa id
-     * @param obj
-     * @return
+     * @param obj objecte per comparar
+     * @return <em>true</em> si i nomes si son iguals
      */
     @Override
     public boolean equals(Object obj)
@@ -82,7 +82,7 @@ public abstract class Node {
     }
 
     /**
-     *
+     * Calcula un hashCode per un node.
      * @return hashcode
      */
     @Override
@@ -99,7 +99,8 @@ public abstract class Node {
 
     /**
      * Getter.
-     * @return conjunt de veins de tipus type
+     * @param type tipus dels veins que es retornen
+     * @return conjunt de veins de tipus <em>type</em>
      */
     abstract Set<Node> getNeighbours(String type);
 
@@ -107,6 +108,7 @@ public abstract class Node {
      * Afegeix una aresta del p.i. a <em>node</em>. <b>No afegeix l'aresta
      * simetrica!</b>
      * @param node destí
+     * @throws DomainException si no existeix el node
      */
     abstract void addEdge(Node node) throws DomainException;
 
@@ -114,6 +116,7 @@ public abstract class Node {
      * Esborra l'aresta del p.i. a node. <b>No esborra l'aresta
      * simetrica!</b>
      * @param node destí
+     * @throws DomainException si no existeix el node o l'aresta
      */
     abstract void removeEdge(Node node) throws DomainException;
 }

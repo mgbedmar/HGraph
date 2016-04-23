@@ -11,7 +11,7 @@ public class Ghost extends Node {
     /**
      * Crea un node de tipus ghost. Aquest node es fa servir per calcular
      * l'HeteSim
-     * @param id
+     * @param id id del node
      */
     public Ghost(int id) {
     	super(id, null);
