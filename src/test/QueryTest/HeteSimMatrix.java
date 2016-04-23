@@ -1,10 +1,11 @@
 package QueryTest;
+import QueryTest.Graph.Ghost;
+import QueryTest.Graph.Graph;
+import QueryTest.Graph.Node;
+
 import java.util.*;
 
-import Domain.*;
-import Domain.DomainException;
-import Domain.Graph.*;
-import Domain.IntermediateHeteSimMatrix;
+
 
 
 public class HeteSimMatrix {
@@ -27,7 +28,7 @@ public class HeteSimMatrix {
      * Crea la matriu U_tRow,TCol (transposada si i nomes 
      * si tr es cert)
      */
-    public HeteSimMatrix(Graph graf, String tRow, String tCol) throws Domain.DomainException {
+    public HeteSimMatrix(Graph graf, String tRow, String tCol) throws DomainException {
         initMatrix(graf, tRow, tCol);
     }
 
@@ -119,7 +120,7 @@ public class HeteSimMatrix {
      * Guarda al p.i. el producte per files de A i B, es a dir,
      * el producte de A per B transposta.
      */
-    public void rowProduct(Domain.HeteSimMatrix A, Domain.HeteSimMatrix B) {
+    public void rowProduct(HeteSimMatrix A, HeteSimMatrix B) {
         this.numRows = A.numRows();
         this.numCols = B.numRows();
         this.m = new HashMap<>(this.numRows);
@@ -143,7 +144,7 @@ public class HeteSimMatrix {
     }
 
     /* A es la que te menys cols en i */
-    private float cij(Domain.HeteSimMatrix A, Domain.HeteSimMatrix B, Node i, Node j) {
+    private float cij(HeteSimMatrix A, HeteSimMatrix B, Node i, Node j) {
         float cij = 0;
         for (Node k: A.cols(i)) {
             cij += A.value(i,k) * B.value(j,k);
@@ -155,7 +156,7 @@ public class HeteSimMatrix {
      * Guarda al p.i. el producte de A i B. B ha de ser una matriu
      * intermitja de la forma U_t,E
      */
-    public void intermediateProduct(Domain.HeteSimMatrix A, IntermediateHeteSimMatrix B) {
+    public void intermediateProduct(HeteSimMatrix A, IntermediateHeteSimMatrix B) {
         this.numRows = A.numRows();
         this.numCols = B.numCols();
         this.m = new HashMap<Node, HashMap<Node, Float>>(this.numRows);
@@ -180,7 +181,7 @@ public class HeteSimMatrix {
         }
     }
 
-    public void usualProduct(Domain.HeteSimMatrix A, Domain.HeteSimMatrix B, Set<Node> Bcols) {
+    public void usualProduct(HeteSimMatrix A, HeteSimMatrix B, Set<Node> Bcols) {
         this.numRows = A.numRows();
         this.numCols = B.numRows();
         this.m = new HashMap<>(this.numRows);
@@ -207,7 +208,7 @@ public class HeteSimMatrix {
      * Guarda al p.i. el producte per files de A i B, es a dir,
      * el producte de A per B transposta, normalitzat.
      */
-    public void productPM(Domain.HeteSimMatrix A, Domain.HeteSimMatrix B) {
+    public void productPM(HeteSimMatrix A, HeteSimMatrix B) {
         this.numRows = A.numRows();
         this.numCols = B.numRows();
         this.m = new HashMap<Node, HashMap<Node, Float>>(this.numRows);
@@ -228,7 +229,7 @@ public class HeteSimMatrix {
     }
 
 
-    private float cijnorm(Domain.HeteSimMatrix A, Domain.HeteSimMatrix B, Node i, Node j) {
+    private float cijnorm(HeteSimMatrix A, HeteSimMatrix B, Node i, Node j) {
         float cij = 0, normi = 0, normj = 0;
         for (Node k: A.cols(i)) {
             cij += A.value(i,k) * B.value(j,k);

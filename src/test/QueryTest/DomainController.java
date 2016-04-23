@@ -1,9 +1,8 @@
 package QueryTest;
 
 
-import Domain.*;
-import Domain.DomainException;
-import Domain.Graph.*;
+
+import QueryTest.Graph.*;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -18,7 +17,7 @@ public class DomainController
      * @param type Tipus del node
      * @return Un node de tipus <em>type</em> amb nom <em>nom</em>
      */
-    private Node createNode(String name, String type) throws Domain.DomainException
+    private Node createNode(String name, String type) throws DomainException
     {
 
         switch(type)
@@ -33,7 +32,7 @@ public class DomainController
                 return new Conf(name);
         }
 
-        throw new Domain.DomainException("El tipus '"+type+"' no existeix.");
+        throw new DomainException("El tipus '"+type+"' no existeix.");
     }
 
     /**
@@ -51,7 +50,7 @@ public class DomainController
      * @return Una llista de les ids dels nodes que tenen nom <em>name</em>
      * i tipus <em>type</em>. Si no n'hi ha cap, retorna una llista buida.
      */
-    public ArrayList<Integer> getNodes(String name, String type) throws Domain.DomainException
+    public ArrayList<Integer> getNodes(String name, String type) throws DomainException
     {
         ArrayList<Integer> ids = new ArrayList<>();
         ArrayList<Node> nodes = g.getNodes(name, type);
@@ -68,7 +67,7 @@ public class DomainController
      * @param name Nom del node
      * @param type Tipus del node
      */
-    public void addNode(String name, String type) throws Domain.DomainException
+    public void addNode(String name, String type) throws DomainException
     {
         Node node = createNode(name, type);
         g.addNode(node);
@@ -79,7 +78,7 @@ public class DomainController
      * @param id id del node
      * @param type Tipus del node
      */
-    public void removeNode(int id, String type) throws Domain.DomainException
+    public void removeNode(int id, String type) throws DomainException
     {
         Node node = g.getNode(id, type);
         g.removeNode(node);
@@ -91,7 +90,7 @@ public class DomainController
      * @param type Tipus del node
      * @param newName Nou nom per al node
      */
-    public void modifyNode(int id, String type, String newName) throws Domain.DomainException
+    public void modifyNode(int id, String type, String newName) throws DomainException
     {
         Node node = g.getNode(id, type);
         node.setName(newName);
@@ -105,7 +104,7 @@ public class DomainController
      * @param typeB
      */
     public void addEdge(int idA, String typeA,
-                        int idB, String typeB) throws Domain.DomainException
+                        int idB, String typeB) throws DomainException
     {
         Node a = g.getNode(idA, typeA);
         Node b = g.getNode(idB, typeB);
@@ -120,7 +119,7 @@ public class DomainController
      * @param typeB Tipus de node B
      */
     public void removeEdge(int idA, String typeA,
-                           int idB, String typeB) throws Domain.DomainException
+                           int idB, String typeB) throws DomainException
     {
         Node a = g.getNode(idA, typeA);
         Node b = g.getNode(idB, typeB);
@@ -131,7 +130,7 @@ public class DomainController
      * Coloca a <em>r</em> el resultat de fer una consulta de tipus
      * @param type Nom del tipus a consultar
      */
-    public void queryByType(String type) throws Domain.DomainException
+    public void queryByType(String type) throws DomainException
     {
         r = Query.queryByType(g, type);
     }
@@ -144,7 +143,7 @@ public class DomainController
      * @param typeEnd Tipus del node destí
      */
     public void query1to1(int idSource, String typeSource,
-                          int idEnd, String typeEnd) throws Domain.DomainException
+                          int idEnd, String typeEnd) throws DomainException
     {
         Node source = g.getNode(idSource, typeSource);
         Node end = g.getNode(idEnd, typeEnd);
@@ -159,7 +158,7 @@ public class DomainController
      * @param id Nom del node font
      * @param type Tipus del node font
      */
-    public void queryNeighbours(int id, String type) throws Domain.DomainException
+    public void queryNeighbours(int id, String type) throws DomainException
     {
         Node source = g.getNode(id, type);
         r = Query.queryNeighbours(g, source);
@@ -171,7 +170,7 @@ public class DomainController
      * @param typeSource Tipus del node font
      * @param typeEnd Tipus dels nodes a consultar
      */
-    public void queryNeighbours(int idSource, String typeSource, String typeEnd) throws Domain.DomainException
+    public void queryNeighbours(int idSource, String typeSource, String typeEnd) throws DomainException
     {
         Node source = g.getNode(idSource, typeSource);
         r = Query.queryNeighbours(g, source, typeEnd);
@@ -183,7 +182,7 @@ public class DomainController
      * @param typeSource Tipus del node font
      * @param typeEnd Tipus destí
      */
-    public void query1toN(int idSource, String typeSource, String typeEnd) throws Domain.DomainException
+    public void query1toN(int idSource, String typeSource, String typeEnd) throws DomainException
     {
         Node source = g.getNode(idSource, typeSource);
         r = Query.query1toN(g, source, Query.defaultPath.get(typeSource).get(typeEnd));
@@ -194,7 +193,7 @@ public class DomainController
      * @param typeSource Tipus font
      * @param typeEnd Tipus destí
      */
-    public void queryNtoN(String typeSource, String typeEnd) throws Domain.DomainException
+    public void queryNtoN(String typeSource, String typeEnd) throws DomainException
     {
         r = Query.queryNtoN(g, Query.defaultPath.get(typeSource).get(typeEnd));
     }

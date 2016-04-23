@@ -1,7 +1,17 @@
 package QueryTest;
 
 
-public class PresentationController
+import QueryTest.Graph.Author;
+import QueryTest.Graph.Conf;
+import QueryTest.Graph.Paper;
+import QueryTest.Graph.Term;
+
+import java.util.ArrayList;
+import java.util.InputMismatchException;
+import java.util.Map;
+import java.util.Scanner;
+
+public class QueryTest
 {
     private static DomainController dc;
     private static boolean verbose;
@@ -127,21 +137,15 @@ public class PresentationController
                 case 0:
                     break;
                 case 1:
-                    queryByType();
-                    break;
-                case 2:
-                    queryNeighbours();
-                    break;
-                case 3:
                     query1to1();
                     break;
-                case 4:
+                case 2:
                     query1toN();
                     break;
-                case 5:
+                case 3:
                     queryNtoN();
                     break;
-                case 6:
+                case 4:
                     queryByReference();
                     break;
                 default:
@@ -252,17 +256,6 @@ public class PresentationController
         dc.hideResultName(x);
     }
 
-    /*
-        private static void selectRows() {
-            info("Escriu el primer numero del rang:");
-            Integer x1 = in.nextInt();
-            in.nextLine(); //Consume '\n'
-            info("Escriu el segon numero del rang:");
-            Integer x2 = in.nextInt();
-            in.nextLine(); //Consume '\n'
-            dc.selectResultRows(x1, x2);
-        }
-    */
     private static void hideRows() {
         info("Escriu el primer numero del rang:");
         Integer x1 = in.nextInt();
@@ -281,16 +274,6 @@ public class PresentationController
     }
 
     private static void showResultMenu() {
-        String[] opts = {
-                "tornar",
-                "Amagar una fila",
-                "Amagar un rang",
-                //"Mostrar un rang",
-                "Amagar per nom",
-                "Mostrar per nom",
-                "Ordenar per columna",
-                "Treure tots els filtres"
-        };
         info("======Resultat de la consulta======");
         Map<String, ArrayList<String>> filters =  dc.getFilters();
         Integer filteredNamesSize = filters.get("filteredNames").size();
@@ -344,7 +327,6 @@ public class PresentationController
             fila = dc.getResultRow();
         }
 
-        printMenu(opts);
     }
 
     private static void queryNtoN() {
@@ -645,8 +627,6 @@ public class PresentationController
     private static void showQueryMenu(){
         String[] opts = {
                 "tornar",
-                "Nodes d'un cert tipus",
-                "Veins d'un node",
                 "1 a 1",
                 "1 a N",
                 "N a N",

@@ -1,11 +1,10 @@
 package QueryTest;
 
 
-import Domain.*;
-import Domain.DomainException;
-import Domain.Graph.Ghost;
-import Domain.Graph.Graph;
-import Domain.Graph.Node;
+
+import QueryTest.Graph.Ghost;
+import QueryTest.Graph.Graph;
+import QueryTest.Graph.Node;
 
 import java.util.HashMap;
 import java.util.Set;
@@ -23,7 +22,7 @@ public class IntermediateHeteSimMatrix extends HeteSimMatrix {
     /**
      * Constructora. Crea la matriu U_tRow,E i la seguent.
      */
-    public IntermediateHeteSimMatrix(Graph graf, String tRow, String tCol) throws Domain.DomainException {
+    public IntermediateHeteSimMatrix(Graph graf, String tRow, String tCol) throws DomainException {
         initIntermediateMatrix(graf, tRow, tCol);
     }
 
