@@ -1,17 +1,5 @@
-package Presentation;
+package QueryTest;
 
-
-import Domain.DomainController;
-import Domain.DomainException;
-import Domain.Graph.Author;
-import Domain.Graph.Conf;
-import Domain.Graph.Paper;
-import Domain.Graph.Term;
-
-import java.util.ArrayList;
-import java.util.InputMismatchException;
-import java.util.Map;
-import java.util.Scanner;
 
 public class PresentationController
 {
