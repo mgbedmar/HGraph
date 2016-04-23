@@ -4,11 +4,27 @@ import Domain.DomainException;
 import java.util.*;
 
 public class Graph {
+    /**
+     * Les entrades del <em>TreeMap</em> son "author", "term", "conf" i "paper". Cadascuna
+     * te com a valors un <em>HashMap</em> que te com a conjunt de claus tots els nodes del graf
+     * i cada node te com a valor a ell mateix. D'aquesta manera es pot trobar un node rapidament
+     * i retornar la versio amb adjacencies d'aquest node (el Set no ho permet).
+     */
 	private TreeMap<String,HashMap<Node,Node>> elements;
-	private HashMap<String,ArrayList<Node>> dicNameNodes;
+
+    /**
+     * Diccionari que conte, per cada nom que estigui al graf, la llista de nodes que tenen
+     * aquest nom. Gestiona noms repetits i permet trobar rapidament nodes al graf a partir del seu nom.
+     */
+    private HashMap<String,ArrayList<Node>> dicNameNodes;
+
+    /**
+     * Conte la id mes gran que s'ha ficat a un node del graf. S'utilitza per generar ids uniques.
+     */
     private int maxID; //la id mes gran que s'ha ficat al graf
 	
-	//Metodes privats per garantir la no redundancia
+
+    //Metodes privats per garantir la no redundancia
 
     /**
      * Comprova si el tipus es correcte
