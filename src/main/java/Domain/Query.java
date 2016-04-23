@@ -9,10 +9,19 @@ import java.util.TreeMap;
 
 public class Query {
 
-    /* Tolerancia per la queryByReference */
+    /**
+     *  Tolerancia per la queryByReference.
+     */
     public static float TOL = 0.1f;
+
+    /**
+     * Conte els camins per defecte utilitzats a les consultes.
+     */
     public static final TreeMap<String, TreeMap<String, ArrayList<String>>> defaultPath = createPaths();
 
+    /**
+     * Instancia la variable <em>defaultPath</em>
+     */
     private static TreeMap<String, TreeMap<String, ArrayList<String>>> createPaths() {
         TreeMap map = new TreeMap<>();
         TreeMap<String, ArrayList<String>> aux;
@@ -75,6 +84,9 @@ public class Query {
         return map;
     }
 
+    /**
+     * Constructor privat per evitar instanciacio.
+     */
     private Query() {
         /* Constructor privat per evitar que s'instancii */
     }
