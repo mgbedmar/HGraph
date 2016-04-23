@@ -6,8 +6,15 @@ import Domain.Graph.*;
 
 public class Result {
 
+    /**
+     * Numero de files que es mostren d'un resultat.
+     * Es una parametre del sistema que pot ser modificat per l'usuari.
+     */
     public static int numRowsResult = 10;
 
+    /**
+     * Inner class per representar una fila. Els nodes son nomes Strings (el nom).
+     */
     protected class Row {
         protected String node1;
 
@@ -28,6 +35,9 @@ public class Result {
         }
     }
 
+    /**
+     * Inner class que hereta i a mes te HeteSim
+     */
     protected class RowWithHS extends Row{
         protected float hs;
 
@@ -41,6 +51,9 @@ public class Result {
         }
     }
 
+    /**
+     * Inner class que hereta i a mes te un altre node.
+     */
     protected class Row3Cols extends RowWithHS{
         protected String node2;
 
@@ -54,12 +67,43 @@ public class Result {
         }
     }
 
+    /**
+     * Llistat de files que formen el resultat.
+     */
     private ArrayList<Row> res;
+
+    /**
+     * Numero de columnes del resultat. Pot ser 1, 2 o 3.
+     * Si es 1, es un node. Si es 2, es un node i el hetesim.
+     * Si es 3, son dos nodes i un hetesim.
+     */
     private int nCols; //nombre de columnes
+
+    /**
+     * Numero de nodes que hi ha a una columna del resultat. Pot ser 1 o 2.
+     */
     private int nNodes; //nombre de nodes
+
+    /**
+     * L'index que toca retornar al controlador (si fos valid).
+     */
     private int currentIndex; //l'index del que s'ha de retornar
+
+    /**
+     * Noms que han estat seleccionats per l'usuari. S'han de retornar nomes files
+     * que els continguin.
+     */
     private ArrayList<String> selectedNames;
+
+    /**
+     * Indexs de les files que han estat filtrades per l'usuari. No s'han de mostrar.
+     */
     private ArrayList<Integer> filteredRows;
+
+    /**
+     * Noms que han estat filtrats per l'usuari. No s'han de mostrar files que
+     * continguin aquests noms.
+     */
     private ArrayList<String> filteredNames;
 
     /**
@@ -117,6 +161,11 @@ public class Result {
 
     /**
      * Comprova si la fila compleix restriccions per mostrarla...
+     */
+    /**
+     * Comprova si una fila es valida per mostrar, i.e. si ha estat filtrada o seleccionada.
+     * @param index l'index de la fila al array <em>res</em>
+     * @return <em>true</em> si es valida, <em>false</em> si no
      */
     private boolean isValid(int index) {
         if (filteredRows.contains(index)) return false;
