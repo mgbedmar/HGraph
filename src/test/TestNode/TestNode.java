@@ -31,6 +31,7 @@ public class TestNode {
     	}
     	misnodos.remove(i);
     }
+    
     private void reinitTest(){
     	for(int i=0;i<misnodos.size();i++){
     		misnodos.remove(misnodos.get(i));
@@ -38,7 +39,17 @@ public class TestNode {
     }
   
     	
-    
+    private void readremoveEdge(Scanner miscan){
+    	System.out.println("Tria el node source per afegir l'aresta indicant el seu id intern");
+		 int source,desti;
+    	 this.listNode();
+		 source=miscan.nextInt();
+		 System.out.println("Tria el node desti per afegir l'aresta indicant el seu id intern");
+		 this.listNode();
+		 desti=miscan.nextInt();
+		 this.addEdge(source, desti);
+		 System.out.println("S'ha afegit l'aresta que va de "+this.getNode(source).getID()+" "+this.getNode(source).getName()+" "+this.getNode(source).getType() +" al node "+this.getNode(desti).getID()+" "+this.getNode(desti).getName()+" "+this.getNode(desti).getType());
+    }
     private void eraseAllEdges(){
     	Iterator<Node> itr;
     	Node n=null;
@@ -94,7 +105,7 @@ public class TestNode {
     	for(int i=0;i<misnodos.size();i++){
     		System.out.println("Tenim el següent node :" +misnodos.get(i).getID()+"del tipo "+misnodos.get(i).getType()+"y su contenido es "+misnodos.get(i).getName());
     		if(!misnodos.get(i).getType().equals(Config.paperType))
-    		this.ShowNeighbours(i);
+    			this.ShowNeighbours(i);
     		else{
     			System.out.println("Su lista de adyacencias por tipos es ");
     			
@@ -137,23 +148,7 @@ public class TestNode {
     		}
     	}
     }
-    private void EraseAllRelationShips(){
-    	Iterator miiter;
-        Node n;
-    	for(int i=0;i<misnodos.size();i++){
-    		miiter=misnodos.get(i).getNeighbours().iterator();
-    		while(miiter.hasNext()){
-    			n=(Node)miiter.next();
-    			System.out.println("Provant d'esborrar"+misnodos.get(i).getID()+" "+misnodos.get(i).getName()+"de tipus"+misnodos.get(i).getType()+"amb el node"+n.getID()+" "+n.getName()+"de tipus"+ n.getType());
-    			try{
-    			misnodos.get(i).removeEdge(n);
-    			}catch(Exception ex){
-    				
-    			}
-    			}
-    		}
-    	
-    }
+    
     private void ShowNeighbours(int i,String type){
     	Iterator<Node> itr = misnodos.get(i).getNeighbours(type).iterator();
     	
@@ -204,15 +199,47 @@ public class TestNode {
     	}
     	System.out.println("No té més adjacents");
     }
+    
     private Node getNeighbour(int i,int id,String type){
       Iterator<Node> itr=misnodos.get(i).getNeighbours(type).iterator();
       Node n=null;
       if (itr.hasNext())
     
-      for(int j=1;j<=i;j++){
-       n=(Node)itr.next();
+    	  for(int j=1;j<=i;j++){
+    		  n=(Node)itr.next();
       }
       return n;
+    }
+    private Node createNode(int id ,String nombre,int tipus){
+    	
+    	Node n=null;	
+    	switch(tipus){	
+	     case 1:
+	    	 n=new Paper(id,nombre);
+	    	 this.afegirNode(n);
+	    	 break;
+	     case 2:
+	    	 n=new Author(id,nombre);
+	    	 this.afegirNode(n);
+	         break;
+	     case 3:
+	    	 n=new Term(id,nombre);
+	    	 this.afegirNode(n);
+	    	 break;
+	     case 4:
+	    	 n=new Conf(id,nombre);
+	    	 this.afegirNode(n);
+	    	 break;
+	     case 5:
+	    	 n=new Ghost(id);
+	    	 this.afegirNode(n);
+	    	 break;
+	    default:
+	    	break;
+	     
+    	}
+	     
+    	return n;
     }
     private Node getNeighbour(int i,int id){
     	 Node n=null;
@@ -220,9 +247,9 @@ public class TestNode {
        
         if (itr.hasNext())
       
-        for(int j=1;j<=i;j++){
-         n=(Node)itr.next();
-        }
+        	for(int j=1;j<=i;j++){
+        		n=(Node)itr.next();
+        	}
         return n;
       }
     private void ShowNeighbours(int i){
@@ -241,7 +268,30 @@ public class TestNode {
     	}
         System.out.println("No té més adjacents");    
     	}
-  
+    private Node eraseEdgePaper(Scanner miscan,int source,String type){
+    	Node n=null; 
+    	int desti;
+    	this.ShowNeighbours(source,type);
+    	 desti=miscan.nextInt();
+    	
+    	 n=this.getNeighbour(desti, source, type);
+    	 try{
+    	 this.getNode(source).removeEdge(n);
+    	 }catch(Exception ex){
+    		 
+    	 }
+    	return n;//return node de l'aresta eliminada
+    }
+    private void dropNode(Scanner miscan){
+    	Node n=null;
+    	int esborrar;
+    	System.out.println("Tria quin node vols esborrar indicant el seu id intern\n");
+        this.listNode();
+        esborrar=miscan.nextInt();
+        n=this.getNode(esborrar);
+        System.out.println("Se ha borrado el nodo "+n.getID()+" "+n.getName()+"del tipus "+n.getType());
+        this.removeNode(n);
+    }
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
      TestNode mitest=new TestNode();
@@ -264,44 +314,12 @@ public class TestNode {
     	     nombre=miscan.nextLine();
     	     System.out.println("Tria un tipus\n 1 Paper\n 2 Author\n 3 Terme \n4Conferencia\n5 Fantasma");
     	     tipus=miscan.nextInt();
-    	     switch(tipus){
-    	     case 1:
-    	    	 n=new Paper(id,nombre);
-    	    	 mitest.afegirNode(n);
-    	    	 break;
-    	     case 2:
-    	    	 n=new Author(id,nombre);
-    	    	 mitest.afegirNode(n);
-    	         break;
-    	     case 3:
-    	    	 n=new Term(id,nombre);
-    	    	 mitest.afegirNode(n);
-    	    	 break;
-    	     case 4:
-    	    	 n=new Conf(id,nombre);
-    	    	 mitest.afegirNode(n);
-    	    	 break;
-    	     case 5:
-    	    	 n=new Ghost(id);
-    	    	 mitest.afegirNode(n);
-    	    	 break;
-    	    default:
-    	    	break;
-    	     
-    	     
-    	     }
+    	     n=mitest.createNode(id,nombre,tipus);
     	     
     	     System.out.println("S'ha creat el node "+n.getType()+" "+n.getID()+" "+n.getName()+"\n");
     	   break;
     	 case 2:
-    		 System.out.println("Tria el node source per afegir l'aresta indicant el seu id intern");
-    		 mitest.listNode();
-    		 source=miscan.nextInt();
-    		 System.out.println("Tria el node desti per afegir l'aresta indicant el seu id intern");
-    		 mitest.listNode();
-    		 desti=miscan.nextInt();
-    		 mitest.addEdge(source, desti);
-    		 System.out.println("S'ha afegit l'aresta que va de "+mitest.getNode(source).getID()+" "+mitest.getNode(source).getName()+" "+mitest.getNode(source).getType() +" al node "+mitest.getNode(desti).getID()+" "+mitest.getNode(desti).getName()+" "+mitest.getNode(desti).getType());
+    		 mitest.readremoveEdge(miscan);
     		break;
     	 case 3:
     		 System.out.println("Tria el node source per esborrar l'aresta indicant el seu id intern");
@@ -312,38 +330,15 @@ public class TestNode {
     		     aresta=miscan.nextInt();
     		     switch(aresta){
     		     case 1:
-    		    	 mitest.ShowNeighbours(source,Config.authorType);
-    		    	 desti=miscan.nextInt();
-    		    	 //mitest.getNeighbour(desti, source, Config.authorType);
-    		    	 n=mitest.getNeighbour(desti, source, Config.authorType);
-    		    	 try{
-    		    	 mitest.getNode(source).removeEdge(n);
-    		    	 }catch(Exception ex){
-    		    		 
-    		    	 }
+    		    	 n=mitest.eraseEdgePaper(miscan,source,Config.authorType);
     		    	 break;
     		    	 
     		     case 2:
-    		    	 mitest.ShowNeighbours(source,Config.confType);
-    		    	 desti=miscan.nextInt();
-    		    	 try{
-    		    		 n=mitest.getNeighbour(desti, source, Config.termType);
-        		    	 mitest.getNode(source).removeEdge(n);
+    		    	 n=mitest.eraseEdgePaper(miscan,source,Config.confType);
     		    	 
-    		    	 }catch(Exception ex){
-    		    		 
-    		    	 }
     		    	 break;
     		     case 3:
-    		    	 mitest.ShowNeighbours(source,Config.termType);
-    		    	 desti=miscan.nextInt();
-    		    	 //mitest.getNeighbour(desti, source, Config.termType);
-    		    	 try{
-    		    		 n=mitest.getNeighbour(desti, source, Config.termType);
-        		    	 mitest.getNode(source).removeEdge(n);
-        		    	 }catch(Exception ex){
-        		    		 
-        		    	 }
+    		    	 n=mitest.eraseEdgePaper(miscan,source,Config.termType);
     		    	 break;
 
     		     }
@@ -353,15 +348,15 @@ public class TestNode {
     		 else{
     			 
     		 
-    		 System.out.println("Tria el node desti per esborrar l'aresta indicant el seu id intern");
-    		 mitest.ShowNeighbours(source);
-    		 desti=miscan.nextInt();
-    		 n=mitest.getNeighbour(source,desti);
-    		 mitest.removeEdge(source, desti);
+    			System.out.println("Tria el node desti per esborrar l'aresta indicant el seu id intern");
+    			mitest.ShowNeighbours(source);
+    			desti=miscan.nextInt();
+    			n=mitest.getNeighbour(source,desti);
+    			mitest.removeEdge(source, desti);
     		 }
     		 break;
     		 case 4:
-    		 mitest.ShowContent();
+    			 mitest.ShowContent();
     		 break;
     	     case 5:
     	    	 mitest.eraseAllEdges();
@@ -404,12 +399,7 @@ public class TestNode {
     		    break;
     		   
     	 
-    	     case 8: System.out.println("Tria quin node vols esborrar indicant el seu id intern\n");
-    	             mitest.listNode();
-    	             esborrar=miscan.nextInt();
-    	             n=mitest.getNode(esborrar);
-    	             System.out.println("Se ha borrado el nodo "+n.getID()+" "+n.getName()+"del tipus "+n.getType());
-    	             mitest.removeNode(n);
+    	     case 8: mitest.dropNode(miscan);
     	             break;
     	     case 9: System.out.println("Se han destruido todos los nodos");
     	             mitest.reinitTest();
