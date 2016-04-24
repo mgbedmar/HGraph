@@ -1,0 +1,43 @@
+\documentclass[a4paper,11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[catalan]{babel}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage[left=3cm,top=3cm,right=2.5cm,bottom=2.5cm]{geometry}
+\usepackage{verbatim}
+\usepackage{hyperref}
+
+\title{Especificació dels jocs de prova per Graph}
+\author{Grup 14.2}
+\date{ }
+
+\begin{document}
+\maketitle
+\tableofcontents
+\newpage
+
+\section{jpAddRemRem}
+ \subsubsection*{Descripció}
+ Els casos d'ús que es proven són:
+ \begin{itemize}
+  \item Afegir un node al graf.
+  \item Esborrar un node del graf.
+  \item Esborrar un node del graf (cas en que no existeix).
+ \end{itemize}
+ S'afegeix un autor i s'esborra dues vegades. A la segona s'avisa que no existeix cap node.
+ 
+ \subsubsection*{Objectius}
+ Afegir i esborrar nodes correctament, avisant a l'usuari quan no existeix el node introduït.
+ 
+ \subsubsection*{Entrada}
+ Al fitxer \verb jpAddRemRem.in .
+ 
+ \subsubsection*{Sortida}
+ Al fitxer \verb jpAddRemRem.out .
+ 
+ \subsubsection*{Resultat}
+ Correcte.
+ \newpage
+ 

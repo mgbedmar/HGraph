@@ -9,7 +9,7 @@
 \usepackage{verbatim}
 \usepackage{hyperref}
 
-\title{Especificació dels jocs de prova per Graph}
+\title{Especificació dels jocs de prova per HeteSim}
 \author{Grup 14.2}
 \date{ }
 
@@ -18,26 +18,52 @@
 \tableofcontents
 \newpage
 
-\section{jpAddRemRem}
+El graf utilitzat per les dues proves es pot carregar usant l'entrada de
+\verb hetesimgraf.txt .
+
+\section{jpWithoutInter}
  \subsubsection*{Descripció}
  Els casos d'ús que es proven són:
  \begin{itemize}
-  \item Afegir un node al graf.
-  \item Esborrar un node del graf.
-  \item Esborrar un node del graf (cas en que no existeix).
+  \item Calcular el HeteSim de dos nodes (cas sense tipus intermig).
  \end{itemize}
- S'afegeix un autor i s'esborra dues vegades. A la segona s'avisa que no existeix cap node.
+ Es carrega un graf i es calcula el HeteSim entre un autor i un terme 
+ mitjançant el camí $APAPT$. La sortida s'ha verificat a mà.
  
  \subsubsection*{Objectius}
- Afegir i esborrar nodes correctament, avisant a l'usuari quan no existeix el node introduït.
+ Calcular correctament el HeteSim en el cas d'un camí de mida parella (en nombre
+ de relacions).
  
  \subsubsection*{Entrada}
- Al fitxer \verb jpAddRemRem.in .
+ Al fitxer \verb jpWithoutInter.in .
  
  \subsubsection*{Sortida}
- Al fitxer \verb jpAddRemRem.out .
+ Al fitxer \verb jpWithoutInter.out .
  
  \subsubsection*{Resultat}
  Correcte.
  \newpage
  
+ 
+\section{jpWithInter}
+ \subsubsection*{Descripció}
+ Els casos d'ús que es proven són:
+ \begin{itemize}
+  \item Calcular el HeteSim de dos nodes (cas amb tipus intermig).
+ \end{itemize}
+ Es carrega un graf i es calcula el HeteSim entre un autor i un paper 
+ mitjançant el camí $APTPAP$. La sortida s'ha verificat a mà.
+ 
+ \subsubsection*{Objectius}
+ Calcular correctament el HeteSim en el cas d'un camí de mida senar (en nombre
+ de relacions).
+ 
+ \subsubsection*{Entrada}
+ Al fitxer \verb jpWithInter.in .
+ 
+ \subsubsection*{Sortida}
+ Al fitxer \verb jpWithInter.out .
+ 
+ \subsubsection*{Resultat}
+ Correcte.
+ \end{document}
