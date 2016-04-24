@@ -57,7 +57,10 @@ public class TestNode {
         this.listNode();
         desti = miscan.nextInt();
         this.addEdge(source, desti);
-        System.out.println("S'ha afegit l'aresta que va de " + this.getNode(source).getID() + " " + this.getNode(source).getName() + " " + this.getNode(source).getType() + " al node " + this.getNode(desti).getID() + " " + this.getNode(desti).getName() + " " + this.getNode(desti).getType());
+        System.out.println("S'ha afegit l'aresta que va de " + this.getNode(source).getID() +
+                " " + this.getNode(source).getName() + " " + this.getNode(source).getType() +
+                " al node " + this.getNode(desti).getID() + " " + this.getNode(desti).getName() +
+                " " + this.getNode(desti).getType());
     }
 
     private void eraseAllEdges() {
