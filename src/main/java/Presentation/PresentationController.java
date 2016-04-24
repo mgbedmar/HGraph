@@ -618,7 +618,35 @@ public class PresentationController
      * Mostra el menu per editar el graf i gestiona les opcions
      */
     private static void goToEditGraph() {
-
+        Integer x;
+        do{
+            showGraphMenu();
+            x = readInt();
+            in.nextLine(); //Consume '\n'
+            switch(x)
+            {
+                case 0:
+                    break;
+                case 1:
+                    addNode();
+                    break;
+                case 2:
+                    removeNode();
+                    break;
+                case 3:
+                    modifyNode();
+                    break;
+                case 4:
+                    addEdge();
+                    break;
+                case 5:
+                    removeEdge();
+                    break;
+                default:
+                    System.out.println("Si us plau, escriu una opció vàlida.");
+                    break;
+            }
+        }while(x != 0);
     }
 
     /**
