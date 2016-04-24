@@ -41,24 +41,22 @@
  Correcte.
  \newpage
  
- \section{query1to1}
+ \section{query1toN}
  \subsubsection*{Descripció}
  Els casos d'ús que es proven són:
  \begin{itemize}
-  \item Consulta 1 a 1 (quan el HeteSim és positiu).
-  \item Consulta 1 a 1 (quan el HeteSim és zero).
-  \item Consulta 1 a 1 (quan un dels nodes no existeix).
+  \item Consulta 1 a N.
  \end{itemize}
  S'afegeix el graf d'exemple del article de Shi et al. i es prova la consulta 
- 1 a 1 en els casos especificats.
+ 1 a N.
  \subsubsection*{Objectius}
- Comprovar la funcionalitat de consulta 1 a 1.
+ Comprovar la funcionalitat de consulta 1 a N.
  
  \subsubsection*{Entrada}
- Al fitxer \verb query1to1.in .
+ Al fitxer \verb query1toN.in .
  
  \subsubsection*{Sortida}
- Al fitxer \verb query1to1.out .
+ Al fitxer \verb query1toN.out .
  
  \subsubsection*{Resultat}
  Correcte.
@@ -85,3 +83,27 @@
  \subsubsection*{Resultat}
  Correcte.
  \newpage
+ 
+ \section{queryByReference}
+ \subsubsection*{Descripció}
+ Els casos d'ús que es proven són:
+ \begin{itemize}
+  \item Consulta N a N (quan hi ha tipus intermig).
+  \item Consulta N a N (quan no hi ha tipus intermig).
+ \end{itemize}
+ S'afegeix el graf d'exemple del article de Shi et al. i es prova la consulta 
+ per referència.
+ \subsubsection*{Objectius}
+ Comprovar la funcionalitat de consulta per referència.
+ 
+ \subsubsection*{Entrada}
+ Al fitxer \verb queryByReference.in .
+ 
+ \subsubsection*{Sortida}
+ Al fitxer \verb queryByReference.out .
+ 
+ \subsubsection*{Resultat}
+ Correcte.
+ \newpage
+ 
+\end{document}
