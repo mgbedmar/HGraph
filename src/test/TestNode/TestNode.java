@@ -100,8 +100,10 @@ public class TestNode {
                 for (Node vecino :misnodos.get(i).getNeighbours(Config.authorType))
                 {
                 	try{
+                		
                         misnodos.get(i).removeEdge(vecino);
-                    }
+                        misnodos.get(i).getNeighbours(Config.authorType).remove(vecino);
+                	}
                     catch (DomainException ex)
                     {
                     	System.out.println(ex.getFriendlyMessage());
@@ -116,6 +118,9 @@ public class TestNode {
                     try
                     {
                         misnodos.get(i).removeEdge(vecino);
+                    	misnodos.get(i).getNeighbours(Config.confType).remove(vecino);
+
+                       
                     }
                     catch (DomainException ex)
                     {
@@ -131,6 +136,8 @@ public class TestNode {
                     try
                     {
                         misnodos.get(i).removeEdge(vecino);
+                    	misnodos.get(i).getNeighbours(Config.termType).remove(vecino);
+                       
                     }
                     catch (DomainException ex)
                     {
@@ -149,7 +156,9 @@ public class TestNode {
             	{
             		try
             		{
-            		misnodos.get(i).removeEdge(vecino);
+            			misnodos.get(i).removeEdge(vecino);
+            			misnodos.get(i).getNeighbours().remove(vecino);
+            			
             
             		}catch(DomainException ex){
             			System.out.println(ex.getFriendlyMessage());
