@@ -131,20 +131,26 @@ public class TestNode {
 
     public void ShowContent() {
         for (int i = 0; i < misnodos.size(); i++)
-        {
-            System.out.println("Tenim el següent node :" + misnodos.get(i).getID() +
-                    "del tipo " + misnodos.get(i).getType() + "y su contenido es " +
-                    misnodos.get(i).getName());
-
+        {    
+        	if(!misnodos.get(i).getType().equals(Config.ghostType))
+        			{
+        				System.out.println("Tenim el següent node :" + misnodos.get(i).getID() +
+        				"del tipo " + misnodos.get(i).getType() + "y su contenido es " +
+        				misnodos.get(i).getName());
+        			}
             if (!misnodos.get(i).getType().equals(Config.paperType))
                 this.ShowNeighbours(i);
-            else
+            else if (misnodos.get(i).equals(Config.paperType))
             {
                 System.out.println("Su lista de adyacencias por tipos es ");
 
                 this.ShowNeighbours(i, Config.authorType);
                 this.ShowNeighbours(i, Config.confType);
                 this.ShowNeighbours(i, Config.termType);
+            }
+            else 
+            {
+            	System.out.println("Tenim un node Ghost amb id "+misnodos.get(i).getID()+"sense cap adjacent");;
             }
         }
     }
@@ -321,12 +327,17 @@ public class TestNode {
         while (itr.hasNext())
         {
             n = (Node) itr.next();
-            System.out.print(j + "\t\t " + n.getID() + "");
-            System.out.print("\t" + n.getName() + "\t ");
-            System.out.print("" + n.getType());
-            System.out.print("\n");
-            j++;
-        }
+            if(!n.getType().equals(Config.ghostType))
+            {
+            	System.out.print(j + "\t\t " + n.getID() + "");
+            	System.out.print("\t" + n.getName() + "\t ");
+            	System.out.print("" + n.getType());
+            	System.out.print("\n");
+            	j++;
+             }
+           
+            
+         }
         System.out.println("No té més adjacents");
     }
 
