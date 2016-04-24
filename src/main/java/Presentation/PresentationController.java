@@ -369,11 +369,9 @@ public class PresentationController
      */
     private static void hideRows() {
         info("Escriu el primer numero del rang:");
-        Integer x1 = in.nextInt();
-        in.nextLine(); //Consume '\n'
+        Integer x1 = readInt();
         info("Escriu el segon numero del rang:");
-        Integer x2 = in.nextInt();
-        in.nextLine(); //Consume '\n'
+        Integer x2 = readInt();
         dc.hideResultRows(x1, x2);
     }
 
