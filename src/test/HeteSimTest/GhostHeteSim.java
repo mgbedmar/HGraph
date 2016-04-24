@@ -163,6 +163,7 @@ public class GhostHeteSim {
         info("Introdueix el nom del node: ");
         String name = in.nextLine();
         String type = readType();
+        info("Introdueix la id del node: ");
         Integer id = readInt();
         Node nr = null;
         switch(type)
