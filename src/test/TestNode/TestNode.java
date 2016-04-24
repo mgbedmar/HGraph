@@ -1,5 +1,5 @@
 package TestNode;
-
+import TestNode.DomainException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Scanner;
@@ -27,7 +27,7 @@ public class TestNode {
         return misnodos.get(i);
     }
 
-    public void afegirNode(Node node) {
+     private void afegirNode(Node node) {
         misnodos.add(node);
     }
 
@@ -79,7 +79,7 @@ public class TestNode {
                     {
                         misnodos.get(i).removeEdge((Node) itr.next());
                     }
-                    catch (Exception ex)
+                    catch (DomainException ex)
                     {
                         ex.printStackTrace();
 
@@ -92,7 +92,7 @@ public class TestNode {
                     {
                         misnodos.get(i).removeEdge((Node) itr.next());
                     }
-                    catch (Exception ex)
+                    catch (DomainException ex)
                     {
                         ex.printStackTrace();
 
@@ -106,7 +106,7 @@ public class TestNode {
                     {
                         misnodos.get(i).removeEdge((Node) itr.next());
                     }
-                    catch (Exception ex)
+                    catch (DomainException ex)
                     {
                         ex.printStackTrace();
 
@@ -123,7 +123,7 @@ public class TestNode {
                     {
                         misnodos.get(i).removeEdge((Node) itr.next());
                     }
-                    catch (Exception ex)
+                    catch (DomainException ex)
                     {
 
                     }
@@ -166,7 +166,7 @@ public class TestNode {
         {
             misnodos.get(i).addEdge(misnodos.get(j));
         }
-        catch (Domain.DomainException e)
+        catch (DomainException e)
         {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -194,9 +194,9 @@ public class TestNode {
                     misnodos.get(i).addEdge(misnodos.get(j));
 
                 }
-                catch (Exception ex)
+                catch (DomainException ex)
                 {
-                    System.out.println(ex);
+                    ex.printStackTrace();
                 }
             }
         }
@@ -368,7 +368,7 @@ public class TestNode {
         Node n = null;
         Scanner miscan = new Scanner(System.in);
         int option = 0;
-        int id, tipus, source, desti, aresta, esborrar;
+        int id, tipus, source, desti, aresta;
         String nombre;
 
         while (option != 10)
