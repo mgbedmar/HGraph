@@ -176,7 +176,7 @@ public class TestNode {
         	if(!misnodos.get(i).getType().equals(Config.ghostType))
         			{
         				System.out.println("Tenim el següent node :" + misnodos.get(i).getID() +
-        				"del tipo " + misnodos.get(i).getType() + "y su contenido es " +
+        				"del tipo " + misnodos.get(i).getType() + "y el seu contingut es " +
         				misnodos.get(i).getName());
         			
         	if (!misnodos.get(i).getType().equals(Config.paperType))
@@ -186,7 +186,7 @@ public class TestNode {
         	}
             else if (misnodos.get(i).getType().equals(Config.paperType))
             {
-                System.out.println("Su lista de adyacencias por tipos es ");
+                System.out.println("La seva llista d'adjacències per tipus és ");
 
                 this.ShowNeighbours(i, Config.authorType);
                 this.ShowNeighbours(i, Config.confType);
@@ -203,7 +203,7 @@ public class TestNode {
     }
 
     private void listNode() {
-        info("Id interno \t IdClase\tContingut\t Tipus");
+        info("Id intern \t IdClase\tContingut\t Tipus");
         for (int i = 0; i < misnodos.size(); i++)
         {
             System.out.println(+i + "\t \t" + misnodos.get(i).getID() + "\t \t" +
@@ -316,8 +316,8 @@ public class TestNode {
         Node n = null;
         if (itr.hasNext())
         {
-            for (int j = 1; j <= i; j++)
-                n = (Node) itr.next();
+            for (int j = 0; j < i; j++)
+                n =  itr.next();
         }
 
         return n;
@@ -362,7 +362,7 @@ public class TestNode {
 
         if (itr.hasNext())
         {
-            for (int j = 1; j <= i; j++)
+            for (int j = 0; j < i; j++)
                 n = (Node) itr.next();
         }
 
@@ -419,7 +419,7 @@ public class TestNode {
         this.listNode();
         esborrar = miscan.nextInt();
         n = this.getNode(esborrar);
-        System.out.println("Se ha borrado el nodo " + n.getID() + " " + n.getName() + "del tipus " + n.getType());
+        System.out.println("Se ha esborrat  el nodo " + n.getID() + " " + n.getName() + "del tipus " + n.getType());
         this.removeNode(n);
     }
 
@@ -435,7 +435,7 @@ public class TestNode {
 
         while (option != 10)
         {
-            info("Tria una opcio:\n1 Crear node\n2 Afegir aresta\n3 Esborrar aresta \n4 Mostrar info tots els nodes creats \n5 Esborrar totes les arestes,\n6 Afegir totes les arestes\n7 Consultar adjiacencies\n8 EsborrarNode\n9 Esborrar tots els nodes\n10 Sortir\n");
+            info("Tria una opcio:\n1 Crear node\n2 Afegir aresta \n4 Mostrar info tots els nodes creats ,\n6 Afegir totes les arestes\n7 Consultar adjacències\n9 Esborrar tots els nodes\n10 Sortir\n");
             option = miscan.nextInt();
 
             switch (option)
@@ -538,7 +538,7 @@ public class TestNode {
                     mitest.dropNode(miscan);
                     break;
                 case 9:
-                    info("Se han destruido todos los nodos");
+                    info("S'han destruit tots els nodes");
                     mitest.reinitTest();
             }
 
