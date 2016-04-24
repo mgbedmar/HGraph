@@ -87,21 +87,20 @@ public class TestNode {
                 " " + this.getNode(desti).getType());
     }
 
-    private void eraseAllEdges() {
-        Iterator<Node> itr;
+    private void eraseAllEdges() 
+    {
+       
         Node n = null;
         for (int i = 0; i < misnodos.size(); i++)
         {
-            itr = misnodos.get(i).getNeighbours().iterator();
+           
             n = misnodos.get(i);
             if (n.getType().equals(Config.paperType))
             {
-                itr = misnodos.get(i).getNeighbours(Config.authorType).iterator();
-                while (itr.hasNext())
+                for (Node vecino :misnodos.get(i).getNeighbours(Config.authorType))
                 {
-                    try
-                    {
-                        misnodos.get(i).removeEdge((Node) itr.next());
+                	try{
+                        misnodos.get(i).removeEdge(vecino);
                     }
                     catch (DomainException ex)
                     {
@@ -111,12 +110,12 @@ public class TestNode {
 
                     }
                 }
-                itr = misnodos.get(i).getNeighbours(Config.confType).iterator();
-                while (itr.hasNext())
+                
+                for (Node vecino :misnodos.get(i).getNeighbours(Config.confType))
                 {
                     try
                     {
-                        misnodos.get(i).removeEdge((Node) itr.next());
+                        misnodos.get(i).removeEdge(vecino);
                     }
                     catch (DomainException ex)
                     {
@@ -127,12 +126,11 @@ public class TestNode {
                     }
 
                 }
-                itr = misnodos.get(i).getNeighbours(Config.termType).iterator();
-                while (itr.hasNext())
+                for (Node vecino :misnodos.get(i).getNeighbours(Config.termType))
                 {
                     try
                     {
-                        misnodos.get(i).removeEdge((Node) itr.next());
+                        misnodos.get(i).removeEdge(vecino);
                     }
                     catch (DomainException ex)
                     {
@@ -146,24 +144,23 @@ public class TestNode {
 
             }
             else
-            {
-                while (itr.hasNext())
-                {
-                    try
-                    {
-                        misnodos.get(i).removeEdge((Node) itr.next());
-                    }
-                    catch (DomainException ex)
-                    {
-                    	System.out.println(ex.getFriendlyMessage());
+            {  
+            	for (Node vecino: misnodos.get(i).getNeighbours()) 
+            	{
+            		try
+            		{
+            		misnodos.get(i).removeEdge(vecino);
+            
+            		}catch(DomainException ex){
+            			System.out.println(ex.getFriendlyMessage());
                         if(debug)
                             ex.printStackTrace(System.err);
-                    }
-                }
+            		}
+            }   
+            
             }
         }
     }
-
     public void ShowContent() {
         for (int i = 0; i < misnodos.size(); i++)
         {    
@@ -190,8 +187,9 @@ public class TestNode {
         			}
             else 
             {
-            	System.out.println("Tenim un node Ghost amb id "+misnodos.get(i).getID()+"sense cap adjacent");;
+            	System.out.println("Tenim un node Ghost amb id "+misnodos.get(i).getID()+"sense cap adjacent");
             }
+            
         }
     }
 
