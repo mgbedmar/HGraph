@@ -41,10 +41,9 @@ public class TestNode {
     }
 
     private void reinitTest() {
-        for (int i = 0; i < misnodos.size(); i++)
-        {
-            misnodos.remove(misnodos.get(i));
-        }
+        
+            misnodos.clear();
+        
     }
 
 
