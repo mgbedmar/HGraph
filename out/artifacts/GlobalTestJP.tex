@@ -1,0 +1,364 @@
+\documentclass[a4paper,11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[catalan]{babel}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage[left=3cm,top=3cm,right=2.5cm,bottom=2.5cm]{geometry}
+\usepackage{verbatim}
+\usepackage{hyperref}
+
+\title{Especificació dels jocs de prova pel sistema global}
+\author{Grup 14.2}
+\date{ }
+
+\begin{document}
+\maketitle
+\tableofcontents
+\newpage
+
+\section{addNode}
+ \subsubsection*{Descripció}
+ Els casos d'ús que es proven són:
+ \begin{itemize}
+  \item Afegir un node al graf.
+ \end{itemize}
+ S'afegeix un node.
+ 
+ \subsubsection*{Objectius}
+ Afegir un node al graf.
+ 
+ \subsubsection*{Entrada}
+ Al fitxer \verb addNode.in .
+ 
+ \subsubsection*{Sortida}
+ Al fitxer \verb addNode.out .
+ 
+ \subsubsection*{Resultat}
+ Correcte.
+ \newpage
+ 
+ \section{addEdge}
+ \subsubsection*{Descripció}
+ Els casos d'ús que es proven són:
+ \begin{itemize}
+  \item Afegir un node al graf.
+  \item Afegir una aresta al graf.
+ \end{itemize}
+ S'afegeix un node autor i un altre paper i una aresta entre ells.
+ 
+ \subsubsection*{Objectius}
+ Afegir arestes.
+ 
+ \subsubsection*{Entrada}
+ Al fitxer \verb addEdge.in .
+ 
+ \subsubsection*{Sortida}
+ Al fitxer \verb addEdge.out .
+ 
+ \subsubsection*{Resultat}
+ Correcte.
+ \newpage
+ 
+ \section{addWrongEdge}
+ \subsubsection*{Descripció}
+ Els casos d'ús que es proven són:
+ \begin{itemize}
+  \item Afegir una aresta al graf (cas de tipus incompatibles).
+ \end{itemize}
+ S'afegeix un node autor i un altre term, i s'intenta afegir una aresta entre ells.
+ 
+ \subsubsection*{Objectius}
+ Comprovar l'avís d'aresta errònia.
+ 
+ \subsubsection*{Entrada}
+ Al fitxer \verb addWrongEdge.in .
+ 
+ \subsubsection*{Sortida}
+ Al fitxer \verb addWrongEdge.out .
+ 
+ \subsubsection*{Resultat}
+ Correcte.
+ 
+ 
+ \newpage\section{removeNode}
+ \subsubsection*{Descripció}
+ Els casos d'ús que es proven són:
+ \begin{itemize}
+  \item Afegir un node al graf.
+  \item Esborrar un node del graf.
+ \end{itemize}
+ S'afegeix un node i després s'esborra.
+ 
+ \subsubsection*{Objectius}
+ Esborrar un node del graf.
+ 
+ \subsubsection*{Entrada}
+ Al fitxer \verb removeNode.in .
+ 
+ \subsubsection*{Sortida}
+ Al fitxer \verb removeNode.out .
+ 
+ \subsubsection*{Resultat}
+ Correcte.
+ \newpage
+ 
+ \section{removeEdge}
+ \subsubsection*{Descripció}
+ Els casos d'ús que es proven són:
+ \begin{itemize}
+  \item Esborrar una aresta.
+ \end{itemize}
+ S'afegeixen dos nodes i una aresta entre ells. Després s'esborra l'aresta.
+ 
+ \subsubsection*{Objectius}
+ Esborrar arestes.
+ 
+ \subsubsection*{Entrada}
+ Al fitxer \verb removeEdge.in .
+ 
+ \subsubsection*{Sortida}
+ Al fitxer \verb removeEdge.out .
+ 
+ \subsubsection*{Resultat}
+ Correcte.
+ \newpage
+ 
+ \section{dupNames}
+ \subsubsection*{Descripció}
+ Els casos d'ús que es proven són:
+ \begin{itemize}
+  \item Distingir nodes de nom repetit.
+ \end{itemize}
+ S'afegeixen dos nodes amb el mateix nom. Després s'intenta esborrar un i surt 
+ un avís per triar quin dels dos s'ha d'esborrar.
+ 
+ \subsubsection*{Objectius}
+ Distingir nodes de nom repetit.
+ 
+ \subsubsection*{Entrada}
+ Al fitxer \verb dupNames.in .
+ 
+ \subsubsection*{Sortida}
+ Al fitxer \verb dupNames.out .
+ 
+ \subsubsection*{Resultat}
+ Correcte.
+ \newpage
+ 
+\section{jpAddRemRem}
+ \subsubsection*{Descripció}
+ Els casos d'ús que es proven són:
+ \begin{itemize}
+  \item Afegir un node al graf.
+  \item Esborrar un node del graf.
+  \item Esborrar un node del graf (cas en que no existeix).
+ \end{itemize}
+ S'afegeix un autor i s'esborra dues vegades. A la segona s'avisa que no existeix cap node.
+ 
+ \subsubsection*{Objectius}
+ Afegir i esborrar nodes correctament, avisant a l'usuari quan no existeix el node introduït.
+ 
+ \subsubsection*{Entrada}
+ Al fitxer \verb jpAddRemRem.in .
+ 
+ \subsubsection*{Sortida}
+ Al fitxer \verb jpAddRemRem.out .
+ 
+ \subsubsection*{Resultat}
+ Correcte.
+ \newpage
+ 
+ 
+ \section{jpEdges}
+ \subsubsection*{Descripció}
+ Els casos d'ús que es proven són:
+ \begin{itemize}
+  \item Afegir una aresta.
+  \item Consultar nodes i arestes.
+  \item Esborrar una aresta.
+  \item Esborrar una aresta (cas en que no existeix).
+ \end{itemize}
+ S'afegeixen dos autors i un paper, i una aresta entre cada autor i el paper. Es consulten els nodes i arestes. Després
+ s'esborra l'aresta entre el paper i un dels autors, dues vegades: la primera s'esborra amb èxit, a la segona surt un 
+ missatge aclarint que l'aresta no existeix. Es torna a consultar l'estat del graf.
+ 
+ \subsubsection*{Objectius}
+ Afegir i esborrar arestes correctament, avisant a l'usuari quan no existeix l'aresta introduida. 
+ Consultar nodes i arestes.
+ 
+ \subsubsection*{Entrada}
+ Al fitxer \verb jpEdges.in .
+ 
+ \subsubsection*{Sortida}
+ Al fitxer \verb jpEdges.out .
+ 
+ \subsubsection*{Resultat}
+ Correcte.
+ \newpage
+ 
+  
+ \section{jpInvalidTypes}
+ \subsubsection*{Descripció}
+ Els casos d'ús que es proven són:
+ \begin{itemize}
+  \item Afegir una aresta (entre tipus incompatibles).
+  \item Afegir una aresta (entre un node que existeix i un altre que no).
+  \item Esborrar un node del graf (cas en que no existeix).
+ \end{itemize}
+ Afegeix tres nodes, un paper, un term i una conf. Intenta afegir una aresta entre
+ la conf i el term i no es pot per tipus incompatibles. Intenta afegir una aresta 
+ entre el paper i un autor inexistent, i tampoc es permet. Intenta esborrar un 
+ autor inexistent i surt un avís.
+ 
+ \subsubsection*{Objectius}
+ Comprovar si surten avisos quan s'intenten afegir arestes impossibles.
+ 
+ \subsubsection*{Entrada}
+ Al fitxer \verb jpInvalidTypes.in .
+ 
+ \subsubsection*{Sortida}
+ Al fitxer \verb jpInvalidTypes.out .
+ 
+ \subsubsection*{Resultat}
+ Correcte.
+  \newpage
+ 
+ 
+  \section{jpNeighAfterRemNode}
+ \subsubsection*{Descripció}
+ Els casos d'ús que es proven són:
+ \begin{itemize}
+  \item Esborrar un node (que té arestes).
+  \item Consulta de veïns (després d'esborrar algun veï).
+ \end{itemize}
+ Afegeix un node terme i un altre paper, i una aresta entre ells.
+Despres esborra el node terme i consulta els veins del paper. 
+El node terme ja no hi apareix.
+ 
+ \subsubsection*{Objectius}
+ Comprovar si quan s'esborren nodes, s'esborra correctament tot el seu rastre 
+ del graf.
+ 
+ \subsubsection*{Entrada}
+ Al fitxer \verb jpNeighAfterRemNode.in .
+ 
+ \subsubsection*{Sortida}
+ Al fitxer \verb jpNeighAfterRemNode.out .
+ 
+ \subsubsection*{Resultat}
+ Correcte.
+  \newpage
+  
+  \section{query1to1}
+ \subsubsection*{Descripció}
+ Els casos d'ús que es proven són:
+ \begin{itemize}
+  \item Consulta 1 a 1 (quan el HeteSim és positiu).
+  \item Consulta 1 a 1 (quan el HeteSim és zero).
+  \item Consulta 1 a 1 (quan un dels nodes no existeix).
+ \end{itemize}
+ S'afegeix el graf d'exemple del article de Shi et al. i es prova la consulta 
+ 1 a 1 en els casos especificats.
+ \subsubsection*{Objectius}
+ Comprovar la funcionalitat de consulta 1 a 1.
+ 
+ \subsubsection*{Entrada}
+ Al fitxer \verb query1to1.in .
+ 
+ \subsubsection*{Sortida}
+ Al fitxer \verb query1to1.out .
+ 
+ \subsubsection*{Resultat}
+ Correcte.
+ \newpage
+ 
+ \section{query1toN}
+ \subsubsection*{Descripció}
+ Els casos d'ús que es proven són:
+ \begin{itemize}
+  \item Consulta 1 a N.
+ \end{itemize}
+ S'afegeix el graf d'exemple del article de Shi et al. i es prova la consulta 
+ 1 a N.
+ \subsubsection*{Objectius}
+ Comprovar la funcionalitat de consulta 1 a N.
+ 
+ \subsubsection*{Entrada}
+ Al fitxer \verb query1toN.in .
+ 
+ \subsubsection*{Sortida}
+ Al fitxer \verb query1toN.out .
+ 
+ \subsubsection*{Resultat}
+ Correcte.
+ \newpage
+ 
+ \section{queryNtoN}
+ \subsubsection*{Descripció}
+ Els casos d'ús que es proven són:
+ \begin{itemize}
+  \item Consulta N a N (quan hi ha tipus intermig).
+  \item Consulta N a N (quan no hi ha tipus intermig).
+ \end{itemize}
+ S'afegeix el graf d'exemple del article de Shi et al. i es prova la consulta 
+ N a N en els casos especificats.
+ \subsubsection*{Objectius}
+ Comprovar la funcionalitat de consulta N a N.
+ 
+ \subsubsection*{Entrada}
+ Al fitxer \verb queryNtoN.in .
+ 
+ \subsubsection*{Sortida}
+ Al fitxer \verb queryNtoN.out .
+ 
+ \subsubsection*{Resultat}
+ Correcte.
+ \newpage
+ 
+ \section{queryByReference}
+ \subsubsection*{Descripció}
+ Els casos d'ús que es proven són:
+ \begin{itemize}
+  \item Consulta N a N (quan hi ha tipus intermig).
+  \item Consulta N a N (quan no hi ha tipus intermig).
+ \end{itemize}
+ S'afegeix el graf d'exemple del article de Shi et al. i es prova la consulta 
+ per referència.
+ \subsubsection*{Objectius}
+ Comprovar la funcionalitat de consulta per referència.
+ 
+ \subsubsection*{Entrada}
+ Al fitxer \verb queryByReference.in .
+ 
+ \subsubsection*{Sortida}
+ Al fitxer \verb queryByReference.out .
+ 
+ \subsubsection*{Resultat}
+ Correcte.
+ \newpage
+ 
+  \section{queryAndResult}
+ \subsubsection*{Descripció}
+ Els casos d'ús que es proven són:
+ \begin{itemize}
+  \item Gestió de filtres al resultat.
+  \item Ordenació del resultat.
+ \end{itemize}
+ S'afegeix el graf d'exemple del article de Shi et al. i es prova la consulta 
+ N a N. Amb el resultat obtingut s'apliquen els tipus possibles de filtres i 
+ s'ordena.
+ \subsubsection*{Objectius}
+ Comprovar la funcionalitat del resultat.
+ 
+ \subsubsection*{Entrada}
+ Al fitxer \verb queryAndResult.in .
+ 
+ \subsubsection*{Sortida}
+ Al fitxer \verb queryAndResult.out .
+ 
+ \subsubsection*{Resultat}
+ Correcte.
+ \newpage
+ \end{document}

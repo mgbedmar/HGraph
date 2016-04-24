@@ -258,6 +258,7 @@ public class DomainController
     {
         for(int i = x1; i < x2; i++)
             r.filter(i);
+        r.resetIndex();
     }
 
     public void hideResultName(String x)

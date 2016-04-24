@@ -1,0 +1,3 @@
+Node (tipus: author, nom: a) afegit.
+Node (tipus: author, nom: a) esborrat.
+El nom 'a' no correspon a cap node de tipus 'author'.
