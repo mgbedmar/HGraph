@@ -4,11 +4,11 @@
 2
 n1
 0
-10,125
+0,125
 2
 n2
 0
-9,1261
+0,01
 0
 2
 4
@@ -19,6 +19,3 @@ n2
 0
 0
 0
-
-
-Afegeix dos nodes amb una mesura hetesim i ordena el resultat primer per la primera columna i despres per la segona

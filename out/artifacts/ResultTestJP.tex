@@ -1,0 +1,113 @@
+\documentclass[a4paper,11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[catalan]{babel}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage[left=3cm,top=3cm,right=2.5cm,bottom=2.5cm]{geometry}
+\usepackage{verbatim}
+\usepackage{hyperref}
+
+\title{Especificació dels jocs de prova per Graph}
+\author{Grup 14.2}
+\date{ }
+
+\begin{document}
+\maketitle
+\tableofcontents
+\newpage
+
+\section{listNodes}
+ \subsubsection*{Descripció}
+ Els casos d'ús que es proven són:
+ \begin{itemize}
+  \item Afegir files al resultat (d'una columna).
+  \item Mostrar el resultat.
+ \end{itemize}
+ S'afegeix una fila de cada tipus i després es mostra el resultat.
+ 
+ \subsubsection*{Objectius}
+ Afegir files i mostrar-les.
+ 
+ \subsubsection*{Entrada}
+ Al fitxer \verb listNodes.in .
+ 
+ \subsubsection*{Sortida}
+ Al fitxer \verb listNodes.out .
+ 
+ \subsubsection*{Resultat}
+ Correcte.
+ \newpage
+ 
+ \section{selectName}
+ \subsubsection*{Descripció}
+ Els casos d'ús que es proven són:
+ \begin{itemize}
+  \item Afegir files al resultat (de tres columnes).
+  \item Mostrar el resultat.
+  \item Sel·leccionar només files que continguin un nom.
+ \end{itemize}
+ S'afegeixen files, es mostra el resultat i se sel·leccionen files per nom.
+ 
+ \subsubsection*{Objectius}
+ Provar el filtre de sel·lecció.
+ 
+ \subsubsection*{Entrada}
+ Al fitxer \verb selecName.in .
+ 
+ \subsubsection*{Sortida}
+ Al fitxer \verb selectName.out .
+ 
+ \subsubsection*{Resultat}
+ Correcte.
+ \newpage
+ 
+ 
+ \section{orderBy}
+ \subsubsection*{Descripció}
+ Els casos d'ús que es proven són:
+ \begin{itemize}
+  \item Afegir files al resultat (de dues columnes).
+  \item Mostrar el resultat.
+  \item Ordenar el resultat per cada columna.
+ \end{itemize}
+ S'afegeixen dues files i després s'ordena primer per una columna i després per 
+ l'altra.
+ 
+ \subsubsection*{Objectius}
+ Provar l'opció d'ordenar el resultat.
+ 
+ \subsubsection*{Entrada}
+ Al fitxer \verb orderBy.in .
+ 
+ \subsubsection*{Sortida}
+ Al fitxer \verb orderBy.out .
+ 
+ \subsubsection*{Resultat}
+ Correcte.
+ \newpage
+ 
+ \section{removeAllFilters}
+ \subsubsection*{Descripció}
+ Els casos d'ús que es proven són:
+ \begin{itemize}
+  \item Filtrar el resultat.
+  \item Treure els filtres.
+ \end{itemize}
+ S'afegeixen algunes files i després s'apliquen filtres i es treuen.
+ 
+ \subsubsection*{Objectius}
+ Provar filtres.
+ 
+ \subsubsection*{Entrada}
+ Al fitxer \verb removeAllFilters.in .
+ 
+ \subsubsection*{Sortida}
+ Al fitxer \verb removeAllFilters.out .
+ 
+ \subsubsection*{Resultat}
+ Correcte.
+ \newpage
+ 
+ \end{document}
