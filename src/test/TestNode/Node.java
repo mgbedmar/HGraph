@@ -3,12 +3,14 @@ import TestNode.DomainException;
 
 import java.util.Set;
 
+
+
 public abstract class Node {
     private int id;
     private String name;
     
     /**
-     * Constructor.
+     * Crea un node
      * @param name: el nom del node
      */
     public Node(String name) {
@@ -17,8 +19,9 @@ public abstract class Node {
     }
 
     /**
-     * Constructor.
-     * @param name: el nom del node
+     * Crea un node amb id
+     * @param name  el nom del node
+     * @param id id del node
      */
     public Node(int id, String name) {
         this.name = name;
@@ -26,7 +29,7 @@ public abstract class Node {
     }
 
     /**
-     * Getter.
+     * Getter. Retorna la id del node
      * @return id: identificador
      */
     public int getID() {
@@ -34,8 +37,8 @@ public abstract class Node {
     }
 
     /**
-     * Setter. Només un Graph pot editar la id
-     * @param id
+     * Setter. Nomes un Graph pot editar la id
+     * @param id nova id
      */
     public void setID(Integer id)
     {
@@ -64,7 +67,12 @@ public abstract class Node {
     	this.name = name;
     }
 
-    //dos nodes són iguals si són del mateix tipus i tenen la mateixa id
+    /**
+     * Dos nodes son iguals si son del mateix tipus i tenen la mateixa id
+     * @param obj objecte per comparar
+     * @return <em>true</em> si i nomes si son iguals
+     */
+    @Override
     public boolean equals(Object obj)
     {
         if (obj == null) return false;
@@ -75,6 +83,11 @@ public abstract class Node {
                 node.getID() == this.getID();
     }
 
+    /**
+     * Calcula un hashCode per un node.
+     * @return hashcode
+     */
+    @Override
     public int hashCode() {
         Integer a = new Integer(this.id);
         return a.hashCode();
@@ -88,19 +101,24 @@ public abstract class Node {
 
     /**
      * Getter.
-     * @return conjunt de veins de tipus type
+     * @param type tipus dels veins que es retornen
+     * @return conjunt de veins de tipus <em>type</em>
      */
     abstract Set<Node> getNeighbours(String type);
 
     /**
-     * Afegeix una aresta del p.i. a node. No afegeix l'aresta
-     * simetrica!
+     * Afegeix una aresta del p.i. a <em>node</em>. <b>No afegeix l'aresta
+     * simetrica!</b>
+     * @param node destí
+     * @throws DomainException si no existeix el node
      */
     abstract void addEdge(Node node) throws DomainException;
 
     /**
-     * Esborra l'aresta del p.i. a node. No esborra l'aresta
-     * simetrica!
+     * Esborra l'aresta del p.i. a node. <b>No esborra l'aresta
+     * simetrica!</b>
+     * @param node destí
+     * @throws DomainException si no existeix el node o l'aresta
      */
     abstract void removeEdge(Node node) throws DomainException;
 }
