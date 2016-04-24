@@ -200,28 +200,6 @@ public class QueryTest
             {
                 case 0 :
                     break;
-                case 1:
-                    hideRow();
-                    break;
-                case 2:
-                    hideRows();
-                    break;
-                case 3:
-                    filterName();
-                    break;
-                case 4:
-                    selectName();
-                    break;
-                case 5:
-                    sortByRow();
-                    break;
-                case 6:
-                    clearFilters();
-                    break;
-                default:
-                    System.out.println("Si us plau, escriu una opció vàlida.");
-                    dc.resetResult();
-                    break;
             }
         }while(x != 0);
     }
@@ -275,44 +253,6 @@ public class QueryTest
 
     private static void showResultMenu() {
         info("======Resultat de la consulta======");
-        Map<String, ArrayList<String>> filters =  dc.getFilters();
-        Integer filteredNamesSize = filters.get("filteredNames").size();
-        Integer filteredLinesSize = filters.get("filteredLines").size();
-        Integer selectedNamesSize = filters.get("selectedNames").size();
-
-        if(filteredLinesSize > 0 ||
-                filteredNamesSize > 0 ||
-                selectedNamesSize > 0)
-        {
-            info("Filtres:");
-            if(filteredLinesSize> 0)
-            {
-                info("Linies amagades:");
-                for(int i = 0; i < filteredLinesSize; i++)
-                {
-                    if(i%6 == 0)
-                        System.out.println();
-                    System.out.print(filters.get("filteredLines").get(i)+", ");
-                }
-            }
-
-            if(selectedNamesSize > 0)
-            {
-                info("Noms seleccionats:");
-                for(int i = 0; i < selectedNamesSize; i++)
-                {
-                    System.out.println("-"+filters.get("selectedNames").get(i));
-                }
-            }
-            else if(filteredNamesSize > 0)
-            {
-                info("Noms amagats:");
-                for(int i = 0; i < filteredNamesSize; i++)
-                {
-                    System.out.println("-"+filters.get("filteredNames").get(i));
-                }
-            }
-        }
         info("Resultat:");
 
         ArrayList<String> fila = dc.getResultRow();
@@ -326,6 +266,7 @@ public class QueryTest
             System.out.println();
             fila = dc.getResultRow();
         }
+        info("0 - tornar");
 
     }
 
