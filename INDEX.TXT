@@ -1,0 +1,56 @@
+-DOCS
+
+    -COMU
+        Especificacio_Cluster14.pdf: especificació el cluster
+    -GRUP
+        -Javadoc: conté la documentació en format html
+                  Per consultar-la es pot obrir, per exemple, 
+                  el fitxer allclasses-frame.html.
+        documentacio.pdf: conté la documentació en format pdf
+        grup.pdf: conté el diagrama de classes, disseny de pantalles, 
+                  repartiment de la feina i justificació de les
+                  estructures de dades i algorismes.
+        diagrama.png: imatge del diagrama per poder ampliar.
+        pantalles.png: imatge de les pantalles per poder ampliar.
+
+
+
+-FONTS
+
+ L'autor de cada classe es pot saber mitjançant la documentació 
+ Javadoc, el fitxer pdf del grup (grup.pdf) o el comentari inicial 
+ de cada fitxer de codi font.
+
+    -COMU
+        -Domain
+            -Graph: conté el codi font de Graph, Node i subclasses.
+            
+    -GRUP
+        -Presentation: conté el codi font de la vista provisional 
+                       per terminal.
+        -Domain: conté el codi font de totes les classes del domini.
+            -Graph: conté el codi font de Graph, Node i subclasses.
+        -Persistence: directori encara buit.
+            
+
+
+-EXE
+
+ Per executar qualsevol dels tests per línia de comandes:
+     #java -jar nom_del_executable.jar
+ Les sortides dels jocs de prova ometen els menús. Si es desitja 
+ executar de manera que s'ometin els menús:
+     #java -jar noverbose nom_del_executable.jar
+ Si es desitja obtenir el stackTrace de les excepcions:
+     #java -jar debug nom_del_executable.jar
+ Cada directori de test conté l'executable corresponent i un conjunt 
+ de jocs de prova (fitxers .in per l'entrada i .out per la sortida 
+ correcta). També un fitxer pdf que especifica els jocs de prova.
+
+ L'estructura de directoris interna:
+    -NodeTest
+    -GraphTest
+    -ResultTest
+    -HeteSimTest
+    -QueryTest
+    -GlobalTest

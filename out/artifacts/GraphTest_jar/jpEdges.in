@@ -48,12 +48,4 @@ p
 0
 
 
-Afegeix dos nodes autor i un node paper, i una aresta entre cada 
-autor i el paper. Fa consultes dels nodes que hi ha i els seus 
-veins. Despres esborra l'aresta entre el primer autor i 
-el paper dues vegades: la primera surt missatge de fet, la segona 
-surt missatge de no existeix. Consulta els veins del paper i nomes 
-surt l'autor que queda.
-
-
 

@@ -10,7 +10,3 @@ a
 0
 0
 0
-
-
-S'afegeix un node autor de nom a. Despres s'esborra. S'intenta tornar 
-a esborrar i es rep un avis.

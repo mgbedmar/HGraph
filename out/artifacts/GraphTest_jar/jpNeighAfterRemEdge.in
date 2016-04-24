@@ -20,8 +20,3 @@ p
 1
 0
 0
-
-
-Afegeix un node terme i un altre paper, i una aresta entre ells.
-Despres esborra el node terme i consulta els veins del paper. 
-El node terme ja no hi apareix.
