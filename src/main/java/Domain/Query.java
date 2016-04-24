@@ -179,6 +179,7 @@ public class Query {
         for (Node j: mat.cols(node)) {
             res.addRow(j, mat.value(node,j));
         }
+        res.sort(2, false);
         return res;
     }
 
@@ -203,6 +204,7 @@ public class Query {
                 res.addRow(d, mat.value(c,d));
             }
         }
+        res.sort(2, false);
         return res;
     }
 
@@ -225,6 +227,7 @@ public class Query {
                 res.addRow(a, b, mat.value(a,b));
             }
         }
+        res.sort(3, false);
         return res;
     }
 

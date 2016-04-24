@@ -12,15 +12,5 @@ Aresta (tipusA: author, nomA: a2, tipusB: paper, nomB: b3) afegida.
 Aresta (tipusA: author, nomA: a2, tipusB: paper, nomB: b4) afegida.
 Aresta (tipusA: author, nomA: a3, tipusB: paper, nomB: b4) afegida.
 0 a1 b1 0.70710677 
-1 a1 b2 0.5 
-2 a2 b2 0.40824828 
-3 a2 b3 0.57735026 
-4 a2 b4 0.40824828 
-5 a3 b4 0.70710677 
-0 a1 a1 1.0 
-1 a1 a2 0.40824828 
-2 a2 a1 0.40824828 
-3 a2 a2 1.0 
-4 a2 a3 0.57735026 
-5 a3 a2 0.57735026 
-6 a3 a3 1.0 
+0 a1 b4 0.0 
+El nom 'b5' no correspon a cap node
