@@ -140,8 +140,9 @@ public class TestNode {
         				System.out.println("Tenim el següent node :" + misnodos.get(i).getID() +
         				"del tipo " + misnodos.get(i).getType() + "y su contenido es " +
         				misnodos.get(i).getName());
-        			}
-            if (!misnodos.get(i).getType().equals(Config.paperType))
+        			
+        	if (!misnodos.get(i).getType().equals(Config.paperType))
+            
                 this.ShowNeighbours(i);
             else if (misnodos.get(i).equals(Config.paperType))
             {
@@ -151,6 +152,8 @@ public class TestNode {
                 this.ShowNeighbours(i, Config.confType);
                 this.ShowNeighbours(i, Config.termType);
             }
+            
+        			}
             else 
             {
             	System.out.println("Tenim un node Ghost amb id "+misnodos.get(i).getID()+"sense cap adjacent");;
