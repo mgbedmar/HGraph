@@ -174,9 +174,11 @@ public class TestNode {
         				misnodos.get(i).getName());
         			
         	if (!misnodos.get(i).getType().equals(Config.paperType))
+        	{
             
                 this.ShowNeighbours(i);
-            else if (misnodos.get(i).equals(Config.paperType))
+        	}
+            else if (misnodos.get(i).getType().equals(Config.paperType))
             {
                 System.out.println("Su lista de adyacencias por tipos es ");
 
