@@ -105,7 +105,9 @@ public class TestNode {
                     }
                     catch (DomainException ex)
                     {
-                        ex.printStackTrace();
+                    	System.out.println(ex.getFriendlyMessage());
+                        if(debug)
+                            ex.printStackTrace(System.err);
 
                     }
                 }
@@ -118,7 +120,9 @@ public class TestNode {
                     }
                     catch (DomainException ex)
                     {
-                        ex.printStackTrace();
+                    	System.out.println(ex.getFriendlyMessage());
+                        if(debug)
+                            ex.printStackTrace(System.err);
 
                     }
 
@@ -132,7 +136,9 @@ public class TestNode {
                     }
                     catch (DomainException ex)
                     {
-                        ex.printStackTrace();
+                    	System.out.println(ex.getFriendlyMessage());
+                        if(debug)
+                            ex.printStackTrace(System.err);
 
                     }
 
@@ -149,7 +155,9 @@ public class TestNode {
                     }
                     catch (DomainException ex)
                     {
-
+                    	System.out.println(ex.getFriendlyMessage());
+                        if(debug)
+                            ex.printStackTrace(System.err);
                     }
                 }
             }
@@ -202,7 +210,9 @@ public class TestNode {
         catch (DomainException e)
         {
             // TODO Auto-generated catch block
-            e.printStackTrace();
+        	System.out.println(e.getFriendlyMessage());
+            if(debug)
+                e.printStackTrace(System.err);
         }
     }
 
@@ -229,7 +239,9 @@ public class TestNode {
                 }
                 catch (DomainException ex)
                 {
-                    ex.printStackTrace();
+                	System.out.println(ex.getFriendlyMessage());
+                    if(debug)
+                        ex.printStackTrace(System.err);
                 }
             }
         }
@@ -382,9 +394,11 @@ public class TestNode {
         {
             this.getNode(source).removeEdge(n);
         }
-        catch (Exception ex)
+        catch (DomainException ex)
         {
-
+        	System.out.println(ex.getFriendlyMessage());
+            if(debug)
+               ex.printStackTrace(System.err);
         }
         return n;//return node de l'aresta eliminada
     }
