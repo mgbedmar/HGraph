@@ -75,10 +75,18 @@ public class GhostHeteSim {
     private static void compareNode() {
         info("Indica la informació del node a comparar:");
         Node n2 = readNode();
-        if(n.equals(n2))
-            System.out.println("Son iguals.");
-        else
-            System.out.println("Son diferents.");
+        try
+        {
+            if(n.equals(n2))
+                System.out.println("Son iguals.");
+            else
+                System.out.println("Son diferents.");
+        }
+        catch(NullPointerException e)
+        {
+            System.out.println("Si us plau, inicialitza el node abans de consultar-lo.");
+        }
+
     }
 
     private static void queryNode() {
