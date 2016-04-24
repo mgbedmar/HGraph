@@ -238,7 +238,7 @@ public class Result {
     /**
      * Ordena el resultat segons el valor de la columna
      * <em>numCol</em>, ascendentment si <em>ascend</em> es cert i
-     * descendentment si es fals
+     * descendentment si es fals.
      * @param numCol numero de columna pel que es vol ordenar
      * @param ascend ascendent o no
      */

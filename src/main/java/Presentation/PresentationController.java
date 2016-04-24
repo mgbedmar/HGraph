@@ -416,10 +416,11 @@ public class PresentationController
                 info("Linies amagades:");
                 for(int i = 0; i < filteredLinesSize; i++)
                 {
-                    if(i%6 == 0)
+                    if(i > 0 && i%6 == 0)
                         System.out.println();
                     System.out.print(filters.get("filteredLines").get(i)+", ");
                 }
+                System.out.print("\n");
             }
 
             if(selectedNamesSize > 0)
@@ -430,7 +431,7 @@ public class PresentationController
                     System.out.println("-"+filters.get("selectedNames").get(i));
                 }
             }
-            else if(filteredNamesSize > 0)
+            if(filteredNamesSize > 0)
             {
                 info("Noms amagats:");
                 for(int i = 0; i < filteredNamesSize; i++)
