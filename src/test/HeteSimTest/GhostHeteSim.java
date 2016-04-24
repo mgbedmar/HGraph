@@ -82,7 +82,15 @@ public class GhostHeteSim {
     }
 
     private static void queryNode() {
-        System.out.println("Nom: "+n.getName()+" tipus: "+ n.getType() +" id: "+n.getID());
+        try
+        {
+            System.out.println("Nom: "+n.getName()+" tipus: "+ n.getType() +" id: "+n.getID());
+        }
+        catch(NullPointerException e)
+        {
+            System.out.println("Si us plau, inicialitza el node abans de consultar-lo.");
+        }
+
     }
 
 
