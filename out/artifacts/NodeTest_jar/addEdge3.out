@@ -1,0 +1,138 @@
+Tria una opcio:
+1 Crear node
+2 Afegir aresta 
+4 Mostrar info tots els nodes creats ,
+6 Afegir totes les arestes
+7 Consultar adjacències
+9 Esborrar tots els nodes
+10 Sortir
+
+Introdueix una id 
+Introdueix un nom 
+Tria un tipus
+ 1 Paper
+ 2 Author
+ 3 Terme 
+4Conferencia
+5 Fantasma
+S'ha creat el node term 1 Markov
+
+Tria una opcio:
+1 Crear node
+2 Afegir aresta 
+4 Mostrar info tots els nodes creats ,
+6 Afegir totes les arestes
+7 Consultar adjacències
+9 Esborrar tots els nodes
+10 Sortir
+
+Introdueix una id 
+Introdueix un nom 
+Tria un tipus
+ 1 Paper
+ 2 Author
+ 3 Terme 
+4Conferencia
+5 Fantasma
+S'ha creat el node paper 1 applying markov chains
+
+Tria una opcio:
+1 Crear node
+2 Afegir aresta 
+4 Mostrar info tots els nodes creats ,
+6 Afegir totes les arestes
+7 Consultar adjacències
+9 Esborrar tots els nodes
+10 Sortir
+
+Introdueix una id 
+Introdueix un nom 
+Tria un tipus
+ 1 Paper
+ 2 Author
+ 3 Terme 
+4Conferencia
+5 Fantasma
+S'ha creat el node paper 2 swarm algorithms
+
+Tria una opcio:
+1 Crear node
+2 Afegir aresta 
+4 Mostrar info tots els nodes creats ,
+6 Afegir totes les arestes
+7 Consultar adjacències
+9 Esborrar tots els nodes
+10 Sortir
+
+Tria el node source per afegir l'aresta indicant el seu id intern
+Id intern 	 IdClase	Contingut	 Tipus
+0	 	1	 	Markov	 term
+1	 	1	 	applying markov chains	 paper
+2	 	2	 	swarm algorithms	 paper
+Tria el node desti per afegir l'aresta indicant el seu id intern
+Id intern 	 IdClase	Contingut	 Tipus
+0	 	1	 	Markov	 term
+1	 	1	 	applying markov chains	 paper
+2	 	2	 	swarm algorithms	 paper
+S'ha afegit l'aresta que va de 1 Markov term al node 1 applying markov chains paper
+Tria una opcio:
+1 Crear node
+2 Afegir aresta 
+4 Mostrar info tots els nodes creats ,
+6 Afegir totes les arestes
+7 Consultar adjacències
+9 Esborrar tots els nodes
+10 Sortir
+
+Tria el node source per afegir l'aresta indicant el seu id intern
+Id intern 	 IdClase	Contingut	 Tipus
+0	 	1	 	Markov	 term
+1	 	1	 	applying markov chains	 paper
+2	 	2	 	swarm algorithms	 paper
+Tria el node desti per afegir l'aresta indicant el seu id intern
+Id intern 	 IdClase	Contingut	 Tipus
+0	 	1	 	Markov	 term
+1	 	1	 	applying markov chains	 paper
+2	 	2	 	swarm algorithms	 paper
+S'ha afegit l'aresta que va de 1 Markov term al node 2 swarm algorithms paper
+Tria una opcio:
+1 Crear node
+2 Afegir aresta 
+4 Mostrar info tots els nodes creats ,
+6 Afegir totes les arestes
+7 Consultar adjacències
+9 Esborrar tots els nodes
+10 Sortir
+
+Tenim el següent node :1del tipo termy el seu contingut es Markov
+La seva llista d'adjacències és 
+Id intern 	 IdClase	Contingut	Tipus
+0		 1	applying markov chains	 paper
+1		 2	swarm algorithms	 paper
+No té més adjacents
+Tenim el següent node :1del tipo papery el seu contingut es applying markov chains
+La seva llista d'adjacències per tipus és 
+Autores
+No té més adjacents
+Conferencias
+No té més adjacents
+Termes
+No té més adjacents
+Tenim el següent node :2del tipo papery el seu contingut es swarm algorithms
+La seva llista d'adjacències per tipus és 
+Autores
+No té més adjacents
+Conferencias
+No té més adjacents
+Termes
+No té més adjacents
+Tria una opcio:
+1 Crear node
+2 Afegir aresta 
+4 Mostrar info tots els nodes creats ,
+6 Afegir totes les arestes
+7 Consultar adjacències
+9 Esborrar tots els nodes
+10 Sortir
+
+Test terminado 
