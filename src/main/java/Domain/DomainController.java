@@ -235,25 +235,51 @@ public class DomainController
                 Query.defaultPath.get(nodeRefSourceType).get(nodeRefEndType), Query.TOL);
     }
 
+    /**
+     * Retorna una estructura amb tots els filtres.
+     * @return Un map amb claus "filteredNames", "filteredLines" i
+     * "selectedNames" associades cadascuna a un ArrayList
+     */
     public Map<String,ArrayList<String>> getFilters()
     {
         return r.getFilters();
     }
 
+    /**
+     * Consultora de la mida del resultat.
+     * @return el nombre total de files del resultat
+     */
     public Integer getResultSize() {
         return r.size();
     }
 
+    /**
+     * Retorna la fila que toca des de la darrera
+     * vegada que es va ordenar, filtrar o fer reset.
+     * @return El primer element del ArrayList es un
+     * enter unic per identificar la fila, els seguents
+     * son n dades (el nom del node si es un node, el float
+     * en String si es el HS). Retorna <em>null</em> si no queden files.
+     */
     public ArrayList<String> getResultRow()
     {
         return r.getRow();
     }
 
+    /**
+     * Amaga una fila.
+     * @param x: numero de la fila que es vol amagar
+     */
     public void hideResultRow(Integer x)
     {
         r.filter(x);
     }
 
+    /**
+     * Amaga un rang de files.
+     * @param x1: primer nombre del rang
+     * @param x2: darrer nombre del rang (no inclos)
+     */
     public void hideResultRows(Integer x1, Integer x2)
     {
         for(int i = x1; i < x2; i++)
@@ -261,33 +287,53 @@ public class DomainController
         r.resetIndex();
     }
 
+    /**
+     * Amaga els resultats on apareix el nom <em>x</em>.
+     * @param x nom no desitjat
+     */
     public void hideResultName(String x)
     {
         r.filter(x);
     }
 
+    /**
+     * Filtra per nom, nomes es mostren els resultats
+     * on apareix el nom <em>x</em>.
+     * @param x nom que se selecciona
+     */
     public void selectResultName(String x)
     {
         r.select(x);
     }
 
+    /**
+     * Ordena el resultat segons el valor de la columna
+     * <em>col</em>, ascendentment si <em>dir</em> es 1 i
+     * descendentment si es 0.
+     * @param col numero de columna pel que es vol ordenar
+     * @param dir 1 si ascendent i 0 si no
+     */
     public void sortResultByRow(Integer col, Integer dir)
     {
         r.sort(col, (dir != 0));
     }
 
+    /**
+     * Treu tots els filtres del resultat.
+     */
     public void clearResultFilters()
     {
         r.unfilterAll();
         r.unselectAll();
     }
 
+    /**
+     * Despres d'executar aquest metode, getResultRow() comencara
+     * a donar files per la primera segons l'ultim ordre escollit
+     * i tenint en compte tots els filtres imposats.
+     */
     public void resetResult() {
         r.resetIndex();
     }
-/*
-    public void selectResultRows(Integer x1, Integer x2) {
-        //TODO
-    }
-    */
+
 }
