@@ -75,6 +75,8 @@ public class GhostHeteSim {
     private static void compareNode() {
         info("Indica la informació del node a comparar:");
         Node n2 = readNode();
+        info("Indica la id del node:");
+        n2.setID(readInt());
         try
         {
             if(n.equals(n2))
@@ -132,13 +134,29 @@ public class GhostHeteSim {
     }
 
     private static void modifyName() {
-        info("Escriu el nou nom del node:");
-        n.setName(in.nextLine());
+        try
+        {
+            info("Escriu el nou nom del node:");
+            n.setName(in.nextLine());
+        }
+        catch(NullPointerException e)
+        {
+            System.out.println("Si us plau, inicialitza el node abans de consultar-lo.");
+        }
+
+
     }
 
     private static void modifyId() {
-        info("Escriu la nova id del node:");
-        n.setID(readInt());
+        try
+        {
+            info("Escriu la nova id del node:");
+            n.setID(readInt());
+        }
+        catch(NullPointerException e)
+        {
+            System.out.println("Si us plau, inicialitza el node abans de consultar-lo.");
+        }
     }
 
     private static Node readNodeWithId() {
