@@ -7,13 +7,13 @@ import java.util.*;
 import static java.nio.file.StandardCopyOption.*;
 
 public class GraphFileManager {
-    private static String fileAuthor = "author";
-    private static String filePaper = "paper";
-    private static String fileTerm = "term";
-    private static String fileConf = "conf";
-    private static String filePaperAuthor = "paper_author";
-    private static String filePaperTerm = "paper_term";
-    private static String filePaperConf = "paper_conf";
+    private static String fileAuthor = "/author";
+    private static String filePaper = "/paper";
+    private static String fileTerm = "/term";
+    private static String fileConf = "/conf";
+    private static String filePaperAuthor = "/paper_author";
+    private static String filePaperTerm = "/paper_term";
+    private static String filePaperConf = "/paper_conf";
     private static String normExt = ".txt";
     private static String backupExt = ".bak";
     private BufferedReader bufReader;
@@ -95,7 +95,7 @@ public class GraphFileManager {
         bufWriter = null;
     }
 
-    public void startSave(String path) throws IOException {
+    public void startSaving(String path) throws IOException {
         backup(path, fileAuthor);
         backup(path, filePaper);
         backup(path, fileTerm);
@@ -113,6 +113,11 @@ public class GraphFileManager {
         deleteBackup(path, filePaperAuthor);
         deleteBackup(path, filePaperTerm);
         deleteBackup(path, filePaperConf);
+    }
+
+    public void startLoading(String path) throws IOException {
+        bufReader = null;
+        bufWriter = null;
     }
 
     /* Retornen un array de Strings de dos posicions, una amb la id i l'altra amb el nom */
