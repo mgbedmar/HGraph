@@ -12,11 +12,50 @@ public class ProjectManager {
 
     }
 
-    public void selectProject(){
-
+    public void createProject(String projectName) throws PersistenceException
+    {
+        if(!projectExists(projectName))
+        {
+            File dir = new File(PROJECTS_FOLDER_PATH+"/"+projectName);
+            dir.mkdir();
+        }
+        else
+            throw new PersistenceException("El projecte ja existeix");
     }
 
-    public String getProjectPath() throws PersistenceException {
+    public void deleteProject(String projectName) throws PersistenceException
+    {
+        if(projectExists(projectName))
+        {
+            File dir = new File(PROJECTS_FOLDER_PATH+"/"+projectName);
+            dir.delete();
+        }
+        else
+            throw new PersistenceException("El projecte no existeix");
+    }
+
+    public void selectProject(String projectName) throws PersistenceException
+    {
+        if(projectExists(projectName))
+            selectedProject = PROJECTS_FOLDER_PATH+"/"+projectName;
+        else
+            throw new PersistenceException("El projecte no existeix");
+    }
+
+    public boolean projectExists(String projectName)
+    {
+        String[] pl = getProjectList();
+        for(String p : pl)
+        {
+            if(p.equals(projectName))
+                return true;
+        }
+
+        return false;
+    }
+
+    public String getProjectPath() throws PersistenceException
+    {
         if(selectedProject != null)
             return selectedProject;
         else
