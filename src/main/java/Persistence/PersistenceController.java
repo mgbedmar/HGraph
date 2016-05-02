@@ -1,6 +1,8 @@
 package Persistence;
 
 
+import java.io.IOException;
+
 public class PersistenceController {
     private GraphFileManager gfm;
     private ProjectManager pm;
@@ -17,6 +19,14 @@ public class PersistenceController {
 
     }
 
-    public void startImport() {
+    public void startLoad() {
+        gfm.startLoad();
+    }
+
+    public String[] getAuthor() throws PersistenceException {
+        try {
+            return gfm.getAuthor();
+        } catch (IOException e) {
+        }
     }
 }

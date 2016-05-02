@@ -5,6 +5,7 @@ import Domain.Graph.*;
 import Persistence.PersistenceController;
 import Persistence.PersistenceException;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -370,9 +371,17 @@ public class DomainController
         }
     }
 
-    public void importGraph() {
+    public void load() throws DomainException {
         String[] elem;
-        pc.startImport();
+        pc.startLoad();
+        try {
+            while ((elem = pc.getAuthor()) != null) {
+                Author a = new Author(Integer.parseInt(elem[0]), elem[1]);
+                g.addNode(a);
+            }
+        } catch (PersistenceException e) {
+            throw new DomainException("Hi ha hagut un problema al intentar carregar el graf: "+e.getFriendlyMessage());
+        }
         //Nodes
         /*
         while ((elem = pc.getAuthor()) != null) {
