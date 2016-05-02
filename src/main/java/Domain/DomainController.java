@@ -8,6 +8,7 @@ import Persistence.PersistenceException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * @author Gerard
@@ -359,22 +360,35 @@ public class DomainController
         }
     }
 
-    public void save() {
+    public void save() throws DomainException {
         String[] types = {
                 Author.TYPE,
                 Paper.TYPE,
                 Term.TYPE,
                 Conf.TYPE
         };
-        for (String t : types) {
+        try
+        {
+            pc.startSaving();
+            Set<Node> s = g.getSetOfNodes(Author.TYPE);
+            for(Node n : s)
+            {
+                pc.addAuthor(n.getID(), n.getName());
+            }
 
         }
+        catch (PersistenceException e)
+        {
+            throw new DomainException();
+        }
+
     }
 
     public void load() throws DomainException {
         String[] elem;
-        pc.startLoad();
+
         try {
+            pc.startLoad();
             while ((elem = pc.getAuthor()) != null) {
                 Author a = new Author(Integer.parseInt(elem[0]), elem[1]);
                 g.addNode(a);
