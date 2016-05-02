@@ -1,17 +1,21 @@
 package Persistence;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.*;
+import static java.nio.file.StandardCopyOption.*;
 
 public class GraphFileManager {
-    private String graphPath;
-    private String fileAuthor;
-    private String filePaper;
-    private String fileTerm;
-    private String fileConf;
-    private String filePaperAuthor;
-    private String filePaperTerm;
-    private String filePaperConf;
+    private static String fileAuthor = "/author";
+    private static String filePaper = "/paper";
+    private static String fileTerm = "/term";
+    private static String fileConf = "/conf";
+    private static String filePaperAuthor = "/paper_author";
+    private static String filePaperTerm = "/paper_term";
+    private static String filePaperConf = "/paper_conf";
+    private static String normExt = ".txt";
+    private static String backupExt = ".bak";
     private BufferedReader bufReader;
     private BufferedWriter bufWriter;
     private String currentOutputFile;
@@ -61,11 +65,25 @@ public class GraphFileManager {
         return getLine();
     }
 
-    private void setElementInFile(String file, String[] line) throws PersistenceException, IOException {
+    private void addElementInFile(String file, String[] line) throws PersistenceException, IOException {
         if (bufWriter == null || currentOutputFile != file) {
             initBufWriter(file);
         }
-        bufWriter.write(line[0]+"\t"+line[1]);
+        if (line != null) {
+            bufWriter.write(line[0] + "\t" + line[1]);
+        }
+    }
+
+    private void backup(String path, String file) throws IOException {
+        File source = new File(path+file+normExt);
+        File target = new File(path+file+backupExt);
+        target.createNewFile();
+        Files.copy(source.toPath(), target.toPath(), REPLACE_EXISTING);
+    }
+
+    private void deleteBackup(String path, String file) throws IOException {
+        File a = new File(path+file+backupExt);
+        a.delete();
     }
 
     /** Constructora. Crea un Manager nou que gestiona un graf al
@@ -75,19 +93,31 @@ public class GraphFileManager {
     public GraphFileManager(String path) {
         bufReader = null;
         bufWriter = null;
-
-        graphPath = path;
-        fileAuthor = path + "author.txt";
-        filePaper = path + "paper.txt";
-        fileTerm = path + "term.txt";
-        fileConf = path + "conf.txt";
-        filePaperAuthor = path + "paper_author.txt";
-        filePaperTerm = path + "paper_term.txt";
-        filePaperConf = path + "paper_conf.txt";
     }
 
-    public void startTransaction() {
+    public void startSaving(String path) throws IOException {
+        backup(path, fileAuthor);
+        backup(path, filePaper);
+        backup(path, fileTerm);
+        backup(path, fileConf);
+        backup(path, filePaperAuthor);
+        backup(path, filePaperTerm);
+        backup(path, filePaperConf);
+    }
 
+    public void commit(String path) throws IOException {
+        deleteBackup(path, fileAuthor);
+        deleteBackup(path, filePaper);
+        deleteBackup(path, fileTerm);
+        deleteBackup(path, fileConf);
+        deleteBackup(path, filePaperAuthor);
+        deleteBackup(path, filePaperTerm);
+        deleteBackup(path, filePaperConf);
+    }
+
+    public void startLoading(String path) throws IOException {
+        bufReader = null;
+        bufWriter = null;
     }
 
     /* Retornen un array de Strings de dos posicions, una amb la id i l'altra amb el nom */
@@ -126,31 +156,31 @@ public class GraphFileManager {
 
 
     public void addAuthor(String[] data) throws PersistenceException, IOException {
-        setElementInFile(fileAuthor, data);
+        addElementInFile(fileAuthor, data);
     }
 
     public void addPaper(String[] data) throws PersistenceException, IOException {
-        setElementInFile(filePaper, data);
+        addElementInFile(filePaper, data);
     }
 
     public void addTerm(String[] data) throws PersistenceException, IOException {
-        setElementInFile(fileTerm, data);
+        addElementInFile(fileTerm, data);
     }
 
     public void addConf(String[] data) throws PersistenceException, IOException {
-        setElementInFile(fileConf, data);
+        addElementInFile(fileConf, data);
     }
 
     public void addPaperAuthor(String[] data) throws PersistenceException, IOException {
-        setElementInFile(filePaperAuthor, data);
+        addElementInFile(filePaperAuthor, data);
     }
 
     public void addPaperTerm(String[] data) throws PersistenceException, IOException {
-        setElementInFile(filePaperTerm, data);
+        addElementInFile(filePaperTerm, data);
     }
 
     public void addPaperConf(String[] data) throws PersistenceException, IOException {
-        setElementInFile(filePaperConf, data);
+        addElementInFile(filePaperConf, data);
     }
 }
 
