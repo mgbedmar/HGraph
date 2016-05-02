@@ -361,12 +361,6 @@ public class DomainController
     }
 
     public void save() throws DomainException {
-        String[] types = {
-                Author.TYPE,
-                Paper.TYPE,
-                Term.TYPE,
-                Conf.TYPE
-        };
         try
         {
             pc.startSaving();
@@ -375,6 +369,22 @@ public class DomainController
             {
                 pc.addAuthor(n.getID(), n.getName());
             }
+            s = g.getSetOfNodes(Paper.TYPE);
+            for(Node n : s)
+            {
+                pc.addPaper(n.getID(), n.getName());
+            }
+            s = g.getSetOfNodes(Conf.TYPE);
+            for(Node n : s)
+            {
+                pc.addConf(n.getID(), n.getName());
+            }
+            s = g.getSetOfNodes(Term.TYPE);
+            for(Node n : s)
+            {
+                pc.addTerm(n.getID(), n.getName());
+            }
+            pc.commit();
 
         }
         catch (PersistenceException e)
@@ -393,47 +403,43 @@ public class DomainController
                 Author a = new Author(Integer.parseInt(elem[0]), elem[1]);
                 g.addNode(a);
             }
+
+            while ((elem = pc.getPaper()) != null) {
+                Paper a = new Paper(Integer.parseInt(elem[0]), elem[1]);
+                g.addNode(a);
+            }
+            while ((elem = pc.getTerm()) != null) {
+                Term a = new Term(Integer.parseInt(elem[0]), elem[1]);
+                g.addNode(a);
+            }
+            while ((elem = pc.getConf()) != null) {
+                Conf a = new Conf(Integer.parseInt(elem[0]), elem[1]);
+                g.addNode(a);
+            }
+
+            //Arestes
+            while ((elem = pc.getPaperAuthor()) != null) {
+                Node a = g.getNode(Integer.parseInt(elem[0]), "paper");
+                Node b = g.getNode(Integer.parseInt(elem[1]), "author");
+                g.addEdge(a, b);
+            }
+
+            while ((elem = pc.getPaperTerm()) != null) {
+                Node a = g.getNode(Integer.parseInt(elem[0]), "paper");
+                Node b = g.getNode(Integer.parseInt(elem[1]), "term");
+                g.addEdge(a, b);
+            }
+
+            while ((elem = pc.getPaperConf()) != null) {
+                Node a = g.getNode(Integer.parseInt(elem[0]), "paper");
+                Node b = g.getNode(Integer.parseInt(elem[1]), "conf");
+                g.addEdge(a, b);
+            }
+
         } catch (PersistenceException e) {
             throw new DomainException("Hi ha hagut un problema al intentar carregar el graf: "+e.getFriendlyMessage());
         }
-        //Nodes
-        /*
-        while ((elem = pc.getAuthor()) != null) {
-            Author a = new Author(Integer.parseInt(elem[0]), elem[1]);
-            g.addNode(a);
-        }
-        while ((elem = pers.getPaper()) != null) {
-            Paper a = new Paper(Integer.parseInt(elem[0]), elem[1]);
-            g.addNode(a);
-        }
-        while ((elem = pers.getTerm()) != null) {
-            Term a = new Term(Integer.parseInt(elem[0]), elem[1]);
-            g.addNode(a);
-        }
-        while ((elem = pers.getConf()) != null) {
-            Conf a = new Conf(Integer.parseInt(elem[0]), elem[1]);
-            g.addNode(a);
-        }
 
-        //Arestes
-        while ((elem = pers.getPaperAuthor()) != null) {
-            Node a = g.getNode(Integer.parseInt(elem[0]), "paper");
-            Node b = g.getNode(Integer.parseInt(elem[1]), "author");
-            g.addEdge(a, b);
-        }
-
-        while ((elem = pers.getPaperTerm()) != null) {
-            Node a = g.getNode(Integer.parseInt(elem[0]), "paper");
-            Node b = g.getNode(Integer.parseInt(elem[1]), "term");
-            g.addEdge(a, b);
-        }
-
-        while ((elem = pers.getPaperConf()) != null) {
-            Node a = g.getNode(Integer.parseInt(elem[0]), "paper");
-            Node b = g.getNode(Integer.parseInt(elem[1]), "conf");
-            g.addEdge(a, b);
-        }
-        */
     }
 
 }
