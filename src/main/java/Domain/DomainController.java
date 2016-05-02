@@ -2,6 +2,7 @@ package Domain;
 
 
 import Domain.Graph.*;
+import Persistence.PersistenceController;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -13,6 +14,7 @@ public class DomainController
 {
     private Graph g;
     private Result r;
+    private PersistenceController pc;
 
     /**
      * @param name Nom del node
