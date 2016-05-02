@@ -89,9 +89,9 @@ public class PresentationController
         {
             dc = new DomainController();
             in = new Scanner(System.in);
+            showInitMenu();
             Integer x;
             do{
-                showMainMenu();
                 x = readInt();
                 in.nextLine(); //Consume '\n'
                 switch(x)
@@ -99,14 +99,13 @@ public class PresentationController
                     case 0:
                         break;
                     case 1:
-                        goToEditGraph();
+                        goToMainMenu();
                         break;
                     case 2:
-                        goToQueryGraph();
+                        selectProject();
                         break;
                     default:
                         System.out.println("Si us plau, escriu una opció vàlida.");
-                        break;
                 }
             }while(x != 0);
 
@@ -120,6 +119,73 @@ public class PresentationController
             }
         }
 
+    }
+
+    private static void selectProject() {
+        info("Escull un projecte:");
+        String[] l = dc.getProjectList();
+        printMenu(l);
+        Integer x;
+        do{
+            x = readInt();
+            in.nextLine(); //Consume '\n'
+            if(x > l.length || x < 0)
+                System.out.println("Escriu un numero del 0 al "+l.length);
+        }while(x > l.length || x < 0);
+
+        try {
+            dc.load(l[x]);
+            goToMainMenu();
+        } catch (DomainException de) {
+            System.out.println(de.getFriendlyMessage());
+            if(debug)
+                de.printStackTrace(System.err);
+        }
+    }
+
+    private static void showInitMenu() {
+        String[] opts = {
+                "Sortir",
+                "Nou graf",
+                "Carregar graf"
+        };
+        info("Menu:");
+        printMenu(opts);
+    }
+
+    private static void goToMainMenu(){
+        Integer x;
+        do{
+            showMainMenu();
+            x = readInt();
+            in.nextLine(); //Consume '\n'
+            switch(x)
+            {
+                case 0:
+                    break;
+                case 1:
+                    goToEditGraph();
+                    break;
+                case 2:
+                    goToQueryGraph();
+                    break;
+                case 3:
+                    saveGraph();
+                default:
+                    System.out.println("Si us plau, escriu una opció vàlida.");
+                    break;
+            }
+        }while(x != 0);
+    }
+
+    private static void saveGraph() {
+        try {
+            dc.save();
+        } catch (DomainException de) {
+            System.out.println(de.getFriendlyMessage());
+            if(debug)
+                de.printStackTrace(System.err);
+        }
     }
 
     /**
@@ -811,7 +877,8 @@ public class PresentationController
         String[] opts = {
                 "Sortir",
                 "Editar graf",
-                "Consultar graf"
+                "Consultar graf",
+                "Guardar graf"
         };
         info("Menu:");
         printMenu(opts);

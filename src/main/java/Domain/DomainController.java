@@ -349,17 +349,6 @@ public class DomainController
         return pc.getProjectList();
     }
 
-    public void selectProject(String pn) throws DomainException {
-        try
-        {
-            pc.selectProject(pn);
-        }
-        catch (PersistenceException e)
-        {
-            throw new DomainException("Hi ha hagut un problema al intentar seleccionar el projecte: "+e.getFriendlyMessage());
-        }
-    }
-
     public void save() throws DomainException {
         try
         {
@@ -394,10 +383,11 @@ public class DomainController
 
     }
 
-    public void load() throws DomainException {
+    public void load(String projectName) throws DomainException {
         String[] elem;
 
         try {
+            pc.selectProject(projectName);
             pc.startLoad();
             while ((elem = pc.getAuthor()) != null) {
                 Author a = new Author(Integer.parseInt(elem[0]), elem[1]);
