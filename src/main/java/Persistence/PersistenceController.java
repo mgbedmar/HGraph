@@ -19,7 +19,7 @@ public class PersistenceController {
         try {
             gfm.startSaving(pm.getProjectPath());
         } catch (IOException e) {
-            //TODO
+            throw new PersistenceException("Ha fallat la escriptura. (Permisos? Espai al disc?)");
         }
     }
 
@@ -27,7 +27,7 @@ public class PersistenceController {
         try {
             gfm.startLoading(pm.getProjectPath());
         } catch (IOException e) {
-            throw new PersistenceException("Ha fallat la lectura. (Permisos? Espai al disc?)");
+            throw new PersistenceException("Ha fallat la lectura. (Permisos?)");
         }
     }
 
@@ -35,9 +35,56 @@ public class PersistenceController {
         try {
             return gfm.getAuthor();
         } catch (IOException e) {
-            //TODO
+            throw new PersistenceException("Ha fallat la lectura. (Permisos?)");
         }
-        return null;
+    }
+
+    public String[] getPaper() throws PersistenceException {
+        try {
+            return gfm.getPaper();
+        } catch (IOException e) {
+            throw new PersistenceException("Ha fallat la lectura. (Permisos?)");
+        }
+    }
+
+    public String[] getTerm() throws PersistenceException {
+        try {
+            return gfm.getTerm();
+        } catch (IOException e) {
+            throw new PersistenceException("Ha fallat la lectura. (Permisos?)");
+        }
+    }
+
+    public String[] getConf() throws PersistenceException {
+        try {
+            return gfm.getConf();
+        } catch (IOException e) {
+            throw new PersistenceException("Ha fallat la lectura. (Permisos?)");
+        }
+    }
+
+    public String[] getPaperAuthor() throws PersistenceException {
+        try {
+            return gfm.getPaperAuthor();
+        } catch (IOException e) {
+            throw new PersistenceException("Ha fallat la lectura. (Permisos?)");
+        }
+    }
+
+    public String[] getPaperTerm() throws PersistenceException {
+        try {
+            return gfm.getPaperTerm();
+        } catch (IOException e) {
+            throw new PersistenceException("Ha fallat la lectura. (Permisos?)");
+        }
+    }
+
+    public String[] getPaperConf() throws PersistenceException {
+        try {
+            return gfm.getPaperConf();
+        } catch (IOException e) {
+            throw new PersistenceException("Ha fallat la lectura. (Permisos?)");
+        }
     }
 
     public void addAuthor(Integer id, String name) throws PersistenceException {
@@ -45,7 +92,42 @@ public class PersistenceController {
         try {
             gfm.addAuthor(s);
         } catch (IOException e) {
-            //TODO
+            throw new PersistenceException("Ha fallat la escriptura. (Permisos? Espai al disc?)");
+        }
+    }
+
+    public void addPaper(Integer id, String name) throws PersistenceException {
+        String[] s = {id.toString(), name};
+        try {
+            gfm.addPaper(s);
+        } catch (IOException e) {
+            throw new PersistenceException("Ha fallat la escriptura. (Permisos? Espai al disc?)");
+        }
+    }
+
+    public void addConf(Integer id, String name) throws PersistenceException {
+        String[] s = {id.toString(), name};
+        try {
+            gfm.addConf(s);
+        } catch (IOException e) {
+            throw new PersistenceException("Ha fallat la escriptura. (Permisos? Espai al disc?)");
+        }
+    }
+
+    public void addTerm(Integer id, String name) throws PersistenceException {
+        String[] s = {id.toString(), name};
+        try {
+            gfm.addAuthor(s);
+        } catch (IOException e) {
+            throw new PersistenceException("Ha fallat la escriptura. (Permisos? Espai al disc?)");
+        }
+    }
+
+    public void commit() {
+        try {
+            gfm.commit();
+        } catch (IOException e) {
+            //No passa res
         }
     }
 }
