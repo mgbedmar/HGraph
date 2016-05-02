@@ -7,6 +7,7 @@ import java.util.*;
 import static java.nio.file.StandardCopyOption.*;
 
 public class GraphFileManager {
+    private String path;
     private static String fileAuthor = "/author";
     private static String filePaper = "/paper";
     private static String fileTerm = "/term";
@@ -18,7 +19,6 @@ public class GraphFileManager {
     private static String backupExt = ".bak";
     private BufferedReader bufReader;
     private BufferedWriter bufWriter;
-    private String currentOutputFile;
 
 
     private void handleException(String message) throws PersistenceException {
@@ -36,13 +36,8 @@ public class GraphFileManager {
     }
 
     private void initBufWriter(String file) throws IOException {
-        if (bufWriter != null) {
-            bufWriter.flush();
-            bufWriter.close();
-        }
         FileWriter fw = new FileWriter(file, false);
         bufWriter = new BufferedWriter(fw);
-        currentOutputFile = file;
     }
 
     private String[] getLine() throws IOException {
@@ -60,24 +55,28 @@ public class GraphFileManager {
 
     private String[] getElementFromFile(String file) throws PersistenceException, IOException {
         if (bufReader == null) {
-            initBufReader(file);
+            initBufReader(path+file+normExt);
         }
         return getLine();
     }
 
-    private void addElementInFile(String file, String[] line) throws PersistenceException, IOException {
-        if (bufWriter == null || currentOutputFile != file) {
-            initBufWriter(file);
+    private void addElementToFile(String file, String[] line) throws PersistenceException, IOException {
+        if (bufWriter == null) {
+            initBufWriter(path+file+normExt);
         }
         if (line != null) {
             bufWriter.write(line[0] + "\t" + line[1]);
         }
+        else {
+            bufWriter.flush();
+            bufWriter.close();
+            bufWriter = null;
+        }
     }
 
-    private void backup(String path, String file) throws IOException {
-        File source = new File(path+file+normExt);
-        File target = new File(path+file+backupExt);
-        target.createNewFile();
+    private void backup(String path, String file, String extA, String extB) throws IOException {
+        File source = new File(path+file+extA);
+        File target = new File(path+file+extB);
         Files.copy(source.toPath(), target.toPath(), REPLACE_EXISTING);
     }
 
@@ -86,26 +85,17 @@ public class GraphFileManager {
         a.delete();
     }
 
-    /** Constructora. Crea un Manager nou que gestiona un graf al
-     * path donat. Ha de ser un path correcte i acabat en / o \.
-     * @param path path del directori on es guarda el graf
-     */
-    public GraphFileManager(String path) {
-        bufReader = null;
-        bufWriter = null;
+    private void makeBackups(String path, String extA, String extB) throws IOException {
+        backup(path, fileAuthor, extA, extB);
+        backup(path, filePaper, extA, extB);
+        backup(path, fileTerm, extA, extB);
+        backup(path, fileConf, extA, extB);
+        backup(path, filePaperAuthor, extA, extB);
+        backup(path, filePaperTerm, extA, extB);
+        backup(path, filePaperConf, extA, extB);
     }
 
-    public void startSaving(String path) throws IOException {
-        backup(path, fileAuthor);
-        backup(path, filePaper);
-        backup(path, fileTerm);
-        backup(path, fileConf);
-        backup(path, filePaperAuthor);
-        backup(path, filePaperTerm);
-        backup(path, filePaperConf);
-    }
-
-    public void commit(String path) throws IOException {
+    private void deleteBackups(String path) throws IOException {
         deleteBackup(path, fileAuthor);
         deleteBackup(path, filePaper);
         deleteBackup(path, fileTerm);
@@ -115,7 +105,29 @@ public class GraphFileManager {
         deleteBackup(path, filePaperConf);
     }
 
+    /** Constructora. Crea un Manager nou.
+     */
+    public GraphFileManager() {
+        bufReader = null;
+        bufWriter = null;
+    }
+
+    public void startSaving(String path) throws IOException {
+        this.path = path;
+        makeBackups(path, normExt, backupExt);
+    }
+
+    public void commit() throws IOException {
+        deleteBackups(path);
+    }
+
+    public void rollback() throws IOException {
+        makeBackups(path, backupExt, normExt);
+        deleteBackups(path);
+    }
+
     public void startLoading(String path) throws IOException {
+        this.path = path;
         bufReader = null;
         bufWriter = null;
     }
@@ -156,31 +168,31 @@ public class GraphFileManager {
 
 
     public void addAuthor(String[] data) throws PersistenceException, IOException {
-        addElementInFile(fileAuthor, data);
+        addElementToFile(fileAuthor, data);
     }
 
     public void addPaper(String[] data) throws PersistenceException, IOException {
-        addElementInFile(filePaper, data);
+        addElementToFile(filePaper, data);
     }
 
     public void addTerm(String[] data) throws PersistenceException, IOException {
-        addElementInFile(fileTerm, data);
+        addElementToFile(fileTerm, data);
     }
 
     public void addConf(String[] data) throws PersistenceException, IOException {
-        addElementInFile(fileConf, data);
+        addElementToFile(fileConf, data);
     }
 
     public void addPaperAuthor(String[] data) throws PersistenceException, IOException {
-        addElementInFile(filePaperAuthor, data);
+        addElementToFile(filePaperAuthor, data);
     }
 
     public void addPaperTerm(String[] data) throws PersistenceException, IOException {
-        addElementInFile(filePaperTerm, data);
+        addElementToFile(filePaperTerm, data);
     }
 
     public void addPaperConf(String[] data) throws PersistenceException, IOException {
-        addElementInFile(filePaperConf, data);
+        addElementToFile(filePaperConf, data);
     }
 }
 
