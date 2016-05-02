@@ -3,6 +3,7 @@ package Domain;
 
 import Domain.Graph.*;
 import Persistence.PersistenceController;
+import Persistence.PersistenceException;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -338,10 +339,42 @@ public class DomainController
         r.resetIndex();
     }
 
+    /**
+     * Retorna la llista de projectes guardats
+     * @return
+     */
+    public String[] getProjectList(){
+        return pc.getProjectList();
+    }
+
+    public void selectProject(String pn) throws DomainException {
+        try
+        {
+            pc.selectProject(pn);
+        }
+        catch (PersistenceException e)
+        {
+            throw new DomainException("Hi ha hagut un problema al intentar seleccionar el projecte: "+e.getFriendlyMessage());
+        }
+    }
+
+    public void save() {
+        String[] types = {
+                Author.TYPE,
+                Paper.TYPE,
+                Term.TYPE,
+                Conf.TYPE
+        };
+        for (String t : types) {
+
+        }
+    }
+
     public void importGraph() {
         String[] elem;
-
+        pc.startImport();
         //Nodes
+        /*
         while ((elem = pc.getAuthor()) != null) {
             Author a = new Author(Integer.parseInt(elem[0]), elem[1]);
             g.addNode(a);
@@ -377,6 +410,7 @@ public class DomainController
             Node b = g.getNode(Integer.parseInt(elem[1]), "conf");
             g.addEdge(a, b);
         }
+        */
     }
 
 }
