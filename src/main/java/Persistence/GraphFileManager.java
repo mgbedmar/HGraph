@@ -1,43 +1,71 @@
 package Persistence;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.*;
 
 public class GraphFileManager {
     private String graphPath;
-    private BufferedReader buf;
+    private String fileAuthor;
+    private String filePaper;
+    private String fileTerm;
+    private String fileConf;
+    private String filePaperAuthor;
+    private String filePaperTerm;
+    private String filePaperConf;
+    private BufferedReader bufReader;
+    private BufferedWriter bufWriter;
+    private String currentOutputFile;
 
-    private void initBuf(String file) throws FileNotFoundException {
-        FileReader fr = new FileReader(file);
-        this.buf = new BufferedReader(fr);
+
+    private void handleException(String message) throws PersistenceException {
+        throw new PersistenceException(message);
+    }
+
+    private void initBufReader(String file) throws PersistenceException {
+        try {
+            FileReader fr = new FileReader(file);
+            this.bufReader = new BufferedReader(fr);
+        }
+        catch (FileNotFoundException e) {
+            handleException("Algun dels fitxers del graf no existeix o no es pot obrir.");
+        }
+    }
+
+    private void initBufWriter(String file) throws IOException {
+        if (bufWriter != null) {
+            bufWriter.flush();
+            bufWriter.close();
+        }
+        FileWriter fw = new FileWriter(file, false);
+        bufWriter = new BufferedWriter(fw);
+        currentOutputFile = file;
     }
 
     private String[] getLine() throws IOException {
-        String line = buf.readLine();
+        String line = bufReader.readLine();
         if (line != null) {
             String[] res = line.split("\t");
             return res;
         }
         else {
-            this.buf = null;
+            this.bufReader.close();
+            this.bufReader = null;
             return null;
         }
     }
 
-    private String[] getElementFromFile(String file) {
-        try {
-            if (buf == null) {
-                initBuf(file);
-            }
-            return getLine();
+    private String[] getElementFromFile(String file) throws PersistenceException, IOException {
+        if (bufReader == null) {
+            initBufReader(file);
         }
-        catch (Exception e) {
-            e.printStackTrace();
+        return getLine();
+    }
+
+    private void setElementInFile(String file, String[] line) throws PersistenceException, IOException {
+        if (bufWriter == null || currentOutputFile != file) {
+            initBufWriter(file);
         }
-        return null;
+        bufWriter.write(line[0]+"\t"+line[1]);
     }
 
     /** Constructora. Crea un Manager nou que gestiona un graf al
@@ -45,41 +73,80 @@ public class GraphFileManager {
      * @param path path del directori on es guarda el graf
      */
     public GraphFileManager(String path) {
-        this.graphPath = path;
-        buf = null;
+        bufReader = null;
+        bufWriter = null;
+
+        graphPath = path;
+        fileAuthor = path + "author.txt";
+        filePaper = path + "paper.txt";
+        fileTerm = path + "term.txt";
+        fileConf = path + "conf.txt";
+        filePaperAuthor = path + "paper_author.txt";
+        filePaperTerm = path + "paper_term.txt";
+        filePaperConf = path + "paper_conf.txt";
     }
 
     /* Retornen un array de Strings de dos posicions, una amb la id i l'altra amb el nom */
 
-    public String[] getAuthor() {
-        return getElementFromFile("author.txt");
+    public String[] getAuthor() throws PersistenceException, IOException {
+        return getElementFromFile(fileAuthor);
     }
 
-    public String[] getConf() {
-        return getElementFromFile("conf.txt");
+    public String[] getConf() throws PersistenceException, IOException {
+        return getElementFromFile(fileConf);
     }
 
-    public String[] getTerm() {
-        return getElementFromFile("term.txt");
+    public String[] getTerm() throws PersistenceException, IOException {
+        return getElementFromFile(fileTerm);
     }
 
-    public String[] getPaper() {
-        return getElementFromFile("paper.txt");
+    public String[] getPaper() throws PersistenceException, IOException {
+        return getElementFromFile(filePaper);
     }
 
 
     /* Retornen un array de Strings de dos posicions, una amb la id del paper i l'altra de l'altre */
 
-    public String[] getPaperAuthor() {
-        return getElementFromFile("paper_author.txt");
+    public String[] getPaperAuthor() throws PersistenceException, IOException {
+        return getElementFromFile(filePaperAuthor);
     }
 
-    public String[] getPaperTerm() {
-        return getElementFromFile("paper_term.txt");
+    public String[] getPaperTerm() throws PersistenceException, IOException {
+        return getElementFromFile(filePaperTerm);
     }
 
-    public String[] getPaperConf() {
-        return getElementFromFile("paper_conf.txt");
+    public String[] getPaperConf() throws PersistenceException, IOException {
+        return getElementFromFile(filePaperConf);
+    }
+
+
+
+    public void setAuthor(String[] data) throws PersistenceException, IOException {
+        setElementInFile(fileAuthor, data);
+    }
+
+    public void setPaper(String[] data) throws PersistenceException, IOException {
+        setElementInFile(filePaper, data);
+    }
+
+    public void setTerm(String[] data) throws PersistenceException, IOException {
+        setElementInFile(fileTerm, data);
+    }
+
+    public void setConf(String[] data) throws PersistenceException, IOException {
+        setElementInFile(fileConf, data);
+    }
+
+    public void setPaperAuthor(String[] data) throws PersistenceException, IOException {
+        setElementInFile(filePaperAuthor, data);
+    }
+
+    public void setPaperTerm(String[] data) throws PersistenceException, IOException {
+        setElementInFile(filePaperTerm, data);
+    }
+
+    public void setPaperConf(String[] data) throws PersistenceException, IOException {
+        setElementInFile(filePaperConf, data);
     }
 }
 
