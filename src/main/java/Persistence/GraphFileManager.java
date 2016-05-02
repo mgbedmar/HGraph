@@ -86,6 +86,10 @@ public class GraphFileManager {
         filePaperConf = path + "paper_conf.txt";
     }
 
+    public void startTransaction() {
+
+    }
+
     /* Retornen un array de Strings de dos posicions, una amb la id i l'altra amb el nom */
 
     public String[] getAuthor() throws PersistenceException, IOException {
@@ -121,31 +125,31 @@ public class GraphFileManager {
 
 
 
-    public void setAuthor(String[] data) throws PersistenceException, IOException {
+    public void addAuthor(String[] data) throws PersistenceException, IOException {
         setElementInFile(fileAuthor, data);
     }
 
-    public void setPaper(String[] data) throws PersistenceException, IOException {
+    public void addPaper(String[] data) throws PersistenceException, IOException {
         setElementInFile(filePaper, data);
     }
 
-    public void setTerm(String[] data) throws PersistenceException, IOException {
+    public void addTerm(String[] data) throws PersistenceException, IOException {
         setElementInFile(fileTerm, data);
     }
 
-    public void setConf(String[] data) throws PersistenceException, IOException {
+    public void addConf(String[] data) throws PersistenceException, IOException {
         setElementInFile(fileConf, data);
     }
 
-    public void setPaperAuthor(String[] data) throws PersistenceException, IOException {
+    public void addPaperAuthor(String[] data) throws PersistenceException, IOException {
         setElementInFile(filePaperAuthor, data);
     }
 
-    public void setPaperTerm(String[] data) throws PersistenceException, IOException {
+    public void addPaperTerm(String[] data) throws PersistenceException, IOException {
         setElementInFile(filePaperTerm, data);
     }
 
-    public void setPaperConf(String[] data) throws PersistenceException, IOException {
+    public void addPaperConf(String[] data) throws PersistenceException, IOException {
         setElementInFile(filePaperConf, data);
     }
 }
