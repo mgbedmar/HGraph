@@ -16,4 +16,7 @@ public class PersistenceController {
     public void save() {
 
     }
+
+    public void startImport() {
+    }
 }
