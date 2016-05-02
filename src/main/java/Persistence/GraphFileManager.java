@@ -1,4 +1,4 @@
-package ParserTest;
+package Persistence;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -6,8 +6,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
 
-
-public class PersistenceLineByLine {
+public class GraphFileManager {
     private String graphPath;
     private BufferedReader buf;
 
@@ -45,7 +44,7 @@ public class PersistenceLineByLine {
      * path donat. Ha de ser un path correcte i acabat en / o \.
      * @param path path del directori on es guarda el graf
      */
-    public PersistenceLineByLine(String path) {
+    public GraphFileManager(String path) {
         this.graphPath = path;
         buf = null;
     }
@@ -83,3 +82,4 @@ public class PersistenceLineByLine {
         return getElementFromFile("paper_conf.txt");
     }
 }
+
