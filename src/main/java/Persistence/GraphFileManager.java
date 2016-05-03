@@ -19,6 +19,7 @@ public class GraphFileManager {
     private static String backupExt = ".bak";
     private BufferedReader bufReader;
     private BufferedWriter bufWriter;
+    private String currentFile;
 
 
     /**
@@ -51,8 +52,13 @@ public class GraphFileManager {
      * @throws IOException si hi ha error IO
      */
     private void initBufWriter(String file) throws IOException {
+        if (bufWriter != null) {
+            bufWriter.flush();
+            bufWriter.close();
+        }
         FileWriter fw = new FileWriter(file, false);
         bufWriter = new BufferedWriter(fw);
+        currentFile = file;
     }
 
     /**
@@ -95,18 +101,12 @@ public class GraphFileManager {
      * @throws IOException error IO
      */
     private void addElementToFile(String file, String[] line) throws IOException {
-        if (bufWriter == null) {
-            initBufWriter(path+file+normExt);
+        file = path+file+normExt;
+        if (bufWriter == null || currentFile != file) {
+            initBufWriter(file);
         }
-        if (line != null) {
-            bufWriter.write(line[0] + "\t" + line[1]);
-            bufWriter.newLine();
-        }
-        else {
-            bufWriter.flush();
-            bufWriter.close();
-            bufWriter = null;
-        }
+        bufWriter.write(line[0] + "\t" + line[1]);
+        bufWriter.newLine();
     }
 
     /**
@@ -169,6 +169,20 @@ public class GraphFileManager {
         deleteBackup(path, filePaperConf);
     }
 
+    private void createNonExistingFile(String file) throws IOException {
+        File f = new File(file);
+        f.createNewFile();
+    }
+    private void createNonExistingFiles() throws IOException {
+        createNonExistingFile(path+fileAuthor+normExt);
+        createNonExistingFile(path+filePaper+normExt);
+        createNonExistingFile(path+fileTerm+normExt);
+        createNonExistingFile(path+fileConf+normExt);
+        createNonExistingFile(path+filePaperTerm+normExt);
+        createNonExistingFile(path+filePaperConf+normExt);
+        createNonExistingFile(path+filePaperAuthor+normExt);
+    }
+
     /** Constructora. Crea un Manager nou.
      */
     public GraphFileManager() {
@@ -194,6 +208,7 @@ public class GraphFileManager {
      */
     public void commit() throws IOException {
         deleteBackups(path);
+        createNonExistingFiles();
     }
 
     /**
