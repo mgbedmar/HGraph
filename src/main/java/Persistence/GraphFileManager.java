@@ -21,10 +21,20 @@ public class GraphFileManager {
     private BufferedWriter bufWriter;
 
 
+    /**
+     * Fica l'excepcio a una <em>PersistenceException</em> i la llenca.
+     * @param message misatge de l'excepcio
+     * @throws PersistenceException sempre
+     */
     private void handleException(String message) throws PersistenceException {
         throw new PersistenceException(message);
     }
 
+    /**
+     * Instancia el <em>BufferedReader</em> amb el fitxer <em>file</em>.
+     * @param file fitxer per llegir
+     * @throws PersistenceException si el fitxer <em>file</em> no existeix
+     */
     private void initBufReader(String file) throws PersistenceException {
         try {
             FileReader fr = new FileReader(file);
@@ -35,11 +45,22 @@ public class GraphFileManager {
         }
     }
 
+    /**
+     * Instancia el <em>BufferedWriter</em> amb el fitxer <em>file</em>.
+     * @param file fitxer per escriure
+     * @throws IOException si hi ha error IO
+     */
     private void initBufWriter(String file) throws IOException {
         FileWriter fw = new FileWriter(file, false);
         bufWriter = new BufferedWriter(fw);
     }
 
+    /**
+     * Dona una linia (dos strings) del fitxer que s'estigui llegint actualment
+     * (i.e. el del reader).
+     * @return la linia que toca del fitxer obert
+     * @throws IOException si hi ha error IO
+     */
     private String[] getLine() throws IOException {
         String line = bufReader.readLine();
         if (line != null) {
@@ -53,6 +74,13 @@ public class GraphFileManager {
         }
     }
 
+    /**
+     * Comprova si hi ha un buffer obert i dona la linia que toca.
+     * @param file fitxer per obrir
+     * @return linia que toca
+     * @throws PersistenceException no existeix el fitxer
+     * @throws IOException error IO
+     */
     private String[] getElementFromFile(String file) throws PersistenceException, IOException {
         if (bufReader == null) {
             initBufReader(path+file+normExt);
@@ -60,7 +88,13 @@ public class GraphFileManager {
         return getLine();
     }
 
-    private void addElementToFile(String file, String[] line) throws PersistenceException, IOException {
+    /**
+     * Afegeix una linia al fitxer obert (o per obrir).
+     * @param file fitxer on s'escriu
+     * @param line dos strings per escriure separats per un tabulador \t
+     * @throws IOException error IO
+     */
+    private void addElementToFile(String file, String[] line) throws IOException {
         if (bufWriter == null) {
             initBufWriter(path+file+normExt);
         }
@@ -75,17 +109,39 @@ public class GraphFileManager {
         }
     }
 
+    /**
+     * Copia el fitxer que te path <em>path</em>, nom <em>file</em> i extensio <em>extA</em> a un
+     * altre fitxer amb mateixos path i nom i amb extensio <em>extB</em>
+     * @param path path del sistema
+     * @param file nom del fitxer
+     * @param extA extensio del fitxer antic
+     * @param extB extensio del nou fitxer
+     * @throws IOException error IO
+     */
     private void backup(String path, String file, String extA, String extB) throws IOException {
         File source = new File(path+file+extA);
         File target = new File(path+file+extB);
         Files.copy(source.toPath(), target.toPath(), REPLACE_EXISTING);
     }
 
+    /**
+     * Esborra el backup del fitxer amb path <em>path</em> i nom <em>file</em>.
+     * @param path path del sistema
+     * @param file nom del fitxer (sense extensio)
+     * @throws IOException error IO
+     */
     private void deleteBackup(String path, String file) throws IOException {
         File a = new File(path+file+backupExt);
         a.delete();
     }
 
+    /**
+     * Copia tots els fitxers del graf d'extensio <em>extA</em> a extensio <em>extB</em>.
+     * @param path path del sistema
+     * @param extA extensio del fitxer antic
+     * @param extB extensio del fitxer nou
+     * @throws IOException error IO
+     */
     private void makeBackups(String path, String extA, String extB) throws IOException {
         backup(path, fileAuthor, extA, extB);
         backup(path, filePaper, extA, extB);
@@ -96,6 +152,11 @@ public class GraphFileManager {
         backup(path, filePaperConf, extA, extB);
     }
 
+    /**
+     * Esborra tots els backups del graf.
+     * @param path path del sistema
+     * @throws IOException error IO
+     */
     private void deleteBackups(String path) throws IOException {
         deleteBackup(path, fileAuthor);
         deleteBackup(path, filePaper);
@@ -113,6 +174,11 @@ public class GraphFileManager {
         bufWriter = null;
     }
 
+    /**
+     * Inicialitza el sistema i crea els backups abans de comencar a guardar dades.
+     * @param path path del graf que es guarda
+     * @throws IOException error IO
+     */
     public void startSaving(String path) throws IOException {
         this.path = path;
         bufReader = null;
@@ -120,15 +186,28 @@ public class GraphFileManager {
         makeBackups(path, normExt, backupExt);
     }
 
+    /**
+     * Confirma els canvis guardats fins ara i esborra els backups.
+     * @throws IOException error IO
+     */
     public void commit() throws IOException {
         deleteBackups(path);
     }
 
+    /**
+     * Denega tots els canvis des del darrer <em>startSaving()</em> i deixa el graf en l'estat anterior.
+     * @throws IOException error IO
+     */
     public void rollback() throws IOException {
         makeBackups(path, backupExt, normExt);
         deleteBackups(path);
     }
 
+    /**
+     * Inicialitza el sistema per comencar a carregar un graf.
+     * @param path path del nou graf a carregar
+     * @throws IOException error IO
+     */
     public void startLoading(String path) throws IOException {
         this.path = path;
         bufReader = null;
@@ -137,18 +216,46 @@ public class GraphFileManager {
 
     /* Retornen un array de Strings de dos posicions, una amb la id i l'altra amb el nom */
 
+    /**
+     * Dona el node del tipus que toca. Una vegada que es comencen a llegir nodes d'aquest tipus,
+     * cal continuar fins que s'acabin. Quan s'acaben retorna <em>null</em>.
+     * @return les dues dades del node (id en format String, nom)
+     * @throws PersistenceException si no existeix el fitxer
+     * @throws IOException error IO
+     */
     public String[] getAuthor() throws PersistenceException, IOException {
         return getElementFromFile(fileAuthor);
     }
 
+    /**
+     * Dona el node del tipus que toca. Una vegada que es comencen a llegir nodes d'aquest tipus,
+     * cal continuar fins que s'acabin. Quan s'acaben retorna <em>null</em>.
+     * @return les dues dades del node (id en format String, nom)
+     * @throws PersistenceException si no existeix el fitxer
+     * @throws IOException error IO
+     */
     public String[] getConf() throws PersistenceException, IOException {
         return getElementFromFile(fileConf);
     }
 
+    /**
+     * Dona el node del tipus que toca. Una vegada que es comencen a llegir nodes d'aquest tipus,
+     * cal continuar fins que s'acabin. Quan s'acaben retorna <em>null</em>.
+     * @return les dues dades del node (id en format String, nom)
+     * @throws PersistenceException si no existeix el fitxer
+     * @throws IOException error IO
+     */
     public String[] getTerm() throws PersistenceException, IOException {
         return getElementFromFile(fileTerm);
     }
 
+    /**
+     * Dona el node del tipus que toca. Una vegada que es comencen a llegir nodes d'aquest tipus,
+     * cal continuar fins que s'acabin. Quan s'acaben retorna <em>null</em>.
+     * @return les dues dades del node (id en format String, nom)
+     * @throws PersistenceException si no existeix el fitxer
+     * @throws IOException error IO
+     */
     public String[] getPaper() throws PersistenceException, IOException {
         return getElementFromFile(filePaper);
     }
@@ -156,44 +263,113 @@ public class GraphFileManager {
 
     /* Retornen un array de Strings de dos posicions, una amb la id del paper i l'altra de l'altre */
 
+    /**
+     * Dona l'aresta d'aquest tipus que toca. Una vegada que es comencen a llegir arestes d'aquest tipus,
+     * cal continuar fins que s'acabin. Quan s'acaben retorna <em>null</em>.
+     * @return les dades dels dos nodes (id del paper, id de l'altre)
+     * @throws PersistenceException si no existeix el fitxer
+     * @throws IOException error IO
+     */
     public String[] getPaperAuthor() throws PersistenceException, IOException {
         return getElementFromFile(filePaperAuthor);
     }
 
+    /**
+     * Dona l'aresta d'aquest tipus que toca. Una vegada que es comencen a llegir arestes d'aquest tipus,
+     * cal continuar fins que s'acabin. Quan s'acaben retorna <em>null</em>.
+     * @return les dades dels dos nodes (id del paper, id de l'altre)
+     * @throws PersistenceException si no existeix el fitxer
+     * @throws IOException error IO
+     */
     public String[] getPaperTerm() throws PersistenceException, IOException {
         return getElementFromFile(filePaperTerm);
     }
 
+    /**
+     * Dona l'aresta d'aquest tipus que toca. Una vegada que es comencen a llegir arestes d'aquest tipus,
+     * cal continuar fins que s'acabin. Quan s'acaben retorna <em>null</em>.
+     * @return les dades dels dos nodes (id del paper, id de l'altre)
+     * @throws PersistenceException si no existeix el fitxer
+     * @throws IOException error IO
+     */
     public String[] getPaperConf() throws PersistenceException, IOException {
         return getElementFromFile(filePaperConf);
     }
 
 
-
+    /**
+     * Guarda un nou node al graf. Una vegada es comencen a guardar nodes d'aquest tipus,
+     * s'han de guardar tots. Quan s'acaben, s'ha de cridar la funcio amb <em>data</em> = <em>null</em>.
+     * @param data (id, nom)
+     * @throws PersistenceException si no existeix el fitxer
+     * @throws IOException error IO
+     */
     public void addAuthor(String[] data) throws PersistenceException, IOException {
         addElementToFile(fileAuthor, data);
     }
 
+    /**
+     * Guarda un nou node al graf. Una vegada es comencen a guardar nodes d'aquest tipus,
+     * s'han de guardar tots. Quan s'acaben, s'ha de cridar la funcio amb <em>data</em> = <em>null</em>.
+     * @param data (id, nom)
+     * @throws PersistenceException si no existeix el fitxer
+     * @throws IOException error IO
+     */
     public void addPaper(String[] data) throws PersistenceException, IOException {
         addElementToFile(filePaper, data);
     }
 
+    /**
+     * Guarda un nou node al graf. Una vegada es comencen a guardar nodes d'aquest tipus,
+     * s'han de guardar tots. Quan s'acaben, s'ha de cridar la funcio amb <em>data</em> = <em>null</em>.
+     * @param data (id, nom)
+     * @throws PersistenceException si no existeix el fitxer
+     * @throws IOException error IO
+     */
     public void addTerm(String[] data) throws PersistenceException, IOException {
         addElementToFile(fileTerm, data);
     }
 
+    /**
+     * Guarda un nou node al graf. Una vegada es comencen a guardar nodes d'aquest tipus,
+     * s'han de guardar tots. Quan s'acaben, s'ha de cridar la funcio amb <em>data</em> = <em>null</em>.
+     * @param data (id, nom)
+     * @throws PersistenceException si no existeix el fitxer
+     * @throws IOException error IO
+     */
     public void addConf(String[] data) throws PersistenceException, IOException {
         addElementToFile(fileConf, data);
     }
 
+    /**
+     * Guarda una nova aresta al graf. Una vegada es comencen a guardar arestes d'aquest tipus,
+     * s'han de guardar totes. Quan s'acaben, s'ha de cridar la funcio amb <em>data</em> = <em>null</em>.
+     * @param data (id_paper, id_altre)
+     * @throws PersistenceException si no existeix el fitxer
+     * @throws IOException error IO
+     */
     public void addPaperAuthor(String[] data) throws PersistenceException, IOException {
         addElementToFile(filePaperAuthor, data);
     }
 
+    /**
+     * Guarda una nova aresta al graf. Una vegada es comencen a guardar arestes d'aquest tipus,
+     * s'han de guardar totes. Quan s'acaben, s'ha de cridar la funcio amb <em>data</em> = <em>null</em>.
+     * @param data (id_paper, id_altre)
+     * @throws PersistenceException si no existeix el fitxer
+     * @throws IOException error IO
+     */
     public void addPaperTerm(String[] data) throws PersistenceException, IOException {
         addElementToFile(filePaperTerm, data);
     }
 
+    /**
+     * Guarda una nova aresta al graf. Una vegada es comencen a guardar arestes d'aquest tipus,
+     * s'han de guardar totes. Quan s'acaben, s'ha de cridar la funcio amb <em>data</em> = <em>null</em>.
+     * @param data (id_paper, id_altre)
+     * @throws PersistenceException si no existeix el fitxer
+     * @throws IOException error IO
+     */
     public void addPaperConf(String[] data) throws PersistenceException, IOException {
         addElementToFile(filePaperConf, data);
     }
