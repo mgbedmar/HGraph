@@ -5,11 +5,12 @@ import java.io.File;
 import java.io.FilenameFilter;
 
 public class ProjectManager {
-    private final String PROJECTS_FOLDER_PATH = "/projects";
+    private final String PROJECTS_FOLDER_PATH = "projects";
     private String selectedProject;
 
     public ProjectManager(){
-
+        File dir = new File(PROJECTS_FOLDER_PATH);
+        dir.mkdir();
     }
 
     public void createProject(String projectName) throws PersistenceException
@@ -17,7 +18,7 @@ public class ProjectManager {
         if(!projectExists(projectName))
         {
             File dir = new File(PROJECTS_FOLDER_PATH+"/"+projectName);
-            dir.mkdir();
+            dir.mkdirs();
         }
         else
             throw new PersistenceException("El projecte ja existeix");
@@ -45,10 +46,13 @@ public class ProjectManager {
     public boolean projectExists(String projectName)
     {
         String[] pl = getProjectList();
-        for(String p : pl)
+        if(pl != null)
         {
-            if(p.equals(projectName))
-                return true;
+            for(String p : pl)
+            {
+                if(p.equals(projectName))
+                    return true;
+            }
         }
 
         return false;
@@ -75,5 +79,9 @@ public class ProjectManager {
         });
 
         return directories;
+    }
+
+    public boolean isProjectSelected() {
+        return (selectedProject != null);
     }
 }

@@ -191,12 +191,23 @@ public class PresentationController
 
     private static void saveGraph() {
         try {
+            if(!dc.isProjectSelected())
+                createProject();
+
             dc.save();
         } catch (DomainException de) {
             System.out.println(de.getFriendlyMessage());
             if(debug)
                 de.printStackTrace(System.err);
         }
+    }
+
+    private static void createProject() throws DomainException {
+        info("Introdueix un nom:");
+        String name = in.nextLine();
+        dc.createProject(name);
+        dc.selectProject(name);
+
     }
 
     /**

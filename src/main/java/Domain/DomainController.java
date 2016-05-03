@@ -379,7 +379,7 @@ public class DomainController
         }
         catch (PersistenceException e)
         {
-            throw new DomainException();
+            throw new DomainException("Ha fallat l'escriptura del graf: "+e.getFriendlyMessage());
         }
 
     }
@@ -433,4 +433,23 @@ public class DomainController
 
     }
 
+    public boolean isProjectSelected() {
+        return pc.isProjectSelected();
+    }
+
+    public void createProject(String name) throws DomainException {
+        try {
+            pc.createProject(name);
+        } catch (PersistenceException e) {
+            throw new DomainException("No s'ha pogut crear el projecte:"+e.getFriendlyMessage());
+        }
+    }
+
+    public void selectProject(String name) throws DomainException {
+        try {
+            pc.selectProject(name);
+        } catch (PersistenceException e) {
+            throw new DomainException("No s'ha pogut seleccionar el projecte: "+e.getFriendlyMessage());
+        }
+    }
 }
