@@ -120,8 +120,10 @@ public class GraphFileManager {
      */
     private void backup(String path, String file, String extA, String extB) throws IOException {
         File source = new File(path+file+extA);
-        File target = new File(path+file+extB);
-        Files.copy(source.toPath(), target.toPath(), REPLACE_EXISTING);
+        if (source.exists()) {
+            File target = new File(path + file + extB);
+            Files.copy(source.toPath(), target.toPath(), REPLACE_EXISTING);
+        }
     }
 
     /**
