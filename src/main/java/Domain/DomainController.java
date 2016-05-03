@@ -48,6 +48,7 @@ public class DomainController
      */
     public DomainController()
     {
+        pc = new PersistenceController();
         g = new Graph();
     }
 

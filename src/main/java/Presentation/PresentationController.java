@@ -89,9 +89,10 @@ public class PresentationController
         {
             dc = new DomainController();
             in = new Scanner(System.in);
-            showInitMenu();
+
             Integer x;
             do{
+                showInitMenu();
                 x = readInt();
                 in.nextLine(); //Consume '\n'
                 switch(x)
@@ -122,25 +123,34 @@ public class PresentationController
     }
 
     private static void selectProject() {
-        info("Escull un projecte:");
-        String[] l = dc.getProjectList();
-        printMenu(l);
-        Integer x;
-        do{
-            x = readInt();
-            in.nextLine(); //Consume '\n'
-            if(x > l.length || x < 0)
-                System.out.println("Escriu un numero del 0 al "+l.length);
-        }while(x > l.length || x < 0);
 
-        try {
-            dc.load(l[x]);
-            goToMainMenu();
-        } catch (DomainException de) {
-            System.out.println(de.getFriendlyMessage());
-            if(debug)
-                de.printStackTrace(System.err);
+        String[] l = dc.getProjectList();
+        if(l != null && l.length > 0)
+        {
+            info("Escull un projecte:");
+            printMenu(l);
+            Integer x;
+            do{
+                x = readInt();
+                in.nextLine(); //Consume '\n'
+                if(x > l.length || x < 0)
+                    System.out.println("Escriu un numero del 0 al "+l.length);
+            }while(x > l.length || x < 0);
+
+            try {
+                dc.load(l[x]);
+                goToMainMenu();
+            } catch (DomainException de) {
+                System.out.println(de.getFriendlyMessage());
+                if(debug)
+                    de.printStackTrace(System.err);
+            }
         }
+        else
+        {
+            System.out.println("No hi han projectes guardats");
+        }
+
     }
 
     private static void showInitMenu() {
@@ -171,6 +181,7 @@ public class PresentationController
                     break;
                 case 3:
                     saveGraph();
+                    break;
                 default:
                     System.out.println("Si us plau, escriu una opció vàlida.");
                     break;

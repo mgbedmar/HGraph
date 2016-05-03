@@ -7,6 +7,11 @@ public class PersistenceController {
     private GraphFileManager gfm;
     private ProjectManager pm;
 
+    public PersistenceController(){
+        gfm = new GraphFileManager();
+        pm = new ProjectManager();
+    }
+
     public String[] getProjectList() {
         return pm.getProjectList();
     }
