@@ -2,13 +2,20 @@ package HeteSimTest;
 import java.util.*;
 import GraphTest.Graph.*;
 
+/**
+ * @author Mireia
+ */
 public class HeteSim {
 
     /**
      * Retorna una matriu que te els valors de HeteSim
-     * segons el cami cami, entre tots els nodes del 
-     * tipus pel que comenca el cami i tots els nodes 
-     * del tipus pel que acaba el cami
+     * segons el cami cami, entre tots els nodes del
+     * tipus pel que comenca el cami i tots els nodes
+     * del tipus pel que acaba el cami.
+     * @param graf graf sobre el que es fa el calcul
+     * @param cami cami sobre el que es fa el calcul
+     * @return una <em>HeteSimMatrix</em> amb tots els valors de HeteSim
+     * @throws DomainException si es produeix a les capes inferiors
      */
     public static HeteSimMatrix run(Graph graf, ArrayList<String> cami) throws DomainException {
         ArrayList<String> cami1 = new ArrayList<String>();
@@ -23,7 +30,18 @@ public class HeteSim {
         return result;
     }
 
-    /* Retorna la matriu PM del cami cami */
+    /**
+     * Calcula la matriu PM del cami <em>cami</em>
+     * @param graf graf sobre el que es fa el calcul
+     * @param cami cami sobre el que es fa el calcul
+     * @param tNextE si el cami acaba en tipus <em>ghost</em>, aquest parametre conte el tipus
+     *               seguent al ghost (necessari per construir la matriu intermitja)
+     * @param calc <em>true</em> si cal calcular la matriu intermitja, <em>false</em> si
+     *             ja esta fet (i nomes cal fer un <em>getAnother()</em>
+     * @param in matriu on s'ha de guardar la matriu intermitja que es calculi
+     * @return la matriu PM del cami <em>cami</em>
+     * @throws DomainException si es produeix a les capes inferiors
+     */
     private static HeteSimMatrix calculatePM(Graph graf, ArrayList<String> cami, String tNextE,
                                              boolean calc, IntermediateHeteSimMatrix in) throws DomainException{
         HeteSimMatrix uini, ufi, uprod;
@@ -31,7 +49,15 @@ public class HeteSim {
 
         /*Si el cami nomes te 2 tipus i un intermig anem ja a intermig */
         if (cami.size() == 2 && interm) {
-            uini = new IntermediateHeteSimMatrix(graf, cami.get(0), tNextE);
+            if (calc) {
+		IntermediateHeteSimMatrix matrix = new IntermediateHeteSimMatrix(graf, cami.get(0), tNextE);
+		in.getAnother(matrix);
+		return matrix;
+	    }
+	    else {
+		in.getAnother();
+		return in;
+	    }
         }
         else {
             uini = new HeteSimMatrix(graf, cami.get(0), cami.get(1));
@@ -49,8 +75,9 @@ public class HeteSim {
             uini = uprod;
         }
 
-        /* Si no hi ha E, ja hem acabat. Si hi ha E pero nomes long 2, tambe */
-        if (!interm || cami.size() == 2) return uini;
+        /* Si no hi ha E, ja hem acabat */
+        if (!interm) return uini;
+
         /* Cas contrari, calculem la ultima */
         else {
             /* La matriu final es la intermitja de size-2,tNextE */
@@ -68,8 +95,11 @@ public class HeteSim {
     }
 
 
-    /* Separa el cami per la meitat afegint el node intermig
-     * si cal 
+    /**
+     * Separa el cami <em>cami</em> per la meitat afegint si cal el tipus intermig
+     * @param cami cami a separar
+     * @param cami1 variable on es retorna la primera meitat
+     * @param cami2 variable on es retorna la segona meitat
      */
     private static void subdividirCami(ArrayList<String> cami,
                                        ArrayList<String> cami1,

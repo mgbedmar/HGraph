@@ -43,6 +43,17 @@ public class IntermediateHeteSimMatrix extends HeteSimMatrix {
     }
 
     /**
+     * Copia la matriu <em>matrix</em> i guarda la copia al parametre implicit.
+     * @param matrix matriu a copiar
+     */
+    public void getAnother(IntermediateHeteSimMatrix matrix) {
+        this.numRows = matrix.numRows();
+        this.numCols = matrix.numCols();
+        this.m = matrix.m;
+        this.mv = matrix.mv;
+    }
+
+    /**
      * Inicialitza la matriu amb els valors U_tRow,E i U_TCol,E.
      * @param graf graf sobre el que es calcula
      * @param tRow tipus que indexa files

@@ -49,7 +49,15 @@ public class HeteSim {
 
         /*Si el cami nomes te 2 tipus i un intermig anem ja a intermig */
         if (cami.size() == 2 && interm) {
-            uini = new IntermediateHeteSimMatrix(graf, cami.get(0), tNextE);
+            if (calc) {
+		IntermediateHeteSimMatrix matrix = new IntermediateHeteSimMatrix(graf, cami.get(0), tNextE);
+		in.getAnother(matrix);
+		return matrix;
+	    }
+	    else {
+		in.getAnother();
+		return in;
+	    }
         }
         else {
             uini = new HeteSimMatrix(graf, cami.get(0), cami.get(1));
@@ -67,8 +75,9 @@ public class HeteSim {
             uini = uprod;
         }
 
-        /* Si no hi ha E, ja hem acabat. Si hi ha E pero nomes long 2, tambe */
-        if (!interm || cami.size() == 2) return uini;
+        /* Si no hi ha E, ja hem acabat */
+        if (!interm) return uini;
+
         /* Cas contrari, calculem la ultima */
         else {
             /* La matriu final es la intermitja de size-2,tNextE */

@@ -1,0 +1,27 @@
+Node a1 afegit.
+Node a2 afegit.
+Node a3 afegit.
+Node a4 afegit.
+Node a5 afegit.
+Node p1 afegit.
+Node p2 afegit.
+Node p3 afegit.
+Node t1 afegit.
+Node t2 afegit.
+Node t3 afegit.
+Node c1 afegit.
+Node c2 afegit.
+Aresta (tipusA: author, nomA: a1, tipusB: paper, nomB: p1) afegida.
+Aresta (tipusA: author, nomA: a2, tipusB: paper, nomB: p1) afegida.
+Aresta (tipusA: author, nomA: a3, tipusB: paper, nomB: p2) afegida.
+Aresta (tipusA: author, nomA: a3, tipusB: paper, nomB: p3) afegida.
+Aresta (tipusA: author, nomA: a4, tipusB: paper, nomB: p3) afegida.
+Aresta (tipusA: author, nomA: a5, tipusB: paper, nomB: p3) afegida.
+Aresta (tipusA: term, nomA: t1, tipusB: paper, nomB: p1) afegida.
+Aresta (tipusA: term, nomA: t1, tipusB: paper, nomB: p3) afegida.
+Aresta (tipusA: term, nomA: t2, tipusB: paper, nomB: p2) afegida.
+Aresta (tipusA: term, nomA: t3, tipusB: paper, nomB: p3) afegida.
+Aresta (tipusA: conf, nomA: c1, tipusB: paper, nomB: p1) afegida.
+Aresta (tipusA: conf, nomA: c1, tipusB: paper, nomB: p2) afegida.
+Aresta (tipusA: conf, nomA: c2, tipusB: paper, nomB: p3) afegida.
+a1 t1 0.7745967
