@@ -24,6 +24,7 @@ public class PersistenceController {
         try {
             gfm.startSaving(pm.getProjectPath());
         } catch (IOException e) {
+            e.printStackTrace(System.err);
             throw new PersistenceException("Ha fallat la escriptura. (Permisos? Espai al disc?)");
         }
     }
@@ -134,5 +135,13 @@ public class PersistenceController {
         } catch (IOException e) {
             //No passa res
         }
+    }
+
+    public boolean isProjectSelected() {
+        return pm.isProjectSelected();
+    }
+
+    public void createProject(String name) throws PersistenceException {
+        pm.createProject(name);
     }
 }
