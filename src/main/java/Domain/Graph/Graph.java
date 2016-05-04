@@ -77,20 +77,39 @@ public class Graph {
      * @param node el node desti
      * @throws DomainException si l'aresta no existeix (impossible)
      */
-    private void removeEdgesToNode(Node node) throws DomainException {
+    private void removeEdgesToNode(Node node) throws DomainException
+    {
         for (Node a: node.getNeighbours())
         {
             a.removeEdge(node);
         }
     }
-	
+
+    /**
+     * Afegeix un node al diccionari de noms.
+     * @param node Node per afegir
+     */
+    private void addNodeToDicNames(Node node)
+    {
+        if (dicNameNodes.containsKey(node.getName()))
+        {
+            dicNameNodes.get(node.getName()).add(node);
+        }
+        else
+        {
+            ArrayList<Node> forDic = new ArrayList<>(1); //1 per estalviar memoria
+            forDic.add(node);
+            dicNameNodes.put(node.getName(), forDic);
+        }
+    }
 	
 	//Metodes Publics
 
     /**
      * Constructora. Crea un graf buit.
      */
-    public Graph() {
+    public Graph()
+    {
 		elements = new TreeMap<>();
 		elements.put(Author.TYPE, new HashMap<>());
 		elements.put(Paper.TYPE, new HashMap<>());
@@ -188,7 +207,8 @@ public class Graph {
 	 * @return Conjunt de veins de <em>node</em>. Modificacions en el conjunt de retorn
      * canviaran l'estat del graf.
 	 */
-	public Set<Node> getNeighbours(Node node) {
+	public Set<Node> getNeighbours(Node node)
+    {
         return node.getNeighbours();
 	}
 	
@@ -226,18 +246,9 @@ public class Graph {
             maxID = node.getID();
 
         elements.get(node.getType()).put(node, node);
-        if (dicNameNodes.containsKey(node.getName()))
-        {
-            dicNameNodes.get(node.getName()).add(node);
-        }
-        else
-        {
-            ArrayList<Node> forDic = new ArrayList<>(1); //1 per estalviar memoria
-            forDic.add(node);
-            dicNameNodes.put(node.getName(), forDic);
-        }
+
+        addNodeToDicNames(node);
     }
-	
 
 	/**
 	 * Afegeix una aresta de <em>a</em> a <em>b</em> (i la simetrica).
@@ -259,7 +270,8 @@ public class Graph {
      *             o be <em>getNodes()</em>
      * @throws DomainException si es produeix a les capes inferiors
      */
-	public void removeNode(Node node) throws DomainException {
+	public void removeNode(Node node) throws DomainException
+    {
         if (dicNameNodes.containsKey(node.getName()))
         {
 			dicNameNodes.get(node.getName()).remove(node);
@@ -282,19 +294,29 @@ public class Graph {
      *          o be <em>getNodes()</em>
      * @throws DomainException si es produeix a les capes inferiors
      */
-	public void removeEdge(Node a, Node b) throws DomainException {
+	public void removeEdge(Node a, Node b) throws DomainException
+    {
         a.removeEdge(b);
         b.removeEdge(a);
 	}
 
-    public void setNodeName(Node node, String newName){
-
+    /**
+     * Canvia el nom d'un node.
+     * @param node node extret directament del graf (amb <em>getNode()</em>
+     *        o be <em>getNodes()</em>
+     * @param newName el nou nom pel node <em>node</em>
+     */
+    public void setNodeName(Node node, String newName)
+    {
         dicNameNodes.get(node.getName()).remove(node);
+        if (dicNameNodes.get(node.getName()).isEmpty())
+        {
+            dicNameNodes.remove(node.getName());
+        }
 
         node.setName(newName);
-        ArrayList<Node> a = new ArrayList<>();
-        a.add(node);
-        dicNameNodes.put(newName, a);
+
+        addNodeToDicNames(node);
     }
 
 }
