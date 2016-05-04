@@ -350,6 +350,10 @@ public class DomainController
         return pc.getProjectList();
     }
 
+    /**
+     * Guarda el graf.
+     * @throws DomainException si falla l'escriptura
+     */
     public void save() throws DomainException {
         try
         {
@@ -358,11 +362,6 @@ public class DomainController
             for(Node n : s)
             {
                 pc.addAuthor(n.getID(), n.getName());
-            }
-            s = g.getSetOfNodes(Paper.TYPE);
-            for(Node n : s)
-            {
-                pc.addPaper(n.getID(), n.getName());
             }
             s = g.getSetOfNodes(Conf.TYPE);
             for(Node n : s)
@@ -374,16 +373,58 @@ public class DomainController
             {
                 pc.addTerm(n.getID(), n.getName());
             }
+
+            s = g.getSetOfNodes(Paper.TYPE);
+            for(Node n : s)
+            {
+                pc.addPaper(n.getID(), n.getName());
+            }
+            for(Node n : s)
+            {
+                for (Node a : g.getNeighbours(n, Author.TYPE))
+                {
+                    pc.addPaperAuthor(n.getID(), a.getID());
+                }
+            }
+            for(Node n : s)
+            {
+                for (Node a : g.getNeighbours(n, Conf.TYPE))
+                {
+                    pc.addPaperConf(n.getID(), a.getID());
+                }
+            }
+            for(Node n : s)
+            {
+                for (Node a : g.getNeighbours(n, Term.TYPE))
+                {
+                    pc.addPaperTerm(n.getID(), a.getID());
+                }
+            }
             pc.commit();
 
         }
         catch (PersistenceException e)
         {
-            throw new DomainException("Ha fallat l'escriptura del graf: "+e.getFriendlyMessage());
+            try
+            {
+                pc.rollback();
+            }
+            catch (PersistenceException pe)
+            {
+                throw new DomainException("Fatal error: no s'ha pogut guardar el graf ni tampoc recuperar " +
+                        "la versio anterior del backup. Comprova els permisos i torna a intentar-ho.");
+            }
+            throw new DomainException("No s'han pogut guardar els canvis: "+e.getFriendlyMessage()+
+                                      "\n Torna a intentar-ho o comprova els permisos.");
         }
 
     }
 
+    /**
+     * Carrega un graf a memoria.
+     * @param projectName Nom del projecte del graf.
+     * @throws DomainException si hi ha problemes a la lectura
+     */
     public void load(String projectName) throws DomainException {
         String[] elem;
 
@@ -428,28 +469,56 @@ public class DomainController
             }
 
         } catch (PersistenceException e) {
+            e.printStackTrace();
             throw new DomainException("Hi ha hagut un problema al intentar carregar el graf: "+e.getFriendlyMessage());
         }
 
     }
 
+    /**
+     * Comprova si hi ha algun projecte seleccionat.
+     * @return <em>true</em> si i nomes si hi ha un projecte seleccionat
+     */
     public boolean isProjectSelected() {
         return pc.isProjectSelected();
     }
 
+    /**
+     * Crea un nou projecte.
+     * @param name nom del projecte
+     * @throws DomainException si no es pot crear el projecte
+     */
     public void createProject(String name) throws DomainException {
         try {
             pc.createProject(name);
         } catch (PersistenceException e) {
-            throw new DomainException("No s'ha pogut crear el projecte:"+e.getFriendlyMessage());
+            throw new DomainException("No s'ha pogut crear el projecte: "+e.getFriendlyMessage());
         }
     }
 
+    /**
+     * Selecciona un projecte.
+     * @param name nom del projecte
+     * @throws DomainException si no es pot seleccionar el projecte
+     */
     public void selectProject(String name) throws DomainException {
         try {
             pc.selectProject(name);
         } catch (PersistenceException e) {
             throw new DomainException("No s'ha pogut seleccionar el projecte: "+e.getFriendlyMessage());
+        }
+    }
+
+    /**
+     * Esborra un projecte.
+     * @param name projecte a esborrar
+     * @throws DomainException si no existeix el projecte o no s'aconsegueix esborrar
+     */
+    public void deleteProject(String name) throws DomainException {
+        try {
+            pc.deleteProject(name);
+        } catch (PersistenceException pe) {
+            throw new DomainException("No s'ha pogut esborrar el projecte: " + pe.getFriendlyMessage());
         }
     }
 }

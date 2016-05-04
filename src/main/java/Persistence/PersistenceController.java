@@ -213,7 +213,7 @@ public class PersistenceController {
     public void addTerm(Integer id, String name) throws PersistenceException {
         String[] s = {id.toString(), name};
         try {
-            gfm.addAuthor(s);
+            gfm.addTerm(s);
         } catch (IOException e) {
             throw new PersistenceException("Ha fallat la escriptura. (Permisos? Espai al disc?)");
         }
@@ -245,7 +245,7 @@ public class PersistenceController {
     public void addPaperTerm(Integer idPaper, Integer idAnother) throws PersistenceException {
         String[] data = {idPaper.toString(), idAnother.toString()};
         try {
-            gfm.addPaperAuthor(data);
+            gfm.addPaperTerm(data);
         } catch (IOException e) {
             throw new PersistenceException("Ha fallat l'escriptura. (Permisos? Espai al disc?)");
         }
@@ -261,7 +261,7 @@ public class PersistenceController {
     public void addPaperConf(Integer idPaper, Integer idAnother) throws PersistenceException {
         String[] data = {idPaper.toString(), idAnother.toString()};
         try {
-            gfm.addPaperAuthor(data);
+            gfm.addPaperConf(data);
         } catch (IOException e) {
             throw new PersistenceException("Ha fallat l'escriptura. (Permisos? Espai al disc?)");
         }
@@ -305,5 +305,17 @@ public class PersistenceController {
      */
     public void deleteProject(String name) throws PersistenceException {
         pm.deleteProject(name);
+    }
+
+    /**
+     * Deixa el sistema en l'estat anterior
+     * @throws PersistenceException error IO
+     */
+    public void rollback() throws PersistenceException {
+        try {
+            gfm.rollback();
+        } catch (IOException e) {
+            throw new PersistenceException("No s'ha pogut fer rollback");
+        }
     }
 }

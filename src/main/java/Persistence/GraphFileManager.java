@@ -66,10 +66,14 @@ public class GraphFileManager {
      * @return la linia que toca del fitxer obert
      * @throws IOException si hi ha error IO
      */
-    private String[] getLine() throws IOException {
+    private String[] getLine() throws IOException, PersistenceException {
         String line = bufReader.readLine();
         if (line != null) {
-            return line.split("\t");
+            String[] split = line.split("\t");
+            if (split.length != 2) {
+                handleException("Fitxer mal format.");
+            }
+            return split;
         }
         else {
             this.bufReader.close();
@@ -217,10 +221,16 @@ public class GraphFileManager {
      * @throws IOException error IO
      */
     public void commit() throws IOException, PersistenceException {
+        if (bufWriter != null) {
+            bufWriter.flush();
+            bufWriter.close();
+            bufWriter = null;
+        }
         createNonExistingFiles();
         deleteBackups(path);
     }
 
+    //TODO que no copii, sino que canvii el nom
     /**
      * Denega tots els canvis des del darrer <em>startSaving()</em> i deixa el graf en l'estat anterior.
      * @throws IOException error IO
