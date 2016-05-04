@@ -287,4 +287,14 @@ public class Graph {
         b.removeEdge(a);
 	}
 
+    public void setNodeName(Node node, String newName){
+
+        dicNameNodes.get(node.getName()).remove(node);
+
+        node.setName(newName);
+        ArrayList<Node> a = new ArrayList<>();
+        a.add(node);
+        dicNameNodes.put(newName, a);
+    }
+
 }

@@ -106,7 +106,7 @@ public class DomainController
     public void modifyNode(int id, String type, String newName) throws DomainException
     {
         Node node = g.getNode(id, type);
-        node.setName(newName);
+        g.setNodeName(node, newName);
     }
 
     /**

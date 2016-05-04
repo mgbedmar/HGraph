@@ -64,7 +64,7 @@ public abstract class Node {
      * Setter.
      * @param name: nom nou del node
      */
-    public void setName(String name) {
+    void setName(String name) {
     	this.name = name;
     }
 
