@@ -122,6 +122,10 @@ public class ProjectManager {
         return directories;
     }
 
+    /**
+     * Comprova si hi ha algun projecte seleccionat.
+     * @return <em>true</em> si i nomes si hi ha un projecte seleccionat
+     */
     public boolean isProjectSelected() {
         return (selectedProject != null);
     }
