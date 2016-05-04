@@ -169,10 +169,20 @@ public class GraphFileManager {
         deleteBackup(path, filePaperConf);
     }
 
+    /**
+     * Crea, si no existeix ja, un fitxer amb el path i nom indicat per <em>file</em>.
+     * @param file Path i nom del fitxer per crear
+     * @throws IOException error IO
+     */
     private void createNonExistingFile(String file) throws IOException {
         File f = new File(file);
         f.createNewFile();
     }
+
+    /**
+     * Crea els fitxers del graf que faltin.
+     * @throws IOException error IO
+     */
     private void createNonExistingFiles() throws IOException {
         createNonExistingFile(path+fileAuthor+normExt);
         createNonExistingFile(path+filePaper+normExt);
@@ -207,8 +217,8 @@ public class GraphFileManager {
      * @throws IOException error IO
      */
     public void commit() throws IOException {
-        deleteBackups(path);
         createNonExistingFiles();
+        deleteBackups(path);
     }
 
     /**
@@ -316,7 +326,7 @@ public class GraphFileManager {
 
     /**
      * Guarda un nou node al graf. Una vegada es comencen a guardar nodes d'aquest tipus,
-     * s'han de guardar tots. Quan s'acaben, s'ha de cridar la funcio amb <em>data</em> = <em>null</em>.
+     * s'han de guardar tots.
      * @param data (id, nom)
      * @throws PersistenceException si no existeix el fitxer
      * @throws IOException error IO
@@ -327,7 +337,7 @@ public class GraphFileManager {
 
     /**
      * Guarda un nou node al graf. Una vegada es comencen a guardar nodes d'aquest tipus,
-     * s'han de guardar tots. Quan s'acaben, s'ha de cridar la funcio amb <em>data</em> = <em>null</em>.
+     * s'han de guardar tots.
      * @param data (id, nom)
      * @throws PersistenceException si no existeix el fitxer
      * @throws IOException error IO
@@ -338,7 +348,7 @@ public class GraphFileManager {
 
     /**
      * Guarda un nou node al graf. Una vegada es comencen a guardar nodes d'aquest tipus,
-     * s'han de guardar tots. Quan s'acaben, s'ha de cridar la funcio amb <em>data</em> = <em>null</em>.
+     * s'han de guardar tots.
      * @param data (id, nom)
      * @throws PersistenceException si no existeix el fitxer
      * @throws IOException error IO
@@ -349,7 +359,7 @@ public class GraphFileManager {
 
     /**
      * Guarda un nou node al graf. Una vegada es comencen a guardar nodes d'aquest tipus,
-     * s'han de guardar tots. Quan s'acaben, s'ha de cridar la funcio amb <em>data</em> = <em>null</em>.
+     * s'han de guardar tots.
      * @param data (id, nom)
      * @throws PersistenceException si no existeix el fitxer
      * @throws IOException error IO
@@ -360,7 +370,7 @@ public class GraphFileManager {
 
     /**
      * Guarda una nova aresta al graf. Una vegada es comencen a guardar arestes d'aquest tipus,
-     * s'han de guardar totes. Quan s'acaben, s'ha de cridar la funcio amb <em>data</em> = <em>null</em>.
+     * s'han de guardar totes.
      * @param data (id_paper, id_altre)
      * @throws PersistenceException si no existeix el fitxer
      * @throws IOException error IO
@@ -371,7 +381,7 @@ public class GraphFileManager {
 
     /**
      * Guarda una nova aresta al graf. Una vegada es comencen a guardar arestes d'aquest tipus,
-     * s'han de guardar totes. Quan s'acaben, s'ha de cridar la funcio amb <em>data</em> = <em>null</em>.
+     * s'han de guardar totes.
      * @param data (id_paper, id_altre)
      * @throws PersistenceException si no existeix el fitxer
      * @throws IOException error IO
@@ -382,7 +392,7 @@ public class GraphFileManager {
 
     /**
      * Guarda una nova aresta al graf. Una vegada es comencen a guardar arestes d'aquest tipus,
-     * s'han de guardar totes. Quan s'acaben, s'ha de cridar la funcio amb <em>data</em> = <em>null</em>.
+     * s'han de guardar totes.
      * @param data (id_paper, id_altre)
      * @throws PersistenceException si no existeix el fitxer
      * @throws IOException error IO
