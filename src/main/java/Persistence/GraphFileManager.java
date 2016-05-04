@@ -69,8 +69,7 @@ public class GraphFileManager {
     private String[] getLine() throws IOException {
         String line = bufReader.readLine();
         if (line != null) {
-            String[] res = line.split("\t");
-            return res;
+            return line.split("\t");
         }
         else {
             this.bufReader.close();
@@ -101,7 +100,7 @@ public class GraphFileManager {
      */
     private void addElementToFile(String file, String[] line) throws IOException {
         file = path+file+normExt;
-        if (bufWriter == null || currentFile != file) {
+        if (bufWriter == null || !currentFile.equals(file)) {
             initBufWriter(file);
         }
         bufWriter.write(line[0] + "\t" + line[1]);
@@ -131,9 +130,11 @@ public class GraphFileManager {
      * @param file nom del fitxer (sense extensio)
      * @throws IOException error IO
      */
-    private void deleteBackup(String path, String file) throws IOException {
+    private void deleteBackup(String path, String file) throws PersistenceException {
         File a = new File(path+file+backupExt);
-        a.delete();
+        if (!a.delete()) {
+            throw new PersistenceException("No s'ha pogut esborrar el backup.");
+        }
     }
 
     /**
@@ -158,7 +159,7 @@ public class GraphFileManager {
      * @param path path del sistema
      * @throws IOException error IO
      */
-    private void deleteBackups(String path) throws IOException {
+    private void deleteBackups(String path) throws PersistenceException {
         deleteBackup(path, fileAuthor);
         deleteBackup(path, filePaper);
         deleteBackup(path, fileTerm);
@@ -215,7 +216,7 @@ public class GraphFileManager {
      * Confirma els canvis guardats fins ara i esborra els backups.
      * @throws IOException error IO
      */
-    public void commit() throws IOException {
+    public void commit() throws IOException, PersistenceException {
         createNonExistingFiles();
         deleteBackups(path);
     }
@@ -224,7 +225,7 @@ public class GraphFileManager {
      * Denega tots els canvis des del darrer <em>startSaving()</em> i deixa el graf en l'estat anterior.
      * @throws IOException error IO
      */
-    public void rollback() throws IOException {
+    public void rollback() throws IOException, PersistenceException {
         makeBackups(path, backupExt, normExt);
         deleteBackups(path);
     }
@@ -232,9 +233,8 @@ public class GraphFileManager {
     /**
      * Inicialitza el sistema per comencar a carregar un graf.
      * @param path path del nou graf a carregar
-     * @throws IOException error IO
      */
-    public void startLoading(String path) throws IOException {
+    public void startLoading(String path) {
         this.path = path;
         bufReader = null;
         bufWriter = null;
@@ -327,10 +327,9 @@ public class GraphFileManager {
      * Guarda un nou node al graf. Una vegada es comencen a guardar nodes d'aquest tipus,
      * s'han de guardar tots.
      * @param data (id, nom)
-     * @throws PersistenceException si no existeix el fitxer
      * @throws IOException error IO
      */
-    public void addAuthor(String[] data) throws PersistenceException, IOException {
+    public void addAuthor(String[] data) throws IOException {
         addElementToFile(fileAuthor, data);
     }
 
@@ -338,10 +337,9 @@ public class GraphFileManager {
      * Guarda un nou node al graf. Una vegada es comencen a guardar nodes d'aquest tipus,
      * s'han de guardar tots.
      * @param data (id, nom)
-     * @throws PersistenceException si no existeix el fitxer
      * @throws IOException error IO
      */
-    public void addPaper(String[] data) throws PersistenceException, IOException {
+    public void addPaper(String[] data) throws IOException {
         addElementToFile(filePaper, data);
     }
 
@@ -349,10 +347,9 @@ public class GraphFileManager {
      * Guarda un nou node al graf. Una vegada es comencen a guardar nodes d'aquest tipus,
      * s'han de guardar tots.
      * @param data (id, nom)
-     * @throws PersistenceException si no existeix el fitxer
      * @throws IOException error IO
      */
-    public void addTerm(String[] data) throws PersistenceException, IOException {
+    public void addTerm(String[] data) throws IOException {
         addElementToFile(fileTerm, data);
     }
 
@@ -360,10 +357,9 @@ public class GraphFileManager {
      * Guarda un nou node al graf. Una vegada es comencen a guardar nodes d'aquest tipus,
      * s'han de guardar tots.
      * @param data (id, nom)
-     * @throws PersistenceException si no existeix el fitxer
      * @throws IOException error IO
      */
-    public void addConf(String[] data) throws PersistenceException, IOException {
+    public void addConf(String[] data) throws IOException {
         addElementToFile(fileConf, data);
     }
 
@@ -371,10 +367,9 @@ public class GraphFileManager {
      * Guarda una nova aresta al graf. Una vegada es comencen a guardar arestes d'aquest tipus,
      * s'han de guardar totes.
      * @param data (id_paper, id_altre)
-     * @throws PersistenceException si no existeix el fitxer
      * @throws IOException error IO
      */
-    public void addPaperAuthor(String[] data) throws PersistenceException, IOException {
+    public void addPaperAuthor(String[] data) throws IOException {
         addElementToFile(filePaperAuthor, data);
     }
 
@@ -385,7 +380,7 @@ public class GraphFileManager {
      * @throws PersistenceException si no existeix el fitxer
      * @throws IOException error IO
      */
-    public void addPaperTerm(String[] data) throws PersistenceException, IOException {
+    public void addPaperTerm(String[] data) throws IOException {
         addElementToFile(filePaperTerm, data);
     }
 
@@ -396,7 +391,7 @@ public class GraphFileManager {
      * @throws PersistenceException si no existeix el fitxer
      * @throws IOException error IO
      */
-    public void addPaperConf(String[] data) throws PersistenceException, IOException {
+    public void addPaperConf(String[] data) throws IOException {
         addElementToFile(filePaperConf, data);
     }
 }

@@ -344,7 +344,7 @@ public class DomainController
 
     /**
      * Retorna la llista de projectes guardats
-     * @return
+     * @return llista de projectes guardats
      */
     public String[] getProjectList(){
         return pc.getProjectList();
@@ -389,7 +389,7 @@ public class DomainController
 
         try {
             pc.selectProject(projectName);
-            pc.startLoad();
+            pc.startLoading();
             while ((elem = pc.getAuthor()) != null) {
                 Author a = new Author(Integer.parseInt(elem[0]), elem[1]);
                 g.addNode(a);

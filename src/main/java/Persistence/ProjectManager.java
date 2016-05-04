@@ -3,20 +3,34 @@ package Persistence;
 
 import java.io.File;
 import java.io.FilenameFilter;
+import java.net.URISyntaxException;
 
 public class ProjectManager {
+    private final String JAR_PATH = getJAR_PATH();
     private final String PROJECTS_FOLDER_PATH = "projects";
     private String selectedProject;
 
     /**
-     * Constructora. Crea un nou manager.
-     * @throws PersistenceException si no aconsegueix crear el directori de projectes
+     * Retorna el path on esta el jar de l'aplicacio
+     * @return un string amb el path del jar
      */
-    public ProjectManager() throws PersistenceException {
+    private String getJAR_PATH() {
+        try {
+            File f = new
+                    File(ProjectManager.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath());
+            return f.getParent();
+        }catch (URISyntaxException ue) {
+            return "";
+        }
+    }
+
+    /**
+     * Constructora. Crea un nou manager.
+     */
+    public ProjectManager() {
         selectedProject = null;
-        File dir = new File(PROJECTS_FOLDER_PATH);
-        if (!dir.mkdir())
-            throw new PersistenceException("No s'ha pogut crear el directori de projectes.");
+        File dir = new File(JAR_PATH+"/"+PROJECTS_FOLDER_PATH);
+        dir.mkdir();
     }
 
     /**
@@ -28,7 +42,7 @@ public class ProjectManager {
     {
         if(!projectExists(projectName))
         {
-            File dir = new File(PROJECTS_FOLDER_PATH+"/"+projectName);
+            File dir = new File(JAR_PATH+"/"+PROJECTS_FOLDER_PATH+"/"+projectName);
             if (!dir.mkdirs()) throw new PersistenceException("No s'ha pogut crear el projecte.");
         }
         else
@@ -44,7 +58,7 @@ public class ProjectManager {
     {
         if(projectExists(projectName))
         {
-            File dir = new File(PROJECTS_FOLDER_PATH+"/"+projectName);
+            File dir = new File(JAR_PATH+"/"+PROJECTS_FOLDER_PATH+"/"+projectName);
             String[] graphFiles = dir.list();
             for(String s: graphFiles){
                 File currentFile = new File(dir.getPath(), s);
@@ -65,7 +79,7 @@ public class ProjectManager {
     public void selectProject(String projectName) throws PersistenceException
     {
         if(projectExists(projectName))
-            selectedProject = PROJECTS_FOLDER_PATH+"/"+projectName;
+            selectedProject = JAR_PATH+"/"+PROJECTS_FOLDER_PATH+"/"+projectName;
         else
             throw new PersistenceException("El projecte no existeix");
     }
@@ -109,7 +123,7 @@ public class ProjectManager {
      */
     public String[] getProjectList()
     {
-        File file = new File(PROJECTS_FOLDER_PATH);
+        File file = new File(JAR_PATH+"/"+PROJECTS_FOLDER_PATH);
         String[] directories = file.list(new FilenameFilter()
         {
             @Override
