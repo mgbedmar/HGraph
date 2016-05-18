@@ -521,4 +521,42 @@ public class DomainController
             throw new DomainException("No s'ha pogut esborrar el projecte: " + pe.getFriendlyMessage());
         }
     }
+
+    /**
+     * Dona tots els nodes de tipus <em>type</em> del graf, en format portable.
+     * @param type tipus dels nodes que es consulten
+     * @return Retorna un ArrayList de parelles de String. En la primera posicio
+     * hi ha la id i en la segona, el nom
+     * @throws DomainException si el tipus <em>type</em> es incorrecte
+     */
+    public ArrayList<String[]> getNodes(String type) throws DomainException {
+        ArrayList<String[]> l = new ArrayList<>();
+        for (Node node: g.getSetOfNodes(type)) {
+            String[] f = new String[2];
+            f[0] = String.valueOf(node.getID());
+            f[1] = node.getName();
+            l.add(f);
+        }
+        return l;
+    }
+
+    /**
+     * Dona totes les arestes de nodes de tipus Paper cap a nodes de tipus <em>type</em>.
+     * @param type tipus desti de les arestes
+     * @return Un ArrayList de parelles de String. En la primera posicio hi ha la id
+     * del paper i en la segona, la id del vei de tipus <em>type</em>
+     * @throws DomainException si el tipus <em>type</em> es incorrecte
+     */
+    public ArrayList<String[]> getEdges(String type) throws DomainException {
+        ArrayList<String[]> l = new ArrayList<>();
+        for (Node node: g.getSetOfNodes(type)) {
+            for (Node paper: g.getNeighbours(node, Paper.TYPE)) {
+                String[] f = new String[2];
+                f[0] = String.valueOf(paper.getID());
+                f[1] = String.valueOf(node.getID());
+                l.add(f);
+            }
+        }
+        return l;
+    }
 }
