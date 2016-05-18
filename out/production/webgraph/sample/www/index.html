@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>HGraph</title>
+    <script type="text/javascript" src="js/app.js"></script>
+    <script type="text/javascript" src="js/sigma.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/style.css"/>
+</head>
+<body>
+
+    <!--Loading-->
+    <div id="loading">
+        <div>Loading...</div>
+    </div>
+    <!--Welcome Page-->
+    <div id="welcomePage">
+        <div class="container">
+            <h1>HGraph</h1>
+            <h2>HeteSim made easy</h2>
+            <div class="buttons">
+                <a data-action="newGraph">Nou graf</a>
+                <a data-action="loadGraph">Carregar graf</a>
+            </div>
+        </div>
+    </div>
+
+    <!--Load Graph Page-->
+    <div id="loadGraphPage">
+        <div class="container">
+            <a data-action="welcome">Tornar</a>
+            <ul>
+            </ul>
+        </div>
+    </div>
+
+    <!--Main Page-->
+    <div id="mainPage">
+        <a data-action="welcome">Tornar</a>
+        <div id="graph-container"></div>
+    </div>
+
+</body>
+</html>
