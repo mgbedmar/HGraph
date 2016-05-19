@@ -64,8 +64,12 @@ function mainGoToWelcome(){
     });
 }
 function loadGoToMain() {
+    show("#loading");
     hide("#loadGraphPage", function(){
-            show("#mainPage");
+        show("#mainPage");
+        drawGraph(function(){
+            hide("#loading");
+        });
     });
 }
 function newGraph(){
@@ -88,11 +92,16 @@ function loadGraph(){
 }
 
 function initLoadPage(){
+    var myList = document.getElementById('projectList');
+    myList.innerHTML = '';
     var projects = window.HGraph.getProjects();
     projects.forEach(function(e){
         var child = document.createElement("li");
         child.innerHTML = e;
-        child.addEventListener("click", function() {window.HGraph.loadProject(e); loadGoToMain();});
+        child.addEventListener("click", function() {
+            window.HGraph.loadProject(e);
+            loadGoToMain();
+        });
         //TODO que vagi a la pagina correcta
         document.querySelector("#loadGraphPage ul").appendChild(child);
     });

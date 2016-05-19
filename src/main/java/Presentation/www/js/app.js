@@ -94,7 +94,10 @@ function initLoadPage(){
     projects.forEach(function(e){
         var child = document.createElement("li");
         child.innerHTML = e;
-        child.addEventListener("click", function() {window.HGraph.loadProject(e); loadGoToMain();});
+        child.addEventListener("click", function() {
+            window.HGraph.loadProject(e);
+            loadGoToMain();
+        });
         //TODO que vagi a la pagina correcta
         document.querySelector("#loadGraphPage ul").appendChild(child);
     });
