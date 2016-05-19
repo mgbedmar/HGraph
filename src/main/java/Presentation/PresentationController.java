@@ -34,4 +34,8 @@ public class PresentationController {
         }
         return res;
     }
+
+    public void log(String msg){
+        System.out.println(msg);
+    }
 }

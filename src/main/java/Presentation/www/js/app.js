@@ -1,6 +1,7 @@
 document.addEventListener("DOMContentLoaded", function(){
     checkDev();
     init();
+    
 });
 
 function checkDev(){
@@ -64,8 +65,12 @@ function mainGoToWelcome(){
     });
 }
 function loadGoToMain() {
+    show("#loading");
     hide("#loadGraphPage", function(){
-            show("#mainPage");
+        show("#mainPage");
+        drawGraph(function(){
+            hide("#loading");
+        });
     });
 }
 function newGraph(){
@@ -108,9 +113,9 @@ function drawGraph(cb){
             nodes: [],
             edges: []
         };
-    alert("asdf");
+    window.HGraph.log("asdf");
     var nodes = window.HGraph.getNodesOfType("paper");
-    alert(nodes);
+    window.HGraph.log(nodes);
     nodes.forEach(function(e){
         g.nodes.push({
             id: e[0],

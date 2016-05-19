@@ -1,6 +1,7 @@
 document.addEventListener("DOMContentLoaded", function(){
     checkDev();
     init();
+    
 });
 
 function checkDev(){
@@ -93,7 +94,7 @@ function loadGraph(){
 
 function initLoadPage(){
     var myList = document.getElementById('projectList');
-    myList.innerHTML = '';
+    //myList.innerHTML = '';
     var projects = window.HGraph.getProjects();
     projects.forEach(function(e){
         var child = document.createElement("li");
@@ -103,7 +104,7 @@ function initLoadPage(){
             loadGoToMain();
         });
         //TODO que vagi a la pagina correcta
-        document.querySelector("#loadGraphPage ul").appendChild(child);
+        myList.appendChild(child);
     });
 }
 
@@ -112,9 +113,9 @@ function drawGraph(cb){
             nodes: [],
             edges: []
         };
-    alert("asdf");
+    window.HGraph.log("asdf");
     var nodes = window.HGraph.getNodesOfType("paper");
-    alert(nodes);
+    window.HGraph.log(nodes);
     nodes.forEach(function(e){
         g.nodes.push({
             id: e[0],
