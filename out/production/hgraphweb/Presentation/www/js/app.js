@@ -128,10 +128,11 @@ function drawGraph(cb){
             color: "red"
         });
     });*/
+    window.HGraph.log(typeof nodes.get(0)[0]);
     for (var i = 0; i < nodes.size(); i++) {
         g.nodes.push({
-            id: nodes.get(i)[0],
-            label: nodes.get(i)[1],
+            id: String(nodes.get(i)[0]),
+            label: String(nodes.get(i)[1]),
             x: Math.random()/10,
             y: Math.random()/10,
             size: Math.random()
@@ -140,7 +141,8 @@ function drawGraph(cb){
 
     window.HGraph.log("abans de sigma");
 
-    s = new sigma({
+
+    var s = new sigma({
         graph: g,
         container: 'graph-container',
         settings: {
