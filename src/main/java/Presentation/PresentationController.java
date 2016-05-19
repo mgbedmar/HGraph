@@ -4,6 +4,8 @@ package Presentation;
 import Domain.DomainController;
 import Domain.DomainException;
 
+import java.util.ArrayList;
+
 public class PresentationController {
     DomainController dc;
 
@@ -19,7 +21,17 @@ public class PresentationController {
         try {
             dc.load(projectName);
         } catch (DomainException de) {
-            de.printStackTrace(); //TODO
+            //TODO
         }
+    }
+
+    public ArrayList<String[]> getNodesOfType(String type){
+        ArrayList<String[]> res = new ArrayList<>();
+        try{
+            res = dc.getNodes(type);
+        } catch (DomainException e) {
+            //TODO
+        }
+        return res;
     }
 }
