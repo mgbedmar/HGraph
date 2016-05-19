@@ -52,6 +52,11 @@ function mainGoToWelcome(){
         show("#welcomePage");
     });
 }
+function loadGoToMain() {
+    hide("#loadGraphPage", function(){
+            show("#mainPage");
+    });
+}
 function newGraph(){
     show("#loading");
     hide("#welcomePage", function(){
@@ -76,6 +81,7 @@ function initLoadPage(){
     projects.forEach(function(e){
         var child = document.createElement("li");
         child.innerHTML = e;
+        child.addEventListener("click", function() {window.HGraph.loadProject(e); loadGoToMain();});
         document.querySelector("#loadGraphPage ul").appendChild(child);
     });
 }
