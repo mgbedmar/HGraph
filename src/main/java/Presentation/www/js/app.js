@@ -89,7 +89,7 @@ function loadGraph(){
 
 function initLoadPage(){
     var myList = document.getElementById('projectList');
-    myList.innerHTML = '';
+    //myList.innerHTML = '';
     var projects = window.HGraph.getProjects();
     projects.forEach(function(e){
         var child = document.createElement("li");
@@ -99,7 +99,7 @@ function initLoadPage(){
             loadGoToMain();
         });
         //TODO que vagi a la pagina correcta
-        document.querySelector("#loadGraphPage ul").appendChild(child);
+        myList.appendChild(child);
     });
 }
 
