@@ -1,6 +1,7 @@
 document.addEventListener("DOMContentLoaded", function(){
     checkDev();
     init();
+    
 });
 
 function checkDev(){
@@ -9,6 +10,17 @@ function checkDev(){
         window.HGraph = {
             getProjects: function(){
                 return ["stub1", "stub2", "sutb3"]
+            },
+            getNodesOfType: function(type){
+                if(type == "paper")
+                {
+                    return [
+                        ["0", "patata"],
+                        ["1", "zanahoria"],
+                        ["2", "berenjena"],
+                        ["3", "tomate"]
+                    ];
+                }
             }
         };
     }
@@ -53,8 +65,12 @@ function mainGoToWelcome(){
     });
 }
 function loadGoToMain() {
+    show("#loading");
     hide("#loadGraphPage", function(){
-            show("#mainPage");
+        show("#mainPage");
+        drawGraph(function(){
+            hide("#loading");
+        });
     });
 }
 function newGraph(){
@@ -83,13 +99,65 @@ function initLoadPage(){
     projects.forEach(function(e){
         var child = document.createElement("li");
         child.innerHTML = e;
-        child.addEventListener("click", function() {window.HGraph.loadProject(e); loadGoToMain();});
+        child.addEventListener("click", function() {
+            window.HGraph.loadProject(e);
+            loadGoToMain();
+        });
         //TODO que vagi a la pagina correcta
         myList.appendChild(child);
     });
 }
 
 function drawGraph(cb){
+    var g = {
+            nodes: [],
+            edges: []
+        };
+    window.HGraph.log("asdf");
+    var nodes = window.HGraph.getNodesOfType("paper");
+    //window.HGraph.log(nodes);
+    window.HGraph.log("asf2");
+    window.HGraph.log(typeof nodes)
+    /*nodes.forEach(function(e){
+        g.nodes.push({
+            id: e[0],
+            label: e[1],
+            x: Math.random()/10,
+            y: Math.random()/10,
+            size: Math.random(),
+            color: "red"
+        });
+    });*/
+    for (var i = 0; i < nodes.size(); i++) {
+        g.nodes.push({
+            id: nodes.get(i)[0],
+            label: nodes.get(i)[1],
+            x: Math.random()/10,
+            y: Math.random()/10,
+            size: Math.random()
+        });
+    }
+
+    window.HGraph.log("abans de sigma");
+
+    s = new sigma({
+        graph: g,
+        container: 'graph-container',
+        settings: {
+            minNodeSize: 2,
+            maxNodeSize: 4,
+            minEdgeSize: 1,
+            maxEdgeSize: 1,
+            eventsEnabled: false
+        }
+    });
+
+    window.HGraph.log("hey");
+    cb();
+}
+
+
+function drawGraphDebug(cb){
     var i,
         s,
         o,
