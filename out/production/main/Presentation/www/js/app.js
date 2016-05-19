@@ -128,19 +128,23 @@ function drawGraph(cb){
             color: "red"
         });
     });*/
-    for (var i = 0; i < nodes.size(); i++) {
+    window.HGraph.log(typeof nodes.get(0)[0]);
+    var i = 0;
+    for (i = 0; i < nodes.size(); i++) {
         g.nodes.push({
-            id: nodes.get(i)[0],
-            label: nodes.get(i)[1],
-            x: Math.random()/10,
-            y: Math.random()/10,
+            id: String(nodes.get(i)[0]),
+            label: String(nodes.get(i)[1]),
+            x: Math.random()*100,
+            y: Math.random()*100,
             size: Math.random()
         });
     }
+    window.HGraph.log(i+"");
 
     window.HGraph.log("abans de sigma");
 
-    s = new sigma({
+
+    var s = new sigma({
         graph: g,
         container: 'graph-container',
         settings: {
