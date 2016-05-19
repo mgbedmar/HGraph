@@ -116,6 +116,10 @@ body > div{
     -webkit-justify-content:center;
     -webkit-flex-direction:column;
     -webkit-align-items:stretch;
+    overflow-y:auto;
+    overflow-x:hidden;
+    margin:100px;
+    max-height:100px;
 }
 
 #loadGraphPage li {
@@ -125,6 +129,7 @@ body > div{
     color:#333;
     border-radius:10px;
     min-width:200px;
+    min-height:20px;
     text-align:center;
     cursor:pointer;
 }
@@ -144,5 +149,15 @@ body > div{
 #tornardiv:hover, #tornardiv:active, #loadGraphPage li:hover, #loadGraphPage li:active {
     background-color:#eee;
 }
+/*
+::-webkit-scrollbar {
+    width: 9px;
+}
 
-#loadGraphPage a {}
+::-webkit-scrollbar-track {
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+}*/
