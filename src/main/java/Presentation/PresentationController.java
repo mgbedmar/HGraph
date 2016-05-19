@@ -6,7 +6,7 @@ import Domain.DomainController;
 public class PresentationController {
     DomainController dc;
 
-    public void PresentationController(){
+    public PresentationController(){
         dc = new DomainController();
     }
 
