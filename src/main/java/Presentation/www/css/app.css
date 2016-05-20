@@ -5,6 +5,7 @@ html{
 body{
     margin:0;
     height:100%;
+    overflow:hidden;
 }
 
 body > div{
@@ -15,4 +16,21 @@ body > div{
 
 .active.show{
     opacity: 1;
+}
+
+
+/*overlay*/
+#overlay.active{
+    display:-webkit-flex;
+    -webkit-align-items:center;
+    -webkit-justify-content:center;
+    background-color:rgba(25,25,25,0.5);
+    height:100%;
+}
+/*Loading*/
+#overlay #loading{
+    padding:20px;
+    background-color:#ccc;
+    color:#333;
+    border-radius:10px;
 }
