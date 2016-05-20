@@ -56,7 +56,7 @@ function init(){
     document.querySelector("#welcomePage .buttons a[data-action=newGraph]").addEventListener("click", newGraph);
     document.querySelector("#welcomePage .buttons a[data-action=loadGraph]").addEventListener("click", loadGraph);
     document.querySelector("#loadGraphPage a[data-action=welcome]").addEventListener("click", loadGoToWelcome);
-    document.querySelector("#mainPage a[data-action=welcome]").addEventListener("click", mainGoToWelcome);
+    //document.querySelector("#mainPage a[data-action=welcome]").addEventListener("click", mainGoToWelcome);
 
     setTimeout(function(){
         show("#welcomePage");
