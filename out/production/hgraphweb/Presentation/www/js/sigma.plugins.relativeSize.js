@@ -21,7 +21,7 @@
     // second create size for every node
     for(var i = 0; i < nodes.length; i++) {
       var degree = s.graph.degree(nodes[i].id);
-      nodes[i].size = initialSize * Math.sqrt(degree);
+      nodes[i].size = initialSize * Math.random()*10;
     }
     s.refresh();
   };
