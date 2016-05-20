@@ -104,7 +104,55 @@
 
     app.nav.showLoading = function(){
         var div = document.createElement(div);
-        div.innerHTML = "Loading...";
+        div.classList.add("loading.gif");
+        var img = document.createElement("img");
+        img.src="img/loading.gif";
+        div.appendChild(img);
+        app.nav.showPopup(div);
+    };
+
+    app.nav.showInfo = function(title, msg, btnMsg, cb){
+        var div = document.createElement("div");
+        div.classList.add("info");
+        var title = document.createElement("h1");
+        title.innerHTML = title || "Informació";
+        var text = document.createElement("span");
+        text.innerHTML = msg;
+        var okbtn = document.createElement("a");
+        okbtn.innerHTML = btnMsg;
+        okbtn.addEventListener("click", function(){
+            app.nav.hidePopup();
+            if(cb) cb();
+        });
+        div.appendChild(title);
+        div.appendChild(text);
+        div.appendChild(okbtn);
+        app.nav.showPopup(div);
+    };
+
+    app.nav.showAccept = function(title, msg, btnMsgOk, btnMsgCancel, cbOk, cbCancel){
+        var div = document.createElement("div");
+        div.classList.add("accept");
+        var title = document.createElement("h1");
+        title.innerHTML = title || "Informació";
+        var text = document.createElement("span");
+        text.innerHTML = msg;
+        var okbtn = document.createElement("a");
+        okbtn.innerHTML = btnMsg;
+        okbtn.addEventListener("click", function(){
+            app.nav.hidePopup();
+            if(cbOk) cbOk();
+        });
+        var cancelbtn = document.createElement("a");
+        cancelbtn.innerHTML = btnMsg;
+        cancelbtn.addEventListener("click", function(){
+            app.nav.hidePopup();
+            if(cbCancel) cbCancel();
+        });
+        div.appendChild(title);
+        div.appendChild(text);
+        div.appendChild(okbtn);
+        div.appendChild(cancelbtn);
         app.nav.showPopup(div);
     };
 
