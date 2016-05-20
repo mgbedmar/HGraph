@@ -3,20 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <title>HGraph</title>
+
+    <!--App modules, order matters-->
     <script type="text/javascript" src="js/app.js"></script>
-    <script type="text/javascript" src="js/sigma.min.js"></script>
-    <script type="text/javascript" src="js/sigma.plugins.relativeSize.js"></script>
-    <script type="text/javascript" src="js/sigma.plugins.filter.js"></script>
-    <script type="text/javascript" src="js/sigma.plugins.animate.js"></script>
-    <script type="text/javascript" src="js/sigma.layout.noverlap.js"></script>
-    <link rel="stylesheet" type="text/css" href="css/style.css"/>
+    <script type="text/javascript" src="js/app.graph.js"></script>
+    <script type="text/javascript" src="js/app.nav.js"></script>
+
+    <!--Sigma modules-->
+    <script type="text/javascript" src="js/sigma/sigma.min.js"></script>
+    <script type="text/javascript" src="js/sigma/sigma.plugins.relativeSize.js"></script>
+    <script type="text/javascript" src="js/sigma/sigma.plugins.filter.js"></script>
+    <script type="text/javascript" src="js/sigma/sigma.plugins.animate.js"></script>
+    <script type="text/javascript" src="js/sigma/sigma.layout.noverlap.js"></script>
+
+    <!--Styles-->
+    <link rel="stylesheet" type="text/css" href="css/app.css"/>
+    <link rel="stylesheet" type="text/css" href="css/loadGraph.css"/>
+    <link rel="stylesheet" type="text/css" href="css/main.css"/>
+    <link rel="stylesheet" type="text/css" href="css/welcome.css"/>
     <link rel="stylesheet" type="text/css" href="css/ionicons.min.css"/>
+
 </head>
 <body>
 
     <!--Loading-->
-    <div id="loading">
-        <div>Loading...</div>
+    <div id="popupPage">
+        <div id="popupContent"></div>
     </div>
     <!--Welcome Page-->
     <div id="welcomePage">
@@ -32,15 +44,18 @@
 
     <!--Load Graph Page-->
     <div id="loadGraphPage">
-        <div class="container">
+        <div id="PLcontainer" class="container">
             <div id="tornardiv">
-                <a data-action="welcome">Tornar</a>
+                <a data-action="welcome"><i class="icon ion-chevron-left"></i></a>
             </div>
-            <div id="iconsProjectList">
-                <h1>Sel·lecciona un projecte:</h1>
-                <div><i class="icon ion-edit"></i></div>
+            <div class="container" id="iconsProjectList">
+                <h1>Projectes</h1>
+                <div id="divEditPL"><i class="icon ion-edit"></i></div>
             </div>
             <ul id="projectList">
+            </ul>
+            <ul id="projectList2">
+                <li><div>text</div><div><i class="icon ion-close-round"></i></div></li>
             </ul>
         </div>
     </div>
@@ -50,7 +65,82 @@
         <div id="mainMenu"></div>
         <div id="toolsMenu"></div>
         <div id="queryMenu">
-            
+            <div>
+                <i class="icon ion-ios-search-strong"></i>
+            </div>
+            <ul>
+                <li>
+                    <h1>Complet</h1>
+                </li>
+            </ul>
+            <ul>
+                <li>
+                    <h1>Tipus</h1>
+                    <div class="collapsed">
+                       <ul>
+                           <li>Autor</li>
+                           <li>Paper</li>
+                           <li>Conferència</li>
+                           <li>Terme</li>
+                       </ul>
+                    </div>
+                </li>
+                <li>
+                    <h1>Veïns</h1>
+                    <div class="collapsed">
+                        <span>Node:</span>
+                        <input />
+                        <i class="icon ion-alert-circled"></i>
+                    </div>
+                </li>
+            </ul>
+            <ul>
+                <li>
+                    <h1>Referència</h1>
+                    <div class="collapsed">
+                        <span>Font:</span>
+                        <input />
+                        <i class="icon ion-alert-circled"></i>
+                        <span>Destí:</span>
+                        <input />
+                        <i class="icon ion-alert-circled"></i>
+                    </div>
+                </li>
+                <li>
+                    <h1>1 a N</h1>
+                    <div class="collapsed">
+                        <span>Font:</span>
+                        <input />
+                        <i class="icon ion-alert-circled"></i>
+                        <span>Destí:</span>
+                        <ul>
+                            <li>Autor</li>
+                            <li>Paper</li>
+                            <li>Conferència</li>
+                            <li>Terme</li>
+                        </ul>
+                    </div>
+                </li>
+                <li>
+                    <h1>N a N</h1>
+                    <div class="collapsed">
+                        <span>Font:</span>
+                        <ul>
+                            <li>Autor</li>
+                            <li>Paper</li>
+                            <li>Conferència</li>
+                            <li>Terme</li>
+                        </ul>
+                        <span>Destí:</span>
+                        <ul>
+                            <li>Autor</li>
+                            <li>Paper</li>
+                            <li>Conferència</li>
+                            <li>Terme</li>
+                        </ul>
+                    </div>
+                </li>
+            </ul>
         </div>
         <div id="graph-container"></div>
     </div>

@@ -23,7 +23,7 @@ public class Main extends Application {
     private Scene scene;
     @Override public void start(Stage stage) {
         // create the scene
-        stage.setTitle("Web View");
+        stage.setTitle("HGraph v0.1a");
         scene = new Scene(new Browser(),900,600, Color.web("#666970"));
         stage.setScene(scene);
         //scene.getStylesheets().add("webviewsample/BrowserToolbar.css");
@@ -52,7 +52,7 @@ class Browser extends Region {
                 .addListener((obs, oldValue, newValue) -> {
                     if (newValue == Worker.State.SUCCEEDED) {
 
-                        JSObject jsobj = (JSObject) webEngine.executeScript("window");
+                        JSObject jsobj = (JSObject) webEngine.executeScript("app");
                         jsobj.setMember("HGraph", new PresentationController());
                     }
                 });
