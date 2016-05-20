@@ -148,6 +148,11 @@ body > div{
     cursor:pointer;
 }
 
+#loadGraphPage h1 {
+    font-size:15px;
+    color:#000;
+}
+
 #tornardiv {
     position:absolute;
     top:0px;
