@@ -1,33 +1,37 @@
 
-var app = {};
+var app = app || {};
+
 //Init HGraph
 (function(){
     'use strict';
-    if(typeof window.HGraph === 'undefined')
-    {
-        app.HGraph = {
-            getProjects: function(){
-                return ["stub1", "stub2", "sutb3"]
-            },
-            getNodesOfType: function(type){
-                if(type == "paper")
-                {
-                    return [
-                        ["0", "patata"],
-                        ["1", "zanahoria"],
-                        ["2", "berenjena"],
-                        ["3", "tomate"]
-                    ];
+    //Ugly race condition
+    setTimeout(function(){
+        if(typeof app.HGraph === 'undefined')
+        {
+            app.HGraph = {
+                getProjects: function(){
+                    return ["stub1", "stub2", "sutb3"]
+                },
+                getNodesOfType: function(type){
+                    if(type == "paper")
+                    {
+                        return [
+                            ["0", "patata"],
+                            ["1", "zanahoria"],
+                            ["2", "berenjena"],
+                            ["3", "tomate"]
+                        ];
+                    }
+                },
+                log: function(msg){
+                    console.log(msg);
                 }
-            },
-            log: function(msg){
-                console.log(msg);
-            }
-        };
-    }
-    else 
-        app.HGraph = window.HGraph;
-    
+            };
+        }
+
+    },1);
+
+
     app.init = function(){
         if(app.nav === undefined || app.graph === undefined){
             app.HGraph.log("Error a les dependencies");
@@ -39,12 +43,21 @@ var app = {};
             .addEventListener("click", app.nav.welcomeGoToloadGraph);
         document.querySelector("#loadGraphPage a[data-action=welcome]")
             .addEventListener("click", app.nav.loadGoToWelcome);
+        document.querySelector("#loadGraphPage .ion-edit")
+                    .addEventListener("click", app.editProjects);
         //document.querySelector("#mainPage a[data-action=welcome]").addEventListener("click", mainGoToWelcome);
 
         setTimeout(function(){
             app.nav.init();
         }, 500);
     };
+
+
+    app.editProjects = function() {
+        //querySelector("#loadGraphPage .ion-close-round").style.display = 'block';
+    };
+
+
 }).call(window);
 
 

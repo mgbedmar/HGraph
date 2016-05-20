@@ -34,9 +34,10 @@ body > div{
 #popupPage #popupContent div.loading{
     width:80px;
     height:80px;
-    background-color:#ccc;
+    background-color:#c1c1c1;
     color:#333;
     border-radius:10px;
+    border:3px solid #333;
 }
 
 #popupPage #popupContent div.loading img{
