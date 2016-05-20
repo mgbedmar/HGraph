@@ -36,11 +36,11 @@ var app = app || {};
         var tr = document.querySelectorAll("#loadGraphPage .ion-close-round");
 
         for (var i = 0; i < tr.length; i++) {
-            if (tr[i].style.display === 'none') {
-                tr[i].style.display = 'inline';
+            if (tr[i].style.display === 'inline') {
+                tr[i].style.display = 'none';
             }
             else {
-                tr[i].style.display = 'none';
+                tr[i].style.display = 'inline';
             }
         }
     };
