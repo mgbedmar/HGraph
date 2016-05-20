@@ -33,7 +33,21 @@
         var projects = app.HGraph.getProjects();
         projects.forEach(function(e){
             var child = document.createElement("li");
-            child.innerHTML = e;
+            /* Crea una estructura del tipus
+            <li><div>text</div><div><i class="icon ion-close-round"></i></div></li> */
+            var div1, div2, ic;
+            div1 = document.createElement("div");
+            div1.innerHTML = e;
+            div2 = document.createElement("div");
+            ic = document.createElement("i");
+            ic.className = "icon ion-close-round";
+            div2.appendChild(ic);
+            div2.addEventListener("click", function() {
+                app.HGraph.log("estic al listener");
+                //TODO show popup and delete
+            });
+            child.appendChild(div1);
+            child.appendChild(div2);
             child.addEventListener("click", function() {
                 app.HGraph.loadProject(e);
                 app.nav.loadGoToMain();
