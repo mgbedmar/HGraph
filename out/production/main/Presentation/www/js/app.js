@@ -1,7 +1,33 @@
+
+
+/*    var s = new sigma({
+        graph: g,
+        container: 'graph-container',
+        settings: {
+            minNodeSize: 1,
+            maxNodeSize: 4,
+            minEdgeSize: 0.2,
+            maxEdgeSize: 0.5,
+            eventsEnabled: true,
+            minRatio: 10, // How far can we zoom out?
+            maxRatio: 20, // How far can we zoom in?
+            defaultLabelColor: "#000",
+            defaultLabelSize: 14,
+            defaultLabelBGColor: "#ddd",
+            defaultHoverLabelBGColor: "#002147",
+            defaultLabelHoverColor: "#fff",
+            labelThreshold: 10,
+            defaultEdgeType: "curve",
+            hoverFontStyle: "bold",
+            fontStyle: "bold",
+            activeFontStyle: "bold"
+        }
+    });*/
+
 document.addEventListener("DOMContentLoaded", function(){
     checkDev();
     init();
-    
+
 });
 
 function checkDev(){
@@ -94,7 +120,7 @@ function loadGraph(){
 
 function initLoadPage(){
     var myList = document.getElementById('projectList');
-    //myList.innerHTML = '';
+    myList.innerHTML = '';
     var projects = window.HGraph.getProjects();
     projects.forEach(function(e){
         var child = document.createElement("li");
@@ -108,65 +134,84 @@ function initLoadPage(){
     });
 }
 
-function drawGraph(cb){
+function addNodesToGraf(nodes, graf, centerPos){
+    for(var i=0; i < nodes.length; i++)
+    {
+        var pos = getCircleRandomPos();
+        graf.nodes.push({
+            id: String(nodes.get(i)[0]),
+            label: String(nodes.get(i)[1]),
+            x: pos.x+centerPos.x,
+            y: pos.y+centerPos.y,
+            size: Math.random()
+        });
+    }
+
+}
+
+function drawGraphd(cb){
     var g = {
             nodes: [],
             edges: []
         };
-    window.HGraph.log("asdf");
+
     var nodes = window.HGraph.getNodesOfType("paper");
-    //window.HGraph.log(nodes);
-    window.HGraph.log("asf2");
-    window.HGraph.log(typeof nodes)
-    /*nodes.forEach(function(e){
-        g.nodes.push({
-            id: e[0],
-            label: e[1],
-            x: Math.random()/10,
-            y: Math.random()/10,
-            size: Math.random(),
-            color: "red"
-        });
-    });*/
-    window.HGraph.log(typeof nodes.get(0)[0]);
-    var i = 0;
-    for (i = 0; i < nodes.size(); i++) {
+
+    for (var i = 0; i < nodes.size(); i++) {
+        var pos = getCircleRandomPos();
         g.nodes.push({
             id: String(nodes.get(i)[0]),
             label: String(nodes.get(i)[1]),
-            x: Math.random()*100,
-            y: Math.random()*100,
-            size: Math.random()
+            x: pos.x,
+            y: pos.y,
+            size: Math.random()*10
         });
     }
-    window.HGraph.log(i+"");
-
-    window.HGraph.log("abans de sigma");
-
 
     var s = new sigma({
         graph: g,
         container: 'graph-container',
         settings: {
-            minNodeSize: 2,
-            maxNodeSize: 4,
-            minEdgeSize: 1,
-            maxEdgeSize: 1,
-            eventsEnabled: false
+            minNodeSize: 0.5,
+            maxNodeSize: 3,
+            minEdgeSize: 0.2,
+            maxEdgeSize: 0.5,
+            eventsEnabled: false,
+            minRatio: 0, // How far can we zoom out?
+            maxRatio: 0, // How far can we zoom in?
+            defaultLabelColor: "#000",
+            defaultLabelSize: 15,
+            defaultLabelBGColor: "#ddd",
+            defaultHoverLabelBGColor: "#002147",
+            defaultLabelHoverColor: "#fff",
+            labelThreshold: 18,
+            defaultEdgeType: "curve",
+            fontStyle: "bold",
+            activeFontStyle: "bold"
         }
     });
+    var filter = new sigma.plugins.filter(s);
 
-    window.HGraph.log("hey");
+    filter.nodesBy(function(n){
+        return e.size > 8;
+    }, "min-size").apply();
     cb();
 }
+function getCircleRandomPos(){
+    var t = 2*Math.PI*Math.random();
+    var u = Math.random()+Math.random();
+    var r = u;
+    if(u>1)
+        r = 2-u;
+    return {x: Math.cos(t)*r, y: Math.sin(t)*r};
+}
 
-
-function drawGraphDebug(cb){
+function drawGraph(cb){
     var i,
         s,
         o,
-        N = 2500,
-        E = 100,
+        N = 24000,
+        E = 110000,
         C = 4,
         d = 0.5,
         cs = [],
@@ -187,16 +232,16 @@ function drawGraphDebug(cb){
 
     for (i = 0; i < N; i++) {
         o = cs[(Math.random() * C) | 0];
+        var pos = getCircleRandomPos();
         g.nodes.push({
             id: 'n' + i,
             label: 'Node' + i,
-            x: Math.random()*100,
-            y: Math.random()*100,
-            size: Math.random(),
+            x: pos.x,
+            y: pos.y,
+            size: Math.random()*30,
             color: o.color
         });
         o.nodes.push('n' + i);
-        if(i%1024) console.log("+1024");
     }
 
     for (i = 0; i < E; i++) {
@@ -204,14 +249,18 @@ function drawGraphDebug(cb){
             g.edges.push({
                 id: 'e' + i,
                 source: 'n' + ((Math.random() * N) | 0),
-                target: 'n' + ((Math.random() * N) | 0)
+                target: 'n' + ((Math.random() * N) | 0),
+                size:Math.random()*10,
+                hidden: true
             });
         else {
             o = cs[(Math.random() * C) | 0]
             g.edges.push({
                 id: 'e' + i,
                 source: o.nodes[(Math.random() * o.nodes.length) | 0],
-                target: o.nodes[(Math.random() * o.nodes.length) | 0]
+                target: o.nodes[(Math.random() * o.nodes.length) | 0],
+                size:Math.random()*10,
+                hidden: true
             });
         }
     }
@@ -227,15 +276,27 @@ function drawGraphDebug(cb){
             eventsEnabled: false
         }
     });
+
+    sigma.plugins.relativeSize(s, 4);
+    var filter = new sigma.plugins.filter(s);
+
+    filter.nodesBy(function(n){
+        return this.degree(n.id) > 15;
+    }, "min-size")
+        .apply();
+    s.graph.edges().forEach(function(e){
+        e.hidden = !(this.nodes(e.source).hidden || this.nodes(e.target).hidden);
+    });
+    
+
     cb();
 /*
 // Configure the noverlap layout:
     var noverlapListener = s.configNoverlap({
-        nodeMargin: 0.2,
-        scaleNodes: 1.05,
-        gridSize: 200,
-        easing: 'quadraticInOut', // animation transition function
-        duration: 1000   // animation duration. Long here for the purposes of this example only
+        nodeMargin: 0.01,
+        scaleNodes: 0.8,
+        gridSize: 400,
+        speed:5
     });
 // Bind the events:
     noverlapListener.bind('start stop interpolate', function(e) {
@@ -243,11 +304,12 @@ function drawGraphDebug(cb){
         if(e.type === 'start') {
             console.time('noverlap');
         }
-        if(e.type === 'interpolate') {
+        if(e.type === 'stop') {
             console.timeEnd('noverlap');
+            cb();
         }
     });
 // Start the layout:
-//s.startNoverlap();
+s.startNoverlap();
 */
 }
