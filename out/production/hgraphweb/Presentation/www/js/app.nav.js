@@ -173,11 +173,6 @@
     app.nav.hidePopup = function(){
         _hide(_pageIds.popup);
     };
-    
-    app.nav.openQueryMenu = function(){
-        app.HGraph.log("toggle");
-        document.querySelector("#"+_pageIds.main + " #queryMenu").classList.toggle("open");
-    };
 
 
 }).call(window);
