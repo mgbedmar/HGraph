@@ -58,6 +58,9 @@ var app = app || {};
             .addEventListener("click", app.nav.loadGoToWelcome);
         document.getElementById("divEditPL")
             .addEventListener("click", app.editProjects);
+
+        document.querySelector("#mainPage #queryMenu > div[data-action=openQueryMenu]")
+            .addEventListener("click", app.nav.openQueryMenu);
         //document.querySelector("#mainPage a[data-action=welcome]").addEventListener("click", mainGoToWelcome);
 
         setTimeout(function(){
