@@ -1,0 +1,18 @@
+html{
+    height:100%;
+    font-family: sans-serif;
+}
+body{
+    margin:0;
+    height:100%;
+}
+
+body > div{
+    display:none;
+    opacity: 0;
+    -webkit-transition:opacity 200ms;
+}
+
+.active.show{
+    opacity: 1;
+}

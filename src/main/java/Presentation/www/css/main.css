@@ -1,0 +1,18 @@
+/*Main Page*/
+#mainPage.active{
+    display:block;
+    height:100%;
+}
+#mainPage a{
+    display:block;
+    position:absolute;
+    padding:20px;
+    border-radius:5;
+    bacgkround-color:#222;
+    color:#ccc;
+    margin:20px;
+    z-index:10;
+}
+#mainPage #graph-container{
+    height:100%;
+}
