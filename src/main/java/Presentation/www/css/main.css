@@ -3,22 +3,13 @@
     display:block;
     height:100%;
 }
-#mainPage a{
-    display:block;
-    position:absolute;
-    padding:20px;
-    border-radius:5;
-    bacgkround-color:#222;
-    color:#ccc;
-    margin:20px;
-    z-index:10;
-}
+
 #mainPage #graph-container{
     height:100%;
 }
 
 #mainPage #queryMenu.open{
-    right:300px;
+    right:0px;
 }
 #mainPage #queryMenu{
     position:absolute;
@@ -36,8 +27,8 @@
     -webkit-justify-content:center;
     padding:5px 0;
     width:40px;
-    border-top-left-radius: 5px;
-    border-bottom-left-radius: 5px;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
     background-color:#aaa;
     color:#333;
     margin-left:-40px;
