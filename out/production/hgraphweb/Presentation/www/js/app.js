@@ -1,7 +1,33 @@
+
+
+/*    var s = new sigma({
+        graph: g,
+        container: 'graph-container',
+        settings: {
+            minNodeSize: 1,
+            maxNodeSize: 4,
+            minEdgeSize: 0.2,
+            maxEdgeSize: 0.5,
+            eventsEnabled: true,
+            minRatio: 10, // How far can we zoom out?
+            maxRatio: 20, // How far can we zoom in?
+            defaultLabelColor: "#000",
+            defaultLabelSize: 14,
+            defaultLabelBGColor: "#ddd",
+            defaultHoverLabelBGColor: "#002147",
+            defaultLabelHoverColor: "#fff",
+            labelThreshold: 10,
+            defaultEdgeType: "curve",
+            hoverFontStyle: "bold",
+            fontStyle: "bold",
+            activeFontStyle: "bold"
+        }
+    });*/
+
 document.addEventListener("DOMContentLoaded", function(){
     checkDev();
     init();
-    
+
 });
 
 function checkDev(){
@@ -120,8 +146,8 @@ function drawGraph(cb){
         g.nodes.push({
             id: String(nodes.get(i)[0]),
             label: String(nodes.get(i)[1]),
-            x: Math.random(),
-            y: Math.random(),
+            x: Math.random()*100,
+            y: Math.random()*100,
             size: Math.random()
         });
     }
@@ -149,7 +175,7 @@ function drawGraph(cb){
             activeFontStyle: "bold"
         }
     });
-    
+
     cb();
 }
 
