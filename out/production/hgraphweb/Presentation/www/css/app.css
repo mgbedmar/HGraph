@@ -1,0 +1,46 @@
+html{
+    height:100%;
+    font-family: sans-serif;
+}
+body{
+    margin:0;
+    height:100%;
+    overflow:hidden;
+}
+
+body > div{
+    display:none;
+    opacity: 0;
+    -webkit-transition:opacity 200ms;
+}
+
+.active.show{
+    opacity: 1;
+}
+
+
+/*overlay*/
+#popupPage.active{
+    position:absolute;
+    display:-webkit-flex;
+    -webkit-align-items:center;
+    -webkit-justify-content:center;
+    background-color:rgba(25,25,25,0.5);
+    height:100%;
+    width:100%;
+    z-index:1;
+}
+/*popup classes*/
+#popupPage #popupContent div.loading{
+    width:80px;
+    height:80px;
+    background-color:#ccc;
+    color:#333;
+    border-radius:10px;
+}
+
+#popupPage #popupContent div.loading img{
+    width: 95px;
+    margin-top: -23px;
+    margin-left: -7px;
+}

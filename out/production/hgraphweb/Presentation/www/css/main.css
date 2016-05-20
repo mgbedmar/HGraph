@@ -1,0 +1,50 @@
+/*Main Page*/
+#mainPage.active{
+    display:block;
+    height:100%;
+}
+#mainPage a{
+    display:block;
+    position:absolute;
+    padding:20px;
+    border-radius:5;
+    bacgkround-color:#222;
+    color:#ccc;
+    margin:20px;
+    z-index:10;
+}
+#mainPage #graph-container{
+    height:100%;
+}
+
+#mainPage #queryMenu.open{
+    right:300px;
+}
+#mainPage #queryMenu{
+    position:absolute;
+    top:0;
+    right:-300px;
+    background-color:#aaa;
+    width:300px;
+
+    -webkit-transition:right 300ms ease;
+}
+
+#mainPage #queryMenu > div{
+    display:-webkit-flex;
+    -webkit-align-items:center;
+    -webkit-justify-content:center;
+    padding:5px 0;
+    width:40px;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+    background-color:#aaa;
+    color:#333;
+    margin-left:-40px;
+    margin-top:150px;
+}
+
+#mainPage #queryMenu > div i{
+    display:block;
+    font-size:25px;
+}
