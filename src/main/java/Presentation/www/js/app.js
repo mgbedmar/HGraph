@@ -149,7 +149,7 @@ function addNodesToGraf(nodes, graf, centerPos){
 
 }
 
-function drawGraphd(cb){
+function drawGraph(cb){
     var g = {
             nodes: [],
             edges: []
@@ -157,44 +157,36 @@ function drawGraphd(cb){
 
     var nodes = window.HGraph.getNodesOfType("paper");
 
-    for (var i = 0; i < nodes.size(); i++) {
+    //TODO
+    for (var i = 0; i < Math.sqrt(nodes.size()); i++) {
         var pos = getCircleRandomPos();
+
         g.nodes.push({
             id: String(nodes.get(i)[0]),
             label: String(nodes.get(i)[1]),
             x: pos.x,
-            y: pos.y,
-            size: Math.random()*10
+            y: pos.y
         });
     }
 
+    //TODO: zoom, size, threshold
     var s = new sigma({
         graph: g,
         container: 'graph-container',
         settings: {
-            minNodeSize: 0.5,
-            maxNodeSize: 3,
+
+            minNodeSize: 1,
             minEdgeSize: 0.2,
             maxEdgeSize: 0.5,
-            eventsEnabled: false,
-            minRatio: 0, // How far can we zoom out?
-            maxRatio: 0, // How far can we zoom in?
-            defaultLabelColor: "#000",
-            defaultLabelSize: 15,
-            defaultLabelBGColor: "#ddd",
-            defaultHoverLabelBGColor: "#002147",
-            defaultLabelHoverColor: "#fff",
-            labelThreshold: 18,
-            defaultEdgeType: "curve",
-            fontStyle: "bold",
-            activeFontStyle: "bold"
+            zoomMin: 0.01,
+            zoomMax: 0.5,
+            eventsEnabled: true,
+            labelThreshold: 25
+
         }
     });
-    var filter = new sigma.plugins.filter(s);
-
-    filter.nodesBy(function(n){
-        return e.size > 8;
-    }, "min-size").apply();
+    //TODO
+    sigma.plugins.relativeSize(s, 0.5);
     cb();
 }
 function getCircleRandomPos(){
@@ -206,12 +198,12 @@ function getCircleRandomPos(){
     return {x: Math.cos(t)*r, y: Math.sin(t)*r};
 }
 
-function drawGraph(cb){
+function drawGraphdebug(cb){
     var i,
         s,
         o,
-        N = 24000,
-        E = 110000,
+        N = 2000,
+        E = 0,
         C = 4,
         d = 0.5,
         cs = [],
@@ -269,28 +261,22 @@ function drawGraph(cb){
         graph: g,
         container: 'graph-container',
         settings: {
-            minNodeSize: 4,
-            maxNodeSize: 2,
+            minNodeSize: 2,
+            /*maxNodeSize: 2,
             minEdgeSize: 1,
-            maxEdgeSize: 1,
+            maxEdgeSize: 1,*/
             eventsEnabled: false
         }
     });
 
     sigma.plugins.relativeSize(s, 4);
-    var filter = new sigma.plugins.filter(s);
 
-    filter.nodesBy(function(n){
-        return this.degree(n.id) > 15;
-    }, "min-size")
-        .apply();
+    //cb();
 
-    cb();
-/*
 // Configure the noverlap layout:
     var noverlapListener = s.configNoverlap({
-        nodeMargin: 0.01,
-        scaleNodes: 0.8,
+        nodeMargin: 0.05,
+        scaleNodes: 0.9,
         gridSize: 400,
         speed:5
     });
@@ -307,5 +293,5 @@ function drawGraph(cb){
     });
 // Start the layout:
 s.startNoverlap();
-*/
+
 }
