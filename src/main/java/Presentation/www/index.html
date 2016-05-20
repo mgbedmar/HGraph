@@ -11,6 +11,7 @@
     <script type="text/javascript" src="js/sigma.layout.noverlap.js"></script>
     <link rel="stylesheet" type="text/css" href="css/style.css"/>
     <link rel="stylesheet" type="text/css" href="css/ionicons.min.css"/>
+    <link rel="stylesheet" type="text/css" href="css/loadGraph.css"/>
 </head>
 <body>
 
@@ -32,13 +33,13 @@
 
     <!--Load Graph Page-->
     <div id="loadGraphPage">
-        <div class="container">
+        <div id="PLcontainer" class="container">
             <div id="tornardiv">
                 <a data-action="welcome">Tornar</a>
             </div>
-            <div id="iconsProjectList">
-                <h1>Sel·lecciona un projecte:</h1>
-                <div><i class="icon ion-edit"></i></div>
+            <div class="container" id="iconsProjectList">
+                <h1>Projectes</h1>
+                <div id="divEditPL"><i class="icon ion-edit"></i></div>
             </div>
             <ul id="projectList">
             </ul>
