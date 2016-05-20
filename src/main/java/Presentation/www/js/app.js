@@ -1,7 +1,33 @@
+
+
+/*    var s = new sigma({
+        graph: g,
+        container: 'graph-container',
+        settings: {
+            minNodeSize: 1,
+            maxNodeSize: 4,
+            minEdgeSize: 0.2,
+            maxEdgeSize: 0.5,
+            eventsEnabled: true,
+            minRatio: 10, // How far can we zoom out?
+            maxRatio: 20, // How far can we zoom in?
+            defaultLabelColor: "#000",
+            defaultLabelSize: 14,
+            defaultLabelBGColor: "#ddd",
+            defaultHoverLabelBGColor: "#002147",
+            defaultLabelHoverColor: "#fff",
+            labelThreshold: 10,
+            defaultEdgeType: "curve",
+            hoverFontStyle: "bold",
+            fontStyle: "bold",
+            activeFontStyle: "bold"
+        }
+    });*/
+
 document.addEventListener("DOMContentLoaded", function(){
     checkDev();
     init();
-    
+
 });
 
 function checkDev(){
@@ -94,7 +120,7 @@ function loadGraph(){
 
 function initLoadPage(){
     var myList = document.getElementById('projectList');
-    myList.innerHTML = '';
+    //myList.innerHTML = '';
     var projects = window.HGraph.getProjects();
     projects.forEach(function(e){
         var child = document.createElement("li");
@@ -113,43 +139,50 @@ function drawGraph(cb){
             nodes: [],
             edges: []
         };
-
+    window.HGraph.log("asdf");
     var nodes = window.HGraph.getNodesOfType("paper");
-
-    for (var i = 0; i < nodes.size(); i++) {
+    //window.HGraph.log(nodes);
+    window.HGraph.log("asf2");
+    window.HGraph.log(typeof nodes)
+    /*nodes.forEach(function(e){
+        g.nodes.push({
+            id: e[0],
+            label: e[1],
+            x: Math.random()/10,
+            y: Math.random()/10,
+            size: Math.random(),
+            color: "red"
+        });
+    });*/
+    window.HGraph.log(typeof nodes.get(0)[0]);
+    var i = 0;
+    for (i = 0; i < nodes.size(); i++) {
         g.nodes.push({
             id: String(nodes.get(i)[0]),
             label: String(nodes.get(i)[1]),
-            x: Math.random(),
-            y: Math.random(),
+            x: Math.random()*100,
+            y: Math.random()*100,
             size: Math.random()
         });
     }
+    window.HGraph.log(i+"");
+
+    window.HGraph.log("abans de sigma");
+
 
     var s = new sigma({
         graph: g,
         container: 'graph-container',
         settings: {
-            minNodeSize: 1,
+            minNodeSize: 2,
             maxNodeSize: 4,
-            minEdgeSize: 0.2,
-            maxEdgeSize: 0.5,
-            eventsEnabled: true,
-            minRatio: 10, // How far can we zoom out?
-            maxRatio: 20, // How far can we zoom in?
-            defaultLabelColor: "#000",
-            defaultLabelSize: 14,
-            defaultLabelBGColor: "#ddd",
-            defaultHoverLabelBGColor: "#002147",
-            defaultLabelHoverColor: "#fff",
-            labelThreshold: 10,
-            defaultEdgeType: "curve",
-            hoverFontStyle: "bold",
-            fontStyle: "bold",
-            activeFontStyle: "bold"
+            minEdgeSize: 1,
+            maxEdgeSize: 1,
+            eventsEnabled: false
         }
     });
-    
+
+    window.HGraph.log("hey");
     cb();
 }
 

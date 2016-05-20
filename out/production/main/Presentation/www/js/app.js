@@ -115,8 +115,10 @@ function drawGraph(cb){
         };
     window.HGraph.log("asdf");
     var nodes = window.HGraph.getNodesOfType("paper");
-    window.HGraph.log(nodes);
-    nodes.forEach(function(e){
+    //window.HGraph.log(nodes);
+    window.HGraph.log("asf2");
+    window.HGraph.log(typeof nodes)
+    /*nodes.forEach(function(e){
         g.nodes.push({
             id: e[0],
             label: e[1],
@@ -125,19 +127,36 @@ function drawGraph(cb){
             size: Math.random(),
             color: "red"
         });
-    });
+    });*/
+    window.HGraph.log(typeof nodes.get(0)[0]);
+    var i = 0;
+    for (i = 0; i < nodes.size(); i++) {
+        g.nodes.push({
+            id: String(nodes.get(i)[0]),
+            label: String(nodes.get(i)[1]),
+            x: Math.random()*100,
+            y: Math.random()*100,
+            size: Math.random()
+        });
+    }
+    window.HGraph.log(i+"");
 
-    s = new sigma({
+    window.HGraph.log("abans de sigma");
+
+
+    var s = new sigma({
         graph: g,
         container: 'graph-container',
         settings: {
-            minNodeSize: 4,
-            maxNodeSize: 2,
+            minNodeSize: 2,
+            maxNodeSize: 4,
             minEdgeSize: 1,
             maxEdgeSize: 1,
             eventsEnabled: false
         }
     });
+
+    window.HGraph.log("hey");
     cb();
 }
 
