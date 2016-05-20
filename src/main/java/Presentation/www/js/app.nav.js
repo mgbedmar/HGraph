@@ -103,8 +103,8 @@
     };
 
     app.nav.showLoading = function(){
-        var div = document.createElement(div);
-        div.classList.add("loading.gif");
+        var div = document.createElement("div");
+        div.classList.add("loading");
         var img = document.createElement("img");
         img.src="img/loading.gif";
         div.appendChild(img);
