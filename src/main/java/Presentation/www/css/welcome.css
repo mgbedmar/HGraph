@@ -28,8 +28,8 @@
     width:50%;
     margin:15px;
     padding: 10px;
-    background-color:#222;
-    color:white;
+    background-color:#00080A;
+    color:#ECEDED;
     border-radius:10px;
     text-align:center;
     cursor:pointer;
@@ -37,6 +37,6 @@
 }
 
 #welcomePage .container .buttons a:hover{
-    background-color: #ccc;
-    color:#222;
+    background-color: #678F99;
+    color:#00080A;
 }
