@@ -20,15 +20,18 @@ body > div{
 
 
 /*overlay*/
-#overlay.active{
+#popupPage.active{
+    position:absolute;
     display:-webkit-flex;
     -webkit-align-items:center;
     -webkit-justify-content:center;
     background-color:rgba(25,25,25,0.5);
     height:100%;
+    width:100%;
+    z-index:1;
 }
-/*Loading*/
-#overlay #loading{
+/*content*/
+#popupPage #popupContent{
     padding:20px;
     background-color:#ccc;
     color:#333;

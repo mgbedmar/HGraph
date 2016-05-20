@@ -6,23 +6,24 @@
 
     //Private
     var _pageIds = {
-        welcome: "#welcomePage",
-        loadGraph: "#loadGraphPage",
-        main: "#mainPage",
-        loading: "#loading"
+        welcome: "welcomePage",
+        loadGraph: "loadGraphPage",
+        main: "mainPage",
+        popup: "popupPage",
+        popupContent: "popupContent"
     };
     function _hide(selector, cb){
-        document.querySelector(selector).classList.remove("show");
+        document.getElementById(selector).classList.remove("show");
         setTimeout(function(){
-            document.querySelector(selector).classList.remove("active");
+            document.getElementById(selector).classList.remove("active");
             if(cb) cb();
         }, 200);
     }
 
     function _show(selector){
-        document.querySelector(selector).classList.add("active");
+        document.getElementById(selector).classList.add("active");
         setTimeout(function(){
-            document.querySelector(selector).classList.add("show");
+            document.getElementById(selector).classList.add("show");
         }, 1);
     }
 
@@ -62,21 +63,21 @@
     };
 
     app.nav.loadGoToMain = function() {
-        _show(_pageIds.loading);
+        app.nav.showLoading();
         _hide(_pageIds.loadGraph, function(){
             _show(_pageIds.main);
             app.graph.drawGraph(function(){
-                _hide(_pageIds.loading);
+                app.nav.hidePopup();
             });
         });
     };
 
     app.nav.welcomeGoToNewGraph = function(){
-        _show(_pageIds.loading);
+        app.nav.showLoading();
         _hide(_pageIds.welcome, function(){
             _show(_pageIds.main);
             app.graph.drawGraph(function(){
-                _hide(_pageIds.loading);
+                app.nav.hidePopup();
             });
         });
     };
@@ -92,6 +93,23 @@
         _hide(_pageIds.loadGraph, function(){
             _show(_pageIds.welcome);
         });
+    };
+
+    app.nav.showPopup = function(element, cb){
+        document.getElementById(_pageIds.popupContent).innerHTML = "";
+        document.getElementById(_pageIds.popupContent).appendChild(element);
+        _show(_pageIds.popup);
+        if(cb) cb();
+    };
+
+    app.nav.showLoading = function(){
+        var div = document.createElement(div);
+        div.innerHTML = "Loading...";
+        app.nav.showPopup(div);
+    };
+
+    app.nav.hidePopup = function(){
+        _hide(_pageIds.popup);
     };
 
 
