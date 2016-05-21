@@ -72,6 +72,9 @@ _editProjects = function() {
         var tr = document.querySelectorAll("#loadGraphPage .ion-close-round");
 
         for (var i = 0; i < tr.length; i++) {
+            setTimeout(tr[i].classList.toggle("active"), 1000);
+            tr[i].classList.toggle("active");
             tr[i].classList.toggle("show");
+
         }
     };
