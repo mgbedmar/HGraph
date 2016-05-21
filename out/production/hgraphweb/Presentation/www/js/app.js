@@ -32,18 +32,7 @@ var app = app || {};
     },1);
 
 
-    app.editProjects = function() {
-        var tr = document.querySelectorAll("#loadGraphPage .ion-close-round");
 
-        for (var i = 0; i < tr.length; i++) {
-            if (tr[i].style.display === 'none') {
-                tr[i].style.display = 'inline';
-            }
-            else {
-                tr[i].style.display = 'none';
-            }
-        }
-    };
 
     app.init = function(){
         if(app.nav === undefined || app.graph === undefined){
@@ -57,7 +46,10 @@ var app = app || {};
         document.querySelector("#tornardiv")
             .addEventListener("click", app.nav.loadGoToWelcome);
         document.getElementById("divEditPL")
-            .addEventListener("click", app.editProjects);
+            .addEventListener("click", _editProjects);
+
+        document.querySelector("#mainPage #queryMenu > div[data-action=openQueryMenu]")
+            .addEventListener("click", app.nav.openQueryMenu);
         //document.querySelector("#mainPage a[data-action=welcome]").addEventListener("click", mainGoToWelcome);
 
         setTimeout(function(){
@@ -76,3 +68,10 @@ document.addEventListener("DOMContentLoaded", function(){
 });
 
 
+_editProjects = function() {
+        var tr = document.querySelectorAll("#loadGraphPage .ion-close-round");
+
+        for (var i = 0; i < tr.length; i++) {
+            tr[i].classList.toggle("show");
+        }
+    };

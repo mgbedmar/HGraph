@@ -45,6 +45,7 @@
             div2.addEventListener("click", function() {
                 app.HGraph.log("estic al listener");
                 //TODO show popup and delete
+                event.stopPropagation(); //per no executar el anar a graf
             });
             child.appendChild(div1);
             child.appendChild(div2);
@@ -172,6 +173,11 @@
 
     app.nav.hidePopup = function(){
         _hide(_pageIds.popup);
+    };
+    
+    app.nav.openQueryMenu = function(){
+        app.HGraph.log("toggle");
+        document.querySelector("#"+_pageIds.main + " #queryMenu").classList.toggle("open");
     };
 
 
