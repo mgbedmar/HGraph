@@ -33,7 +33,7 @@ body > div{
     background-color:rgba(25,25,25,0.5);
     height:100%;
     width:100%;
-    z-index:1;
+    z-index:10;
 }
 /*popup classes*/
 #popupPage #popupContent div.loading{

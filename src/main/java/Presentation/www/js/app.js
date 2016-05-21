@@ -23,6 +23,9 @@ var app = app || {};
                         ];
                     }
                 },
+                loadProject: function(project){
+                    return;
+                },
                 log: function(msg){
                     console.log(msg);
                 }

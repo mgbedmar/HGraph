@@ -9,7 +9,7 @@
 }
 
 #mainPage #queryMenu.open{
-    right:300px;
+    right:0px;
 }
 #mainPage #queryMenu{
     position:absolute;
