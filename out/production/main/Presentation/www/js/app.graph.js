@@ -1,6 +1,6 @@
 (function() {
     'use strict';
-    
+
     if (typeof app === 'undefined' || app.HGraph === 'undefined')
         throw 'Error de dependenciaes';
 
@@ -58,106 +58,103 @@
         sigma.plugins.relativeSize(s, 0.5);
         cb();
     };
-}).call(window);
 
-
-
-
-/*
-app.graph.drawGraph = function(cb){
-    var i,
-        s,
-        o,
-        N = 2000,
-        E = 0,
-        C = 4,
-        d = 0.5,
-        cs = [],
-        g = {
-            nodes: [],
-            edges: []
-        };
+    /*
+    app.graph.drawGraph = function(cb){
+        var i,
+            s,
+            o,
+            N = 2000,
+            E = 0,
+            C = 4,
+            d = 0.5,
+            cs = [],
+            g = {
+                nodes: [],
+                edges: []
+            };
 
 // Generate the graph:
-    for (i = 0; i < C; i++)
-        cs.push({
-            id: i,
-            nodes: [],
-            color: '#' + (
-                Math.floor(Math.random() * 16777215).toString(16) + '000000'
-            ).substr(0, 6)
+        for (i = 0; i < C; i++)
+            cs.push({
+                id: i,
+                nodes: [],
+                color: '#' + (
+                    Math.floor(Math.random() * 16777215).toString(16) + '000000'
+                ).substr(0, 6)
+            });
+
+        for (i = 0; i < N; i++) {
+            o = cs[(Math.random() * C) | 0];
+            var pos = _getCircleRandomPos();
+            g.nodes.push({
+                id: 'n' + i,
+                label: 'Node' + i,
+                x: pos.x,
+                y: pos.y,
+                size: Math.random()*30,
+                color: o.color
+            });
+            o.nodes.push('n' + i);
+        }
+
+        for (i = 0; i < E; i++) {
+            if (Math.random() < 1 - d)
+                g.edges.push({
+                    id: 'e' + i,
+                    source: 'n' + ((Math.random() * N) | 0),
+                    target: 'n' + ((Math.random() * N) | 0),
+                    size:Math.random()*10,
+                    hidden: true
+                });
+            else {
+                o = cs[(Math.random() * C) | 0]
+                g.edges.push({
+                    id: 'e' + i,
+                    source: o.nodes[(Math.random() * o.nodes.length) | 0],
+                    target: o.nodes[(Math.random() * o.nodes.length) | 0],
+                    size:Math.random()*10,
+                    hidden: true
+                });
+            }
+        }
+
+        s = new sigma({
+            graph: g,
+            container: 'graph-container',
+            settings: {
+                minNodeSize: 2,
+                //maxNodeSize: 2,
+                //minEdgeSize: 1,
+                //maxEdgeSize: 1,
+                eventsEnabled: false
+            }
         });
 
-    for (i = 0; i < N; i++) {
-        o = cs[(Math.random() * C) | 0];
-        var pos = getCircleRandomPos();
-        g.nodes.push({
-            id: 'n' + i,
-            label: 'Node' + i,
-            x: pos.x,
-            y: pos.y,
-            size: Math.random()*30,
-            color: o.color
-        });
-        o.nodes.push('n' + i);
-    }
+        sigma.plugins.relativeSize(s, 4);
 
-    for (i = 0; i < E; i++) {
-        if (Math.random() < 1 - d)
-            g.edges.push({
-                id: 'e' + i,
-                source: 'n' + ((Math.random() * N) | 0),
-                target: 'n' + ((Math.random() * N) | 0),
-                size:Math.random()*10,
-                hidden: true
-            });
-        else {
-            o = cs[(Math.random() * C) | 0]
-            g.edges.push({
-                id: 'e' + i,
-                source: o.nodes[(Math.random() * o.nodes.length) | 0],
-                target: o.nodes[(Math.random() * o.nodes.length) | 0],
-                size:Math.random()*10,
-                hidden: true
-            });
-        }
-    }
-
-    s = new sigma({
-        graph: g,
-        container: 'graph-container',
-        settings: {
-            minNodeSize: 2,
-            //maxNodeSize: 2,
-            //minEdgeSize: 1,
-            //maxEdgeSize: 1,
-            eventsEnabled: false
-        }
-    });
-
-    sigma.plugins.relativeSize(s, 4);
-
-    //cb();
+        //cb();
 
 // Configure the noverlap layout:
-    var noverlapListener = s.configNoverlap({
-        nodeMargin: 0.05,
-        scaleNodes: 0.9,
-        gridSize: 400,
-        speed:5
-    });
+        var noverlapListener = s.configNoverlap({
+            nodeMargin: 0.05,
+            scaleNodes: 0.9,
+            gridSize: 400,
+            speed:5
+        });
 // Bind the events:
-    noverlapListener.bind('start stop interpolate', function(e) {
-        console.log(e.type);
-        if(e.type === 'start') {
-            console.time('noverlap');
-        }
-        if(e.type === 'stop') {
-            console.timeEnd('noverlap');
-            cb();
-        }
-    });
+        noverlapListener.bind('start stop interpolate', function(e) {
+            console.log(e.type);
+            if(e.type === 'start') {
+                console.time('noverlap');
+            }
+            if(e.type === 'stop') {
+                console.timeEnd('noverlap');
+                cb();
+            }
+        });
 // Start the layout:
-    s.startNoverlap();
+        s.startNoverlap();
 
-};*/
+    };*/
+}).call(window);

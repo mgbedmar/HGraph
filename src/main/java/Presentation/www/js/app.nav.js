@@ -145,21 +145,21 @@
         app.nav.showPopup(div);
     };
 
-    app.nav.showAccept = function(title, msg, btnMsgOk, btnMsgCancel, cbOk, cbCancel){
+    app.nav.showAccept = function(t, msg, btnMsgOk, btnMsgCancel, cbOk, cbCancel){
         var div = document.createElement("div");
         div.classList.add("accept");
         var title = document.createElement("h1");
-        title.innerHTML = title || "Informació";
+        title.innerHTML = t || "Informació";
         var text = document.createElement("span");
         text.innerHTML = msg;
         var okbtn = document.createElement("a");
-        okbtn.innerHTML = btnMsg;
+        okbtn.innerHTML = btnMsgOk;
         okbtn.addEventListener("click", function(){
             app.nav.hidePopup();
             if(cbOk) cbOk();
         });
         var cancelbtn = document.createElement("a");
-        cancelbtn.innerHTML = btnMsg;
+        cancelbtn.innerHTML = btnMsgCancel;
         cancelbtn.addEventListener("click", function(){
             app.nav.hidePopup();
             if(cbCancel) cbCancel();
