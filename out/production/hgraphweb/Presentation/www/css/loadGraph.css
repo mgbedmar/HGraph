@@ -125,6 +125,10 @@
     display:none;
 }
 
+#loadGraphPage .ion-close-round.show {
+    display:inline;
+}
+
 #loadGraphPage .ion-close-round:hover {
     color:#333;
     background-color:#eee;
