@@ -26,7 +26,7 @@
     -webkit-transition:right 300ms ease;
 }
 
-#mainPage #queryMenu > div, #mainPage #toolsMenu > div {
+#mainPage #queryMenu > div {
     position:absolute;
     display:-webkit-flex;
     -webkit-align-items:center;
@@ -87,11 +87,8 @@
 
 }
 
-#mainPage #toolsMenu.open{
-    left:0px;
-}
 
-#mainPage #toolsMenu {
+#mainPage #toolsMenu{
     position:absolute;
     top:0;
     left:-245px;
@@ -103,16 +100,39 @@
     z-index:1;
 
 
-    -webkit-transition:right 300ms ease;
+    -webkit-transition:left 300ms ease;
 }
 
-#mainPage #toolsMenu > div i{
+#mainPage #toolsMenu.open{
+    left:0px;
+}
+
+#mainPage #toolsMenu #pestToolsMenu {
+    position:absolute;
+    display:-webkit-flex;
+    -webkit-align-items:center;
+    -webkit-justify-content:center;
+    padding:5px 0;
+    width:50px;
+    border-radius:10px;
+    background-color:#aaa;
+    color:#333;
+    margin-left:235px;
+    margin-top:150px;
+}
+
+#mainPage #toolsMenu #pestToolsMenu i{
     display:block;
     font-size:25px;
     margin-left:10px;
 }
 
-#mainPage #toolsMenu > ul{
+#mainPage #toolsMenu i {
+    display:inline;
+    font-size:25px;
+}
+
+#mainPage #toolsMenu ul{
     list-style:none;
     padding:0 15px;
 
@@ -130,7 +150,7 @@
     content:none;
 }
 
-#mainPage #toolsMenu > ul li{
+/*#mainPage #toolsMenu ul li{
     text-align:center;
     border-radius:10px;
     border: thin solid #888;
@@ -151,4 +171,20 @@
     background-color: #ccc;
 
 
+}*/
+
+#mainPage #toolsMenu .contToolsMenu {
+    display:-webkit-flex;
+    -webkit-align-items:left;
+    -webkit-flex-direction:column;
+    background-color:#aaa;
+    color:#333;
+    margin-top:30px;
+    margin-left:30px;
 }
+/*
+#mainPage #toolsMenu .contToolsMenu > div {
+    display:-webkit-flex;
+    -webkit-align-items:left;
+
+}*/
