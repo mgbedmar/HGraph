@@ -22,53 +22,31 @@
 
     //Aixo probablement hauria de ser una funcio init dins de app.graph
     function _initMain(cb){
-        //if there is a graph selected
+
+        var large = false;
+        //If a graph is selected
         if(app.HGraph.isProjectSelected())
         {
-            //Load its nodes
+            //Let's see how big it is
             var authorNodes = app.HGraph.getNodesOfType(app.const.nodeTypes.author);
             var termNodes = app.HGraph.getNodesOfType(app.const.nodeTypes.term);
             var paperNodes = app.HGraph.getNodesOfType(app.const.nodeTypes.paper);
             var confNodes = app.HGraph.getNodesOfType(app.const.nodeTypes.conf);
             var size = authorNodes.size() + termNodes.size()+ confNodes.size()+
                 paperNodes.size();
-            //If graf is too big, print only one type
-            if(size >= app.settings.maxNodes)
-            {
-                //TODO: disable features for small graphs
-                var nodeobj = {};
-                nodeobj[app.const.nodeTypes.author] =authorNodes;
-                app.graph.drawNodesOnlyGraph(nodeobj, function(){
-                    cb();
-                });
-                //TODO update style: queryType authors selected
-            }
-            else
-            {
-                //Draw graph
-                var nodeobj = {};
-                nodeobj[app.const.nodeTypes.author] =authorNodes;
-                nodeobj[app.const.nodeTypes.term] =termNodes;
-                nodeobj[app.const.nodeTypes.paper] =paperNodes;
-                nodeobj[app.const.nodeTypes.conf] =confNodes;
-                var edgeobj = {};
-                edgeobj[app.const.nodeTypes.author] =app.HGraph.getEdgesOfType(app.const.nodeTypes.author);
-                edgeobj[app.const.nodeTypes.term] =app.HGraph.getEdgesOfType(app.const.nodeTypes.term);
-                edgeobj[app.const.nodeTypes.conf] =app.HGraph.getEdgesOfType(app.const.nodeTypes.conf);
+            //Is it larger than maxNodes?
+            large = (size >= app.settings.maxNodes);
 
-                app.graph.drawGraph(nodeobj, edgeobj, function(){
-                    cb();
-                });
-                //TODO update style: complete graph selected
-            }
+        }
+        app.graph.init(large);
+        if(!app.graph.isLarge())
+        {
+            app.events.completeGraph(cb);
         }
         else
         {
-            //New graph
-            app.graph.drawGraph({},{},function(){
-                cb();
-            });
-            //TODO update style: complete graph selected
+            //TODO: disable features for small graphs
+            app.events.queryType("author", cb);
         }
 
     }
@@ -89,7 +67,7 @@
             div2.appendChild(ic);
             div2.addEventListener("click", function() {
                 //TODO show popup and delete
-                app.events.showAccept("Esborrar un projecte", "Estàs a punt d'esborrar un projecte, vols continuar?",
+                app.events.showAccept("Esborrar un projecte", "El projecte '"+e+"' s'esborrarà, vols continuar?",
                     "Esborra", "Cancela", function(){
                         app.HGraph.deleteProject(e);
                     });
@@ -224,7 +202,7 @@
         _hide(app.const.pageIds.popup);
     };
 
-    app.events.editProjects = function() {
+    app.events.editProjects = function() { //TODO transicio
         var tr = document.querySelectorAll("#loadGraphPage .ion-close-round");
 
         for (var i = 0; i < tr.length; i++) {
@@ -236,7 +214,12 @@
         document.querySelector("#"+app.const.pageIds.main + " #queryMenu").classList.toggle("open");
     };
 
-    app.events.queryType = function(type){
+    //TODO
+    app.events.completeGraph = function(){
+        app.graph.drawGraph();
+    };
+
+    app.events.queryType = function(type, cb){
         app.events.showLoading();
         var nodes = app.HGraph.getNodesOfType(type);
         app.graph.drawNodesOnlyGraph(nodes, function(){
