@@ -4,40 +4,6 @@ var app = app || {};
 //Init HGraph
 (function(){
     'use strict';
-    //Ugly race condition
-    setTimeout(function(){
-        if(typeof app.HGraph === 'undefined')
-        {
-            app.HGraph = {
-                getProjects: function(){
-                    return ["stub1", "stub2", "sutb3"]
-                },
-                getNodesOfType: function(type){
-                    if(type == "paper")
-                    {
-                        return [
-                            ["0", "patata"],
-                            ["1", "zanahoria"],
-                            ["2", "berenjena"],
-                            ["3", "tomate"]
-                        ];
-                    }
-                },
-                loadProject: function(project){
-                    return;
-                },
-                isProjectSelected: function(){
-                    return document.querySelector("#welcomePage").classList.contains("active");
-                },
-                log: function(msg){
-                    console.log(msg);
-                }
-            };
-        }
-
-    },1);
-
-
     //Public
     app.settings={
         //Disables some features on graphs with nodes > maxNodes (large graphs)
@@ -62,6 +28,44 @@ var app = app || {};
         //Page transition duration
         transitionDelay: 200
     };
+
+
+    //Init app (Ugly race condition)
+    setTimeout(function(){
+        if(typeof app.HGraph === 'undefined')
+        {
+            app.HGraph = {
+                getProjects: function(){
+                    return ["stub1", "stub2", "sutb3"]
+                },
+                getNodesOfType: function(type){
+                    return {
+                        size: function(){ return 10 },
+                        get: function(i){ return [type+i, "Soc el "+type+i] }
+                    };
+                },
+                getEdgesOfType: function(type){
+                    return {
+                        size: function(){ return 10 },
+                        get: function(i){ return ["paper"+i, "Soc el "+type+i] }
+                    };
+                },
+                loadProject: function(project){
+                    return;
+                },
+                isProjectSelected: function(){
+                    return document.querySelector("#welcomePage").classList.contains("active");
+                },
+                log: function(msg){
+                    console.log(msg);
+                }
+            };
+        }
+
+    },1);
+
+
+
     app.init = function(){
         if(app.events === undefined || app.graph === undefined){
             app.HGraph.log("Error a les dependencies");
