@@ -236,6 +236,9 @@
         });
     };
 
+    app.events.openToolsMenu = function(){
+            document.querySelector("#"+app.const.pageIds.main + " #toolsMenu").classList.toggle("open");
+        };
 
 }).call(window);
 
