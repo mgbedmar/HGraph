@@ -5,19 +5,12 @@
         throw 'Error de dependenciaes';
 
     //Private
-    var _pageIds = {
-        welcome: "welcomePage",
-        loadGraph: "loadGraphPage",
-        main: "mainPage",
-        popup: "popupPage",
-        popupContent: "popupContent"
-    };
     function _hide(selector, cb){
         document.getElementById(selector).classList.remove("show");
         setTimeout(function(){
             document.getElementById(selector).classList.remove("active");
             if(cb) cb();
-        }, 200);
+        }, app.const.transitionDelay);
     }
 
     function _show(selector){
@@ -27,6 +20,11 @@
         }, 1);
     }
 
+    function _initMain(){
+        app.graph.drawGraph(function(){
+            app.events.hidePopup();
+        });
+    }
     function _initLoadPage(){
         var myList = document.getElementById('projectList');
         myList.innerHTML = '';
@@ -43,90 +41,93 @@
             ic.className = "icon ion-close-round";
             div2.appendChild(ic);
             div2.addEventListener("click", function() {
-                app.HGraph.log("estic al listener");
                 //TODO show popup and delete
+                app.events.showAccept("Esborrar un projecte", "Estàs a punt d'esborrar un projecte, vols continuar?",
+                    "Esborra", "Cancela", function(){
+                        app.HGraph.deleteProject(e);
+                    });
                 event.stopPropagation(); //per no executar el anar a graf
             });
             child.appendChild(div1);
             child.appendChild(div2);
             child.addEventListener("click", function() {
-                app.HGraph.loadProject(e);
-                app.nav.loadGoToMain();
+                app.loadProject(e);
+                app.events.loadGoToMain();
             });
             //TODO que vagi a la pagina correcta
             myList.appendChild(child);
         });
     }
 
+
+
     //Public
-    app.nav = {};
+    app.events = {};
 
-    app.nav.init = function(){
-        _show(_pageIds.welcome);
+    app.events.init = function(){
+        _show(app.const.pageIds.welcome);
     };
 
-    app.nav.loadGoToWelcome = function(){
-        _hide(_pageIds.loadGraph, function(){
-            _show(_pageIds.welcome);
+    app.events.loadGoToWelcome = function(){
+        _hide(app.const.pageIds.loadGraph, function(){
+            _show(app.const.pageIds.welcome);
         });
     };
 
-    app.nav.mainGoToWelcome = function(){
-        _hide(_pageIds.main, function(){
-            _show(_pageIds.welcome);
+    app.events.mainGoToWelcome = function(){
+        _hide(app.const.pageIds.main, function(){
+            _show(app.const.pageIds.welcome);
         });
     };
 
-    app.nav.loadGoToMain = function() {
-        app.nav.showLoading();
-        _hide(_pageIds.loadGraph, function(){
-            _show(_pageIds.main);
+    app.events.loadGoToMain = function() {
+        app.events.showLoading();
+        _hide(app.const.pageIds.loadGraph, function(){
+            _show(app.const.pageIds.main);
+            _initMain();
+        });
+    };
+
+    app.events.welcomeGoToNewGraph = function(){
+        app.events.showLoading();
+        _hide(app.const.pageIds.welcome, function(){
+            _show(app.const.pageIds.main);
             app.graph.drawGraph(function(){
-                app.nav.hidePopup();
+                app.events.hidePopup();
             });
         });
     };
 
-    app.nav.welcomeGoToNewGraph = function(){
-        app.nav.showLoading();
-        _hide(_pageIds.welcome, function(){
-            _show(_pageIds.main);
-            app.graph.drawGraph(function(){
-                app.nav.hidePopup();
-            });
-        });
-    };
-
-    app.nav.welcomeGoToloadGraph = function(){
-        _hide(_pageIds.welcome, function(){
+    app.events.welcomeGoToloadGraph = function(){
+        _hide(app.const.pageIds.welcome, function(){
             _initLoadPage();
-            _show(_pageIds.loadGraph);
+            _show(app.const.pageIds.loadGraph);
         });
     };
 
-    app.nav.loadGoToWelcome = function(){
-        _hide(_pageIds.loadGraph, function(){
-            _show(_pageIds.welcome);
+    app.events.loadGoToWelcome = function(){
+        _hide(app.const.pageIds.loadGraph, function(){
+            _show(app.const.pageIds.welcome);
         });
     };
 
-    app.nav.showPopup = function(element, cb){
-        document.getElementById(_pageIds.popupContent).innerHTML = "";
-        document.getElementById(_pageIds.popupContent).appendChild(element);
-        _show(_pageIds.popup);
+    app.events.showPopup = function(element, cb){
+        document.getElementById(app.const.pageIds.popupContent).innerHTML = "";
+        document.getElementById(app.const.pageIds.popupContent).appendChild(element);
+        _show(app.const.pageIds.popup);
         if(cb) cb();
     };
 
-    app.nav.showLoading = function(){
+    app.events.showLoading = function(){
         var div = document.createElement("div");
         div.classList.add("loading");
         var img = document.createElement("img");
         img.src="img/loading.gif";
         div.appendChild(img);
-        app.nav.showPopup(div);
+        app.events.showPopup(div);
     };
 
-    app.nav.showInfo = function(title, msg, btnMsg, cb){
+    app.events.showInfo = function(title, msg, btnMsg, cb){
         var div = document.createElement("div");
         div.classList.add("info");
         var title = document.createElement("h1");
@@ -136,16 +137,16 @@
         var okbtn = document.createElement("a");
         okbtn.innerHTML = btnMsg;
         okbtn.addEventListener("click", function(){
-            app.nav.hidePopup();
+            app.events.hidePopup();
             if(cb) cb();
         });
         div.appendChild(title);
         div.appendChild(text);
         div.appendChild(okbtn);
-        app.nav.showPopup(div);
+        app.events.showPopup(div);
     };
 
-    app.nav.showAccept = function(t, msg, btnMsgOk, btnMsgCancel, cbOk, cbCancel){
+    app.events.showAccept = function(t, msg, btnMsgOk, btnMsgCancel, cbOk, cbCancel){
         var div = document.createElement("div");
         div.classList.add("accept");
         var title = document.createElement("h1");
@@ -155,29 +156,41 @@
         var okbtn = document.createElement("a");
         okbtn.innerHTML = btnMsgOk;
         okbtn.addEventListener("click", function(){
-            app.nav.hidePopup();
+            app.events.hidePopup();
             if(cbOk) cbOk();
         });
         var cancelbtn = document.createElement("a");
         cancelbtn.innerHTML = btnMsgCancel;
         cancelbtn.addEventListener("click", function(){
-            app.nav.hidePopup();
+            app.events.hidePopup();
             if(cbCancel) cbCancel();
         });
         div.appendChild(title);
         div.appendChild(text);
         div.appendChild(okbtn);
         div.appendChild(cancelbtn);
-        app.nav.showPopup(div);
+        app.events.showPopup(div);
     };
 
-    app.nav.hidePopup = function(){
-        _hide(_pageIds.popup);
+    app.events.hidePopup = function(){
+        _hide(app.const.pageIds.popup);
     };
-    
-    app.nav.openQueryMenu = function(){
-        app.HGraph.log("toggle");
-        document.querySelector("#"+_pageIds.main + " #queryMenu").classList.toggle("open");
+
+    app.events.editProjects = function() {
+        var tr = document.querySelectorAll("#loadGraphPage .ion-close-round");
+
+        for (var i = 0; i < tr.length; i++) {
+            tr[i].classList.toggle("show");
+        }
+    };
+
+    app.events.openQueryMenu = function(){
+        document.querySelector("#"+app.const.pageIds.main + " #queryMenu").classList.toggle("open");
+    };
+
+    app.events.queryType = function(type){
+        app.graph.setGraph(app.HGraph.getNodesOfType(type));
+        app.graph.update();
     };
 
 

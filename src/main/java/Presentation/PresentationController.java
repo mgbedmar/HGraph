@@ -24,11 +24,28 @@ public class PresentationController {
             //TODO
         }
     }
+    public void deleteProject(String projectName){
+        try {
+            dc.deleteProject(projectName);
+        } catch (DomainException de) {
+            //TODO
+        }
+    }
 
     public ArrayList<String[]> getNodesOfType(String type){
         ArrayList<String[]> res = new ArrayList<>();
         try{
             res = dc.getNodes(type);
+        } catch (DomainException e) {
+            //TODO
+        }
+        return res;
+    }
+
+    public ArrayList<String[]> getEdgesOfType(String type){
+        ArrayList<String[]> res = new ArrayList<>();
+        try{
+            res = dc.getEdges(type);
         } catch (DomainException e) {
             //TODO
         }

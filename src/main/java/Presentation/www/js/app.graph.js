@@ -5,6 +5,53 @@
         throw 'Error de dependenciaes';
 
     //Private
+    //Domain layer nodes/edges, separated in Java's ArrayList by type
+    var _nodes;
+    var _edges;
+    var _settings = {
+        graph:{
+            minNodeSize: 1,
+            minEdgeSize: 0.2,
+            maxEdgeSize: 0.5,
+            zoomMin: 0.01,
+            zoomMax: 0.5,
+            eventsEnabled: true,
+            labelThreshold: 25
+        },
+        relativeSize:0.5,
+        nooverlap:false
+    };
+    //Sigma instance
+    var _s;
+    //Sigma graph
+    var _g;
+
+    //populates _g with a sigmajs graph using _nodes and _edges
+    function _createGraph(){
+        //For each type in _nodes
+        for (var type in _nodes)
+        {
+            //Check if type is a property of _nodes
+            if (_nodes.hasOwnProperty(type))
+            {
+                //TODO: calculate radius and position and color of types
+                //Add nodes of type to the graph
+                for (var i = 0; i < Math.sqrt(_nodes.size()); i++)
+                {
+                    var pos = _getCircleRandomPos();
+
+                    _g.nodes.push({
+                        id: String(_nodes.get(i)[0]),
+                        label: String(_nodes.get(i)[1]),
+                        x: pos.x,
+                        y: pos.y
+                    });
+                }
+
+            }
+        }
+        //TODO: edges
+    }
     function _getCircleRandomPos(){
         var t = 2*Math.PI*Math.random();
         var u = Math.random()+Math.random();
@@ -14,49 +61,75 @@
         return {x: Math.cos(t)*r, y: Math.sin(t)*r};
     }
 
+    function _setNodes(nodes){
+        _nodes = nodes;
+    }
+    function _setEdges(edges){
+        _edges = edges;
+    }
+
     //Public
     app.graph = {};
 
+    app.graph.setGraph = function(nodes, edges){
+        _setNodes(nodes || {});
+        _setEdges(edges || {});
+    };
 
-    app.graph.drawGraph = function(cb){
-        var g = {
-            nodes: [],
-            edges: []
-        };
+    app.graph.update = function(){
+        _createGraph();
+        s.graph = _g;
+        _s.refresh();
+    };
 
-        var nodes = app.HGraph.getNodesOfType("paper");
-
+    //Draws a graph with a big number of nodes but without edges
+    app.graph.drawNodesOnlyGraph = function(cb){
         //TODO
-        for (var i = 0; i < Math.sqrt(nodes.size()); i++) {
-            var pos = _getCircleRandomPos();
+    };
+    //Draws a bigraph representing a table. Each connected component must be < maxNodes
+    app.graph.drawTableBasedGraph = function(cb){
+        //TODO
+    };
 
-            g.nodes.push({
-                id: String(nodes.get(i)[0]),
-                label: String(nodes.get(i)[1]),
-                x: pos.x,
-                y: pos.y
-            });
-        }
+    //Draws a normal graph
+    app.graph.drawGraph = function(cb){
+
+        _createGraph();
 
         //TODO: zoom, size, threshold
-        var s = new sigma({
-            graph: g,
+        _s = new sigma({
+            graph: _g,
             container: 'graph-container',
-            settings: {
-
-                minNodeSize: 1,
-                minEdgeSize: 0.2,
-                maxEdgeSize: 0.5,
-                zoomMin: 0.01,
-                zoomMax: 0.5,
-                eventsEnabled: true,
-                labelThreshold: 25
-
-            }
+            settings: _settings.graph
         });
+
+        if(typeof _settings.relativeSize !== 'undefined')
+            sigma.plugins.relativeSize(s, _settings.relativeSize);
         //TODO
-        sigma.plugins.relativeSize(s, 0.5);
-        cb();
+        if(typeof _settings.nooverlap !== 'undefined')
+        {
+            // Configure the noverlap layout:
+            var noverlapListener = s.configNoverlap({
+                nodeMargin: 0.05,
+                scaleNodes: 0.9,
+                gridSize: 400,
+                speed:5
+            });
+            // Bind the events:
+            noverlapListener.bind('start stop interpolate', function(e) {
+                console.log(e.type);
+                if(e.type === 'start') {
+                    console.time('noverlap');
+                }
+                if(e.type === 'stop') {
+                    console.timeEnd('noverlap');
+                    cb();
+                }
+            });
+            s.startNoverlap();
+        }
+        else
+            cb();
     };
 
     /*
