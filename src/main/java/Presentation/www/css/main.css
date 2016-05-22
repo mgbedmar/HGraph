@@ -26,7 +26,7 @@
     -webkit-transition:right 300ms ease;
 }
 
-#mainPage #queryMenu > div{
+#mainPage #queryMenu > div, #mainPage #toolsMenu > div {
     position:absolute;
     display:-webkit-flex;
     -webkit-align-items:center;
@@ -76,6 +76,72 @@
 
 
 #mainPage #queryMenu ul > li h1{
+    margin:0;
+    padding:10px;
+
+    font-weight:normal;
+    font-size:24px;
+    border-radius:10px;
+    background-color: #ccc;
+
+
+}
+
+#mainPage #toolsMenu.open{
+    left:0px;
+}
+
+#mainPage #toolsMenu {
+    position:absolute;
+    top:0;
+    left:-245px;
+
+    width:245px;
+    height:100%;
+
+    background-color:#aaa;
+    z-index:1;
+
+
+    -webkit-transition:right 300ms ease;
+}
+
+#mainPage #toolsMenu > div i{
+    display:block;
+    font-size:25px;
+    margin-left:10px;
+}
+
+#mainPage #toolsMenu > ul{
+    list-style:none;
+    padding:0 15px;
+
+}
+#mainPage #toolsMenu > ul::after{
+    content: " ";
+    display: block;
+    height: 1px;
+    margin: 20px 0;
+    background: linear-gradient(90deg, #aaa 15%, #666, #aaa 85%);
+
+}
+
+#mainPage #toolsMenu > ul:last-child::after{
+    content:none;
+}
+
+#mainPage #toolsMenu > ul li{
+    text-align:center;
+    border-radius:10px;
+    border: thin solid #888;
+    margin: 5px 0;
+    height:48px;
+    overflow:hidden;
+}
+
+
+
+#mainPage #toolsMenu ul > li h1{
     margin:0;
     padding:10px;
 

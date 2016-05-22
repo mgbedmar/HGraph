@@ -78,6 +78,9 @@ var app = app || {};
 
         document.querySelector("#mainPage #queryMenu > div[data-action=openQueryMenu]")
             .addEventListener("click", app.events.openQueryMenu);
+
+        document.querySelector("#mainPage #toolsMenu > div[data-action=openToolsMenu]")
+            .addEventListener("click", app.events.openToolsMenu);
         //document.querySelector("#mainPage a[data-action=welcome]").addEventListener("click", mainGoToWelcome);
 
         setTimeout(function(){

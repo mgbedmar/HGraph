@@ -60,7 +60,75 @@
     <!--Main Page-->
     <div id="mainPage">
         <div id="mainMenu"></div>
-        <div id="toolsMenu"></div>
+        <div id="toolsMenu">
+            <div data-action="openToolsMenu">
+                <i class="icon ion-settings"></i>
+            </div>
+            <div>
+                <form id="selectedNode">
+                    <div id="selectedNodeType"></div>
+                    <input id="modSelectedNode" type="text" name="nodeName" value="">
+                </form>
+            </div>
+            <hr>
+            <div>
+                <div id="addNode" title="Afegir node">
+                    <i class="icon ion-android-add-circle"></i>
+                    <div class="collapsed">
+                        Tipus:
+                        <ul>
+                            <li>Autor</li>
+                            <li>Paper</li>
+                            <li>Conferència</li>
+                            <li>Terme</li>
+                        </ul>
+                    </div>
+                </div>
+                <div id="addEdge" title="Afegir aresta">
+                    <i class="icon ion-arrow-resize"></i>
+                    <div class="collapsed">
+                        Aresta de paper a:
+                        <ul>
+                            <li>Autor</li>
+                            <li>Paper</li>
+                            <li>Conferència</li>
+                            <li>Terme</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <div>
+                <div id="addNodeText">
+                    <div><i class="icon ion-android-add-circle"></i></div>
+                    <div>Afegir un node</div>
+                    <select>
+                        <option value="author">Autor</option>
+                        <option value="paper">Paper</option>
+                        <option value="conf">Conferència</option>
+                        <option value="term">Terme</option>
+                    </select>
+                </div>
+                <div id="addEdgeText">
+                    <div><i class="icon ion-android-add-circle"></i></div>
+                    <div>Afegir una aresta:
+                        <div class="collapsed">
+                            <span>Paper:</span>
+                            <input />
+                            <span>Node:</span>
+                            <input />
+                            <select>
+                                <option value="author">Autor</option>
+                                <option value="paper">Paper</option>
+                                <option value="conf">Conferència</option>
+                                <option value="term">Terme</option>
+                            </select>
+                            <i class="icon ion-alert-circled"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div id="queryMenu">
             <div data-action="openQueryMenu">
                 <i class="icon ion-ios-search-strong"></i>
