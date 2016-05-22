@@ -14,21 +14,26 @@
 #mainPage #queryMenu{
     position:absolute;
     top:0;
-    right:-300px;
+    right:-245px;
+
+    width:245px;
+    height:100%;
+
     background-color:#aaa;
-    width:300px;
+    z-index:1;
+
 
     -webkit-transition:right 300ms ease;
 }
 
 #mainPage #queryMenu > div{
+    position:absolute;
     display:-webkit-flex;
     -webkit-align-items:center;
     -webkit-justify-content:center;
     padding:5px 0;
-    width:40px;
-    border-top-left-radius: 10px;
-    border-bottom-left-radius: 10px;
+    width:50px;
+    border-radius:10px;
     background-color:#aaa;
     color:#333;
     margin-left:-40px;
@@ -38,4 +43,46 @@
 #mainPage #queryMenu > div i{
     display:block;
     font-size:25px;
+    margin-right:10px;
+}
+
+#mainPage #queryMenu > ul{
+    list-style:none;
+    padding:0 15px;
+
+}
+#mainPage #queryMenu > ul::after{
+    content: " ";
+    display: block;
+    height: 1px;
+    margin: 20px 0;
+    background: linear-gradient(90deg, #aaa 15%, #666, #aaa 85%);
+
+}
+
+#mainPage #queryMenu > ul:last-child::after{
+    content:none;
+}
+
+#mainPage #queryMenu > ul li{
+    text-align:center;
+    border-radius:10px;
+    border: thin solid #888;
+    margin: 5px 0;
+    height:48px;
+    overflow:hidden;
+}
+
+
+
+#mainPage #queryMenu ul > li h1{
+    margin:0;
+    padding:10px;
+
+    font-weight:normal;
+    font-size:24px;
+    border-radius:10px;
+    background-color: #ccc;
+
+
 }

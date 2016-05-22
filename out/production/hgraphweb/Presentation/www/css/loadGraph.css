@@ -38,8 +38,8 @@
     margin-bottom:2px;
     margin-right:auto;
     margin-left:auto;
-    background-color:#ccc;
-    color:#333;
+    background-color:#678F99;
+    color:#00080A;
     border-radius:10px;
     min-width:200px;
     min-height:20px;
@@ -116,7 +116,7 @@
 }
 
 #tornardiv:hover, #tornardiv:active, #loadGraphPage li:hover, #loadGraphPage li:active {
-    background-color:#eee;
+    background-color:#779FA9;
 }
 
 #loadGraphPage .ion-close-round {

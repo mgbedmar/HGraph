@@ -23,6 +23,12 @@ var app = app || {};
                         ];
                     }
                 },
+                loadProject: function(project){
+                    return;
+                },
+                isProjectSelected: function(){
+                    return document.querySelector("#welcomePage").classList.contains("active");
+                },
                 log: function(msg){
                     console.log(msg);
                 }
@@ -32,29 +38,51 @@ var app = app || {};
     },1);
 
 
-
-
+    //Public
+    app.settings={
+        //Disables some features on graphs with nodes > maxNodes (large graphs)
+        maxNodes:1500
+    };
+    app.const  = {
+        pageIds : {
+            welcome: "welcomePage",
+            loadGraph: "loadGraphPage",
+            main: "mainPage",
+            popup: "popupPage",
+            popupContent: "popupContent"
+        },
+        nodeTypes:{
+            author: "author",
+            conf: "conf",
+            paper: "paper",
+            term: "term"
+        },
+        //Adds a delay before showing the main screen
+        dramaticWait: 500,
+        //Page transition duration
+        transitionDelay: 200
+    };
     app.init = function(){
-        if(app.nav === undefined || app.graph === undefined){
+        if(app.events === undefined || app.graph === undefined){
             app.HGraph.log("Error a les dependencies");
         }
 
         document.querySelector("#welcomePage .buttons a[data-action=newGraph]")
-            .addEventListener("click", app.nav.welcomeGoToNewGraph);
+            .addEventListener("click", app.events.welcomeGoToNewGraph);
         document.querySelector("#welcomePage .buttons a[data-action=loadGraph]")
-            .addEventListener("click", app.nav.welcomeGoToloadGraph);
+            .addEventListener("click", app.events.welcomeGoToloadGraph);
         document.querySelector("#tornardiv")
-            .addEventListener("click", app.nav.loadGoToWelcome);
+            .addEventListener("click", app.events.loadGoToWelcome);
         document.getElementById("divEditPL")
-            .addEventListener("click", _editProjects);
+            .addEventListener("click", app.events.editProjects);
 
         document.querySelector("#mainPage #queryMenu > div[data-action=openQueryMenu]")
-            .addEventListener("click", app.nav.openQueryMenu);
+            .addEventListener("click", app.events.openQueryMenu);
         //document.querySelector("#mainPage a[data-action=welcome]").addEventListener("click", mainGoToWelcome);
 
         setTimeout(function(){
-            app.nav.init();
-        }, 500);
+            app.events.init();
+        }, app.const.dramaticWait);
     };
 
 
@@ -68,13 +96,4 @@ document.addEventListener("DOMContentLoaded", function(){
 });
 
 
-_editProjects = function() {
-        var tr = document.querySelectorAll("#loadGraphPage .ion-close-round");
 
-        for (var i = 0; i < tr.length; i++) {
-            setTimeout(tr[i].classList.toggle("active"), 1000);
-            tr[i].classList.toggle("active");
-            tr[i].classList.toggle("show");
-
-        }
-    };
