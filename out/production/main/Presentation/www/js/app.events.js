@@ -19,24 +19,23 @@
             document.getElementById(selector).classList.add("show");
         }, 1);
     }
-/*
- function _loadProject(project){
 
-
- }
-
- */
+    //Aixo probablement hauria de ser una funcio init dins de app.graph
     function _initMain(cb){
+        //if there is a graph selected
         if(app.HGraph.isProjectSelected())
         {
+            //Load its nodes
             var authorNodes = app.HGraph.getNodesOfType(app.const.nodeTypes.author);
             var termNodes = app.HGraph.getNodesOfType(app.const.nodeTypes.term);
             var paperNodes = app.HGraph.getNodesOfType(app.const.nodeTypes.paper);
             var confNodes = app.HGraph.getNodesOfType(app.const.nodeTypes.conf);
             var size = authorNodes.size() + termNodes.size()+ confNodes.size()+
                 paperNodes.size();
+            //If graf is too big, print only one type
             if(size >= app.settings.maxNodes)
             {
+                //TODO: disable features for small graphs
                 var nodeobj = {};
                 nodeobj[app.const.nodeTypes.author] =authorNodes;
                 app.graph.drawNodesOnlyGraph(nodeobj, function(){
@@ -46,6 +45,7 @@
             }
             else
             {
+                //Draw graph
                 var nodeobj = {};
                 nodeobj[app.const.nodeTypes.author] =authorNodes;
                 nodeobj[app.const.nodeTypes.term] =termNodes;
@@ -244,6 +244,7 @@
         });
     };
 
+    //TODO
     app.events.queryNeighbours = function(nodeid){
         app.events.showLoading();
         var nodes = app.HGraph.getNodesOfType(type);
