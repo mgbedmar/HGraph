@@ -38,7 +38,7 @@
     margin-bottom:2px;
     margin-right:auto;
     margin-left:auto;
-    background-color:#678F99;
+    background-color:#BFDCE3;
     color:#00080A;
     border-radius:10px;
     min-width:200px;
@@ -67,7 +67,7 @@
 }
 #loadGraphPage h1 {
     font-size:25px;
-    color:#000;
+    color:#00080A;
     font-weight: normal;
     margin-left:55px;
     /*-webkit-flex:1 1 auto;*/
@@ -81,12 +81,13 @@
 #loadGraphPage .ion-edit {
     padding-left:8px;
     padding-right:8px;
-    background-color:#555;
+    color:#678F99;
+    background-color:#00080A;
     border-radius:10px;
 }
 
 #loadGraphPage .ion-edit:hover {
-    color:#eee;
+    color:#87AFB9;
     background-color:#666;
 }
 
@@ -116,7 +117,7 @@
 }
 
 #tornardiv:hover, #tornardiv:active, #loadGraphPage li:hover, #loadGraphPage li:active {
-    background-color:#779FA9;
+    background-color:#B7DFE9; /* l'altre +202020*/
 }
 
 #loadGraphPage .ion-close-round {

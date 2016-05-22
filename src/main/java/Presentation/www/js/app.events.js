@@ -224,7 +224,7 @@
         _hide(app.const.pageIds.popup);
     };
 
-    app.events.editProjects = function() {
+    app.events.editProjects = function() { //TODO transicio
         var tr = document.querySelectorAll("#loadGraphPage .ion-close-round");
 
         for (var i = 0; i < tr.length; i++) {
