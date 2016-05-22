@@ -17,6 +17,10 @@ public class PresentationController {
         return dc.getProjectList();
     }
 
+    public boolean isProjectSelected(){
+        return dc.isProjectSelected();
+    }
+
     public void loadProject(String projectName) {
         try {
             dc.load(projectName);

@@ -5,9 +5,7 @@
         throw 'Error de dependenciaes';
 
     //Private
-    //Domain layer nodes/edges, separated in Java's ArrayList by type
-    var _nodes;
-    var _edges;
+    var _s;
     var _settings = {
         graph:{
             minNodeSize: 1,
@@ -21,28 +19,27 @@
         relativeSize:0.5,
         nooverlap:false
     };
-    //Sigma instance
-    var _s;
-    //Sigma graph
-    var _g;
 
-    //populates _g with a sigmajs graph using _nodes and _edges
-    function _createGraph(){
-        //For each type in _nodes
-        for (var type in _nodes)
+    function _createGraph(nodes, edges){
+        var g = {nodes:[], edges:[]};
+
+        //For each type in nodes
+        for (var type in nodes)
         {
-            //Check if type is a property of _nodes
-            if (_nodes.hasOwnProperty(type))
+
+            //Check if type is a property of nodes
+            if (nodes.hasOwnProperty(type))
             {
                 //TODO: calculate radius and position and color of types
                 //Add nodes of type to the graph
-                for (var i = 0; i < Math.sqrt(_nodes.size()); i++)
+                app.HGraph.log(type);
+                for (var i = 0; i < Math.sqrt(nodes[type].size()); i++)
                 {
                     var pos = _getCircleRandomPos();
 
-                    _g.nodes.push({
-                        id: String(_nodes.get(i)[0]),
-                        label: String(_nodes.get(i)[1]),
+                    g.nodes.push({
+                        id: String(nodes[type].get(i)[0]),
+                        label: String(nodes[type].get(i)[1]),
                         x: pos.x,
                         y: pos.y
                     });
@@ -51,6 +48,8 @@
             }
         }
         //TODO: edges
+
+        return g;
     }
     function _getCircleRandomPos(){
         var t = 2*Math.PI*Math.random();
@@ -61,55 +60,49 @@
         return {x: Math.cos(t)*r, y: Math.sin(t)*r};
     }
 
-    function _setNodes(nodes){
-        _nodes = nodes;
-    }
-    function _setEdges(edges){
-        _edges = edges;
-    }
 
     //Public
     app.graph = {};
 
-    app.graph.setGraph = function(nodes, edges){
-        _setNodes(nodes || {});
-        _setEdges(edges || {});
-    };
-
-    app.graph.update = function(){
-        _createGraph();
-        s.graph = _g;
-        _s.refresh();
-    };
 
     //Draws a graph with a big number of nodes but without edges
-    app.graph.drawNodesOnlyGraph = function(cb){
+    app.graph.drawNodesOnlyGraph = function(nodes, cb){
         //TODO
+        app.graph.drawGraph(nodes, {}, function(){cb()});
     };
     //Draws a bigraph representing a table. Each connected component must be < maxNodes
-    app.graph.drawTableBasedGraph = function(cb){
+    app.graph.drawTableBasedGraph = function(nodes, edges, cb){
         //TODO
     };
 
     //Draws a normal graph
-    app.graph.drawGraph = function(cb){
-
-        _createGraph();
-
-        //TODO: zoom, size, threshold
-        _s = new sigma({
-            graph: _g,
-            container: 'graph-container',
-            settings: _settings.graph
-        });
+    app.graph.drawGraph = function(nodes, edges, cb){
+        var g = _createGraph(nodes, edges);
+        if(typeof _s === 'undefined')
+        {
+            //TODO: zoom, size, threshold
+            _s = new sigma({
+                graph: g,
+                container: 'graph-container',
+                settings: _settings.graph
+            });
+        }
+        else
+        {
+            //this gets rid of all the ndoes and edges
+            _s.graph.clear();
+            _s.graph.kill();
+            _s.graph = g;
+            _s.refresh();
+        }
 
         if(typeof _settings.relativeSize !== 'undefined')
-            sigma.plugins.relativeSize(s, _settings.relativeSize);
-        //TODO
+            sigma.plugins.relativeSize(_s, _settings.relativeSize);
+        //TODO adjust nooverlap
         if(typeof _settings.nooverlap !== 'undefined')
         {
             // Configure the noverlap layout:
-            var noverlapListener = s.configNoverlap({
+            var noverlapListener = _s.configNoverlap({
                 nodeMargin: 0.05,
                 scaleNodes: 0.9,
                 gridSize: 400,
@@ -126,7 +119,7 @@
                     cb();
                 }
             });
-            s.startNoverlap();
+            _s.startNoverlap();
         }
         else
             cb();

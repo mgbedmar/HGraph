@@ -26,6 +26,9 @@ var app = app || {};
                 loadProject: function(project){
                     return;
                 },
+                isProjectSelected: function(){
+                    return document.querySelector("#welcomePage").classList.contains("active");
+                },
                 log: function(msg){
                     console.log(msg);
                 }
@@ -34,9 +37,6 @@ var app = app || {};
 
     },1);
 
-
-    //Private
-    var _largeGraph = false;
 
     //Public
     app.settings={
@@ -83,36 +83,6 @@ var app = app || {};
         setTimeout(function(){
             app.events.init();
         }, app.const.dramaticWait);
-    };
-
-    app.loadProject = function(project) {
-        app.HGraph.loadProject(project);
-        var authorNodes = app.HGraph.getNodesOfType(app.const.nodeTypes.author);
-        var termNodes = app.HGraph.getNodesOfType(app.const.nodeTypes.term);
-        var paperNodes = app.HGraph.getNodesOfType(app.const.nodeTypes.paper);
-        var confNodes = app.HGraph.getNodesOfType(app.const.nodeTypes.conf);
-        var size = authorNodes.size() + termNodes.size()+ confNodes.size()+
-                paperNodes.size();
-        if(size >= app.settings.maxNodes)
-        {
-            app._largeGraph = true;
-            var nodeobj = {};
-            nodeobj[app.const.nodeTypes.author] =authorNodes;
-            app.graph.setGraph(nodeobj);
-        }
-        else
-        {
-            var nodeobj = {};
-            nodeobj[app.const.nodeTypes.author] =authorNodes;
-            nodeobj[app.const.nodeTypes.term] =termNodes;
-            nodeobj[app.const.nodeTypes.paper] =paperNodes;
-            nodeobj[app.const.nodeTypes.conf] =confNodes;
-            var edgeobj = {};
-            edgeobj[app.const.nodeTypes.author] =authorNodes;
-            edgeobj[app.const.nodeTypes.term] =termNodes;
-            edgeobj[app.const.nodeTypes.conf] =confNodes;
-            app.graph.setGraph(nodeobj, edgeobj);
-        }
     };
 
 

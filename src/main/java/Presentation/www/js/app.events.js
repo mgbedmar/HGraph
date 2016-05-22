@@ -20,10 +20,57 @@
         }, 1);
     }
 
-    function _initMain(){
-        app.graph.drawGraph(function(){
-            app.events.hidePopup();
-        });
+    //Aixo probablement hauria de ser una funcio init dins de app.graph
+    function _initMain(cb){
+        //if there is a graph selected
+        if(app.HGraph.isProjectSelected())
+        {
+            //Load its nodes
+            var authorNodes = app.HGraph.getNodesOfType(app.const.nodeTypes.author);
+            var termNodes = app.HGraph.getNodesOfType(app.const.nodeTypes.term);
+            var paperNodes = app.HGraph.getNodesOfType(app.const.nodeTypes.paper);
+            var confNodes = app.HGraph.getNodesOfType(app.const.nodeTypes.conf);
+            var size = authorNodes.size() + termNodes.size()+ confNodes.size()+
+                paperNodes.size();
+            //If graf is too big, print only one type
+            if(size >= app.settings.maxNodes)
+            {
+                //TODO: disable features for small graphs
+                var nodeobj = {};
+                nodeobj[app.const.nodeTypes.author] =authorNodes;
+                app.graph.drawNodesOnlyGraph(nodeobj, function(){
+                    cb();
+                });
+                //TODO update style: queryType authors selected
+            }
+            else
+            {
+                //Draw graph
+                var nodeobj = {};
+                nodeobj[app.const.nodeTypes.author] =authorNodes;
+                nodeobj[app.const.nodeTypes.term] =termNodes;
+                nodeobj[app.const.nodeTypes.paper] =paperNodes;
+                nodeobj[app.const.nodeTypes.conf] =confNodes;
+                var edgeobj = {};
+                edgeobj[app.const.nodeTypes.author] =app.HGraph.getEdgesOfType(app.const.nodeTypes.author);
+                edgeobj[app.const.nodeTypes.term] =app.HGraph.getEdgesOfType(app.const.nodeTypes.term);
+                edgeobj[app.const.nodeTypes.conf] =app.HGraph.getEdgesOfType(app.const.nodeTypes.conf);
+
+                app.graph.drawGraph(nodeobj, edgeobj, function(){
+                    cb();
+                });
+                //TODO update style: complete graph selected
+            }
+        }
+        else
+        {
+            //New graph
+            app.graph.drawGraph({},{},function(){
+                cb();
+            });
+            //TODO update style: complete graph selected
+        }
+
     }
     function _initLoadPage(){
         var myList = document.getElementById('projectList');
@@ -51,14 +98,13 @@
             child.appendChild(div1);
             child.appendChild(div2);
             child.addEventListener("click", function() {
-                app.loadProject(e);
+                app.HGraph.loadProject(e);
                 app.events.loadGoToMain();
             });
             //TODO que vagi a la pagina correcta
             myList.appendChild(child);
         });
     }
-
 
 
     //Public
@@ -84,7 +130,9 @@
         app.events.showLoading();
         _hide(app.const.pageIds.loadGraph, function(){
             _show(app.const.pageIds.main);
-            _initMain();
+            _initMain(function(){
+                app.events.hidePopup();
+            });
         });
     };
 
@@ -92,7 +140,7 @@
         app.events.showLoading();
         _hide(app.const.pageIds.welcome, function(){
             _show(app.const.pageIds.main);
-            app.graph.drawGraph(function(){
+            _initMain(function(){
                 app.events.hidePopup();
             });
         });
@@ -189,8 +237,20 @@
     };
 
     app.events.queryType = function(type){
-        app.graph.setGraph(app.HGraph.getNodesOfType(type));
-        app.graph.update();
+        app.events.showLoading();
+        var nodes = app.HGraph.getNodesOfType(type);
+        app.graph.drawNodesOnlyGraph(nodes, function(){
+            cb();
+        });
+    };
+
+    //TODO
+    app.events.queryNeighbours = function(nodeid){
+        app.events.showLoading();
+        var nodes = app.HGraph.getNodesOfType(type);
+        app.graph.drawNodesOnlyGraph(nodes, function(){
+            cb();
+        });
     };
 
 
