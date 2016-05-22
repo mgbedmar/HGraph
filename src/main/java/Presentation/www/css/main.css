@@ -87,9 +87,7 @@
 
 }
 
-#mainPage #toolsMenu.open{
-    left:0px;
-}
+
 #mainPage #toolsMenu{
     position:absolute;
     top:0;
@@ -102,10 +100,14 @@
     z-index:1;
 
 
-    -webkit-transition:right 300ms ease;
+    -webkit-transition:left 300ms ease;
 }
 
-#mainPage #toolsMenu > div {
+#mainPage #toolsMenu.open{
+    left:0px;
+}
+
+#mainPage #toolsMenu #pestToolsMenu {
     position:absolute;
     display:-webkit-flex;
     -webkit-align-items:center;
@@ -115,17 +117,22 @@
     border-radius:10px;
     background-color:#aaa;
     color:#333;
-   /* margin-left:-40px;
-    margin-top:150px;*/
+    margin-left:235px;
+    margin-top:150px;
 }
 
-#mainPage #toolsMenu > div i{
+#mainPage #toolsMenu #pestToolsMenu i{
     display:block;
     font-size:25px;
-    margin-left:30px;
+    margin-left:10px;
 }
 
-#mainPage #toolsMenu > ul{
+#mainPage #toolsMenu i {
+    display:inline;
+    font-size:25px;
+}
+
+#mainPage #toolsMenu ul{
     list-style:none;
     padding:0 15px;
 
@@ -143,7 +150,7 @@
     content:none;
 }
 
-#mainPage #toolsMenu > ul li{
+/*#mainPage #toolsMenu ul li{
     text-align:center;
     border-radius:10px;
     border: thin solid #888;
@@ -164,4 +171,20 @@
     background-color: #ccc;
 
 
+}*/
+
+#mainPage #toolsMenu .contToolsMenu {
+    display:-webkit-flex;
+    -webkit-align-items:left;
+    -webkit-flex-direction:column;
+    background-color:#aaa;
+    color:#333;
+    margin-top:30px;
+    margin-left:30px;
 }
+/*
+#mainPage #toolsMenu .contToolsMenu > div {
+    display:-webkit-flex;
+    -webkit-align-items:left;
+
+}*/
