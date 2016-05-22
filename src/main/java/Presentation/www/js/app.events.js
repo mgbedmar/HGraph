@@ -45,7 +45,7 @@
         }
         else
         {
-            //TODO: disable features for small graphs
+            //TODO: disable small graphs features
             app.events.queryType("author", cb);
         }
 
@@ -215,8 +215,17 @@
     };
 
     //TODO
-    app.events.completeGraph = function(){
-        app.graph.drawGraph();
+    app.events.completeGraph = function(cb){
+        var nodeobj = {};
+        nodeobj[app.const.nodeTypes.author] = app.HGraph.getNodesOfType(app.const.nodeTypes.author);
+        nodeobj[app.const.nodeTypes.term]  = app.HGraph.getNodesOfType(app.const.nodeTypes.term);
+        nodeobj[app.const.nodeTypes.paper]  = app.HGraph.getNodesOfType(app.const.nodeTypes.paper);
+        nodeobj[app.const.nodeTypes.conf]  = app.HGraph.getNodesOfType(app.const.nodeTypes.conf);
+        var edgeobj = {};
+        edgeobj[app.const.nodeTypes.term]  = app.HGraph.getEdgesOfType(app.const.nodeTypes.term);
+        edgeobj[app.const.nodeTypes.author]  = app.HGraph.getEdgesOfType(app.const.nodeTypes.author);
+        edgeobj[app.const.nodeTypes.conf]  = app.HGraph.getEdgesOfType(app.const.nodeTypes.conf);
+        app.graph.drawGraph(nodeobj, edgeobj, cb);
     };
 
     app.events.queryType = function(type, cb){
