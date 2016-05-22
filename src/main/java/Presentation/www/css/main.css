@@ -26,7 +26,7 @@
     -webkit-transition:right 300ms ease;
 }
 
-#mainPage #queryMenu > div, #mainPage #toolsMenu > div {
+#mainPage #queryMenu > div {
     position:absolute;
     display:-webkit-flex;
     -webkit-align-items:center;
@@ -90,8 +90,7 @@
 #mainPage #toolsMenu.open{
     left:0px;
 }
-
-#mainPage #toolsMenu {
+#mainPage #toolsMenu{
     position:absolute;
     top:0;
     left:-245px;
@@ -106,10 +105,24 @@
     -webkit-transition:right 300ms ease;
 }
 
+#mainPage #toolsMenu > div {
+    position:absolute;
+    display:-webkit-flex;
+    -webkit-align-items:center;
+    -webkit-justify-content:center;
+    padding:5px 0;
+    width:50px;
+    border-radius:10px;
+    background-color:#aaa;
+    color:#333;
+   /* margin-left:-40px;
+    margin-top:150px;*/
+}
+
 #mainPage #toolsMenu > div i{
     display:block;
     font-size:25px;
-    margin-left:10px;
+    margin-left:30px;
 }
 
 #mainPage #toolsMenu > ul{
