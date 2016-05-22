@@ -15,7 +15,7 @@
             minEdgeSize: 0.2,
             maxEdgeSize: 0.5,
             zoomMin: 0.01,
-            zoomMax: 0.5,
+            zoomMax: 2,
             eventsEnabled: true,
             labelThreshold: 25
         },
@@ -27,7 +27,7 @@
         if(typeof _settings.relativeSize !== 'undefined')
             sigma.plugins.relativeSize(s, _settings.relativeSize);
         //TODO adjust nooverlap
-        if(typeof _settings.nooverlap !== 'undefined')
+        if(typeof _settings.nooverlap !== 'undefined' && _settings.nooverlap)
         {
             // Configure the noverlap layout:
             var noverlapListener = s.configNoverlap({
@@ -86,7 +86,7 @@
     }
     function _getCircleRandomPos(){
         var t = 2*Math.PI*Math.random();
-        var u = Math.random()+Math.random();
+        var u = Math.random()*100+Math.random()*100+2;
         var r = u;
         if(u>1)
             r = 2-u;
@@ -110,7 +110,8 @@
     app.graph.drawNodesOnlyGraph = function(nodes, cb){
         var g={nodes:[]};
         var i = 0;
-
+        if(typeof _sarr === 'undefined')
+            _sarr = [];
         //Start empty graph (for the camera)
         var s=new sigma({
             graph:g,
@@ -139,7 +140,7 @@
                 y: pos.y
             });
             //If graph is % maxNodes, start a new one
-            if(i % maxNodes == 0)
+            if(i % app.settings.maxNodes == 0)
             {
                 s=new sigma({
                     graph:g,

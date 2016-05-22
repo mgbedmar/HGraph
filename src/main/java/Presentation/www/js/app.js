@@ -40,7 +40,7 @@ var app = app || {};
                 },
                 getNodesOfType: function(type){
                     return {
-                        size: function(){ return 10 },
+                        size: function(){ return 2000 },
                         get: function(i){ return [type+i, "Soc el "+type+i] }
                     };
                 },
@@ -54,7 +54,7 @@ var app = app || {};
                     return;
                 },
                 isProjectSelected: function(){
-                    return document.querySelector("#welcomePage").classList.contains("active");
+                    return !document.querySelector("#welcomePage").classList.contains("active");
                 },
                 log: function(msg){
                     console.log(msg);
