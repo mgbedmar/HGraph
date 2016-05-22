@@ -32,8 +32,8 @@
             {
                 //TODO: calculate radius and position and color of types
                 //Add nodes of type to the graph
-                app.HGraph.log(type);
-                for (var i = 0; i < Math.sqrt(nodes[type].size()); i++)
+
+                for (var i = 0; i < nodes[type].size(); i++)
                 {
                     var pos = _getCircleRandomPos();
 

@@ -6,6 +6,8 @@
 
     //Private
     var _s;
+    //True if graph.nodes > maxNodes
+    var _largeGraph;
     var _settings = {
         graph:{
             minNodeSize: 1,
@@ -64,11 +66,20 @@
     //Public
     app.graph = {};
 
+    app.graph.init = function(large){
+        _largeGraph = large;
+    };
+
+    app.graph.isLarge = function(){
+        return _largeGraph;
+    };
+
 
     //Draws a graph with a big number of nodes but without edges
     app.graph.drawNodesOnlyGraph = function(nodes, cb){
         //TODO
-        app.graph.drawGraph(nodes, {}, function(){cb()});
+        //app.graph.drawGraph(nodes, {}, function(){cb()});
+        
     };
     //Draws a bigraph representing a table. Each connected component must be < maxNodes
     app.graph.drawTableBasedGraph = function(nodes, edges, cb){
