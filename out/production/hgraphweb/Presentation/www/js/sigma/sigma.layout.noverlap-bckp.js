@@ -214,19 +214,12 @@
 
     this.go = function () {
       this.iterCount = this.config.maxIterations;
-      var self = this;
-      var process = function(){
-        if(self.running) {
-          self.atomicGo();
-          setTimeout(process, 10);
-        }
-        else {
-          self.stop();
-        }
+
+      while (this.running) {
+        this.atomicGo();
       };
 
-      process();
-
+      this.stop();
     };
 
     this.start = function() {
@@ -253,7 +246,6 @@
     };
 
     this.stop = function() {
-      console.log("end");
       var nodes = this.sigInst.graph.nodes();
 
       this.running = false;
