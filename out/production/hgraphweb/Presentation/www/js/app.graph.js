@@ -220,7 +220,7 @@
 
         }
 
-        _applySettings(_sarr[0]);
+
 
         _sarr[0].addRenderer({
             container: 'graph-container',
@@ -231,6 +231,7 @@
             }
         });
         _sarr[0].refresh();
+        _applySettings(_sarr[0], cb);
     };
 
     /*
