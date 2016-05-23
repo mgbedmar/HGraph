@@ -40,7 +40,7 @@ var app = app || {};
                 },
                 getNodesOfType: function(type){
                     return {
-                        size: function(){ return 2000 },
+                        size: function(){ return 200 },
                         get: function(i){ return [type+i, "Soc el "+type+i] }
                     };
                 },

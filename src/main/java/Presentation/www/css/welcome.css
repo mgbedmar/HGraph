@@ -5,22 +5,20 @@
     -webkit-justify-content:center;
     height:100%;
 }
-#welcomePage.show{
-    transition:none;
-}
 #welcomePage .container h1,
 #welcomePage .container h2{
     margin:0;
     font-weight: normal;
 }
 #welcomePage .container h1{
-    font-size: 115px;
+    font-size: 80px;
+    padding:0px 10px;
 }
 
 #welcomePage .container h2{
     font-size:20px;
     margin-top: -20px;
-    margin-left: 8px;
+    margin-left: 16px;
 }
 #welcomePage .container .buttons{
     display: -webkit-flex;

@@ -1,3 +1,57 @@
+/*
+         settings: {
+
+-            minNodeSize: 1,
+
+-            maxNodeSize: 4,
+
++            minNodeSize: 0.5,
+
++            maxNodeSize: 3,
+
+             minEdgeSize: 0.2,
+
+             maxEdgeSize: 0.5,
+
+-            eventsEnabled: true,
+
+-            minRatio: 10, // How far can we zoom out?
+
+-            maxRatio: 20, // How far can we zoom in?
+
++            eventsEnabled: false,
+
++            minRatio: 0, // How far can we zoom out?
+
++            maxRatio: 0, // How far can we zoom in?
+
+             defaultLabelColor: "#000",
+
+-            defaultLabelSize: 14,
+
++            defaultLabelSize: 15,
+
+             defaultLabelBGColor: "#ddd",
+
+             defaultHoverLabelBGColor: "#002147",
+
+             defaultLabelHoverColor: "#fff",
+
+-            labelThreshold: 10,
+
++            labelThreshold: 18,
+
+             defaultEdgeType: "curve",
+
+-            hoverFontStyle: "bold",
+
+             fontStyle: "bold",
+
+             activeFontStyle: "bold"
+
+         }
+         */
+
 (function() {
     'use strict';
 
@@ -17,13 +71,15 @@
             zoomMin: 0.01,
             zoomMax: 2,
             eventsEnabled: true,
-            labelThreshold: 25
+            labelThreshold: 25,
+             defaultEdgeType: "curve"
+
         },
         relativeSize:0.5,
-        nooverlap:true
+        nooverlap:false
     };
 
-    function _applySettings(s, cb){
+    function _applySettings(s){
         if(typeof _settings.relativeSize !== 'undefined')
             sigma.plugins.relativeSize(s, _settings.relativeSize);
         //TODO adjust nooverlap
@@ -44,13 +100,12 @@
                 }
                 if(e.type === 'stop') {
                     console.timeEnd('noverlap');
-                    cb();
+
                 }
             });
             s.startNoverlap();
         }
-        else
-            cb();
+
     }
 
     function _createGraph(nodes, edges){
@@ -71,7 +126,7 @@
                     var pos = _getCircleRandomPos(i, i);
 
                     g.nodes.push({
-                        id: String(nodes[type].get(i)[0]),
+                        id: String(nodes[type].get(i)[0])+type,
                         label: String(nodes[type].get(i)[1]),
                         x: pos.x,
                         y: pos.y
@@ -80,7 +135,22 @@
 
             }
         }
+
+
         //TODO: edges
+        for (type in edges) {
+            if (edges.hasOwnProperty(type))
+            {
+                for (var i = 0; i < edges[type].size(); i++)
+                {
+                    g.edges.push({
+                        id: type+i,
+                        source: String(edges[type].get(i)[0]+"paper"),
+                        target: String(edges[type].get(i)[1])+type
+                    })
+                }
+            }
+        }
 
         return g;
     }
@@ -109,20 +179,19 @@
 
 
     //Draws a graph with a big number of nodes but without edges, nodes = JavaArrayList
-    app.graph.drawNodesOnlyGraph = function(nodes, cb){
+    app.graph.drawNodesOnlyGraph = function(nodes){
         var g={nodes:[]};
         var i = 0;
         if(typeof _sarr === 'undefined')
             _sarr = [];
         var s;
-        //n Callbacks
-        var ncb=0;
+
         var colors = ["#FF0000", "#00FF00", "#0000FF"];
         //For each node
         var c = 0;
         while(i < nodes.size())
         {
-            app.HGraph.log(i);
+
             //TODO: rings
             var pos = _getCircleRandomPos(i*40,i*20);
 
@@ -144,9 +213,7 @@
                 });
 
 
-                ncb++;
                 _applySettings(s, function(){
-                    ncb--;
                 });
                 _sarr.push(s);
                 g = {nodes:[]};
@@ -162,9 +229,7 @@
                 settings:_settings.graph
             });
 
-            ncb++;
             _applySettings(s, function(){
-                ncb--;
             });
 
 
@@ -185,16 +250,6 @@
             })
         }, 5));
 
-        //Polling callbacks number. Ends when ncb is 0
-        var interval = setInterval(function(){
-
-            if(ncb == 0)
-            {
-                clearInterval(interval);
-                cb();
-            }
-        },1000);
-
     };
     //Draws a bigraph representing a table. Each connected component must be < maxNodes
     app.graph.drawTableBasedGraph = function(nodes, edges, cb){
@@ -202,7 +257,7 @@
     };
 
     //Draws a normal graph, nodes = {author:JavaArrayList, paper:...}
-    app.graph.drawGraph = function(nodes, edges, cb){
+    app.graph.drawGraph = function(nodes, edges){
         var g = _createGraph(nodes, edges);
         if(typeof _sarr === 'undefined')
         {
@@ -234,12 +289,11 @@
             container: 'graph-container',
             type:'canvas',
             settings: {
-                batchEdgesDrawing: true,
-                hideEdgesOnMove: true
+                batchEdgesDrawing: true
             }
         });
         _sarr[0].refresh();
-        _applySettings(_sarr[0], cb);
+        _applySettings(_sarr[0]);
     };
 
     /*

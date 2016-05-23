@@ -24,7 +24,7 @@ var app = app || {};
             term: "term"
         },
         //Adds a delay before showing the main screen
-        dramaticWait: 1,
+        dramaticWait: 500,
         //Page transition duration
         transitionDelay: 200
     };

@@ -21,7 +21,7 @@
     }
 
     //Aixo probablement hauria de ser una funcio init dins de app.graph
-    function _initMain(cb){
+    function _initMain(){
 
         var large = false;
         //If a graph is selected
@@ -41,12 +41,12 @@
         app.graph.init(large);
         if(!app.graph.isLarge())
         {
-            app.events.completeGraph(cb);
+            app.events.completeGraph();
         }
         else
         {
             //TODO: disable small graphs features
-            app.events.queryType("author", cb);
+            app.events.queryType("author");
         }
 
     }
@@ -108,9 +108,8 @@
         app.events.showLoading();
         _hide(app.const.pageIds.loadGraph, function(){
             _show(app.const.pageIds.main);
-            _initMain(function(){
-                app.events.hidePopup();
-            });
+            _initMain();
+            app.events.hidePopup();
         });
     };
 
@@ -118,9 +117,8 @@
         app.events.showLoading();
         _hide(app.const.pageIds.welcome, function(){
             _show(app.const.pageIds.main);
-            _initMain(function(){
-                app.events.hidePopup();
-            });
+            _initMain();
+            app.events.hidePopup();
         });
     };
 
@@ -137,11 +135,10 @@
         });
     };
 
-    app.events.showPopup = function(element, cb){
+    app.events.showPopup = function(element){
         document.getElementById(app.const.pageIds.popupContent).innerHTML = "";
         document.getElementById(app.const.pageIds.popupContent).appendChild(element);
         _show(app.const.pageIds.popup);
-        if(cb) cb();
     };
 
     app.events.showLoading = function(){
@@ -215,7 +212,7 @@
     };
 
     //TODO
-    app.events.completeGraph = function(cb){
+    app.events.completeGraph = function(){
         var nodeobj = {};
         nodeobj[app.const.nodeTypes.author] = app.HGraph.getNodesOfType(app.const.nodeTypes.author);
         nodeobj[app.const.nodeTypes.term]  = app.HGraph.getNodesOfType(app.const.nodeTypes.term);
@@ -225,24 +222,21 @@
         edgeobj[app.const.nodeTypes.term]  = app.HGraph.getEdgesOfType(app.const.nodeTypes.term);
         edgeobj[app.const.nodeTypes.author]  = app.HGraph.getEdgesOfType(app.const.nodeTypes.author);
         edgeobj[app.const.nodeTypes.conf]  = app.HGraph.getEdgesOfType(app.const.nodeTypes.conf);
-        app.graph.drawGraph(nodeobj, edgeobj, cb);
+        app.graph.drawGraph(nodeobj, edgeobj);
+        app.events.hidePopup();
     };
 
-    app.events.queryType = function(type, cb){
+    app.events.queryType = function(type){
         app.events.showLoading();
         var nodes = app.HGraph.getNodesOfType(type);
-        app.graph.drawNodesOnlyGraph(nodes, function(){
-            cb();
-        });
+        app.graph.drawNodesOnlyGraph(nodes);
     };
 
     //TODO
     app.events.queryNeighbours = function(nodeid){
         app.events.showLoading();
         var nodes = app.HGraph.getNodesOfType(type);
-        app.graph.drawNodesOnlyGraph(nodes, function(){
-            cb();
-        });
+        app.graph.drawNodesOnlyGraph(nodes);
     };
 
     app.events.openToolsMenu = function(){
