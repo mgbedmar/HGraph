@@ -4,6 +4,13 @@
     <meta charset="UTF-8">
     <title>HGraph</title>
 
+    <!--Styles-->
+    <link rel="stylesheet" type="text/css" href="css/app.css"/>
+    <link rel="stylesheet" type="text/css" href="css/loadGraph.css"/>
+    <link rel="stylesheet" type="text/css" href="css/main.css"/>
+    <link rel="stylesheet" type="text/css" href="css/welcome.css"/>
+    <link rel="stylesheet" type="text/css" href="css/ionicons.min.css"/>
+
     <!--App modules, order matters-->
     <script type="text/javascript" src="js/app.js"></script>
     <script type="text/javascript" src="js/app.graph.js"></script>
@@ -15,13 +22,6 @@
     <script type="text/javascript" src="js/sigma/sigma.plugins.filter.js"></script>
     <script type="text/javascript" src="js/sigma/sigma.plugins.animate.js"></script>
     <script type="text/javascript" src="js/sigma/sigma.layout.noverlap.js"></script>
-
-    <!--Styles-->
-    <link rel="stylesheet" type="text/css" href="css/app.css"/>
-    <link rel="stylesheet" type="text/css" href="css/loadGraph.css"/>
-    <link rel="stylesheet" type="text/css" href="css/main.css"/>
-    <link rel="stylesheet" type="text/css" href="css/welcome.css"/>
-    <link rel="stylesheet" type="text/css" href="css/ionicons.min.css"/>
 
 </head>
 <body>
@@ -60,7 +60,73 @@
     <!--Main Page-->
     <div id="mainPage">
         <div id="mainMenu"></div>
-        <div id="toolsMenu"></div>
+        <div id="toolsMenu">
+            <div id="pestToolsMenu" data-action="openToolsMenu">
+                <i class="icon ion-settings"></i>
+            </div>
+            <div class="contToolsMenu">
+                <form id="selectedNode">
+                    <div id="selectedNodeType"></div>
+                    <input id="modSelectedNode" type="text" name="nodeName" value="">
+                </form>
+            </div>
+            <div class="contToolsMenu">
+                <div id="addNode" title="Afegir node">
+                    <i class="icon ion-android-add-circle"></i>
+                    <div class="collapsed">
+                        Tipus:
+                        <ul>
+                            <li>Autor</li>
+                            <li>Paper</li>
+                            <li>Conferència</li>
+                            <li>Terme</li>
+                        </ul>
+                    </div>
+                </div>
+                <div id="addEdge" title="Afegir aresta">
+                    <i class="icon ion-arrow-resize"></i>
+                    <div class="collapsed">
+                        Aresta de paper a:
+                        <ul>
+                            <li>Autor</li>
+                            <li>Paper</li>
+                            <li>Conferència</li>
+                            <li>Terme</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="contToolsMenu">
+                <div id="addNodeText">
+                    <div><i class="icon ion-android-add-circle"></i></div>
+                    <div>Afegir un node</div>
+                    <select class="selectable">
+                        <option value="author">Autor</option>
+                        <option value="paper">Paper</option>
+                        <option value="conf">Conferència</option>
+                        <option value="term">Terme</option>
+                    </select>
+                </div>
+                <div id="addEdgeText">
+                    <div><i class="icon ion-arrow-resize"></i></div>
+                    <div>Afegir una aresta:
+                        <div class="collapsed">
+                            <span>Paper:</span>
+                            <input />
+                            <span>Node:</span>
+                            <input />
+                            <select class="selectable">
+                                <option value="author">Autor</option>
+                                <option value="paper">Paper</option>
+                                <option value="conf">Conferència</option>
+                                <option value="term">Terme</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div id="queryMenu">
             <div data-action="openQueryMenu">
                 <i class="icon ion-ios-search-strong"></i>

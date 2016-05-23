@@ -15,26 +15,26 @@
             minEdgeSize: 0.2,
             maxEdgeSize: 0.5,
             zoomMin: 0.01,
-            zoomMax: 0.5,
+            zoomMax: 2,
             eventsEnabled: true,
             labelThreshold: 25
         },
         relativeSize:0.5,
-        nooverlap:false
+        nooverlap:true
     };
 
     function _applySettings(s, cb){
         if(typeof _settings.relativeSize !== 'undefined')
             sigma.plugins.relativeSize(s, _settings.relativeSize);
         //TODO adjust nooverlap
-        if(typeof _settings.nooverlap !== 'undefined')
+        if(typeof _settings.nooverlap !== 'undefined' && _settings.nooverlap)
         {
             // Configure the noverlap layout:
             var noverlapListener = s.configNoverlap({
                 nodeMargin: 0.05,
-                scaleNodes: 0.9,
-                gridSize: 400,
-                speed:5
+                scaleNodes: 1,
+                gridSize: 100,
+                speed:10
             });
             // Bind the events:
             noverlapListener.bind('start stop interpolate', function(e) {
@@ -68,7 +68,7 @@
 
                 for (var i = 0; i < nodes[type].size(); i++)
                 {
-                    var pos = _getCircleRandomPos();
+                    var pos = _getCircleRandomPos(i, i);
 
                     g.nodes.push({
                         id: String(nodes[type].get(i)[0]),
@@ -84,9 +84,11 @@
 
         return g;
     }
-    function _getCircleRandomPos(){
+
+    //TODO
+    function _getCircleRandomPos(radius, gap){
         var t = 2*Math.PI*Math.random();
-        var u = Math.random()+Math.random();
+        var u = Math.random()*(radius+10)+Math.random()*(radius+10)+gap;
         var r = u;
         if(u>1)
             r = 2-u;
@@ -110,83 +112,89 @@
     app.graph.drawNodesOnlyGraph = function(nodes, cb){
         var g={nodes:[]};
         var i = 0;
-
-        //Start empty graph (for the camera)
-        var s=new sigma({
-            graph:g,
-            settings:_settings.graph
-        });
-        var cam = s.addCamera();
-        s.addRenderer({
-            container: 'graph-container',
-            type: 'canvas',
-            camera: cam
-        });
-        s.refresh();
-        _sarr.push(s);
+        if(typeof _sarr === 'undefined')
+            _sarr = [];
+        var s;
         //n Callbacks
         var ncb=0;
+        var colors = ["#FF0000", "#00FF00", "#0000FF"];
         //For each node
+        var c = 0;
         while(i < nodes.size())
         {
+            app.HGraph.log(i);
             //TODO: rings
-            var pos = _getCircleRandomPos();
+            var pos = _getCircleRandomPos(i*40,i*20);
 
             g.nodes.push({
                 id: String(nodes.get(i)[0]),
                 label: String(nodes.get(i)[1]),
                 x: pos.x,
-                y: pos.y
+                y: pos.y,
+                color: colors[c]
             });
             //If graph is % maxNodes, start a new one
-            if(i % maxNodes == 0)
+            if(i % app.settings.maxNodes == 0)
             {
+                c = (c+1) %3;
                 s=new sigma({
+                    container: 'graph-container',
                     graph:g,
                     settings:_settings.graph
                 });
-                s.addRenderer({
-                    container: 'graph-container',
-                    type: 'canvas',
-                    camera: cam
-                });
+
+
                 ncb++;
                 _applySettings(s, function(){
                     ncb--;
                 });
-                s.refresh();
                 _sarr.push(s);
                 g = {nodes:[]};
             }
+            i++;
         }
         //If nodes remaining, start a new graph
         if(g.nodes.length > 0)
         {
             s=new sigma({
+                container: 'graph-container',
                 graph:g,
                 settings:_settings.graph
             });
+
             ncb++;
             _applySettings(s, function(){
                 ncb--;
             });
-            s.addRenderer({
-                container: 'graph-container',
-                type: 'canvas',
-                camera: cam
-            });
-            s.refresh();
+
+
             _sarr.push(s);
         }
 
+        s = new sigma({
+            container: 'graph-container',
+            graph:{nodes:[]}
+        });
+
+        s.camera.bind('coordinatesUpdated', app.debounce(function(){
+            _sarr.forEach(function(si){
+                si.camera.x = s.camera.x;
+                si.camera.y = s.camera.y;
+                si.camera.ratio = s.camera.ratio;
+                si.refresh();
+            })
+        }, 5));
+
         //Polling callbacks number. Ends when ncb is 0
         var interval = setInterval(function(){
+
             if(ncb == 0)
             {
                 clearInterval(interval);
                 cb();
             }
         },1000);
+
     };
     //Draws a bigraph representing a table. Each connected component must be < maxNodes
     app.graph.drawTableBasedGraph = function(nodes, edges, cb){
@@ -220,7 +228,7 @@
 
         }
 
-        _applySettings(_sarr[0]);
+
 
         _sarr[0].addRenderer({
             container: 'graph-container',
@@ -231,6 +239,7 @@
             }
         });
         _sarr[0].refresh();
+        _applySettings(_sarr[0], cb);
     };
 
     /*

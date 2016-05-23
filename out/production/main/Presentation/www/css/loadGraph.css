@@ -38,7 +38,7 @@
     margin-bottom:2px;
     margin-right:auto;
     margin-left:auto;
-    background-color:#678F99;
+    background-color:#BFDCE3;
     color:#00080A;
     border-radius:10px;
     min-width:200px;
@@ -81,24 +81,21 @@
 #loadGraphPage .ion-edit {
     padding-left:8px;
     padding-right:8px;
-    color:#678F99;
-    background-color:#00080A;
+    color:#00080A;
+    background-color:#rgba(0,0,0,0);
+    border:thin solid #00080A;
     border-radius:10px;
+    cursor:pointer;
 }
 
 #loadGraphPage .ion-edit:hover {
-    color:#87AFB9;
-    background-color:#666;
+    /*background-color:#9FBCC3;*/
 }
 
 #loadGraphPage .ion-chevron-left {
-    color:rgba(25,25,25,0.5);
+    color:#00080A;
     margin-left:7px;
     margin-right:10px;
-}
-
-#loadGraphPage .ion-chevron-left:hover {
-    color:#333;
 }
 
 #divEditPL {
@@ -111,17 +108,22 @@
     left:0px;
     margin:10px;
     padding:10px;
-    background-color:#ccc;
+    background-color:rgba(0,0,0,0);/*#BFDCE3;*/
+    border:thin solid #00080A;
     border-radius:50px;
     cursor:pointer;
 }
 
-#tornardiv:hover, #tornardiv:active, #loadGraphPage li:hover, #loadGraphPage li:active {
-    background-color:#87AFB9; /* l'altre +202020*/
+#tornardiv:hover {
+    background-color:rgba(159, 188, 195, 0.5);
+}
+
+#loadGraphPage li:hover {
+    background-color:#9FBCC3; /*#678F99; /* l'altre +202020*/
 }
 
 #loadGraphPage .ion-close-round {
-    color:rgba(25,25,25,0.5);
+    color:#20282A;
     font-size:16px;
     display:none;
     opacity:0;
@@ -140,9 +142,9 @@
 }
 
 #loadGraphPage .ion-close-round:hover {
-    color:#333;
-    background-color:#eee;
+    color:#00080A;
 }
+
 
 ::-webkit-scrollbar {
     background-color:rgba(25,25,25,0.5);

@@ -66,6 +66,17 @@ var app = app || {};
 
 
 
+    app.debounce = function(fn, delay){
+        var timer = null;
+        return function () {
+            var context = this, args = arguments;
+            clearTimeout(timer);
+            timer = setTimeout(function () {
+                fn.apply(context, args);
+            }, delay);
+        };
+    };
+
     app.init = function(){
         if(app.events === undefined || app.graph === undefined){
             app.HGraph.log("Error a les dependencies");

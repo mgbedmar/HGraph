@@ -4,40 +4,6 @@ var app = app || {};
 //Init HGraph
 (function(){
     'use strict';
-    //Ugly race condition
-    setTimeout(function(){
-        if(typeof app.HGraph === 'undefined')
-        {
-            app.HGraph = {
-                getProjects: function(){
-                    return ["stub1", "stub2", "sutb3"]
-                },
-                getNodesOfType: function(type){
-                    if(type == "paper")
-                    {
-                        return [
-                            ["0", "patata"],
-                            ["1", "zanahoria"],
-                            ["2", "berenjena"],
-                            ["3", "tomate"]
-                        ];
-                    }
-                },
-                loadProject: function(project){
-                    return;
-                },
-                isProjectSelected: function(){
-                    return document.querySelector("#welcomePage").classList.contains("active");
-                },
-                log: function(msg){
-                    console.log(msg);
-                }
-            };
-        }
-
-    },1);
-
-
     //Public
     app.settings={
         //Disables some features on graphs with nodes > maxNodes (large graphs)
@@ -62,6 +28,55 @@ var app = app || {};
         //Page transition duration
         transitionDelay: 200
     };
+
+
+    //Init app (Ugly race condition)
+    setTimeout(function(){
+        if(typeof app.HGraph === 'undefined')
+        {
+            app.HGraph = {
+                getProjects: function(){
+                    return ["stub1", "stub2", "sutb3"]
+                },
+                getNodesOfType: function(type){
+                    return {
+                        size: function(){ return 2000 },
+                        get: function(i){ return [type+i, "Soc el "+type+i] }
+                    };
+                },
+                getEdgesOfType: function(type){
+                    return {
+                        size: function(){ return 10 },
+                        get: function(i){ return ["paper"+i, "Soc el "+type+i] }
+                    };
+                },
+                loadProject: function(project){
+                    return;
+                },
+                isProjectSelected: function(){
+                    return !document.querySelector("#welcomePage").classList.contains("active");
+                },
+                log: function(msg){
+                    console.log(msg);
+                }
+            };
+        }
+
+    },1);
+
+
+
+    app.debounce = function(fn, delay){
+        var timer = null;
+        return function () {
+            var context = this, args = arguments;
+            clearTimeout(timer);
+            timer = setTimeout(function () {
+                fn.apply(context, args);
+            }, delay);
+        };
+    };
+
     app.init = function(){
         if(app.events === undefined || app.graph === undefined){
             app.HGraph.log("Error a les dependencies");
@@ -78,6 +93,9 @@ var app = app || {};
 
         document.querySelector("#mainPage #queryMenu > div[data-action=openQueryMenu]")
             .addEventListener("click", app.events.openQueryMenu);
+
+        document.querySelector("#mainPage #toolsMenu > div[data-action=openToolsMenu]")
+            .addEventListener("click", app.events.openToolsMenu);
         //document.querySelector("#mainPage a[data-action=welcome]").addEventListener("click", mainGoToWelcome);
 
         setTimeout(function(){
