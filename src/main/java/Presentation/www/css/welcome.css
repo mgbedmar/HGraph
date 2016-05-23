@@ -11,8 +11,9 @@
     font-weight: normal;
 }
 #welcomePage .container h1{
-    font-size: 80px;
-    padding:0px 10px;
+    /*font-size: 80px;
+    padding:0px 10px;*/
+    font-size:115px;
 }
 
 #welcomePage .container h2{

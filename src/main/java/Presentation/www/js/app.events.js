@@ -66,10 +66,10 @@
             ic.className = "icon ion-close-round";
             div2.appendChild(ic);
             div2.addEventListener("click", function() {
-                //TODO show popup and delete
                 app.events.showAccept("Esborrar un projecte", "El projecte '"+e+"' s'esborrarà, vols continuar?",
                     "Esborra", "Cancela", function(){
                         app.HGraph.deleteProject(e);
+                        _initLoadPage();
                     });
                 event.stopPropagation(); //per no executar el anar a graf
             });
