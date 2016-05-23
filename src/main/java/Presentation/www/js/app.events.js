@@ -223,6 +223,7 @@
         edgeobj[app.const.nodeTypes.author]  = app.HGraph.getEdgesOfType(app.const.nodeTypes.author);
         edgeobj[app.const.nodeTypes.conf]  = app.HGraph.getEdgesOfType(app.const.nodeTypes.conf);
         app.graph.drawGraph(nodeobj, edgeobj);
+        app.events.hidePopup();
     };
 
     app.events.queryType = function(type){

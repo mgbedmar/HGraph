@@ -24,7 +24,7 @@ var app = app || {};
             term: "term"
         },
         //Adds a delay before showing the main screen
-        dramaticWait: 500,
+        dramaticWait: 1,
         //Page transition duration
         transitionDelay: 200
     };
@@ -40,7 +40,7 @@ var app = app || {};
                 },
                 getNodesOfType: function(type){
                     return {
-                        size: function(){ return 10 },
+                        size: function(){ return 200 },
                         get: function(i){ return [type+i, "Soc el "+type+i] }
                     };
                 },
@@ -54,7 +54,7 @@ var app = app || {};
                     return;
                 },
                 isProjectSelected: function(){
-                    return document.querySelector("#welcomePage").classList.contains("active");
+                    return !document.querySelector("#welcomePage").classList.contains("active");
                 },
                 log: function(msg){
                     console.log(msg);
@@ -65,6 +65,17 @@ var app = app || {};
     },1);
 
 
+
+    app.debounce = function(fn, delay){
+        var timer = null;
+        return function () {
+            var context = this, args = arguments;
+            clearTimeout(timer);
+            timer = setTimeout(function () {
+                fn.apply(context, args);
+            }, delay);
+        };
+    };
 
     app.init = function(){
         if(app.events === undefined || app.graph === undefined){

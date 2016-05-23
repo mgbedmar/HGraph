@@ -24,7 +24,7 @@ var app = app || {};
             term: "term"
         },
         //Adds a delay before showing the main screen
-        dramaticWait: 500,
+        dramaticWait: 1,
         //Page transition duration
         transitionDelay: 200
     };
@@ -40,7 +40,7 @@ var app = app || {};
                 },
                 getNodesOfType: function(type){
                     return {
-                        size: function(){ return 2000 },
+                        size: function(){ return 200 },
                         get: function(i){ return [type+i, "Soc el "+type+i] }
                     };
                 },

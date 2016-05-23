@@ -5,6 +5,9 @@
     -webkit-justify-content:center;
     height:100%;
 }
+#welcomePage.show{
+    transition:none;
+}
 #welcomePage .container h1,
 #welcomePage .container h2{
     margin:0;
@@ -13,6 +16,7 @@
 #welcomePage .container h1{
     font-size: 115px;
 }
+
 #welcomePage .container h2{
     font-size:20px;
     margin-top: -20px;
