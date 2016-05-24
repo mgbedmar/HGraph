@@ -230,6 +230,7 @@
         if(_popupShown) return;
         var div = document.createElement("div");
         div.classList.add("loading");
+        div.classList.add("with-border");
         var img = document.createElement("img");
         img.src="img/loading.gif";
         div.appendChild(img);
@@ -260,10 +261,13 @@
         if(_popupShown) return;
         var div = document.createElement("div");
         div.classList.add("accept");
+        div.classList.add("with-border");
         var title = document.createElement("h1");
         title.innerHTML = t || "Informació";
         var text = document.createElement("span");
         text.innerHTML = msg;
+        var divbtns = document.createElement("div");
+        divbtns.classList.add("divbtns");
         var okbtn = document.createElement("a");
         okbtn.innerHTML = btnMsgOk;
         okbtn.addEventListener("click", function(){
@@ -276,10 +280,11 @@
             app.events.hidePopup();
             if(cbCancel) cbCancel();
         });
+        divbtns.appendChild(okbtn);
+        divbtns.appendChild(cancelbtn);
         div.appendChild(title);
         div.appendChild(text);
-        div.appendChild(okbtn);
-        div.appendChild(cancelbtn);
+        div.appendChild(divbtns);
         app.events.showPopup(div);
     };
 

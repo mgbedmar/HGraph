@@ -73,8 +73,8 @@
             eventsEnabled: true,
             labelThreshold: 25,
             defaultEdgeType: "curve",
-            autoRescale:false,
-            enableHovering:true //TODO posar a false
+            autoRescale:false, //TODO no va be, posar a true
+            enableHovering:true
 
         },
         relativeSize:0.5,
@@ -216,7 +216,6 @@
             //TODO: rings
             //var pos = _getCircleRandomPos(i*40,i*20);
             pos = _getNextPosition();
-            if (i%1500 === 0) app.HGraph.log(pos.x + " " +pos.y + " " + _radius);
 
             g.nodes.push({
                 id: String(nodes.get(i)[0]),
