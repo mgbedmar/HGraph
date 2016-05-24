@@ -72,11 +72,15 @@
             zoomMax: 2,
             eventsEnabled: true,
             labelThreshold: 25,
-             defaultEdgeType: "curve"
+            defaultEdgeType: "curve",
+            //drawLabels:false
+            enableHovering:false
 
         },
         relativeSize:0.5,
         nooverlap:false
+        //enableHovering:false
+
     };
 
     function _applySettings(s){
