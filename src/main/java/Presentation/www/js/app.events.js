@@ -147,16 +147,18 @@
         app.graph.drawNodesOnlyGraph(nodes);
     }
 
-    function _selectQueryMenuOption(element){
-        var nodes = document.querySelectorAll("#queryMenu > ul > li");
+    function _selectMenuOption(element,menu){
+        var nodes = document.querySelectorAll(menu +" > ul > li");
         for(var i = 0; i < nodes.length; i++)
         {
-            nodes[i].classList.remove("selected");
+            if (nodes[i] != element.parentNode) {
+                nodes[i].classList.remove("selected");
+            }
         }
 
-        element.parentNode.classList.add("selected");
-
+        element.parentNode.classList.toggle("selected");
     }
+
     function _selectType(parentElement, type){
         var nodes = parentElement.children;
         for(var i = 0; i < nodes.length; i++)
@@ -307,7 +309,7 @@
         document.querySelector("#"+app.const.pageIds.main + " #queryMenu").classList.toggle("open");
     };
     app.events.selectQueryMenuOption = function(e){
-        _selectQueryMenuOption(e.currentTarget);
+        _selectMenuOption(e.currentTarget, "#queryMenu");
     };
     app.events.selectTypeOption = function(e){
         _selectType(e.target.parentNode, e.currentTarget.dataset.type);
@@ -336,6 +338,10 @@
 
     app.events.openToolsMenu = function(){
             document.querySelector("#"+app.const.pageIds.main + " #toolsMenu").classList.toggle("open");
+    };
+
+    app.events.selectToolsMenuOption = function(e){
+            _selectMenuOption(e.currentTarget, "#toolsMenu");
     };
 
 }).call(window);
