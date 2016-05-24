@@ -10,6 +10,9 @@
     <script type="text/javascript" src="js/app.graph.js"></script>
     <script type="text/javascript" src="js/app.events.js"></script>
 
+    <!--autocomplete-->
+    <script type="text/javascript" src="js/autocomplete/auto-complete.min.js"></script>
+
     <!--Sigma modules-->
     <script type="text/javascript" src="js/sigma/sigma.min.js"></script>
     <script type="text/javascript" src="js/sigma/sigma.plugins.relativeSize.js"></script>
@@ -23,16 +26,17 @@
     <link rel="stylesheet" type="text/css" href="css/main.css"/>
     <link rel="stylesheet" type="text/css" href="css/welcome.css"/>
     <link rel="stylesheet" type="text/css" href="css/ionicons.min.css"/>
+    <link rel="stylesheet" type="text/css" href="css/auto-complete.css"/>
 
 </head>
 <body>
 
     <!--Loading-->
-    <div id="popupPage">
+    <div id="popupPage" class="page">
         <div id="popupContent"></div>
     </div>
     <!--Welcome Page-->
-    <div id="welcomePage" class="active">
+    <div id="welcomePage" class="page active">
         <div class="container">
             <h1>HGraph</h1>
             <h2>HeteSim made easy</h2>
@@ -44,7 +48,7 @@
     </div>
 
     <!--Load Graph Page-->
-    <div id="loadGraphPage">
+    <div id="loadGraphPage" class="page">
         <div id="PLcontainer" class="container">
             <div id="tornardiv">
                 <a data-action="welcome"><i class="icon ion-chevron-left"></i></a>
@@ -59,7 +63,7 @@
     </div>
 
     <!--Main Page-->
-    <div id="mainPage">
+    <div id="mainPage" class="page">
         <div id="mainMenu"></div>
         <div id="toolsMenu">
             <div id="pestToolsMenu" data-action="openToolsMenu">
@@ -74,7 +78,7 @@
             <div class="contToolsMenu">
                 <div id="addNode" title="Afegir node">
                     <i class="icon ion-android-add-circle"></i>
-                    <div class="collapsed">
+                    <div>
                         Tipus:
                         <ul>
                             <li>Autor</li>
@@ -86,7 +90,7 @@
                 </div>
                 <div id="addEdge" title="Afegir aresta">
                     <i class="icon ion-arrow-resize"></i>
-                    <div class="collapsed">
+                    <div>
                         Aresta de paper a:
                         <ul>
                             <li>Autor</li>
@@ -112,7 +116,7 @@
                 <div id="addEdgeText">
                     <div><i class="icon ion-arrow-resize"></i></div>
                     <div>Afegir una aresta:
-                        <div class="collapsed">
+                        <div>
                             <span>Paper:</span>
                             <input />
                             <span>Node:</span>
@@ -133,74 +137,71 @@
                 <i class="icon ion-ios-search-strong"></i>
             </div>
             <ul>
-                <li>
+                <li data-action="completeGraph">
                     <h1>Complet</h1>
                 </li>
             </ul>
             <ul>
-                <li>
+                <li class="oneLine" data-action="queryType">
                     <h1>Tipus</h1>
-                    <div class="collapsed">
-                       <ul>
-                           <li>Autor</li>
-                           <li>Paper</li>
-                           <li>Conferència</li>
-                           <li>Terme</li>
-                       </ul>
-                    </div>
+                    <ul class="typeSelector">
+                        <li data-type="author">Autor</li>
+                        <li data-type="paper">Paper</li>
+                        <li data-type="conf">Conferència</li>
+                        <li data-type="term">Terme</li>
+                    </ul>
                 </li>
-                <li>
+                <li class="oneLine">
                     <h1>Veïns</h1>
-                    <div class="collapsed">
-                        <span>Node:</span>
-                        <input />
-                        <i class="icon ion-alert-circled"></i>
+                    <div>
+                        <input id="autoVeins" />
+                        <i class="icon ion-android-locate"></i>
                     </div>
                 </li>
             </ul>
             <ul>
-                <li>
+                <li class="twoLines">
                     <h1>Referència</h1>
-                    <div class="collapsed">
+                    <div>
                         <span>Font:</span>
-                        <input />
-                        <i class="icon ion-alert-circled"></i>
+                        <input id="autoref1"/>
+                        <i class="icon ion-android-locate"></i>
                         <span>Destí:</span>
-                        <input />
-                        <i class="icon ion-alert-circled"></i>
+                        <input id="autoref2"/>
+                        <i class="icon ion-android-locate"></i>
                     </div>
                 </li>
-                <li>
+                <li class="twoLines">
                     <h1>1 a N</h1>
-                    <div class="collapsed">
+                    <div>
                         <span>Font:</span>
-                        <input />
-                        <i class="icon ion-alert-circled"></i>
+                        <input id="auto1ToN"/>
+                        <i class="icon ion-android-locate"></i>
                         <span>Destí:</span>
-                        <ul>
-                            <li>Autor</li>
-                            <li>Paper</li>
-                            <li>Conferència</li>
-                            <li>Terme</li>
+                        <ul class="typeSelector">
+                            <li data-type="author">Autor</li>
+                            <li data-type="paper">Paper</li>
+                            <li data-type="conf">Conferència</li>
+                            <li data-type="term">Terme</li>
                         </ul>
                     </div>
                 </li>
-                <li>
+                <li  class="threeLines">
                     <h1>N a N</h1>
-                    <div class="collapsed">
+                    <div>
                         <span>Font:</span>
-                        <ul>
-                            <li>Autor</li>
-                            <li>Paper</li>
-                            <li>Conferència</li>
-                            <li>Terme</li>
+                        <ul class="typeSelector">
+                            <li data-type="author">Autor</li>
+                            <li data-type="paper">Paper</li>
+                            <li data-type="conf">Conferència</li>
+                            <li data-type="term">Terme</li>
                         </ul>
                         <span>Destí:</span>
-                        <ul>
-                            <li>Autor</li>
-                            <li>Paper</li>
-                            <li>Conferència</li>
-                            <li>Terme</li>
+                        <ul class="typeSelector">
+                            <li data-type="author">Autor</li>
+                            <li data-type="paper">Paper</li>
+                            <li data-type="conf">Conferència</li>
+                            <li data-type="term">Terme</li>
                         </ul>
                     </div>
                 </li>

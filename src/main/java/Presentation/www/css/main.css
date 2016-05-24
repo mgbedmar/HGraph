@@ -8,6 +8,56 @@
     height:100%;
 }
 
+#mainPage ul.typeSelector{
+    display: -webkit-flex;
+    list-style: none;
+    padding: 0;
+    border-radius: 5px;
+    overflow: hidden;
+    height: 30px;
+    margin: 5px;
+}
+
+#mainPage ul.typeSelector li{
+    -webkit-flex: 1 1 auto;
+    font-size: 10px;
+    color: #ECEDED;
+    font-weight: bold;
+    padding-top:9px;
+}
+
+#mainPage ul.typeSelector li[data-type=author]{
+    background-color: steelblue;
+}
+
+#mainPage ul.typeSelector li[data-type=paper]{
+    background-color: purple;
+}
+
+#mainPage ul.typeSelector li[data-type=conf]{
+    background-color: forestgreen;
+}
+
+#mainPage ul.typeSelector li[data-type=term]{
+    background-color: darkred;
+}
+
+#mainPage ul.typeSelector li[data-type=author].selected{
+    background-color: #799db4;
+}
+
+#mainPage ul.typeSelector li[data-type=paper].selected{
+    background-color: #804d78;
+}
+
+#mainPage ul.typeSelector li[data-type=conf].selected{
+    background-color: #688b69;
+}
+
+#mainPage ul.typeSelector li[data-type=term].selected{
+    background-color: #a05c58;
+}
+
 #mainPage #queryMenu.open{
     right:0px;
 }
@@ -39,7 +89,22 @@
     margin-left:-40px;
     margin-top:150px;
 }
-
+#mainPage #queryMenu span{
+    display: block;
+    text-align: left;
+    margin: 10px 0 0 10px;
+    font-size: 14px;
+    color: rgba(0, 0, 0, 0.5);
+    font-style: italic;
+}
+#mainPage #queryMenu .oneLine input{
+    margin-top: 10px;
+}
+#mainPage #queryMenu input{
+    border-radius: 5px;
+    font-size: 14px;
+    width:150px;
+}
 #mainPage #queryMenu > div i{
     display:block;
     font-size:25px;
@@ -56,22 +121,39 @@
     display: block;
     height: 1px;
     margin: 20px 0;
-    background: linear-gradient(90deg, #aaa 15%, #666, #aaa 85%);
-
+    background: #aaa;
+    border-bottom: thin solid #bbb;
 }
 
 #mainPage #queryMenu > ul:last-child::after{
     content:none;
 }
 
-#mainPage #queryMenu > ul li{
+#mainPage #queryMenu > ul > li{
     text-align:center;
     border-radius:10px;
     border: thin solid #888;
     margin: 5px 0;
     height:48px;
     overflow:hidden;
+
+    -webkit-transition: height 200ms, background-color 100ms, color 100ms;
 }
+
+
+
+#mainPage #queryMenu > ul li.oneLine.selected{
+    height:90px;
+}
+
+#mainPage #queryMenu > ul li.twoLines.selected{
+    height:160px;
+}
+
+#mainPage #queryMenu > ul li.threeLines.selected{
+    height:185px;
+}
+
 
 
 
@@ -84,9 +166,13 @@
     border-radius:10px;
     background-color: #ccc;
 
-
+    -webkit-transition: background-color 100ms, color 100ms;
 }
 
+#mainPage #queryMenu > ul li.selected h1{
+    background-color:#20282A;
+    color:#ECEDED;
+}
 
 #mainPage #toolsMenu{
     position:absolute;

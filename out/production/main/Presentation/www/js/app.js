@@ -17,6 +17,12 @@ var app = app || {};
             popup: "popupPage",
             popupContent: "popupContent"
         },
+        autoInputIds:{
+            veins: "autoVeins",
+            ref1: "autoref1",
+            ref2: "autoref2",
+            oToN: "auto1ToN"
+        },
         nodeTypes:{
             author: "author",
             conf: "conf",
@@ -47,7 +53,7 @@ var app = app || {};
                 getEdgesOfType: function(type){
                     return {
                         size: function(){ return 10 },
-                        get: function(i){ return ["paper"+i, "Soc el "+type+i] }
+                        get: function(i){ return [type+i, "Soc el "+type+i] }
                     };
                 },
                 loadProject: function(project){
@@ -63,6 +69,14 @@ var app = app || {};
         }
 
     },1);
+
+    function _addMultiEvent(selector, event, fn){
+        var elements = document.querySelectorAll(selector);
+        for(var i = 0; i < elements.length; i++)
+        {
+            elements[i].addEventListener(event, fn);
+        }
+    }
 
 
 
@@ -93,6 +107,11 @@ var app = app || {};
 
         document.querySelector("#mainPage #queryMenu > div[data-action=openQueryMenu]")
             .addEventListener("click", app.events.openQueryMenu);
+        _addMultiEvent("#mainPage #queryMenu > ul > li > h1", "click", app.events.selectQueryMenuOption);
+        _addMultiEvent("#mainPage #queryMenu ul.typeSelector > li", "click", app.events.selectTypeOption);
+        document.querySelector("#mainPage #queryMenu > ul > li[data-action=completeGraph]")
+            .addEventListener("click", app.events.drawCompleteGraph);
+
 
         document.querySelector("#mainPage #toolsMenu > div[data-action=openToolsMenu]")
             .addEventListener("click", app.events.openToolsMenu);

@@ -135,9 +135,8 @@
 
             }
         }
-
-
-        //TODO: edges
+        //TODO: peta molt wtf
+/*
         for (type in edges) {
             if (edges.hasOwnProperty(type))
             {
@@ -151,7 +150,7 @@
                 }
             }
         }
-
+*/
         return g;
     }
 
@@ -213,8 +212,7 @@
                 });
 
 
-                _applySettings(s, function(){
-                });
+                _applySettings(s);
                 _sarr.push(s);
                 g = {nodes:[]};
             }
@@ -229,8 +227,7 @@
                 settings:_settings.graph
             });
 
-            _applySettings(s, function(){
-            });
+            _applySettings(s);
 
 
             _sarr.push(s);
