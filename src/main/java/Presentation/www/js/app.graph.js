@@ -56,7 +56,7 @@
     'use strict';
 
     if (typeof app === 'undefined' || app.HGraph === 'undefined')
-        throw 'Error de dependenciaes';
+        throw 'Error de dependencies';
 
     //Private
     //Array of sigma instances
@@ -69,17 +69,22 @@
             minEdgeSize: 0.2,
             maxEdgeSize: 0.5,
             zoomMin: 0.01,
-            zoomMax: 2,
+            zoomMax: 200,
             eventsEnabled: true,
             labelThreshold: 25,
             defaultEdgeType: "curve",
-            enableHovering:false
+            autoRescale:false, //TODO no va be, posar a true
+            enableHovering:true
 
         },
         relativeSize:0.5,
         nooverlap:false
 
     };
+
+    //For graph layout
+    var _radius = 0.06;
+    var _angle = 0;
 
     function _applySettings(s){
         if(typeof _settings.relativeSize !== 'undefined')
@@ -125,7 +130,9 @@
 
                 for (var i = 0; i < nodes[type].size(); i++)
                 {
-                    var pos = _getCircleRandomPos(i, i);
+
+                    var pos = _getCircleRandomPos(i, i); //en els petits queda millor aixo
+                    //var pos = _getNextPosition();
 
                     g.nodes.push({
                         id: String(nodes[type].get(i)[0])+type,
@@ -166,6 +173,18 @@
         return {x: Math.cos(t)*r, y: Math.sin(t)*r};
     }
 
+    function _getNextPosition() {
+        var tol = 0.000001;
+        var pos = {x: Math.cos(2*Math.PI*_angle)*_radius, y: Math.sin(Math.PI*2*_angle)*_radius};
+        _angle = _angle + 0.01/(_radius); //inversament proporcional
+        if (_angle > (1 - tol) || _angle < tol) {
+            _angle = 0;
+            _radius += 0.05; //valors que mes o menys van: 0.000001, 0.01, 0, 0.05
+        }
+
+        return pos;
+    }
+
 
     //Public
     app.graph = {};
@@ -186,7 +205,8 @@
         if(typeof _sarr === 'undefined')
             _sarr = [];
         var s;
-
+        var pos_centre = {x:0, y:0}
+        var pos;
         var colors = ["#FF0000", "#00FF00", "#0000FF"];
         //For each node
         var c = 0;
@@ -194,13 +214,14 @@
         {
 
             //TODO: rings
-            var pos = _getCircleRandomPos(i*40,i*20);
+            //var pos = _getCircleRandomPos(i*40,i*20);
+            pos = _getNextPosition();
 
             g.nodes.push({
                 id: String(nodes.get(i)[0]),
                 label: String(nodes.get(i)[1]),
-                x: pos.x,
-                y: pos.y,
+                x: pos.x+pos_centre.x,
+                y: pos.y+pos_centre.y,
                 color: colors[c]
             });
             //If graph is % maxNodes, start a new one
