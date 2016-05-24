@@ -20,7 +20,7 @@
     border-radius: 5px;
     overflow: hidden;
     height: 30px;
-    margin: 5px;
+    margin: 5px 15px;
 }
 
 #mainPage ul.typeSelector li{
@@ -105,7 +105,7 @@
     -webkit-align-items:center;
     -webkit-justify-content:center;
     padding:5px 0;
-    width:50px;
+    width:45px;
     border-radius:10px;
     background-color:#678F99;
     color:#00080A;
@@ -148,43 +148,55 @@
     content:none;
 }
 
-#mainPage #queryMenu > ul > li{
+#mainPage #queryMenu > ul > li, #mainPage #toolsMenu > ul > li{
     text-align:center;
     border-radius:10px;
     border: thin solid #022F3A;
     margin: 5px 0;
-    height:48px;
+    height:42px;
     overflow:hidden;
     background-color:#ECEDED;
     -webkit-transition: height 200ms, background-color 100ms, color 100ms;
 }
 
 
-#mainPage #queryMenu > ul li.oneLine.selected{
+#mainPage #queryMenu ul li.oneLine.selected, #mainPage #toolsMenu ul li.oneLine.selected{
     height:90px;
 }
 
-#mainPage #queryMenu > ul li.oneandahalfLine.selected{
+#mainPage #queryMenu ul li.oneandahalfLine.selected, #mainPage #toolsMenu ul li.oneandahalfLine.selected{
     height:120px;
 }
 
-#mainPage #queryMenu > ul li.twoLines.selected{
+#mainPage #queryMenu ul li.almostTwoLines.selected, #mainPage #toolsMenu ul li.almostTwoLines.selected{
+    height:140px;
+}
+#mainPage #queryMenu ul li.twoLines.selected, #mainPage #toolsMenu ul li.twoLines.selected{
     height:160px;
 }
 
-#mainPage #queryMenu > ul li.threeLines.selected{
+#mainPage #queryMenu ul li.threeLines.selected, #mainPage #toolsMenu ul li.threeLines.selected{
     height:185px;
 }
 
+#mainPage #queryMenu ul li.fourLines.selected, #mainPage #toolsMenu ul li.fourLines.selected{
+    height:210px;
+}
 
+#mainPage #queryMenu ul li.fiveLines.selected, #mainPage #toolsMenu ul li.fiveLines.selected{
+    height:230px;
+}
 
+#mainPage #queryMenu ul li.sixLines.selected, #mainPage #toolsMenu ul li.sixLines.selected{
+    height:275px;
+}
 
 #mainPage #queryMenu ul > li h1{
     margin:0;
     padding:10px;
     cursor:pointer;
     font-weight:normal;
-    font-size:24px;
+    font-size:20px;
     border-radius:10px;
     color:#022F3A;
     background-color:#ECEDED;
@@ -198,11 +210,24 @@
 
 
 #mainPage #queryMenu > ul li.selected h1{
+    position:relative;
     background-color:#022F3A;
     color:#ECEDED;
 }
 
+#mainPage #queryMenu i.ion-information-circled {
+    display:none;
+    font-size:18px;
+    position:absolute;
+    right:6px;
+    top:6px;
+    background-color:#022F3A;
+    color:#ECEDED;
+}
 
+#mainPage #queryMenu > ul li.selected h1 i {
+    display:inline-block;
+}
 
 
 
@@ -231,7 +256,7 @@
     -webkit-align-items:center;
     -webkit-justify-content:center;
     padding:5px 0;
-    width:50px;
+    width:45px;
     border-radius:10px;
     background-color:#678F99;
     color:#00080A;
@@ -274,47 +299,12 @@
     content:none;
 }
 
-#mainPage #toolsMenu > ul > li{
-    text-align:center;
-    border-radius:10px;
-    border: thin solid #022F3A;
-    margin: 5px 0;
-    height:48px;
-    overflow:hidden;
-    background-color:#ECEDED;
-    -webkit-transition: height 200ms, background-color 100ms, color 100ms;
-}
-
-
-#mainPage #toolsMenu > ul li.oneLine.selected{
-    height:90px;
-}
-
-#mainPage #toolsMenu > ul li.oneandahalfLine.selected{
-    height:120px;
-}
-
-#mainPage #toolsMenu > ul li.almostTwoLines.selected{
-    height:140px;
-}
-
-#mainPage #toolsMenu > ul li.twoLines.selected{
-    height:160px;
-}
-
-#mainPage #toolsMenu > ul li.threeLines.selected{
-    height:185px;
-}
-
-
-
-
 #mainPage #toolsMenu ul > li h1{
     margin:0;
     padding:10px;
     cursor:pointer;
     font-weight:normal;
-    font-size:24px;
+    font-size:20px;
     border-radius:10px;
     color:#022F3A;
     background-color:#ECEDED;
