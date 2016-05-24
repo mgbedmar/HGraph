@@ -5,6 +5,8 @@
         throw 'Error de dependenciaes';
 
     //Private
+    var _autocompletes = [];
+    var _popupShown = false;
     function _hide(selector, cb){
         document.getElementById(selector).classList.remove("show");
         setTimeout(function(){
@@ -20,34 +22,78 @@
         }, 1);
     }
 
-    //Aixo probablement hauria de ser una funcio init dins de app.graph
+    function _getNames(arrayList){
+        var names = [];
+        for(var i = 0; i < arrayList.size(); i++)
+        {
+            names.push(String(arrayList.get(i)[1]));
+        }
+        return names;
+    }
+
+    function _initAutoCompletes(nodes){
+        //For each type in nodes
+        for (var key in app.const.autoInputIds) {
+
+            //Check if type is a property of nodes
+            if (app.const.autoInputIds.hasOwnProperty(key)) {
+
+                _autocompletes.push(new autoComplete({
+                    //TODO: specify inputs..
+                    selector: "#"+app.const.autoInputIds[key],
+                    minChars: 1,
+                    source: function(term, suggest){
+                        term = term.toLowerCase();
+                        var choices = nodes;
+                        var matches = [];
+                        for (var i=0; i<choices.length; i++)
+                            if (~choices[i].toLowerCase().indexOf(term)) matches.push(choices[i]);
+                        suggest(matches);
+                        //app.HGraph.log(JSON.stringify(matches));
+                    }
+                }));
+            }
+        }
+
+
+    }
+
     function _initMain(){
 
         var large = false;
+        var nodes=[];
         //If a graph is selected
         if(app.HGraph.isProjectSelected())
         {
             //Let's see how big it is
-            var authorNodes = app.HGraph.getNodesOfType(app.const.nodeTypes.author);
-            var termNodes = app.HGraph.getNodesOfType(app.const.nodeTypes.term);
-            var paperNodes = app.HGraph.getNodesOfType(app.const.nodeTypes.paper);
-            var confNodes = app.HGraph.getNodesOfType(app.const.nodeTypes.conf);
-            var size = authorNodes.size() + termNodes.size()+ confNodes.size()+
-                paperNodes.size();
+            var authorNodes = _getNames(app.HGraph.getNodesOfType(app.const.nodeTypes.author));
+            var termNodes = _getNames(app.HGraph.getNodesOfType(app.const.nodeTypes.term));
+            var paperNodes = _getNames(app.HGraph.getNodesOfType(app.const.nodeTypes.paper));
+            var confNodes = _getNames(app.HGraph.getNodesOfType(app.const.nodeTypes.conf));
+            nodes = authorNodes.concat(termNodes.concat(paperNodes.concat(confNodes)));
             //Is it larger than maxNodes?
-            large = (size >= app.settings.maxNodes);
+            large = (nodes.length >= app.settings.maxNodes);
 
         }
         app.graph.init(large);
         if(!app.graph.isLarge())
         {
-            app.events.completeGraph();
+            document.querySelector("#queryMenu li[data-action=completeGraph]").click();
         }
         else
         {
+            app.HGraph.log("abans de disable");
             //TODO: disable small graphs features
-            app.events.queryType("author");
+            //_disableSmallGraphFeatures(); //TODO la comento perque no esta definida
+            //Trigger draw queryType author
+            //document.querySelector("#queryMenu li[data-action=queryType] typeSelector[data-type=author]").click();
+            //TODO posar la linia de dalt quan estiguin els listeners corresponents
+            app.HGraph.log("despres de disable");
+            _drawQueryType("author");
         }
+
+        //Init autocompletes
+        _initAutoCompletes(nodes);
 
     }
     function _initLoadPage(){
@@ -66,10 +112,10 @@
             ic.className = "icon ion-close-round";
             div2.appendChild(ic);
             div2.addEventListener("click", function() {
-                //TODO show popup and delete
                 app.events.showAccept("Esborrar un projecte", "El projecte '"+e+"' s'esborrarà, vols continuar?",
                     "Esborra", "Cancela", function(){
                         app.HGraph.deleteProject(e);
+                        _initLoadPage();
                     });
                 event.stopPropagation(); //per no executar el anar a graf
             });
@@ -84,6 +130,47 @@
         });
     }
 
+    //QueryMenu functions
+    function _drawCompleteGraph(){
+        var nodeobj = {};
+        nodeobj[app.const.nodeTypes.author] = app.HGraph.getNodesOfType(app.const.nodeTypes.author);
+        nodeobj[app.const.nodeTypes.term]  = app.HGraph.getNodesOfType(app.const.nodeTypes.term);
+        nodeobj[app.const.nodeTypes.paper]  = app.HGraph.getNodesOfType(app.const.nodeTypes.paper);
+        nodeobj[app.const.nodeTypes.conf]  = app.HGraph.getNodesOfType(app.const.nodeTypes.conf);
+        var edgeobj = {};
+        edgeobj[app.const.nodeTypes.term]  = app.HGraph.getEdgesOfType(app.const.nodeTypes.term);
+        edgeobj[app.const.nodeTypes.author]  = app.HGraph.getEdgesOfType(app.const.nodeTypes.author);
+        edgeobj[app.const.nodeTypes.conf]  = app.HGraph.getEdgesOfType(app.const.nodeTypes.conf);
+        app.graph.drawGraph(nodeobj, edgeobj);
+    }
+
+    function _drawQueryType (type){
+        var nodes = app.HGraph.getNodesOfType(type);
+        app.HGraph.log("nodes getted");
+        app.graph.drawNodesOnlyGraph(nodes);
+    }
+
+    function _selectQueryMenuOption(element){
+        var nodes = document.querySelectorAll("#queryMenu > ul > li");
+        for(var i = 0; i < nodes.length; i++)
+        {
+            nodes[i].classList.remove("selected");
+        }
+
+        element.parentNode.classList.add("selected");
+
+    }
+    function _selectType(parentElement, type){
+        var nodes = parentElement.children;
+        for(var i = 0; i < nodes.length; i++)
+        {
+            if(nodes[i].dataset.type == type)
+                nodes[i].classList.add("selected");
+            else
+                nodes[i].classList.remove("selected");
+        };
+
+    }
 
     //Public
     app.events = {};
@@ -134,14 +221,16 @@
             _show(app.const.pageIds.welcome);
         });
     };
-
+    //----Popups
     app.events.showPopup = function(element){
+        _popupShown = true;
         document.getElementById(app.const.pageIds.popupContent).innerHTML = "";
         document.getElementById(app.const.pageIds.popupContent).appendChild(element);
         _show(app.const.pageIds.popup);
     };
 
     app.events.showLoading = function(){
+        if(_popupShown) return;
         var div = document.createElement("div");
         div.classList.add("loading");
         var img = document.createElement("img");
@@ -151,6 +240,7 @@
     };
 
     app.events.showInfo = function(title, msg, btnMsg, cb){
+        if(_popupShown) return;
         var div = document.createElement("div");
         div.classList.add("info");
         var title = document.createElement("h1");
@@ -170,6 +260,7 @@
     };
 
     app.events.showAccept = function(t, msg, btnMsgOk, btnMsgCancel, cbOk, cbCancel){
+        if(_popupShown) return;
         var div = document.createElement("div");
         div.classList.add("accept");
         var title = document.createElement("h1");
@@ -196,8 +287,10 @@
     };
 
     app.events.hidePopup = function(){
+        _popupShown = false;
         _hide(app.const.pageIds.popup);
     };
+    //----/popups
 
     app.events.editProjects = function() { //TODO transicio
         var tr = document.querySelectorAll("#loadGraphPage .ion-close-round");
@@ -207,29 +300,25 @@
         }
     };
 
+    //----Query menu
     app.events.openQueryMenu = function(){
         document.querySelector("#"+app.const.pageIds.main + " #queryMenu").classList.toggle("open");
     };
-
-    //TODO
-    app.events.completeGraph = function(){
-        var nodeobj = {};
-        nodeobj[app.const.nodeTypes.author] = app.HGraph.getNodesOfType(app.const.nodeTypes.author);
-        nodeobj[app.const.nodeTypes.term]  = app.HGraph.getNodesOfType(app.const.nodeTypes.term);
-        nodeobj[app.const.nodeTypes.paper]  = app.HGraph.getNodesOfType(app.const.nodeTypes.paper);
-        nodeobj[app.const.nodeTypes.conf]  = app.HGraph.getNodesOfType(app.const.nodeTypes.conf);
-        var edgeobj = {};
-        edgeobj[app.const.nodeTypes.term]  = app.HGraph.getEdgesOfType(app.const.nodeTypes.term);
-        edgeobj[app.const.nodeTypes.author]  = app.HGraph.getEdgesOfType(app.const.nodeTypes.author);
-        edgeobj[app.const.nodeTypes.conf]  = app.HGraph.getEdgesOfType(app.const.nodeTypes.conf);
-        app.graph.drawGraph(nodeobj, edgeobj);
+    app.events.selectQueryMenuOption = function(e){
+        _selectQueryMenuOption(e.currentTarget);
+    };
+    app.events.selectTypeOption = function(e){
+        _selectType(e.target.parentNode, e.currentTarget.dataset.type);
+    };
+    app.events.drawCompleteGraph = function(){
+        app.events.showLoading();
+        _drawCompleteGraph();
         app.events.hidePopup();
     };
+    //e.target is the type button pressed
+    app.events.changeQueryType = function(e){
 
-    app.events.queryType = function(type){
-        app.events.showLoading();
-        var nodes = app.HGraph.getNodesOfType(type);
-        app.graph.drawNodesOnlyGraph(nodes);
+        _drawQueryType(e.currentTarget.dataset.type);
     };
 
     //TODO
@@ -238,10 +327,14 @@
         var nodes = app.HGraph.getNodesOfType(type);
         app.graph.drawNodesOnlyGraph(nodes);
     };
+    //----/QueryMenu
+
+
+
 
     app.events.openToolsMenu = function(){
             document.querySelector("#"+app.const.pageIds.main + " #toolsMenu").classList.toggle("open");
-        };
+    };
 
 }).call(window);
 

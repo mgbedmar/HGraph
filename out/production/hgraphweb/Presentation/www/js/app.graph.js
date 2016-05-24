@@ -135,9 +135,8 @@
 
             }
         }
+        //TODO: peta molt wtf
 
-
-        //TODO: edges
         for (type in edges) {
             if (edges.hasOwnProperty(type))
             {
@@ -213,8 +212,7 @@
                 });
 
 
-                _applySettings(s, function(){
-                });
+                _applySettings(s);
                 _sarr.push(s);
                 g = {nodes:[]};
             }
@@ -229,8 +227,7 @@
                 settings:_settings.graph
             });
 
-            _applySettings(s, function(){
-            });
+            _applySettings(s);
 
 
             _sarr.push(s);
@@ -289,7 +286,7 @@
             container: 'graph-container',
             type:'canvas',
             settings: {
-                batchEdgesDrawing: true
+                batchEdgesDrawing: false
             }
         });
         _sarr[0].refresh();

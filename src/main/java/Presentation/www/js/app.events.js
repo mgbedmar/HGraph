@@ -83,9 +83,11 @@
         else
         {
             //TODO: disable small graphs features
-            _disableSmallGraphFeatures();
+            //_disableSmallGraphFeatures(); //TODO la comento perque no esta definida
             //Trigger draw queryType author
-            document.querySelector("#queryMenu li[data-action=queryType] typeSelector[data-type=author]").click();
+            //document.querySelector("#queryMenu li[data-action=queryType] typeSelector[data-type=author]").click();
+            //TODO posar la linia de dalt quan estiguin els listeners corresponents
+            _drawQueryType("author");
         }
 
         //Init autocompletes
@@ -140,7 +142,7 @@
         app.graph.drawGraph(nodeobj, edgeobj);
     }
 
-    function _drawQueryType (){
+    function _drawQueryType (type){
         var nodes = app.HGraph.getNodesOfType(type);
         app.graph.drawNodesOnlyGraph(nodes);
     }

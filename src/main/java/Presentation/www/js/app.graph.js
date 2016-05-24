@@ -136,7 +136,7 @@
             }
         }
         //TODO: peta molt wtf
-/*
+
         for (type in edges) {
             if (edges.hasOwnProperty(type))
             {
@@ -150,7 +150,7 @@
                 }
             }
         }
-*/
+
         return g;
     }
 
@@ -286,7 +286,7 @@
             container: 'graph-container',
             type:'canvas',
             settings: {
-                batchEdgesDrawing: true
+                batchEdgesDrawing: false
             }
         });
         _sarr[0].refresh();
