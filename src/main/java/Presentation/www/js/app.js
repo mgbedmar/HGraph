@@ -18,10 +18,17 @@ var app = app || {};
             popupContent: "popupContent"
         },
         autoInputIds:{
+            edge1: "autoedge1",
+            edge2: "autoedge2",
+            node: "autonode",
+            remedge1: "autofont",
+            remedge2: "autodesti",
             veins: "autoVeins",
             ref1: "autoref1",
             ref2: "autoref2",
-            oToN: "auto1ToN"
+            oToN: "auto1ToN",
+            oToo: "auto1To1-1",
+            oToo2: "auto1To1-2"
         },
         nodeTypes:{
             author: "author",

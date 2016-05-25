@@ -7,7 +7,8 @@ import Domain.DomainException;
 import java.util.ArrayList;
 
 public class PresentationController {
-    DomainController dc;
+    private DomainController dc;
+    private int MAX_FILES;
 
     public PresentationController(){
         dc = new DomainController();
@@ -55,6 +56,12 @@ public class PresentationController {
         }
         return res;
     }
+
+    public ArrayList<String[]> query1to1() {
+
+        return null;
+    }
+
 
     public void log(String msg){
         System.out.println(msg);

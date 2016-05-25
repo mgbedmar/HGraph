@@ -7,6 +7,7 @@
     //Private
     var _autocompletes = [];
     var _popupShown = false;
+    var _inputChoices = [];
     function _hide(selector, cb){
         document.getElementById(selector).classList.remove("show");
         setTimeout(function(){
@@ -32,6 +33,10 @@
     }
 
     function _initAutoCompletes(nodes){
+        var mChars;
+        if (nodes.length < 300) mChars = 1;
+        else mChars = 3;
+
         //For each type in nodes
         for (var key in app.const.autoInputIds) {
 
@@ -41,7 +46,7 @@
                 _autocompletes.push(new autoComplete({
                     //TODO: specify inputs..
                     selector: "#"+app.const.autoInputIds[key],
-                    minChars: 1,
+                    minChars: mChars,
                     source: function(term, suggest){
                         term = term.toLowerCase();
                         var choices = nodes;
@@ -50,6 +55,9 @@
                             if (~choices[i].toLowerCase().indexOf(term)) matches.push(choices[i]);
                         suggest(matches);
                         //app.HGraph.log(JSON.stringify(matches));
+                    },
+                    onSelect: function(e, term, item){
+                        _inputChoices.push(item);
                     }
                 }));
             }
@@ -157,6 +165,7 @@
         }
 
         element.parentNode.classList.toggle("selected");
+        _inputChoices=[]; //reset
     }
 
     function _selectType(parentElement, type){

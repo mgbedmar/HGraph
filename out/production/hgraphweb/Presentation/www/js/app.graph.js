@@ -66,24 +66,28 @@
     var _settings = {
         graph:{
             minNodeSize: 1,
+            maxNodeSize: 3,
             minEdgeSize: 0.2,
             maxEdgeSize: 0.5,
-            zoomMin: 0.01,
-            zoomMax: 200,
             eventsEnabled: true,
-            labelThreshold: 25,
+            labelThreshold: 200,
             defaultEdgeType: "curve",
-            autoRescale:false, //TODO no va be, posar a true
-            enableHovering:false //etiquetes: posades no funciona be
-
+            autoRescale:true,
+            edgeLabels:true,
+            enableHovering:false, //etiquetes: posades no funciona be
+            relativeSize:0.5,
+            nooverlap:false,
+            minRatio:0.001, //no va
+            maxRatio:1.125
         },
         relativeSize:0.5,
+        edgeLabels:true,
         nooverlap:false
 
     };
 
     //For graph layout
-    var _radius = 0.06;
+    var _radius = 0.001;
     var _angle = 0;
 
     function _applySettings(s){
@@ -144,7 +148,6 @@
 
             }
         }
-        //TODO: peta molt wtf
 
         for (type in edges) {
             if (edges.hasOwnProperty(type))
@@ -174,12 +177,11 @@
     }
 
     function _getNextPosition() {
-        var tol = 0.000001;
         var pos = {x: Math.cos(2*Math.PI*_angle)*_radius, y: Math.sin(Math.PI*2*_angle)*_radius};
-        _angle = _angle + 0.01/(_radius); //inversament proporcional
-        if (_angle > (1 - tol) || _angle < tol) {
-            _angle = 0;
-            _radius += 0.05; //valors que mes o menys van: 0.000001, 0.01, 0, 0.05
+        _angle = _angle + 0.0005/(_radius); //inversament proporcional
+        if (_angle > 1) {
+            _angle = _angle-1;
+            _radius += 0.004; //valors que mes o menys van: 0.000001, 0.01, 0, 0.05
         }
 
         return pos;
@@ -210,6 +212,9 @@
         var colors = ["#FF0000", "#00FF00", "#0000FF"];
         //For each node
         var c = 0;
+        var inizoom = 0.3;
+        _radius = 0.004;
+        _angle = 0;
         while(i < nodes.size())
         {
 
@@ -220,8 +225,8 @@
             g.nodes.push({
                 id: String(nodes.get(i)[0]),
                 label: String(nodes.get(i)[1]),
-                x: pos.x+pos_centre.x,
-                y: pos.y+pos_centre.y,
+                x: pos.x,
+                y: pos.y,
                 color: colors[c]
             });
             //If graph is % maxNodes, start a new one
@@ -234,14 +239,15 @@
                     settings:_settings.graph
                 });
 
-
+                //s.camera.ratio = inizoom;
                 _applySettings(s);
+                s.refresh();
                 _sarr.push(s);
                 g = {nodes:[]};
             }
             i++;
         }
-        //If nodes remaining, start a new graph
+        //If nodes remaining, start a new graph //TODO aixo esta fet?
         if(g.nodes.length > 0)
         {
             s=new sigma({
@@ -250,7 +256,9 @@
                 settings:_settings.graph
             });
 
+            //s.camera.ratio = inizoom;
             _applySettings(s);
+            s.refresh();
 
 
             _sarr.push(s);
@@ -260,6 +268,9 @@
             container: 'graph-container',
             graph:{nodes:[]}
         });
+
+        //s.camera.ratio = inizoom;
+        s.refresh();
 
         s.camera.bind('coordinatesUpdated', app.debounce(function(){
             _sarr.forEach(function(si){
@@ -278,7 +289,9 @@
 
     //Draws a normal graph, nodes = {author:JavaArrayList, paper:...}
     app.graph.drawGraph = function(nodes, edges){
-        var g = _createGraph(nodes, edges);
+        var g;
+        if (typeof edges === 'undefined') g = nodes;
+        else g = _createGraph(nodes, edges);
         if(typeof _sarr === 'undefined')
         {
             //TODO: zoom, size, threshold
@@ -312,9 +325,44 @@
                 batchEdgesDrawing: false
             }
         });
+
+        //_sarr[0].camera.ratio = 0.1;
         _sarr[0].refresh();
         _applySettings(_sarr[0]);
+
     };
+
+    //result es un [] amb un sol element {source, target, hetesim}
+    app.graph.drawQuery1to1 = function(result) {
+        var g = {
+            nodes: [],
+            edges: []
+        };
+
+        g.nodes.push({
+            id: result[0].source+"1",
+            label: result[0].source,
+            x: -1,
+            y: -1,
+            //TODO colors corresponents al tipus... problema: el resultat no dona el tipus, cal passarlo
+        });
+
+        g.nodes.push({
+            id: result[0].target+"2",
+            label: result[0].target,
+            x: 1,
+            y: 1,
+            //TODO colors corresponents al tipus... problema: el resultat no dona el tipus, cal passarlo
+        });
+
+        g.edges.push({
+            id:"1",
+            source:result[0].source+"1",
+            target:result[0].target+"2",
+            label:result[0].hetesim
+        });
+
+    }
 
     /*
     app.graph.drawGraph = function(cb){
