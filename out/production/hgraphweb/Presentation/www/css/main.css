@@ -13,7 +13,7 @@
     color:#022F3A;
     cursor:pointer;
 }
-#mainPage #queryType ul.typeSelector, #mainPage #toolsMenu ul.typeSelector{
+#mainPage #queryMenu ul.typeSelector, #mainPage #toolsMenu ul.typeSelector{
     display: -webkit-flex;
     list-style: none;
     padding: 0;
@@ -172,7 +172,7 @@
 }
 
 #mainPage #queryMenu ul li.oneandahalfLine.selected, #mainPage #toolsMenu ul li.oneandahalfLine.selected{
-    height:120px;
+    height:110px;
 }
 
 #mainPage #queryMenu ul li.almostTwoLines.selected, #mainPage #toolsMenu ul li.almostTwoLines.selected{
@@ -187,7 +187,7 @@
 }
 
 #mainPage #queryMenu ul li.fourLines.selected, #mainPage #toolsMenu ul li.fourLines.selected{
-    height:210px;
+    height:205px;
 }
 
 #mainPage #queryMenu ul li.fiveLines.selected, #mainPage #toolsMenu ul li.fiveLines.selected{
