@@ -78,7 +78,7 @@
             relativeSize:0.5,
             nooverlap:false,
             zoomMin:0.001, //no va
-            zoomMax:1.125
+            zoomMax:2
         },
         relativeSize:0.5,
         edgeLabels:true,
@@ -134,8 +134,8 @@
                 for (var i = 0; i < nodes[type].size(); i++)
                 {
 
-                    var pos = _getCircleRandomPos(i, i); //en els petits queda millor aixo
-                    //var pos = _getNextPosition();
+                    //var pos = _getCircleRandomPos(i, i); //en els petits queda millor aixo
+                    var pos = _getNextPosition();
 
                     g.nodes.push({
                         id: String(nodes[type].get(i)[0])+"-"+type,
@@ -292,32 +292,20 @@
         if (typeof edges === 'undefined') g = nodes;
         else g = _createGraph(nodes, edges);
 
-
-        if(typeof _sarr === 'undefined')
-        {
-            //TODO: zoom, size, threshold
-            _sarr = [new sigma({
-                graph: g,
-                settings: _settings.graph
-            })];
-        }
-        else
+        if (typeof _sarr != 'undefined')
         {
             var s0 =_sarr[0];
             _sarr.forEach(function(s, i){
                 //this gets rid of all the ndoes and edges
                 s0.graph.clear();
-                s0.graph.kill();
                 s0.refresh();
             });
-            s0.graph = g;
-            s0.refresh();
-            _sarr = [s0];
-
-
         }
 
-
+        _sarr = [new sigma({
+            graph: g,
+            settings: _settings.graph
+        })];
 
         _sarr[0].addRenderer({
             container: 'graph-container',
@@ -326,11 +314,13 @@
                 batchEdgesDrawing: false
             }
         });
+        _sarr[0].refresh();
+        app.HGraph.log("clear");
 
         //_sarr[0].camera.ratio = 0.1;
         _sarr[0].refresh();
         _applySettings(_sarr[0]);
-
+app.HGraph.log("clear");
     };
 
     //result es un [] amb un sol element {source, target, hetesim}
@@ -339,7 +329,7 @@
             nodes: [],
             edges: []
         };
-
+        app.HGraph.log("graf declarat");
         g.nodes.push({
             id: result[0].source+"1",
             label: result[0].source,
@@ -347,7 +337,7 @@
             y: -1,
             //TODO colors corresponents al tipus... problema: el resultat no dona el tipus, cal passarlo
         });
-
+app.HGraph.log("nodes posats");
         g.nodes.push({
             id: result[0].target+"2",
             label: result[0].target,
@@ -355,15 +345,15 @@
             y: 1,
             //TODO colors corresponents al tipus... problema: el resultat no dona el tipus, cal passarlo
         });
-
         g.edges.push({
             id:"1",
             source:result[0].source+"1",
             target:result[0].target+"2",
             label:result[0].hetesim
         });
-
-        _drawGraph(g);
+app.HGraph.log("arestes");
+        app.graph.drawGraph(g);
+        app.HGraph.log("dibuixat");
     }
 
     /*

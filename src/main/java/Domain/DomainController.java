@@ -526,7 +526,7 @@ public class DomainController
      * Dona tots els nodes de tipus <em>type</em> del graf, en format portable.
      * @param type tipus dels nodes que es consulten
      * @return Retorna un ArrayList de parelles de String. En la primera posicio
-     * hi ha la id i en la segona, el nom
+     * hi ha la id, en la segona, el nom i en la tercera el numero de veins
      * @throws DomainException si el tipus <em>type</em> es incorrecte
      */
     public ArrayList<String[]> getNodes(String type) throws DomainException {
@@ -535,6 +535,7 @@ public class DomainController
             String[] f = new String[2];
             f[0] = String.valueOf(node.getID());
             f[1] = node.getName();
+            f[2] = String.valueOf(g.getNeighbours(node).size());
             l.add(f);
         }
 
