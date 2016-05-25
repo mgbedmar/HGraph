@@ -66,146 +66,232 @@
     <div id="mainPage" class="page">
         <div id="mainMenu"></div>
         <div id="toolsMenu">
-            <div id="pestToolsMenu" data-action="openToolsMenu">
+            <div class="divext" data-action="openToolsMenu">
                 <i class="icon ion-settings"></i>
             </div>
-            <div class="contToolsMenu">
-                <form id="selectedNode">
-                    <div id="selectedNodeType"></div>
-                    <input id="modSelectedNode" type="text" name="nodeName" value="">
-                </form>
-            </div>
-            <div class="contToolsMenu">
-                <div id="addNode" title="Afegir node">
-                    <i class="icon ion-android-add-circle"></i>
-                    <div>
-                        Tipus:
-                        <ul>
-                            <li>Autor</li>
-                            <li>Paper</li>
-                            <li>Conferència</li>
-                            <li>Terme</li>
+            <div class="scrolleable-y">
+                <ul>
+                    <li class="oneLine" data-action="toolsType">
+                        <h1>Node actiu</h1>
+                        <input id="nodemod"/>
+                        <i class="icon ion-checkmark-circled"></i>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="oneLine" data-action="toolsType">
+                        <h1><i class="icon ion-plus-circled"></i></h1>
+                        <ul class="typeSelector">
+                            <li data-type="author">Autor</li>
+                            <li data-type="paper">Paper</li>
+                            <li data-type="conf">Conferència</li>
+                            <li data-type="term">Terme</li>
                         </ul>
-                    </div>
-                </div>
-                <div id="addEdge" title="Afegir aresta">
-                    <i class="icon ion-arrow-resize"></i>
-                    <div>
-                        Aresta de paper a:
-                        <ul>
-                            <li>Autor</li>
-                            <li>Paper</li>
-                            <li>Conferència</li>
-                            <li>Terme</li>
+                    </li>
+                    <li class="oneandahalfLine">
+                        <h1><i class="icon ion-arrow-resize"></i></h1>
+                        <span>De paper a:</span>
+                        <ul class="typeSelector">
+                            <li data-type="author">Autor</li>
+                            <li data-type="paper">Paper</li>
+                            <li data-type="conf">Conferència</li>
+                            <li data-type="term">Terme</li>
                         </ul>
-                    </div>
-                </div>
-            </div>
-
-            <div class="contToolsMenu">
-                <div id="addNodeText">
-                    <div><i class="icon ion-android-add-circle"></i></div>
-                    <div>Afegir un node</div>
-                    <select class="selectable">
-                        <option value="author">Autor</option>
-                        <option value="paper">Paper</option>
-                        <option value="conf">Conferència</option>
-                        <option value="term">Terme</option>
-                    </select>
-                </div>
-                <div id="addEdgeText">
-                    <div><i class="icon ion-arrow-resize"></i></div>
-                    <div>Afegir una aresta:
+                    </li>
+                </ul>
+                <ul>
+                    <li class="almostTwoLines">
+                        <h1>Afegir node</h1>
                         <div>
-                            <span>Paper:</span>
-                            <input />
-                            <span>Node:</span>
-                            <input />
-                            <select class="selectable">
-                                <option value="author">Autor</option>
-                                <option value="paper">Paper</option>
-                                <option value="conf">Conferència</option>
-                                <option value="term">Terme</option>
-                            </select>
+                            <ul class="typeSelector">
+                                <li data-type="author">Autor</li>
+                                <li data-type="paper">Paper</li>
+                                <li data-type="conf">Conferència</li>
+                                <li data-type="term">Terme</li>
+                            </ul>
+                            <span>Nom:</span>
+                            <input id="autonodeadd"/>
+                            <i class="icon ion-checkmark-circled"></i>
                         </div>
-                    </div>
-                </div>
+                    </li>
+                    <li class="threeLines">
+                        <h1>Afegir aresta</h1>
+                        <div>
+                            <span>Font (paper):</span>
+                            <input id="autoedge1"/>
+                            <i class="icon ion-checkmark-circled hiddenicon"></i>
+                            <span>Destí:</span>
+                            <ul class="typeSelector">
+                                <li data-type="author">Autor</li>
+                                <li data-type="paper">Paper</li>
+                                <li data-type="conf">Conferència</li>
+                                <li data-type="term">Terme</li>
+                            </ul>
+                            <input id="autoedge2"/>
+                            <i class="icon ion-checkmark-circled"></i>
+                        </div>
+                    </li>
+                    <li class="almostTwoLines">
+                        <h1>Esborrar node</h1>
+                        <div>
+                            <ul class="typeSelector">
+                                <li data-type="author">Autor</li>
+                                <li data-type="paper">Paper</li>
+                                <li data-type="conf">Conferència</li>
+                                <li data-type="term">Terme</li>
+                            </ul>
+                            <span>Nom:</span>
+                            <input id="autonode"/>
+                            <i class="icon ion-android-locate"></i>
+                        </div>
+                    </li>
+                    <li  class="sixLines">
+                        <h1>Esborrar aresta</h1>
+                        <div>
+                            <span>Font (paper):</span>
+                            <input id="autopaper"/>
+                            <i class="icon ion-android-locate hiddenicon"></i>
+                            <span>Destí:</span>
+                            <ul class="typeSelector">
+                                <li data-type="author">Autor</li>
+                                <li data-type="paper">Paper</li>
+                                <li data-type="conf">Conferència</li>
+                                <li data-type="term">Terme</li>
+                            </ul>
+                            <input id="autonode2"/>
+                            <i class="icon ion-android-locate"></i>
+                        </div>
+                    </li>
+                </ul>
             </div>
         </div>
+
         <div id="queryMenu">
-            <div data-action="openQueryMenu">
+            <div class="divext" data-action="openQueryMenu">
                 <i class="icon ion-ios-search-strong"></i>
             </div>
-            <ul>
-                <li data-action="completeGraph">
-                    <h1>Complet</h1>
-                </li>
-            </ul>
-            <ul>
-                <li class="oneLine" data-action="queryType">
-                    <h1>Tipus</h1>
-                    <ul class="typeSelector">
-                        <li data-type="author">Autor</li>
-                        <li data-type="paper">Paper</li>
-                        <li data-type="conf">Conferència</li>
-                        <li data-type="term">Terme</li>
-                    </ul>
-                </li>
-                <li class="oneLine">
-                    <h1>Veïns</h1>
-                    <div>
-                        <input id="autoVeins" />
-                        <i class="icon ion-android-locate"></i>
-                    </div>
-                </li>
-            </ul>
-            <ul>
-                <li class="twoLines">
-                    <h1>Referència</h1>
-                    <div>
-                        <span>Font:</span>
-                        <input id="autoref1"/>
-                        <i class="icon ion-android-locate"></i>
-                        <span>Destí:</span>
-                        <input id="autoref2"/>
-                        <i class="icon ion-android-locate"></i>
-                    </div>
-                </li>
-                <li class="twoLines">
-                    <h1>1 a N</h1>
-                    <div>
-                        <span>Font:</span>
-                        <input id="auto1ToN"/>
-                        <i class="icon ion-android-locate"></i>
-                        <span>Destí:</span>
+            <div class="scrolleable-y">
+                <ul>
+                    <li data-action="completeGraph">
+                        <h1>Complet</h1>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="oneLine" data-action="queryType">
+                        <h1>Tipus</h1>
                         <ul class="typeSelector">
                             <li data-type="author">Autor</li>
                             <li data-type="paper">Paper</li>
                             <li data-type="conf">Conferència</li>
                             <li data-type="term">Terme</li>
                         </ul>
-                    </div>
-                </li>
-                <li  class="threeLines">
-                    <h1>N a N</h1>
-                    <div>
-                        <span>Font:</span>
-                        <ul class="typeSelector">
-                            <li data-type="author">Autor</li>
-                            <li data-type="paper">Paper</li>
-                            <li data-type="conf">Conferència</li>
-                            <li data-type="term">Terme</li>
-                        </ul>
-                        <span>Destí:</span>
-                        <ul class="typeSelector">
-                            <li data-type="author">Autor</li>
-                            <li data-type="paper">Paper</li>
-                            <li data-type="conf">Conferència</li>
-                            <li data-type="term">Terme</li>
-                        </ul>
-                    </div>
-                </li>
-            </ul>
+                    </li>
+                    <li class="almostTwoLines">
+                        <h1>Veïns</h1>
+                        <div>
+                            <span>Veïns del node:</span>
+                            <ul class="typeSelector">
+                                <li data-type="author">Autor</li>
+                                <li data-type="paper">Paper</li>
+                                <li data-type="conf">Conf</li>
+                                <li data-type="term">Terme</li>
+                            </ul>
+                            <input id="autoVeins" />
+                            <i class="icon ion-android-locate"></i>
+                        </div>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="fiveLines">
+                        <h1>1 a 1 <i id="info1a1" class="icon ion-information-circled"></i></h1>
+                        <div>
+                            <span>Font:</span>
+                            <ul class="typeSelector">
+                                <li data-type="author">Autor</li>
+                                <li data-type="paper">Paper</li>
+                                <li data-type="conf">Conferència</li>
+                                <li data-type="term">Terme</li>
+                            </ul>
+                            <input id="auto1To1-1"/>
+                            <i class="icon ion-android-locate hiddenicon"></i>
+                            <span>Destí:</span>
+                            <ul class="typeSelector">
+                                <li data-type="author">Autor</li>
+                                <li data-type="paper">Paper</li>
+                                <li data-type="conf">Conferència</li>
+                                <li data-type="term">Terme</li>
+                            </ul>
+                            <input id="auto1To1-2"/>
+                            <i class="icon ion-android-locate"></i>
+                        </div>
+                    </li>
+                    <li class="fourLines">
+                        <h1>1 a N <i id="info1aN" class="icon ion-information-circled"></i></h1>
+                        <div>
+                            <span>Font:</span>
+                            <ul class="typeSelector">
+                                <li data-type="author">Autor</li>
+                                <li data-type="paper">Paper</li>
+                                <li data-type="conf">Conferència</li>
+                                <li data-type="term">Terme</li>
+                            </ul>
+                            <input id="auto1ToN"/>
+                            <i class="icon ion-android-locate"></i>
+                            <span>Destí:</span>
+                            <ul class="typeSelector">
+                                <li data-type="author">Autor</li>
+                                <li data-type="paper">Paper</li>
+                                <li data-type="conf">Conferència</li>
+                                <li data-type="term">Terme</li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li  class="threeLines">
+                        <h1>N a N <i id="infoNaN" class="icon ion-information-circled"></i></h1>
+                        <div>
+                            <span>Font:</span>
+                            <ul class="typeSelector">
+                                <li data-type="author">Autor</li>
+                                <li data-type="paper">Paper</li>
+                                <li data-type="conf">Conferència</li>
+                                <li data-type="term">Terme</li>
+                            </ul>
+                            <span>Destí:</span>
+                            <ul class="typeSelector">
+                                <li data-type="author">Autor</li>
+                                <li data-type="paper">Paper</li>
+                                <li data-type="conf">Conferència</li>
+                                <li data-type="term">Terme</li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li class="sixLines">
+                        <h1>Referència <i id="inforef" class="icon ion-information-circled"></i></h1>
+                        <div>
+                            <span>Font (referència):</span>
+                            <ul class="typeSelector">
+                                <li data-type="author">Autor</li>
+                                <li data-type="paper">Paper</li>
+                                <li data-type="conf">Conferència</li>
+                                <li data-type="term">Terme</li>
+                            </ul>
+                            <input id="autoref1"/>
+                            <i class="icon ion-android-locate hiddenicon"></i>
+                            <span>Destí (referència):</span>
+                            <ul class="typeSelector">
+                                <li data-type="author">Autor</li>
+                                <li data-type="paper">Paper</li>
+                                <li data-type="conf">Conferència</li>
+                                <li data-type="term">Terme</li>
+                            </ul>
+                            <input id="autoref2"/>
+                            <i class="icon ion-android-locate hiddenicon"></i>
+                            <span>Font:</span>
+                            <input id="autoref3"/>
+                            <i class="icon ion-android-locate"></i>
+                        </div>
+                    </li>
+                </ul>
+            </div>
         </div>
         <div id="graph-container"></div>
     </div>

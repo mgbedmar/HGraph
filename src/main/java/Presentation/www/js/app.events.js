@@ -148,7 +148,7 @@
     }
 
     function _selectMenuOption(element,menu){
-        var nodes = document.querySelectorAll(menu +" > ul > li");
+        var nodes = document.querySelectorAll(menu +"> div > ul > li");
         for(var i = 0; i < nodes.length; i++)
         {
             if (nodes[i] != element.parentNode) {

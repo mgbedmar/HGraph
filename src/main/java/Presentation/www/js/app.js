@@ -107,10 +107,10 @@ var app = app || {};
 
         document.querySelector("#mainPage #queryMenu > div[data-action=openQueryMenu]")
             .addEventListener("click", app.events.openQueryMenu);
-        _addMultiEvent("#mainPage #queryMenu > ul > li > h1", "click", app.events.selectQueryMenuOption);
-        _addMultiEvent("#mainPage #toolsMenu > ul > li > h1", "click", app.events.selectToolsMenuOption);
+        _addMultiEvent("#mainPage #queryMenu > div > ul > li > h1", "click", app.events.selectQueryMenuOption);
+        _addMultiEvent("#mainPage #toolsMenu > div > ul > li > h1", "click", app.events.selectToolsMenuOption);
         _addMultiEvent("#mainPage ul.typeSelector > li", "click", app.events.selectTypeOption);
-        document.querySelector("#mainPage #queryMenu > ul > li[data-action=completeGraph]")
+        document.querySelector("#mainPage #queryMenu > div > ul > li[data-action=completeGraph]")
             .addEventListener("click", app.events.drawCompleteGraph);
 
 

@@ -1,7 +1,7 @@
 /*Main Page*/
 #mainPage.active{
     display:block;
-    height:100%;
+    min-height:100%;
     color:#00080A;
 }
 
@@ -13,7 +13,7 @@
     color:#022F3A;
     cursor:pointer;
 }
-#mainPage ul.typeSelector{
+#mainPage #queryType ul.typeSelector, #mainPage #toolsMenu ul.typeSelector{
     display: -webkit-flex;
     list-style: none;
     padding: 0;
@@ -81,6 +81,13 @@
     box-shadow: 0 0 6px #9ecaed;
 }
 
+
+#mainPage .scrolleable-y {
+    overflow-y:auto;
+    overflow-x:hidden;
+    height:100%;
+}
+
 #mainPage #queryMenu.open{
     right:0px;
 }
@@ -99,7 +106,7 @@
     -webkit-transition:right 300ms ease;
 }
 
-#mainPage #queryMenu > div {
+#mainPage #queryMenu .divext {
     position:absolute;
     display:-webkit-flex;
     -webkit-align-items:center;
@@ -123,19 +130,19 @@
     font-style: italic;
 }
 
-#mainPage #queryMenu > div i{
+#mainPage #queryMenu .divext i{
     display:block;
     font-size:25px;
     margin-right:10px;
     color: #022F3A;
 }
 
-#mainPage #queryMenu > ul{
+#mainPage #queryMenu > div > ul{
     list-style:none;
     padding:0 15px;
 
 }
-#mainPage #queryMenu > ul::after{
+#mainPage #queryMenu > div > ul::after{
     content: " ";
     display: block;
     height: 1px;
@@ -144,11 +151,11 @@
     border-bottom: thin solid #255C69;
 }
 
-#mainPage #queryMenu > ul:last-child::after{
+#mainPage #queryMenu > div > ul:last-child::after{
     content:none;
 }
 
-#mainPage #queryMenu > ul > li, #mainPage #toolsMenu > ul > li{
+#mainPage #queryMenu > div > ul > li, #mainPage #toolsMenu > div > ul > li{
     text-align:center;
     border-radius:10px;
     border: thin solid #022F3A;
@@ -203,13 +210,13 @@
     -webkit-transition: background-color 100ms, color 100ms;
 }
 
-#mainPage #queryMenu > ul > li h1:hover{
+#mainPage #queryMenu > div > ul > li h1:hover{
     background-color:#022F3A;
     color:#ECEDED;
 }
 
 
-#mainPage #queryMenu > ul li.selected h1{
+#mainPage #queryMenu > div > ul li.selected h1{
     position:relative;
     background-color:#022F3A;
     color:#ECEDED;
@@ -225,7 +232,7 @@
     color:#ECEDED;
 }
 
-#mainPage #queryMenu > ul li.selected h1 i {
+#mainPage #queryMenu > div > ul li.selected h1 i {
     display:inline-block;
 }
 
@@ -250,17 +257,20 @@
     -webkit-transition:left 300ms ease;
 }
 
-#mainPage #toolsMenu > div {
+#mainPage #toolsMenu > div.divext {
     position:absolute;
     display:-webkit-flex;
     -webkit-align-items:center;
     -webkit-justify-content:center;
-    padding:5px 0;
-    width:45px;
+    padding-top:5px;
+    padding-bottom:5px;
+    padding-left:0px;
+    padding-right:0px;
+    width:55px;
     border-radius:10px;
     background-color:#678F99;
     color:#00080A;
-    margin-left:235px;
+    margin-left:230px;
     margin-top:150px;
     cursor:pointer;
 }
@@ -274,19 +284,19 @@
     font-style: italic;
 }
 
-#mainPage #toolsMenu > div i{
+#mainPage #toolsMenu .divext i{
     display:block;
     font-size:25px;
     margin-left:10px;
     color: #022F3A;
 }
 
-#mainPage #toolsMenu > ul{
+#mainPage #toolsMenu ul{
     list-style:none;
     padding:0 15px;
 
 }
-#mainPage #toolsMenu > ul::after{
+#mainPage #toolsMenu .scrolleable-y ul::after{
     content: " ";
     display: block;
     height: 1px;
@@ -295,11 +305,11 @@
     border-bottom: thin solid #255C69;
 }
 
-#mainPage #toolsMenu > ul:last-child::after{
+#mainPage #toolsMenu .scrolleable-y ul:last-child::after{
     content:none;
 }
 
-#mainPage #toolsMenu ul > li h1{
+#mainPage #toolsMenu .scrolleable-y ul > li h1{
     margin:0;
     padding:10px;
     cursor:pointer;
@@ -311,27 +321,27 @@
     -webkit-transition: background-color 100ms, color 100ms;
 }
 
-#mainPage #toolsMenu ul > li h1 i {
+#mainPage #toolsMenu .scrolleable-y ul > li h1 i {
     display: block;
 }
 
-#mainPage #toolsMenu > ul > li h1:hover i{
+#mainPage #toolsMenu .scrolleable-y ul > li h1:hover i{
     background-color:#022F3A;
     color:#ECEDED;
 }
 
 
-#mainPage #toolsMenu > ul > li h1:hover{
+#mainPage #toolsMenu .scrolleable-y ul > li h1:hover{
     background-color:#022F3A;
     color:#ECEDED;
 }
 
-#mainPage #toolsMenu > ul li.selected h1{
+#mainPage #toolsMenu .scrolleable-y ul li.selected h1{
     background-color:#022F3A;
     color:#ECEDED;
 }
 
-#mainPage #toolsMenu > ul > li.selected h1 i{
+#mainPage #toolsMenu .scrolleable-y ul > li.selected h1 i{
     background-color:#022F3A;
     color:#ECEDED;
 }
