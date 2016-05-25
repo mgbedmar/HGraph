@@ -361,7 +361,7 @@
         }
         else {
             _inputChoices = [];
-            app.events.showInfo("mira...", "no ha anat be", "ok");
+            app.events.showInfoF("mira...", "no ha anat be", "ok");
 
         }
     };
