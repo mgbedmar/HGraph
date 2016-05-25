@@ -65,7 +65,7 @@
     var _largeGraph;
     var _settings = {
         graph:{
-            minNodeSize: 1,
+            //minNodeSize: 1,
             maxNodeSize: 3,
             minEdgeSize: 0.2,
             maxEdgeSize: 0.5,
@@ -75,7 +75,7 @@
             autoRescale:true,
             edgeLabels:true,
             enableHovering:false, //etiquetes: posades no funciona be
-            relativeSize:0.5,
+            //relativeSize:0.5,
             nooverlap:false,
             zoomMin:0.001, //no va
             zoomMax:2
@@ -294,12 +294,11 @@
 
         if (typeof _sarr != 'undefined')
         {
-            var s0 =_sarr[0];
-            _sarr.forEach(function(s, i){
+            for (var i = 0; i < _sarr.length; ++i) {
                 //this gets rid of all the ndoes and edges
-                s0.graph.clear();
-                s0.refresh();
-            });
+                _sarr[i].graph.clear();
+                _sarr[i].refresh();
+            }
         }
 
         _sarr = [new sigma({
@@ -316,7 +315,7 @@
         });
         _sarr[0].refresh();
 
-        //_sarr[0].camera.ratio = 0.1;
+        _sarr[0].camera.ratio = 1.7;
         _sarr[0].refresh();
         _applySettings(_sarr[0]);
     };

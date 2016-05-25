@@ -356,9 +356,14 @@
             result.push(c);
             app.events.showLoading();
             app.graph.drawQuery1to1(result);
+            _inputChoices = [];
             app.events.hidePopup();
         }
-        else showInfo("mira...", "no ha anat be", "ok");
+        else {
+            _inputChoices = [];
+            app.events.showInfo("mira...", "no ha anat be", "ok");
+
+        }
     };
 
 

@@ -294,12 +294,11 @@
 
         if (typeof _sarr != 'undefined')
         {
-            var s0 =_sarr[0];
-            _sarr.forEach(function(s, i){
+            for (var i = 0; i < _sarr.length; ++i) {
                 //this gets rid of all the ndoes and edges
-                s0.graph.clear();
-                s0.refresh();
-            });
+                _sarr[i].graph.clear();
+                _sarr[i].refresh();
+            }
         }
 
         _sarr = [new sigma({
