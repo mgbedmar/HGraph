@@ -377,7 +377,7 @@
             app.events.hidePopup();
         }
         else showAccept("mira...", "no ha anat be", "ok");
-    }
+    };
 
 
     app.events.openToolsMenu = function(){

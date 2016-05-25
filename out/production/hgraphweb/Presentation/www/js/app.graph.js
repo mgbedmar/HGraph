@@ -134,8 +134,8 @@
                 for (var i = 0; i < nodes[type].size(); i++)
                 {
 
-                    //var pos = _getCircleRandomPos(i, i); //en els petits queda millor aixo
-                    var pos = _getNextPosition();
+                    var pos = _getCircleRandomPos(i, i); //en els petits queda millor aixo
+                   // var pos = _getNextPosition();
 
                     g.nodes.push({
                         id: String(nodes[type].get(i)[0])+"-"+type,
@@ -315,12 +315,10 @@
             }
         });
         _sarr[0].refresh();
-        app.HGraph.log("clear");
 
         //_sarr[0].camera.ratio = 0.1;
         _sarr[0].refresh();
         _applySettings(_sarr[0]);
-app.HGraph.log("clear");
     };
 
     //result es un [] amb un sol element {source, target, hetesim}
@@ -329,7 +327,6 @@ app.HGraph.log("clear");
             nodes: [],
             edges: []
         };
-        app.HGraph.log("graf declarat");
         g.nodes.push({
             id: result[0].source+"1",
             label: result[0].source,
@@ -337,7 +334,7 @@ app.HGraph.log("clear");
             y: -1,
             //TODO colors corresponents al tipus... problema: el resultat no dona el tipus, cal passarlo
         });
-app.HGraph.log("nodes posats");
+
         g.nodes.push({
             id: result[0].target+"2",
             label: result[0].target,
@@ -351,9 +348,9 @@ app.HGraph.log("nodes posats");
             target:result[0].target+"2",
             label:result[0].hetesim
         });
-app.HGraph.log("arestes");
+
         app.graph.drawGraph(g);
-        app.HGraph.log("dibuixat");
+
     }
 
     /*
