@@ -2,7 +2,7 @@
     'use strict';
 
     if (typeof app === 'undefined' || typeof app.graph === 'undefined')
-        throw 'Error de dependenciaes';
+        throw 'Error de dependencies';
 
     //Private
     var _autocompletes = [];
@@ -23,11 +23,11 @@
         }, 1);
     }
 
-    function _getNames(arrayList){
+    function _getNames(arrayList, type){
         var names = [];
         for(var i = 0; i < arrayList.size(); i++)
         {
-            names.push(String(arrayList.get(i)[1]));
+            names.push([String(arrayList.get(i)[1]), String(arrayList.get(i)[0]), type]);
         }
         return names;
     }
@@ -52,7 +52,7 @@
                         var choices = nodes;
                         var matches = [];
                         for (var i=0; i<choices.length; i++)
-                            if (~choices[i].toLowerCase().indexOf(term)) matches.push(choices[i]);
+                            if (~(choices[i][0]+' '+choices[i][1]).toLowerCase().indexOf(term)) matches.push(choices[i][0]);
                         suggest(matches);
                         //app.HGraph.log(JSON.stringify(matches));
                     },
@@ -74,10 +74,10 @@
         if(app.HGraph.isProjectSelected())
         {
             //Let's see how big it is
-            var authorNodes = _getNames(app.HGraph.getNodesOfType(app.const.nodeTypes.author));
-            var termNodes = _getNames(app.HGraph.getNodesOfType(app.const.nodeTypes.term));
-            var paperNodes = _getNames(app.HGraph.getNodesOfType(app.const.nodeTypes.paper));
-            var confNodes = _getNames(app.HGraph.getNodesOfType(app.const.nodeTypes.conf));
+            var authorNodes = _getNames(app.HGraph.getNodesOfType(app.const.nodeTypes.author), app.const.nodeTypes.author);
+            var termNodes = _getNames(app.HGraph.getNodesOfType(app.const.nodeTypes.term), app.const.nodeTypes.term);
+            var paperNodes = _getNames(app.HGraph.getNodesOfType(app.const.nodeTypes.paper), app.const.nodeTypes.paper);
+            var confNodes = _getNames(app.HGraph.getNodesOfType(app.const.nodeTypes.conf), app.const.nodeTypes.conf);
             nodes = authorNodes.concat(termNodes.concat(paperNodes.concat(confNodes)));
             //Is it larger than maxNodes?
             large = (nodes.length >= app.settings.maxNodes);
@@ -353,7 +353,12 @@
     };
     //----/QueryMenu
 
+    app.events.query1to1 = function() {
+        if (_inputChoices.length === 2) {
 
+        }
+        else alert("fatal!");
+    }
 
 
     app.events.openToolsMenu = function(){

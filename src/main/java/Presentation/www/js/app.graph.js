@@ -362,6 +362,7 @@
             label:result[0].hetesim
         });
 
+        _drawGraph(g);
     }
 
     /*

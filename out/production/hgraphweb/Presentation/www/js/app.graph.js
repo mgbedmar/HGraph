@@ -77,8 +77,8 @@
             enableHovering:false, //etiquetes: posades no funciona be
             relativeSize:0.5,
             nooverlap:false,
-            minRatio:0.001, //no va
-            maxRatio:1.125
+            zoomMin:0.001, //no va
+            zoomMax:0.001
         },
         relativeSize:0.5,
         edgeLabels:true,
@@ -362,6 +362,7 @@
             label:result[0].hetesim
         });
 
+        _drawGraph(g);
     }
 
     /*
