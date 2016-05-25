@@ -56,7 +56,7 @@
     'use strict';
 
     if (typeof app === 'undefined' || app.HGraph === 'undefined')
-        throw 'Error de dependenciaes';
+        throw 'Error de dependencies';
 
     //Private
     //Array of sigma instances
@@ -66,18 +66,29 @@
     var _settings = {
         graph:{
             minNodeSize: 1,
+            maxNodeSize: 3,
             minEdgeSize: 0.2,
             maxEdgeSize: 0.5,
-            zoomMin: 0.01,
-            zoomMax: 2,
             eventsEnabled: true,
-            labelThreshold: 25,
-             defaultEdgeType: "curve"
-
+            labelThreshold: 200,
+            defaultEdgeType: "curve",
+            autoRescale:true,
+            edgeLabels:true,
+            enableHovering:false, //etiquetes: posades no funciona be
+            relativeSize:0.5,
+            nooverlap:false,
+            zoomMin:0.001, //no va
+            zoomMax:1.125
         },
         relativeSize:0.5,
+        edgeLabels:true,
         nooverlap:false
+
     };
+
+    //For graph layout
+    var _radius = 0.001;
+    var _angle = 0;
 
     function _applySettings(s){
         if(typeof _settings.relativeSize !== 'undefined')
@@ -114,7 +125,6 @@
         //For each type in nodes
         for (var type in nodes)
         {
-
             //Check if type is a property of nodes
             if (nodes.hasOwnProperty(type))
             {
@@ -123,10 +133,12 @@
 
                 for (var i = 0; i < nodes[type].size(); i++)
                 {
-                    var pos = _getCircleRandomPos(i, i);
+
+                    var pos = _getCircleRandomPos(i, i); //en els petits queda millor aixo
+                    //var pos = _getNextPosition();
 
                     g.nodes.push({
-                        id: String(nodes[type].get(i)[0])+type,
+                        id: String(nodes[type].get(i)[0])+"-"+type,
                         label: String(nodes[type].get(i)[1]),
                         x: pos.x,
                         y: pos.y
@@ -135,8 +147,7 @@
 
             }
         }
-        //TODO: peta molt wtf
-/*
+
         for (type in edges) {
             if (edges.hasOwnProperty(type))
             {
@@ -144,13 +155,13 @@
                 {
                     g.edges.push({
                         id: type+i,
-                        source: String(edges[type].get(i)[0]+"paper"),
-                        target: String(edges[type].get(i)[1])+type
+                        source: String(edges[type].get(i)[0]+"-paper"),
+                        target: String(edges[type].get(i)[1])+"-"+type
                     })
                 }
             }
         }
-*/
+
         return g;
     }
 
@@ -162,6 +173,17 @@
         if(u>1)
             r = 2-u;
         return {x: Math.cos(t)*r, y: Math.sin(t)*r};
+    }
+
+    function _getNextPosition() {
+        var pos = {x: Math.cos(2*Math.PI*_angle)*_radius, y: Math.sin(Math.PI*2*_angle)*_radius};
+        _angle = _angle + 0.0005/(_radius); //inversament proporcional
+        if (_angle > 1) {
+            _angle = _angle-1;
+            _radius += 0.004; //valors que mes o menys van: 0.000001, 0.01, 0, 0.05
+        }
+
+        return pos;
     }
 
 
@@ -184,15 +206,20 @@
         if(typeof _sarr === 'undefined')
             _sarr = [];
         var s;
-
+        var pos_centre = {x:0, y:0}
+        var pos;
         var colors = ["#FF0000", "#00FF00", "#0000FF"];
         //For each node
         var c = 0;
+        var inizoom = 0.3;
+        _radius = 0.004;
+        _angle = 0;
         while(i < nodes.size())
         {
 
             //TODO: rings
-            var pos = _getCircleRandomPos(i*40,i*20);
+            //var pos = _getCircleRandomPos(i*40,i*20);
+            pos = _getNextPosition();
 
             g.nodes.push({
                 id: String(nodes.get(i)[0]),
@@ -211,14 +238,15 @@
                     settings:_settings.graph
                 });
 
-
+                //s.camera.ratio = inizoom;
                 _applySettings(s);
+                s.refresh();
                 _sarr.push(s);
                 g = {nodes:[]};
             }
             i++;
         }
-        //If nodes remaining, start a new graph
+        //If nodes remaining, start a new graph //TODO aixo esta fet?
         if(g.nodes.length > 0)
         {
             s=new sigma({
@@ -227,7 +255,9 @@
                 settings:_settings.graph
             });
 
+            //s.camera.ratio = inizoom;
             _applySettings(s);
+            s.refresh();
 
 
             _sarr.push(s);
@@ -237,6 +267,9 @@
             container: 'graph-container',
             graph:{nodes:[]}
         });
+
+        //s.camera.ratio = inizoom;
+        s.refresh();
 
         s.camera.bind('coordinatesUpdated', app.debounce(function(){
             _sarr.forEach(function(si){
@@ -255,7 +288,11 @@
 
     //Draws a normal graph, nodes = {author:JavaArrayList, paper:...}
     app.graph.drawGraph = function(nodes, edges){
-        var g = _createGraph(nodes, edges);
+        var g;
+        if (typeof edges === 'undefined') g = nodes;
+        else g = _createGraph(nodes, edges);
+
+
         if(typeof _sarr === 'undefined')
         {
             //TODO: zoom, size, threshold
@@ -286,12 +323,48 @@
             container: 'graph-container',
             type:'canvas',
             settings: {
-                batchEdgesDrawing: true
+                batchEdgesDrawing: false
             }
         });
+
+        //_sarr[0].camera.ratio = 0.1;
         _sarr[0].refresh();
         _applySettings(_sarr[0]);
+
     };
+
+    //result es un [] amb un sol element {source, target, hetesim}
+    app.graph.drawQuery1to1 = function(result) {
+        var g = {
+            nodes: [],
+            edges: []
+        };
+
+        g.nodes.push({
+            id: result[0].source+"1",
+            label: result[0].source,
+            x: -1,
+            y: -1,
+            //TODO colors corresponents al tipus... problema: el resultat no dona el tipus, cal passarlo
+        });
+
+        g.nodes.push({
+            id: result[0].target+"2",
+            label: result[0].target,
+            x: 1,
+            y: 1,
+            //TODO colors corresponents al tipus... problema: el resultat no dona el tipus, cal passarlo
+        });
+
+        g.edges.push({
+            id:"1",
+            source:result[0].source+"1",
+            target:result[0].target+"2",
+            label:result[0].hetesim
+        });
+
+        _drawGraph(g);
+    }
 
     /*
     app.graph.drawGraph = function(cb){

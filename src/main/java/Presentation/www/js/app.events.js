@@ -125,10 +125,10 @@
             div2.appendChild(ic);
             div2.addEventListener("click", function() {
                 app.events.showAccept("Esborrar un projecte", "El projecte '"+e+"' s'esborrarà, vols continuar?",
-                    "Esborra", "Cancela", function(){
+                    "Esborra", function(){
                         app.HGraph.deleteProject(e);
                         _initLoadPage();
-                    });
+                    }, "Cancela");
                 event.stopPropagation(); //per no executar el anar a graf
             });
             child.appendChild(div1);
@@ -254,29 +254,11 @@
         app.events.showPopup(div);
     };
 
-    //TODO comprovar si es necessaria: ara es pot fer tot amb showAccept no passant boto de cancel
     app.events.showInfo = function(title, msg, btnMsg, cb){
-        if(_popupShown) return;
-        var div = document.createElement("div");
-        div.classList.add("info");
-        div.classList.add("with-border");
-        var title = document.createElement("h1");
-        title.innerHTML = title || "Informació";
-        var text = document.createElement("span");
-        text.innerHTML = msg;
-        var okbtn = document.createElement("a");
-        okbtn.innerHTML = btnMsg;
-        okbtn.addEventListener("click", function(){
-            app.events.hidePopup();
-            if(cb) cb();
-        });
-        div.appendChild(title);
-        div.appendChild(text);
-        div.appendChild(okbtn);
-        app.events.showPopup(div);
+        app.events.showAccept(title, msg, btnMsg, cb);
     };
 
-    app.events.showAccept = function(t, msg, btnMsgOk, btnMsgCancel, cbOk, cbCancel){
+    app.events.showAccept = function(t, msg, btnMsgOk, cbOk, btnMsgCancel, cbCancel){
         if(_popupShown) return;
         var div = document.createElement("div");
         div.classList.add("accept");
@@ -376,7 +358,7 @@
             app.graph.drawQuery1to1(result);
             app.events.hidePopup();
         }
-        else showAccept("mira...", "no ha anat be", "ok");
+        else showInfo("mira...", "no ha anat be", "ok");
     };
 
 

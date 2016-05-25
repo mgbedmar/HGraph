@@ -2,20 +2,25 @@
 #mainPage.active{
     display:block;
     height:100%;
+    color:#00080A;
 }
 
 #mainPage #graph-container{
     height:100%;
 }
 
-#mainPage ul.typeSelector{
+#mainPage .icon {
+    color:#022F3A;
+    cursor:pointer;
+}
+#mainPage #queryMenu ul.typeSelector, #mainPage #toolsMenu ul.typeSelector{
     display: -webkit-flex;
     list-style: none;
     padding: 0;
     border-radius: 5px;
     overflow: hidden;
     height: 30px;
-    margin: 5px;
+    margin: 5px 15px;
 }
 
 #mainPage ul.typeSelector li{
@@ -24,6 +29,7 @@
     color: #ECEDED;
     font-weight: bold;
     padding-top:9px;
+    cursor:pointer;
 }
 
 #mainPage ul.typeSelector li[data-type=author]{
@@ -58,6 +64,30 @@
     background-color: #a05c58;
 }
 
+#mainPage .oneLine input{
+    margin-top: 10px;
+}
+
+#mainPage input {
+    border-radius: 5px;
+    border: 1px solid #678F99;
+    font-size: 14px;
+    width:150px;
+}
+
+#mainPage input:focus {
+    outline: none;
+    border-color: #9ecaed;
+    box-shadow: 0 0 6px #9ecaed;
+}
+
+
+#mainPage .scrolleable-y {
+    overflow-y:auto;
+    overflow-x:hidden;
+    height:100%;
+}
+
 #mainPage #queryMenu.open{
     right:0px;
 }
@@ -69,111 +99,149 @@
     width:245px;
     height:100%;
 
-    background-color:#aaa;
+    background-color:#678F99;
     z-index:1;
 
 
     -webkit-transition:right 300ms ease;
 }
 
-#mainPage #queryMenu > div {
+#mainPage #queryMenu .divext {
     position:absolute;
     display:-webkit-flex;
     -webkit-align-items:center;
     -webkit-justify-content:center;
     padding:5px 0;
-    width:50px;
+    width:45px;
     border-radius:10px;
-    background-color:#aaa;
-    color:#333;
+    background-color:#678F99;
+    color:#00080A;
     margin-left:-40px;
     margin-top:150px;
+    cursor:pointer;
 }
+
 #mainPage #queryMenu span{
     display: block;
     text-align: left;
     margin: 10px 0 0 10px;
     font-size: 14px;
-    color: rgba(0, 0, 0, 0.5);
+    color: #022F3A;
     font-style: italic;
 }
-#mainPage #queryMenu .oneLine input{
-    margin-top: 10px;
-}
-#mainPage #queryMenu input{
-    border-radius: 5px;
-    font-size: 14px;
-    width:150px;
-}
-#mainPage #queryMenu > div i{
+
+#mainPage #queryMenu .divext i{
     display:block;
     font-size:25px;
     margin-right:10px;
+    color: #022F3A;
 }
 
-#mainPage #queryMenu > ul{
+#mainPage #queryMenu > div > ul{
     list-style:none;
     padding:0 15px;
 
 }
-#mainPage #queryMenu > ul::after{
+#mainPage #queryMenu > div > ul::after{
     content: " ";
     display: block;
     height: 1px;
     margin: 20px 0;
-    background: #aaa;
-    border-bottom: thin solid #bbb;
+    background: #BFDCE3;
+    border-bottom: thin solid #255C69;
 }
 
-#mainPage #queryMenu > ul:last-child::after{
+#mainPage #queryMenu > div > ul:last-child::after{
     content:none;
 }
 
-#mainPage #queryMenu > ul > li{
+#mainPage #queryMenu > div > ul > li, #mainPage #toolsMenu > div > ul > li{
     text-align:center;
     border-radius:10px;
-    border: thin solid #888;
+    border: thin solid #022F3A;
     margin: 5px 0;
-    height:48px;
+    height:42px;
     overflow:hidden;
-
+    background-color:#ECEDED;
     -webkit-transition: height 200ms, background-color 100ms, color 100ms;
 }
 
 
-
-#mainPage #queryMenu > ul li.oneLine.selected{
+#mainPage #queryMenu ul li.oneLine.selected, #mainPage #toolsMenu ul li.oneLine.selected{
     height:90px;
 }
 
-#mainPage #queryMenu > ul li.twoLines.selected{
+#mainPage #queryMenu ul li.oneandahalfLine.selected, #mainPage #toolsMenu ul li.oneandahalfLine.selected{
+    height:110px;
+}
+
+#mainPage #queryMenu ul li.almostTwoLines.selected, #mainPage #toolsMenu ul li.almostTwoLines.selected{
+    height:140px;
+}
+#mainPage #queryMenu ul li.twoLines.selected, #mainPage #toolsMenu ul li.twoLines.selected{
     height:160px;
 }
 
-#mainPage #queryMenu > ul li.threeLines.selected{
+#mainPage #queryMenu ul li.threeLines.selected, #mainPage #toolsMenu ul li.threeLines.selected{
     height:185px;
 }
 
+#mainPage #queryMenu ul li.fourLines.selected, #mainPage #toolsMenu ul li.fourLines.selected{
+    height:205px;
+}
 
+#mainPage #queryMenu ul li.fiveLines.selected, #mainPage #toolsMenu ul li.fiveLines.selected{
+    height:230px;
+}
 
+#mainPage #queryMenu ul li.sixLines.selected, #mainPage #toolsMenu ul li.sixLines.selected{
+    height:275px;
+}
 
 #mainPage #queryMenu ul > li h1{
     margin:0;
     padding:10px;
-
+    cursor:pointer;
     font-weight:normal;
-    font-size:24px;
+    font-size:20px;
     border-radius:10px;
-    background-color: #ccc;
-
+    color:#022F3A;
+    background-color:#ECEDED;
     -webkit-transition: background-color 100ms, color 100ms;
 }
 
-#mainPage #queryMenu > ul li.selected h1{
-    background-color:#20282A;
+#mainPage #queryMenu > div > ul > li h1:hover{
+    background-color:#022F3A;
     color:#ECEDED;
 }
 
+
+#mainPage #queryMenu > div > ul li.selected h1{
+    position:relative;
+    background-color:#022F3A;
+    color:#ECEDED;
+}
+
+#mainPage #queryMenu i.ion-information-circled {
+    display:none;
+    font-size:18px;
+    position:absolute;
+    right:6px;
+    top:6px;
+    background-color:#022F3A;
+    color:#ECEDED;
+}
+
+#mainPage #queryMenu > div > ul li.selected h1 i {
+    display:inline-block;
+}
+
+
+
+
+#mainPage #toolsMenu.open{
+    left:0px;
+}
 #mainPage #toolsMenu{
     position:absolute;
     top:0;
@@ -182,40 +250,45 @@
     width:245px;
     height:100%;
 
-    background-color:#aaa;
+    background-color:#678F99;
     z-index:1;
 
 
     -webkit-transition:left 300ms ease;
 }
 
-#mainPage #toolsMenu.open{
-    left:0px;
-}
-
-#mainPage #toolsMenu #pestToolsMenu {
+#mainPage #toolsMenu > div.divext {
     position:absolute;
     display:-webkit-flex;
     -webkit-align-items:center;
     -webkit-justify-content:center;
-    padding:5px 0;
-    width:50px;
+    padding-top:5px;
+    padding-bottom:5px;
+    padding-left:0px;
+    padding-right:0px;
+    width:55px;
     border-radius:10px;
-    background-color:#aaa;
-    color:#333;
-    margin-left:235px;
+    background-color:#678F99;
+    color:#00080A;
+    margin-left:230px;
     margin-top:150px;
+    cursor:pointer;
 }
 
-#mainPage #toolsMenu #pestToolsMenu i{
+#mainPage #toolsMenu span{
+    display: block;
+    text-align: left;
+    margin: 10px 0 0 10px;
+    font-size: 14px;
+    color: #022F3A;
+    font-style: italic;
+}
+
+#mainPage #toolsMenu .divext i{
     display:block;
     font-size:25px;
     margin-left:10px;
-}
-
-#mainPage #toolsMenu i {
-    display:inline;
-    font-size:25px;
+    color: #022F3A;
 }
 
 #mainPage #toolsMenu ul{
@@ -223,54 +296,57 @@
     padding:0 15px;
 
 }
-#mainPage #toolsMenu > ul::after{
+#mainPage #toolsMenu .scrolleable-y ul::after{
     content: " ";
     display: block;
     height: 1px;
     margin: 20px 0;
-    background: linear-gradient(90deg, #aaa 15%, #666, #aaa 85%);
-
+    background: #BFDCE3;
+    border-bottom: thin solid #255C69;
 }
 
-#mainPage #toolsMenu > ul:last-child::after{
+#mainPage #toolsMenu .scrolleable-y ul:last-child::after{
     content:none;
 }
 
-/*#mainPage #toolsMenu ul li{
-    text-align:center;
-    border-radius:10px;
-    border: thin solid #888;
-    margin: 5px 0;
-    height:48px;
-    overflow:hidden;
-}
-
-
-
-#mainPage #toolsMenu ul > li h1{
+#mainPage #toolsMenu .scrolleable-y ul > li h1{
     margin:0;
     padding:10px;
-
+    cursor:pointer;
     font-weight:normal;
-    font-size:24px;
+    font-size:20px;
     border-radius:10px;
-    background-color: #ccc;
-
-
-}*/
-
-#mainPage #toolsMenu .contToolsMenu {
-    display:-webkit-flex;
-    -webkit-align-items:left;
-    -webkit-flex-direction:column;
-    background-color:#aaa;
-    color:#333;
-    margin-top:30px;
-    margin-left:30px;
+    color:#022F3A;
+    background-color:#ECEDED;
+    -webkit-transition: background-color 100ms, color 100ms;
 }
-/*
-#mainPage #toolsMenu .contToolsMenu > div {
-    display:-webkit-flex;
-    -webkit-align-items:left;
 
-}*/
+#mainPage #toolsMenu .scrolleable-y ul > li h1 i {
+    display: block;
+}
+
+#mainPage #toolsMenu .scrolleable-y ul > li h1:hover i{
+    background-color:#022F3A;
+    color:#ECEDED;
+}
+
+
+#mainPage #toolsMenu .scrolleable-y ul > li h1:hover{
+    background-color:#022F3A;
+    color:#ECEDED;
+}
+
+#mainPage #toolsMenu .scrolleable-y ul li.selected h1{
+    background-color:#022F3A;
+    color:#ECEDED;
+}
+
+#mainPage #toolsMenu .scrolleable-y ul > li.selected h1 i{
+    background-color:#022F3A;
+    color:#ECEDED;
+}
+
+#mainPage .hiddenicon {
+    opacity:0;
+    cursor:default;
+}

@@ -18,10 +18,17 @@ var app = app || {};
             popupContent: "popupContent"
         },
         autoInputIds:{
+            edge1: "autoedge1",
+            edge2: "autoedge2",
+            node: "autonode",
+            remedge1: "autofont",
+            remedge2: "autodesti",
             veins: "autoVeins",
             ref1: "autoref1",
             ref2: "autoref2",
-            oToN: "auto1ToN"
+            oToN: "auto1ToN",
+            oToo: "auto1To1-1",
+            oToo2: "auto1To1-2"
         },
         nodeTypes:{
             author: "author",
@@ -78,6 +85,20 @@ var app = app || {};
         }
     }
 
+    function _addInfoEvent() {
+        document.getElementById("info1a1").addEventListener("click", function() { app.events.showInfo(
+            "Consulta 1 a 1", "Introdueix dos nodes per obtenir la seva mesura de HeteSim.", "OK")});
+        document.getElementById("info1aN").addEventListener("click", function() { app.events.showInfo(
+            "Consulta 1 a N", "Introdueix un node i un tipus per obtenir un llistat de les relacions del "+
+            "node amb el tipus.", "OK")});
+        document.getElementById("infoNaN").addEventListener("click", function() { app.events.showInfo(
+            "Consulta N a N", "Introdueix dos tipus per obtenir una taula amb les seves relacions.", "OK")});
+        document.getElementById("inforef").addEventListener("click", function() { app.events.showInfo(
+            "Consulta amb referència", "Introdueix una parella de nodes de referència i un tercer node (del mateix "+
+            "tipus que el primer) per obtenir un llistat de nodes que siguin tan mútuament rellevants amb el tercer "+
+            "com ho són els dos primers entre sí.", "OK")});
+
+    }
 
 
     app.debounce = function(fn, delay){
@@ -107,11 +128,13 @@ var app = app || {};
 
         document.querySelector("#mainPage #queryMenu > div[data-action=openQueryMenu]")
             .addEventListener("click", app.events.openQueryMenu);
-        _addMultiEvent("#mainPage #queryMenu > ul > li > h1", "click", app.events.selectQueryMenuOption);
-        _addMultiEvent("#mainPage #queryMenu ul.typeSelector > li", "click", app.events.selectTypeOption);
-        document.querySelector("#mainPage #queryMenu > ul > li[data-action=completeGraph]")
+        _addMultiEvent("#mainPage #queryMenu > div > ul > li > h1", "click", app.events.selectQueryMenuOption);
+        _addMultiEvent("#mainPage #toolsMenu > div > ul > li > h1", "click", app.events.selectToolsMenuOption);
+        _addMultiEvent("#mainPage ul.typeSelector > li", "click", app.events.selectTypeOption);
+        document.querySelector("#mainPage #queryMenu > div > ul > li[data-action=completeGraph]")
             .addEventListener("click", app.events.drawCompleteGraph);
-
+        _addInfoEvent();
+        document.getElementById("ok1to1").addEventListener("click", app.events.query1to1);
 
         document.querySelector("#mainPage #toolsMenu > div[data-action=openToolsMenu]")
             .addEventListener("click", app.events.openToolsMenu);

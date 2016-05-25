@@ -29,19 +29,22 @@ body > div.page{
     display:-webkit-flex;
     -webkit-align-items:center;
     -webkit-justify-content:center;
-    background-color:rgba(25,25,25,0.5);
+    background-color:rgba(103, 143, 153, 0.5);
     height:100%;
     width:100%;
     z-index:10;
 }
 /*popup classes*/
+#popupPage #popupContent div.with-border {
+    position:relative;
+    background-color:#ECEDED;
+    border-radius:10px;
+    border:3px solid #00080A;
+}
+
 #popupPage #popupContent div.loading{
     width:80px;
     height:80px;
-    background-color:#c1c1c1;
-    color:#333;
-    border-radius:10px;
-    border:3px solid #333;
 }
 
 #popupPage #popupContent div.loading img{
@@ -50,11 +53,58 @@ body > div.page{
     margin-left: -7px;
 }
 
+#popupPage #popupContent span {
+    text-align: justify;
+    text-justify: inter-word;
+}
+
 #popupPage #popupContent div.accept{
-    width:300px;
-    height:200px;
-    background-color:#c1c1c1;
-    color:#333;
+    width:400px;
+    height:180px;
+}
+
+#popupPage #popupContent div.accept.big {
+    width:400px;
+    height:210px;
+}
+
+#popupPage #popupContent div.accept.large {
+    width:400px;
+    height:270px;
+}
+
+#popupPage h1 {
+    font-weight:normal;
+    font-size:25px;
+    margin-left:20px;
+    margin-top:20px;
+}
+
+#popupPage span {
+    font-size:16px;
+    margin:10px 30px;
+    display:inline-block;
+}
+
+#popupPage .divbtns {
+    position:absolute;
+    bottom:5px;
+    right:10px;
+    display:-webkit-flex;
+    -webkit-align-items:center;
+    -webkit-justify-content:flex-end;
+}
+
+#popupPage .accept a {
+    padding:11px;
+    margin:9px;
+    background-color:#00080A; /*    #BFDCE3; */
+    color:#ECEDED;
     border-radius:10px;
-    border:3px solid #333;
+    cursor:pointer;
+}
+
+#popupPage .accept a:hover {
+    background-color: #678F99;
+    color:#00080A;ackground-color:#9FBCC3;
 }
