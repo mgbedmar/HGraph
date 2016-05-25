@@ -535,7 +535,7 @@ public class DomainController
             String[] f = new String[2];
             f[0] = String.valueOf(node.getID());
             f[1] = node.getName();
-            f[2] = String.valueOf(g.getNeighbours(node).size());
+            //f[2] = String.valueOf(g.getNeighbours(node).size());
             l.add(f);
         }
 
