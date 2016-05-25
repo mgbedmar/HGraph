@@ -64,19 +64,12 @@ public class PresentationController {
         try {
             /* Extreure les ids dels strings d'entrada */
             int id1, id2;
-            System.out.println("Hola, java   "+idSource);
             String[] parts = idSource.split("-");
-            System.out.println("Hola, java   "+parts[0]);
             id1 = Integer.parseInt(parts[0]);
-            System.out.println("Hola, java");
             parts = idEnd.split("-");
-            System.out.println("Hola, java");
             id2 = Integer.parseInt(parts[0]);
-            System.out.println("Hola, java");
             dc.query1to1(id1, typeSource, id2, typeEnd);
-            System.out.println("Hola, java");
             ArrayList<String> fila = dc.getResultRow();
-            System.out.println("Hola, java");
             return fila.get(3);
 
         } catch(DomainException e) {
