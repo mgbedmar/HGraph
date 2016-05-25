@@ -316,7 +316,7 @@
         });
         _sarr[0].refresh();
 
-        //_sarr[0].camera.ratio = 0.1;
+        _sarr[0].camera.ratio = 1.7;
         _sarr[0].refresh();
         _applySettings(_sarr[0]);
     };
