@@ -2,11 +2,12 @@
     'use strict';
 
     if (typeof app === 'undefined' || typeof app.graph === 'undefined')
-        throw 'Error de dependenciaes';
+        throw 'Error de dependencies';
 
     //Private
     var _autocompletes = [];
     var _popupShown = false;
+    var _inputChoices = [];
     function _hide(selector, cb){
         document.getElementById(selector).classList.remove("show");
         setTimeout(function(){
@@ -22,16 +23,20 @@
         }, 1);
     }
 
-    function _getNames(arrayList){
+    function _getNames(arrayList, type){
         var names = [];
         for(var i = 0; i < arrayList.size(); i++)
         {
-            names.push(String(arrayList.get(i)[1]));
+            names.push([String(arrayList.get(i)[1]), String(arrayList.get(i)[0]), type]);
         }
         return names;
     }
 
     function _initAutoCompletes(nodes){
+        var mChars;
+        if (nodes.length < 300) mChars = 1;
+        else mChars = 3;
+
         //For each type in nodes
         for (var key in app.const.autoInputIds) {
 
@@ -41,15 +46,18 @@
                 _autocompletes.push(new autoComplete({
                     //TODO: specify inputs..
                     selector: "#"+app.const.autoInputIds[key],
-                    minChars: 1,
+                    minChars: mChars,
                     source: function(term, suggest){
                         term = term.toLowerCase();
                         var choices = nodes;
                         var matches = [];
                         for (var i=0; i<choices.length; i++)
-                            if (~choices[i].toLowerCase().indexOf(term)) matches.push(choices[i]);
+                            if (~(choices[i][0]+' '+choices[i][1]).toLowerCase().indexOf(term)) matches.push(choices[i][0]);
                         suggest(matches);
                         //app.HGraph.log(JSON.stringify(matches));
+                    },
+                    onSelect: function(e, term, item){
+                        _inputChoices.push(item);
                     }
                 }));
             }
@@ -66,10 +74,10 @@
         if(app.HGraph.isProjectSelected())
         {
             //Let's see how big it is
-            var authorNodes = _getNames(app.HGraph.getNodesOfType(app.const.nodeTypes.author));
-            var termNodes = _getNames(app.HGraph.getNodesOfType(app.const.nodeTypes.term));
-            var paperNodes = _getNames(app.HGraph.getNodesOfType(app.const.nodeTypes.paper));
-            var confNodes = _getNames(app.HGraph.getNodesOfType(app.const.nodeTypes.conf));
+            var authorNodes = _getNames(app.HGraph.getNodesOfType(app.const.nodeTypes.author), app.const.nodeTypes.author);
+            var termNodes = _getNames(app.HGraph.getNodesOfType(app.const.nodeTypes.term), app.const.nodeTypes.term);
+            var paperNodes = _getNames(app.HGraph.getNodesOfType(app.const.nodeTypes.paper), app.const.nodeTypes.paper);
+            var confNodes = _getNames(app.HGraph.getNodesOfType(app.const.nodeTypes.conf), app.const.nodeTypes.conf);
             nodes = authorNodes.concat(termNodes.concat(paperNodes.concat(confNodes)));
             //Is it larger than maxNodes?
             large = (nodes.length >= app.settings.maxNodes);
@@ -83,9 +91,11 @@
         else
         {
             //TODO: disable small graphs features
-            _disableSmallGraphFeatures();
+            //_disableSmallGraphFeatures(); //TODO la comento perque no esta definida
             //Trigger draw queryType author
-            document.querySelector("#queryMenu li[data-action=queryType] typeSelector[data-type=author]").click();
+            //document.querySelector("#queryMenu li[data-action=queryType] typeSelector[data-type=author]").click();
+            //TODO posar la linia de dalt quan estiguin els listeners corresponents
+            _drawQueryType("author");
         }
 
         //Init autocompletes
@@ -109,10 +119,10 @@
             div2.appendChild(ic);
             div2.addEventListener("click", function() {
                 app.events.showAccept("Esborrar un projecte", "El projecte '"+e+"' s'esborrarà, vols continuar?",
-                    "Esborra", "Cancela", function(){
+                    "Esborra", function(){
                         app.HGraph.deleteProject(e);
                         _initLoadPage();
-                    });
+                    }, "Cancela");
                 event.stopPropagation(); //per no executar el anar a graf
             });
             child.appendChild(div1);
@@ -140,21 +150,24 @@
         app.graph.drawGraph(nodeobj, edgeobj);
     }
 
-    function _drawQueryType (){
+    function _drawQueryType (type){
         var nodes = app.HGraph.getNodesOfType(type);
         app.graph.drawNodesOnlyGraph(nodes);
     }
 
-    function _selectQueryMenuOption(element){
-        var nodes = document.querySelectorAll("#queryMenu > ul > li");
+    function _selectMenuOption(element,menu){
+        var nodes = document.querySelectorAll(menu +"> div > ul > li");
         for(var i = 0; i < nodes.length; i++)
         {
-            nodes[i].classList.remove("selected");
+            if (nodes[i] != element.parentNode) {
+                nodes[i].classList.remove("selected");
+            }
         }
 
-        element.parentNode.classList.add("selected");
-
+        element.parentNode.classList.toggle("selected");
+        _inputChoices=[]; //reset
     }
+
     function _selectType(parentElement, type){
         var nodes = parentElement.children;
         for(var i = 0; i < nodes.length; i++)
@@ -228,6 +241,7 @@
         if(_popupShown) return;
         var div = document.createElement("div");
         div.classList.add("loading");
+        div.classList.add("with-border");
         var img = document.createElement("img");
         img.src="img/loading.gif";
         div.appendChild(img);
@@ -235,49 +249,46 @@
     };
 
     app.events.showInfo = function(title, msg, btnMsg, cb){
-        if(_popupShown) return;
-        var div = document.createElement("div");
-        div.classList.add("info");
-        var title = document.createElement("h1");
-        title.innerHTML = title || "Informació";
-        var text = document.createElement("span");
-        text.innerHTML = msg;
-        var okbtn = document.createElement("a");
-        okbtn.innerHTML = btnMsg;
-        okbtn.addEventListener("click", function(){
-            app.events.hidePopup();
-            if(cb) cb();
-        });
-        div.appendChild(title);
-        div.appendChild(text);
-        div.appendChild(okbtn);
-        app.events.showPopup(div);
+        app.events.showAccept(title, msg, btnMsg, cb);
     };
 
-    app.events.showAccept = function(t, msg, btnMsgOk, btnMsgCancel, cbOk, cbCancel){
+    app.events.showAccept = function(t, msg, btnMsgOk, cbOk, btnMsgCancel, cbCancel){
         if(_popupShown) return;
         var div = document.createElement("div");
         div.classList.add("accept");
+        div.classList.add("with-border");
         var title = document.createElement("h1");
         title.innerHTML = t || "Informació";
         var text = document.createElement("span");
         text.innerHTML = msg;
+        if (msg.length > 120) {
+            div.classList.add("large");
+        }
+        else if (msg.length > 80) {
+            div.classList.add("big");
+        }
+        var divbtns = document.createElement("div");
+        divbtns.classList.add("divbtns");
         var okbtn = document.createElement("a");
         okbtn.innerHTML = btnMsgOk;
         okbtn.addEventListener("click", function(){
             app.events.hidePopup();
             if(cbOk) cbOk();
         });
-        var cancelbtn = document.createElement("a");
-        cancelbtn.innerHTML = btnMsgCancel;
-        cancelbtn.addEventListener("click", function(){
-            app.events.hidePopup();
-            if(cbCancel) cbCancel();
-        });
+        if (typeof btnMsgCancel != 'undefined') {
+            app.HGraph.log(typeof btnMsgCancel);
+            var cancelbtn = document.createElement("a");
+            cancelbtn.innerHTML = btnMsgCancel;
+            cancelbtn.addEventListener("click", function(){
+                app.events.hidePopup();
+                if(cbCancel) cbCancel();
+            });
+            divbtns.appendChild(cancelbtn);
+        }
+        divbtns.appendChild(okbtn);
         div.appendChild(title);
         div.appendChild(text);
-        div.appendChild(okbtn);
-        div.appendChild(cancelbtn);
+        div.appendChild(divbtns);
         app.events.showPopup(div);
     };
 
@@ -300,7 +311,7 @@
         document.querySelector("#"+app.const.pageIds.main + " #queryMenu").classList.toggle("open");
     };
     app.events.selectQueryMenuOption = function(e){
-        _selectQueryMenuOption(e.currentTarget);
+        _selectMenuOption(e.currentTarget, "#queryMenu");
     };
     app.events.selectTypeOption = function(e){
         _selectType(e.target.parentNode, e.currentTarget.dataset.type);
@@ -324,11 +335,29 @@
     };
     //----/QueryMenu
 
+    app.events.query1to1 = function() {
+    app.HGraph.log("dins del listener");
+    app.HGraph.log(_inputChoices.length);
 
+        if (_inputChoices.length === 2) {
+            var hm = app.HGraph.query1to1(_inputChoices[0][1], _inputChoices[0][2],
+                                             _inputChoices[1][1], _inputChoices[1][2]);
+                                             app.HGraph.log("dins del listener2");
+            var result = [{source: _inputChoices[0][0], target: _inputChoices[1][0], hetesim: hm}];
+            app.events.showLoading();
+            app.graph.drawQuery1to1(result);
+            app.events.hidePopup();
+        }
+        else showInfo("mira...", "no ha anat be", "ok");
+    }
 
 
     app.events.openToolsMenu = function(){
             document.querySelector("#"+app.const.pageIds.main + " #toolsMenu").classList.toggle("open");
+    };
+
+    app.events.selectToolsMenuOption = function(e){
+            _selectMenuOption(e.currentTarget, "#toolsMenu");
     };
 
 }).call(window);

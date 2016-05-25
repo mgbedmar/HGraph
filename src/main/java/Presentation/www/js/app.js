@@ -86,14 +86,14 @@ var app = app || {};
     }
 
     function _addInfoEvent() {
-        document.getElementById("info1a1").addEventListener("click", function() { app.events.showAccept(
+        document.getElementById("info1a1").addEventListener("click", function() { app.events.showInfo(
             "Consulta 1 a 1", "Introdueix dos nodes per obtenir la seva mesura de HeteSim.", "OK")});
-        document.getElementById("info1aN").addEventListener("click", function() { app.events.showAccept(
+        document.getElementById("info1aN").addEventListener("click", function() { app.events.showInfo(
             "Consulta 1 a N", "Introdueix un node i un tipus per obtenir un llistat de les relacions del "+
             "node amb el tipus.", "OK")});
-        document.getElementById("infoNaN").addEventListener("click", function() { app.events.showAccept(
+        document.getElementById("infoNaN").addEventListener("click", function() { app.events.showInfo(
             "Consulta N a N", "Introdueix dos tipus per obtenir una taula amb les seves relacions.", "OK")});
-        document.getElementById("inforef").addEventListener("click", function() { app.events.showAccept(
+        document.getElementById("inforef").addEventListener("click", function() { app.events.showInfo(
             "Consulta amb referència", "Introdueix una parella de nodes de referència i un tercer node (del mateix "+
             "tipus que el primer) per obtenir un llistat de nodes que siguin tan mútuament rellevants amb el tercer "+
             "com ho són els dos primers entre sí.", "OK")});
