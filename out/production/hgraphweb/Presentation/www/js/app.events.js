@@ -52,12 +52,19 @@
                         var choices = nodes;
                         var matches = [];
                         for (var i=0; i<choices.length; i++)
-                            if (~(choices[i][0]+' '+choices[i][1]).toLowerCase().indexOf(term)) matches.push(choices[i][0]);
+                            if (~(choices[i][0]+' '+choices[i][1]).toLowerCase().indexOf(term)) matches.push(choices[i]);
                         suggest(matches);
                         //app.HGraph.log(JSON.stringify(matches));
                     },
+                    renderItem: function (item, search){
+                        search = search.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+                        var re = new RegExp("(" + search.split(' ').join('|') + ")", "gi");
+                        return '<div class="autocomplete-suggestion" data-nom="'+item[0]+'" data-iden="'+item[1]+'" data-tipus="'+item[2]+
+                                '" data-val="'+item[0]+'"> ' + item[0].replace(re, "<b>$1</b>") + '</div>';
+                    },
                     onSelect: function(e, term, item){
-                        _inputChoices.push(item);
+                        var ob = [item.getAttribute('data-nom'), item.getAttribute('data-iden'), item.getAttribute('data-tipus')];
+                        _inputChoices.push(ob);
                     }
                 }));
             }
@@ -356,15 +363,27 @@
     app.events.query1to1 = function() {
     app.HGraph.log("dins del listener");
     app.HGraph.log(_inputChoices.length);
-
+app.HGraph.log(_inputChoices[0][1])
         if (_inputChoices.length === 2) {
             var hm = app.HGraph.query1to1(_inputChoices[0][1], _inputChoices[0][2],
                                              _inputChoices[1][1], _inputChoices[1][2]);
                                              app.HGraph.log("dins del listener2");
-            result = [{source: _inputChoices[0][0], target: _inputChoices[1][0], hetesim: hm}];
+
+            hm = String(hm);
+            app.HGraph.log("despres del cast "+typeof hm + " "+hm);
+            var result = [];
+           // app.HGraph.log(_inputChoices[0][0]+" "+_inputChoices[1][0]);
+            var c = {source: _inputChoices[0][0],
+                     target:  _inputChoices[1][0],
+                     hetesim:hm
+            };
+
+            app.HGraph.log("despres del result");
+            result.push(c);
             app.events.showLoading();
             app.graph.drawQuery1to1(result);
             app.events.hidePopup();
+            app.HGraph.log("hola, he acabat");
         }
         else showAccept("mira...", "no ha anat be", "ok");
     }
