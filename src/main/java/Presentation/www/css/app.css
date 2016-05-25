@@ -53,9 +53,24 @@ body > div.page{
     margin-left: -7px;
 }
 
+#popupPage #popupContent span {
+    text-align: justify;
+    text-justify: inter-word;
+}
+
 #popupPage #popupContent div.accept{
     width:400px;
     height:180px;
+}
+
+#popupPage #popupContent div.accept.big {
+    width:400px;
+    height:210px;
+}
+
+#popupPage #popupContent div.accept.large {
+    width:400px;
+    height:270px;
 }
 
 #popupPage h1 {

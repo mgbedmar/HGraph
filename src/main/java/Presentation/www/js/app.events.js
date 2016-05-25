@@ -239,10 +239,12 @@
         app.events.showPopup(div);
     };
 
+    //TODO comprovar si es necessaria: ara es pot fer tot amb showAccept no passant boto de cancel
     app.events.showInfo = function(title, msg, btnMsg, cb){
         if(_popupShown) return;
         var div = document.createElement("div");
         div.classList.add("info");
+        div.classList.add("with-border");
         var title = document.createElement("h1");
         title.innerHTML = title || "Informació";
         var text = document.createElement("span");
@@ -268,6 +270,12 @@
         title.innerHTML = t || "Informació";
         var text = document.createElement("span");
         text.innerHTML = msg;
+        if (msg.length > 120) {
+            div.classList.add("large");
+        }
+        else if (msg.length > 80) {
+            div.classList.add("big");
+        }
         var divbtns = document.createElement("div");
         divbtns.classList.add("divbtns");
         var okbtn = document.createElement("a");
@@ -276,14 +284,17 @@
             app.events.hidePopup();
             if(cbOk) cbOk();
         });
-        var cancelbtn = document.createElement("a");
-        cancelbtn.innerHTML = btnMsgCancel;
-        cancelbtn.addEventListener("click", function(){
-            app.events.hidePopup();
-            if(cbCancel) cbCancel();
-        });
+        if (typeof btnMsgCancel != 'undefined') {
+            app.HGraph.log(typeof btnMsgCancel);
+            var cancelbtn = document.createElement("a");
+            cancelbtn.innerHTML = btnMsgCancel;
+            cancelbtn.addEventListener("click", function(){
+                app.events.hidePopup();
+                if(cbCancel) cbCancel();
+            });
+            divbtns.appendChild(cancelbtn);
+        }
         divbtns.appendChild(okbtn);
-        divbtns.appendChild(cancelbtn);
         div.appendChild(title);
         div.appendChild(text);
         div.appendChild(divbtns);
