@@ -78,7 +78,7 @@
             relativeSize:0.5,
             nooverlap:false,
             zoomMin:0.001, //no va
-            zoomMax:0.001
+            zoomMax:1.125
         },
         relativeSize:0.5,
         edgeLabels:true,
@@ -125,7 +125,6 @@
         //For each type in nodes
         for (var type in nodes)
         {
-
             //Check if type is a property of nodes
             if (nodes.hasOwnProperty(type))
             {
@@ -139,7 +138,7 @@
                     //var pos = _getNextPosition();
 
                     g.nodes.push({
-                        id: String(nodes[type].get(i)[0])+type,
+                        id: String(nodes[type].get(i)[0])+"-"+type,
                         label: String(nodes[type].get(i)[1]),
                         x: pos.x,
                         y: pos.y
@@ -156,8 +155,8 @@
                 {
                     g.edges.push({
                         id: type+i,
-                        source: String(edges[type].get(i)[0]+"paper"),
-                        target: String(edges[type].get(i)[1])+type
+                        source: String(edges[type].get(i)[0]+"-paper"),
+                        target: String(edges[type].get(i)[1])+"-"+type
                     })
                 }
             }
@@ -292,6 +291,8 @@
         var g;
         if (typeof edges === 'undefined') g = nodes;
         else g = _createGraph(nodes, edges);
+
+
         if(typeof _sarr === 'undefined')
         {
             //TODO: zoom, size, threshold

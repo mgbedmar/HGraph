@@ -134,7 +134,7 @@ var app = app || {};
         document.querySelector("#mainPage #queryMenu > div > ul > li[data-action=completeGraph]")
             .addEventListener("click", app.events.drawCompleteGraph);
         _addInfoEvent();
-
+        document.getElementById("ok1to1").addEventListener("click", app.events.query1to1);
 
         document.querySelector("#mainPage #toolsMenu > div[data-action=openToolsMenu]")
             .addEventListener("click", app.events.openToolsMenu);

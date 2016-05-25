@@ -52,7 +52,7 @@
                         var choices = nodes;
                         var matches = [];
                         for (var i=0; i<choices.length; i++)
-                            if (~(choices[i][0]+' '+choices[i][1]+' '+choices[i][2]).toLowerCase().indexOf(term)) matches.push(choices[i][0]);
+                            if (~(choices[i][0]+' '+choices[i][1]).toLowerCase().indexOf(term)) matches.push(choices[i][0]);
                         suggest(matches);
                         //app.HGraph.log(JSON.stringify(matches));
                     },
@@ -354,10 +354,19 @@
     //----/QueryMenu
 
     app.events.query1to1 = function() {
-        if (_inputChoices.length === 2) {
+    app.HGraph.log("dins del listener");
+    app.HGraph.log(_inputChoices.length);
 
+        if (_inputChoices.length === 2) {
+            var hm = app.HGraph.query1to1(_inputChoices[0][1], _inputChoices[0][2],
+                                             _inputChoices[1][1], _inputChoices[1][2]);
+                                             app.HGraph.log("dins del listener2");
+            result = [{source: _inputChoices[0][0], target: _inputChoices[1][0], hetesim: hm}];
+            app.events.showLoading();
+            app.graph.drawQuery1to1(result);
+            app.events.hidePopup();
         }
-        else alert("fatal!");
+        else showAccept("mira...", "no ha anat be", "ok");
     }
 
 
