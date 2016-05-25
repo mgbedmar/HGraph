@@ -74,7 +74,7 @@
             labelThreshold: 25,
             defaultEdgeType: "curve",
             autoRescale:false, //TODO no va be, posar a true
-            enableHovering:true
+            enableHovering:false //etiquetes: posades no funciona be
 
         },
         relativeSize:0.5,
