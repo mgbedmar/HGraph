@@ -65,7 +65,7 @@
     var _largeGraph;
     var _settings = {
         graph:{
-            minNodeSize: 1,
+            //minNodeSize: 1,
             maxNodeSize: 3,
             minEdgeSize: 0.2,
             maxEdgeSize: 0.5,
@@ -75,7 +75,7 @@
             autoRescale:true,
             edgeLabels:true,
             enableHovering:false, //etiquetes: posades no funciona be
-            relativeSize:0.5,
+            //relativeSize:0.5,
             nooverlap:false,
             zoomMin:0.001, //no va
             zoomMax:2
