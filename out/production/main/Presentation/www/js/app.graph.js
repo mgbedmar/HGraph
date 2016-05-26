@@ -89,9 +89,10 @@
     var _angle = 0;
 
     function _applySettings(s){
+        /*
         if(typeof _settings.relativeSize !== 'undefined')
             sigma.plugins.relativeSize(s, _settings.relativeSize);
-
+*/
         /* //Deprecated
         if(typeof _settings.nooverlap !== 'undefined' && _settings.nooverlap)
         {
@@ -141,7 +142,8 @@
                         id: String(nodes[type].get(i)[0])+"-"+type,
                         label: String(nodes[type].get(i)[1]),
                         x: pos.x,
-                        y: pos.y
+                        y: pos.y,
+                        size: String(nodes[type].get(i)[2])
                     });
                 }
 
@@ -226,6 +228,7 @@
                 label: String(nodes.get(i)[1]),
                 x: pos.x,
                 y: pos.y,
+                size: String(nodes.get(i)[2]),
                 color: colors[c]
             });
             //If graph is % maxNodes, start a new one
@@ -236,13 +239,6 @@
                     container: 'graph-container',
                     graph:g,
                     settings:_settings.graph
-                });
-
-                s.bind('click', function(e){
-                    app.HGraph.log("====");
-                    app.HGraph.log(JSON.stringify(e.graph.camera.quadtree.area(
-                        self.camera.getRectangle(self.width, self.height)
-                    )));
                 });
 
                 //s.camera.ratio = inizoom;
@@ -272,7 +268,8 @@
 
         s = new sigma({
             container: 'graph-container',
-            graph:{nodes:[]}
+            graph:{nodes:[]},
+            settings: _settings.graph
         });
 
         //s.camera.ratio = inizoom;
@@ -286,13 +283,7 @@
                 si.refresh();
             })
         }, 5));
-
-        s.bind('click', function(event){
-            app.HGraph.log(JSON.stringify(event));
-            _sarr.forEach(function(si){
-                si.dispatchEvent('click', event);
-            })
-        });
+        
 
     };
     //Draws a bigraph representing a table. Each connected component must be < maxNodes
