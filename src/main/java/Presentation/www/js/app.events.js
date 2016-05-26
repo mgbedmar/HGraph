@@ -344,7 +344,7 @@
     app.events.query1to1 = function() {
         if (_inputChoices.length === 2) {
             //TODO: el resultat el coloca java
-            app.HGraph.query1to1(_inputChoices[0][1], _inputChoices[0][2]+"23",
+            app.HGraph.query1to1(_inputChoices[0][1], _inputChoices[0][2],
                                              _inputChoices[1][1], _inputChoices[1][2]);
             app.events.showLoading();
 /*

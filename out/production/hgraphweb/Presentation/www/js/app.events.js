@@ -255,6 +255,7 @@
     };
 
     app.events.showInfo = function(title, msg, btnMsg, cb){
+        app.HGraph.log("info");
         app.events.showAccept(title, msg, btnMsg, cb);
     };
 
@@ -299,6 +300,7 @@
     };
 
     app.events.hidePopup = function(){
+        app.HGraph.log("hidepopup");
         _popupShown = false;
         _hide(app.const.pageIds.popup);
     };
