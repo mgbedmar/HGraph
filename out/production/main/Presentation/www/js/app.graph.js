@@ -66,17 +66,15 @@
     var _settings = {
         graph:{
             //minNodeSize: 1,
-            maxNodeSize: 3,
+            maxNodeSize: 4,
             minEdgeSize: 0.2,
             maxEdgeSize: 0.5,
             eventsEnabled: true,
-            labelThreshold: 200,
+            labelThreshold: 11.5,
             defaultEdgeType: "curve",
             autoRescale:true,
             edgeLabels:true,
             enableHovering:false, //etiquetes: posades no funciona be
-            //relativeSize:0.5,
-            nooverlap:false,
             zoomMin:0.001, //no va
             zoomMax:2
         },
@@ -93,7 +91,8 @@
     function _applySettings(s){
         if(typeof _settings.relativeSize !== 'undefined')
             sigma.plugins.relativeSize(s, _settings.relativeSize);
-        //TODO adjust nooverlap
+
+        /* //Deprecated
         if(typeof _settings.nooverlap !== 'undefined' && _settings.nooverlap)
         {
             // Configure the noverlap layout:
@@ -116,6 +115,7 @@
             });
             s.startNoverlap();
         }
+        */
 
     }
 
@@ -238,6 +238,13 @@
                     settings:_settings.graph
                 });
 
+                s.bind('click', function(e){
+                    app.HGraph.log("====");
+                    app.HGraph.log(JSON.stringify(e.graph.camera.quadtree.area(
+                        self.camera.getRectangle(self.width, self.height)
+                    )));
+                });
+
                 //s.camera.ratio = inizoom;
                 _applySettings(s);
                 s.refresh();
@@ -280,6 +287,13 @@
             })
         }, 5));
 
+        s.bind('click', function(event){
+            app.HGraph.log(JSON.stringify(event));
+            _sarr.forEach(function(si){
+                si.dispatchEvent('click', event);
+            })
+        });
+
     };
     //Draws a bigraph representing a table. Each connected component must be < maxNodes
     app.graph.drawTableBasedGraph = function(nodes, edges, cb){
@@ -294,12 +308,11 @@
 
         if (typeof _sarr != 'undefined')
         {
-            var s0 =_sarr[0];
-            _sarr.forEach(function(s, i){
+            for (var i = 0; i < _sarr.length; ++i) {
                 //this gets rid of all the ndoes and edges
-                s0.graph.clear();
-                s0.refresh();
-            });
+                _sarr[i].graph.clear();
+                _sarr[i].refresh();
+            }
         }
 
         _sarr = [new sigma({
@@ -316,7 +329,7 @@
         });
         _sarr[0].refresh();
 
-        //_sarr[0].camera.ratio = 0.1;
+        _sarr[0].camera.ratio = 1.7;
         _sarr[0].refresh();
         _applySettings(_sarr[0]);
     };

@@ -162,11 +162,12 @@ public class DomainController
     public void query1to1(int idSource, String typeSource,
                           int idEnd, String typeEnd) throws DomainException
     {
+
+
         Node source = g.getNode(idSource, typeSource);
         Node end = g.getNode(idEnd, typeEnd);
 
         r = Query.query1to1(g, source, end, Query.defaultPath.get(typeSource).get(typeEnd));
-
 
     }
 

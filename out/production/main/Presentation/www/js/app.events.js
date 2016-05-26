@@ -343,9 +343,10 @@
 
     app.events.query1to1 = function() {
         if (_inputChoices.length === 2) {
-            var hm = app.HGraph.query1to1(_inputChoices[0][1], _inputChoices[0][2],
+            //TODO: el resultat el coloca java
+            app.HGraph.query1to1(_inputChoices[0][1], _inputChoices[0][2],
                                              _inputChoices[1][1], _inputChoices[1][2]);
-
+/*
             hm = String(hm);
             var result = [];
             var c = {source: _inputChoices[0][0],
@@ -356,9 +357,15 @@
             result.push(c);
             app.events.showLoading();
             app.graph.drawQuery1to1(result);
+            _inputChoices = [];
             app.events.hidePopup();
+            */
         }
-        else showInfo("mira...", "no ha anat be", "ok");
+        else {
+            _inputChoices = [];
+            app.events.showInfo("mira...", "no ha anat be", "ok");
+
+        }
     };
 
 

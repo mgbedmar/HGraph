@@ -66,17 +66,15 @@
     var _settings = {
         graph:{
             //minNodeSize: 1,
-            maxNodeSize: 3,
+            maxNodeSize: 4,
             minEdgeSize: 0.2,
             maxEdgeSize: 0.5,
             eventsEnabled: true,
-            labelThreshold: 200,
+            labelThreshold: 11.5,
             defaultEdgeType: "curve",
             autoRescale:true,
             edgeLabels:true,
             enableHovering:false, //etiquetes: posades no funciona be
-            //relativeSize:0.5,
-            nooverlap:false,
             zoomMin:0.001, //no va
             zoomMax:2
         },
@@ -93,7 +91,8 @@
     function _applySettings(s){
         if(typeof _settings.relativeSize !== 'undefined')
             sigma.plugins.relativeSize(s, _settings.relativeSize);
-        //TODO adjust nooverlap
+
+        /* //Deprecated
         if(typeof _settings.nooverlap !== 'undefined' && _settings.nooverlap)
         {
             // Configure the noverlap layout:
@@ -116,6 +115,7 @@
             });
             s.startNoverlap();
         }
+        */
 
     }
 
@@ -279,6 +279,7 @@
                 si.refresh();
             })
         }, 5));
+        
 
     };
     //Draws a bigraph representing a table. Each connected component must be < maxNodes
