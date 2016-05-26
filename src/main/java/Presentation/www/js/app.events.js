@@ -344,8 +344,9 @@
     app.events.query1to1 = function() {
         if (_inputChoices.length === 2) {
             //TODO: el resultat el coloca java
-            app.HGraph.query1to1(_inputChoices[0][1], _inputChoices[0][2],
+            app.HGraph.query1to1(_inputChoices[0][1], _inputChoices[0][2]+"23",
                                              _inputChoices[1][1], _inputChoices[1][2]);
+            app.events.showLoading();
 /*
             hm = String(hm);
             var result = [];
@@ -368,6 +369,20 @@
         }
     };
 
+    app.events.takeQuery1To1Result = function() {
+        var hm = String(app.HGraph.getQuery1To1Result());
+        var result = [];
+        var c = {source: _inputChoices[0][0],
+                 target:  _inputChoices[1][0],
+                 hetesim:hm
+        };
+
+        result.push(c);
+        app.graph.drawQuery1to1(result);
+        _inputChoices = [];
+        app.events.hidePopup();
+
+    }
 
     app.events.openToolsMenu = function(){
             document.querySelector("#"+app.const.pageIds.main + " #toolsMenu").classList.toggle("open");
