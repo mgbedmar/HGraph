@@ -533,10 +533,10 @@ public class DomainController
     public ArrayList<String[]> getNodes(String type) throws DomainException {
         ArrayList<String[]> l = new ArrayList<>();
         for (Node node: g.getSetOfNodes(type)) {
-            String[] f = new String[2];
+            String[] f = new String[3];
             f[0] = String.valueOf(node.getID());
             f[1] = node.getName();
-            //f[2] = String.valueOf(g.getNeighbours(node).size());
+            f[2] = String.valueOf(g.getNeighbours(node).size());
             l.add(f);
         }
 
