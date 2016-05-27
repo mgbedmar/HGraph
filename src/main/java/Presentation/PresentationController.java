@@ -62,14 +62,16 @@ public class PresentationController {
         try {
             dc.load(projectName);
         } catch (DomainException de) {
-            we.executeScript("app.events.showInfo('Eps!','"+de.getFriendlyMessage()+"', 'Cap problema');");
+            System.err.println(de.getFriendlyMessage());
+            we.executeScript("app.events.showInfo(\"Eps!\",\""+de.getFriendlyMessage()+"\", \"Cap problema\")");
         }
     }
     public void deleteProject(String projectName){
         try {
             dc.deleteProject(projectName);
         } catch (DomainException de) {
-            we.executeScript("app.events.showInfo('Eps!','"+de.getFriendlyMessage()+"', 'Cap problema');");
+            System.err.println(de.getFriendlyMessage());
+            we.executeScript("app.events.showInfo(\"Eps!\",\""+de.getFriendlyMessage()+"\", \"Cap problema\")");
         }
     }
 
@@ -79,7 +81,8 @@ public class PresentationController {
             ArrayList<Integer> ids = dc.getNodes(label, type);
             return getBigger(ids);
         }catch (DomainException de) {
-            we.executeScript("app.events.showInfo('Eps!','"+de.getFriendlyMessage()+"', 'Cap problema');");
+            System.err.println(de.getFriendlyMessage());
+            we.executeScript("app.events.showInfo(\"Eps!\",\""+de.getFriendlyMessage()+"\", \"Cap problema\")");
         }
 
         return null;
@@ -90,7 +93,8 @@ public class PresentationController {
             dc.removeNode(id, type);
             return true;
         }catch (DomainException de) {
-            we.executeScript("app.events.showInfo('Eps!','"+de.getFriendlyMessage()+"', 'Cap problema');");
+            System.err.println(de.getFriendlyMessage());
+            we.executeScript("app.events.showInfo(\"Eps!\",\""+de.getFriendlyMessage()+"\", \"Cap problema\")");
         }
         return false;
     }
@@ -99,8 +103,9 @@ public class PresentationController {
         try {
             dc.addEdge(idA, nameA, idB, nameB);
             return true;
-        } catch (DomainException e) {
-            e.printStackTrace();
+        } catch (DomainException de) {
+            System.err.println(de.getFriendlyMessage());
+            we.executeScript("app.events.showInfo(\"Eps!\",\""+de.getFriendlyMessage()+"\", \"Cap problema\")");
         }
 
         return false;
@@ -110,8 +115,9 @@ public class PresentationController {
         try {
             dc.addEdge(idA, nameA, idB, nameB);
             return true;
-        } catch (DomainException e) {
-            e.printStackTrace();
+        } catch (DomainException de) {
+            System.err.println(de.getFriendlyMessage());
+            we.executeScript("app.events.showInfo(\"Eps!\",\""+de.getFriendlyMessage()+"\", \"Cap problema\")");
         }
 
         return false;
@@ -124,7 +130,8 @@ public class PresentationController {
         try{
             res = dc.getNodes(type);
         } catch (DomainException de) {
-            we.executeScript("app.events.showInfo('Eps!','"+de.getFriendlyMessage()+"', 'Cap problema');");
+            System.err.println(de.getFriendlyMessage());
+            we.executeScript("app.events.showInfo(\"Eps!\",\""+de.getFriendlyMessage()+"\", \"Cap problema\")");
         }
         return res;
     }
@@ -134,7 +141,21 @@ public class PresentationController {
         try{
             res = dc.getEdges(type);
         } catch (DomainException de) {
-            we.executeScript("app.events.showInfo('Eps!','"+de.getFriendlyMessage()+"', 'Cap problema');");
+            System.err.println(de.getFriendlyMessage());
+            we.executeScript("app.events.showInfo(\"Eps!\",\""+de.getFriendlyMessage()+"\", \"Cap problema\")");
+        }
+        return res;
+
+    }
+
+    public int queryNeighboursSize(String id, String type){
+        int res = 0;
+        try{
+            dc.queryNeighbours(Integer.parseInt(id), type);
+            res = dc.getResultSize();
+        } catch (DomainException de) {
+            System.err.println(de.getFriendlyMessage());
+            we.executeScript("app.events.showInfo(\"Eps!\",\""+de.getFriendlyMessage()+"\", \"Cap problema\")");
         }
         return res;
     }
@@ -215,9 +236,8 @@ class Query1To1Task extends Task<String> {
             Platform.runLater(new Runnable() {
                 private String message;
                 @Override public void run() {
-                    we.executeScript("app.events.hidePopup();");
                     String scr = "app.events.showInfo(\"Error\", \"" + message + "\", \"OK\");";
-                    we.executeScript(scr);
+                    we.executeScript("app.events.hidePopup(function(){"+scr+"});");
                 }
 
                 public Runnable setParams(String message) {
@@ -227,9 +247,10 @@ class Query1To1Task extends Task<String> {
             }.setParams(e.getMessage()));
 
             //TODO treure aixo:
-            e.printStackTrace();
+            //e.printStackTrace();
 
         } catch (InterruptedException e) {
+            //Aixo pot interessar-nos provocar-ho nosaltres mateixos per parar una tasca que duri massa
             we.executeScript("app.events.showInfo('Error.', '"+e.getMessage()+"', 'OK');");
         }
     }

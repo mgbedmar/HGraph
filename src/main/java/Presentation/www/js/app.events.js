@@ -548,13 +548,12 @@
         var edgeAdded = app.HGraph.addEdge(_inputChoices.source.id, _inputChoices.source.type,
             _inputChoices.target.id, _inputChoices.target.type);
 
-/*        if(edgeAdded){
+       if(edgeAdded){
             //TODO:Notify
 
             app.graph.addEdge(destId, destType, paperId);
 
-
-        }*/
+        }
 
         inputSrc.value = '';
         inputDest.value = '';
@@ -580,8 +579,8 @@
                 found = (_nodes[i][1] == _inputChoices.source.id && _nodes[i][2] == _inputChoices.source.type);
             }
             if(found)
-                _nodes.splice(i, 1);
-            app.HGraph.log("updated");
+                _nodes.splice((i-1), 1);
+            
         }
         input.value = "";
         _clearInputChoices();
