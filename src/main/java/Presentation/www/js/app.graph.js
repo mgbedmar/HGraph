@@ -74,7 +74,7 @@
             defaultEdgeType: "curve",
             autoRescale:true,
             edgeLabels:true,
-            enableHovering:false, //etiquetes: posades no funciona be
+            enableHovering:true, //etiquetes: posades no funciona be
             zoomMin:0.001, //no va
             zoomMax:2
         },
@@ -89,11 +89,13 @@
     var _angle = 0;
 
     function _applySettings(s){
+        //Deprecated
+
         /*
         if(typeof _settings.relativeSize !== 'undefined')
             sigma.plugins.relativeSize(s, _settings.relativeSize);
 */
-        /* //Deprecated
+        /*
         if(typeof _settings.nooverlap !== 'undefined' && _settings.nooverlap)
         {
             // Configure the noverlap layout:
@@ -235,6 +237,7 @@
             if(i % app.settings.maxNodes == 0)
             {
                 c = (c+1) %3;
+
                 s=new sigma({
                     container: 'graph-container',
                     graph:g,

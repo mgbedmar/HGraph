@@ -12,6 +12,8 @@ import Domain.IntermediateHeteSimMatrix;
 import javafx.scene.web.WebEngine;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 
