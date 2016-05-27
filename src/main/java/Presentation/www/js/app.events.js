@@ -607,11 +607,11 @@
         }
         var edgeRemoved = app.HGraph.removeEdge(_inputChoices.source.id, _inputChoices.source.type,
             _inputChoices.target.id, _inputChoices.target.type);
-     /*   if(edgeRemoved)
+        if(edgeRemoved)
         {
             //TODO:notify
             app.graph.removeEdge(destId, destType, paperId);
-        }*/
+        }
 
         inputSrc.value = "";
         inputDest.value = "";

@@ -65,7 +65,7 @@
     var _largeGraph;
     var _settings = {
         graph:{
-            minNodeSize: 3,
+            //minNodeSize: 1,
             maxNodeSize: 4,
             minEdgeSize: 0.2,
             maxEdgeSize: 0.5,
@@ -405,25 +405,32 @@
     };
 
     app.graph.removeNode = function(id, type){
-        var index = -1;
 
         for(var i = 0; i < _sarr.length && index == -1; i++)
         {
             try {
                 _sarr[i].graph.dropNode(id+"-"+type);
-                index = i;
                 _updateSize(_sarr[i].graph.nodes());
                 _sarr[i].refresh();
-                app.HGraph.log("yes");
             }
             catch(err)
             {
-                app.HGraph.log("no:"+err);
+                //app.HGraph.log("no:"+err);
             }
         }
     };
 
-    app.graph.removeEdge = function(srcId, typeA, paperId){
+    app.graph.removeEdge = function(destId, destType, paperId){
+
+        try {
+            _sarr[0].graph.dropEdge(paperId+"-"+destType+"-"+destId);
+            _updateSize(_sarr[0].graph.nodes());
+            _sarr[0].refresh();
+        }
+        catch(err)
+        {
+            app.HGraph.log("no:"+err);
+        }
 
     };
 

@@ -405,13 +405,11 @@
     };
 
     app.graph.removeNode = function(id, type){
-        var index = -1;
 
         for(var i = 0; i < _sarr.length && index == -1; i++)
         {
             try {
                 _sarr[i].graph.dropNode(id+"-"+type);
-                index = i;
                 _updateSize(_sarr[i].graph.nodes());
                 _sarr[i].refresh();
             }
@@ -422,7 +420,17 @@
         }
     };
 
-    app.graph.removeEdge = function(srcId, typeA, paperId){
+    app.graph.removeEdge = function(destId, destType, paperId){
+
+        try {
+            _sarr[0].graph.dropEdge(paperId+"-"+destType+"-"+destId);
+            _updateSize(_sarr[0].graph.nodes());
+            _sarr[0].refresh();
+        }
+        catch(err)
+        {
+            app.HGraph.log("no:"+err);
+        }
 
     };
 

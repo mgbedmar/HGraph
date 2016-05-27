@@ -113,7 +113,7 @@ public class PresentationController {
 
     public boolean removeEdge(int idA, String nameA, int idB, String nameB){
         try {
-            dc.addEdge(idA, nameA, idB, nameB);
+            dc.removeEdge(idA, nameA, idB, nameB);
             return true;
         } catch (DomainException de) {
             System.err.println(de.getFriendlyMessage());
