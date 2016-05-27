@@ -263,7 +263,7 @@
 
     function _drawQueryType (type){
         var nodes = app.HGraph.getNodesOfType(type);
-        app.graph.drawNodesOnlyGraph(nodes);
+        app.graph.drawNodesOnlyGraph(nodes, type);
     }
 
     function _selectMenuOption(element, currentMenu, theOtherMenu){
@@ -585,6 +585,7 @@
         if(nodeRemoved)
         {
             //TODO: notify
+
             app.graph.removeNode(_inputChoices.source.id, _inputChoices.source.type);
             var found = false;
             var i;
@@ -594,6 +595,8 @@
             }
             if(found)
                 _nodes.splice((i-1), 1);
+        
+
             
         }
         input.value = "";

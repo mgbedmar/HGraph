@@ -128,13 +128,24 @@
             nodes[i].size = app.HGraph.queryNeighboursSize(idType[0], idType[1]);
         }
     }
-    
+
+    /* nodes{
+               typeN:ArrayList<String[3]>
+           }*/
     function _createGraph(nodes, edges){
         var g = {nodes:[], edges:[]};
+        var totalSize = nodes.author.size()+nodes.paper.size()+nodes.term.size()+nodes.conf.size();
+
+        var pos = {
+            x: 0,
+            y: 0
+        };
 
         //For each type in nodes
         for (var type in nodes)
         {
+
+            var tot = Math.sqrt(totalSize);
             //Check if type is a property of nodes
             if (nodes.hasOwnProperty(type))
             {
@@ -143,9 +154,7 @@
 
                 for (var i = 0; i < nodes[type].size(); i++)
                 {
-
-                    var pos = _getCircleRandomPos(i, i); //en els petits queda millor aixo
-                   // var pos = _getNextPosition();
+                    //var pos = _getNextPosition(1./totalSize, 1/(totalSize));
 
                     g.nodes.push({
                         id: String(nodes[type].get(i)[0])+"-"+type,
@@ -154,6 +163,13 @@
                         y: pos.y,
                         size: String(nodes[type].get(i)[2])
                     });
+
+
+                    pos.x++;
+                    if (pos.x-tot > 0) {
+                        pos.x = 0;
+                        pos.y++;
+                    }
                 }
 
             }
@@ -186,12 +202,12 @@
         return {x: Math.cos(t)*r, y: Math.sin(t)*r};
     }
 
-    function _getNextPosition() {
+    function _getNextPosition(incrRad, ratAngle) {
         var pos = {x: Math.cos(2*Math.PI*_angle)*_radius, y: Math.sin(Math.PI*2*_angle)*_radius};
-        _angle = _angle + 0.0005/(_radius); //inversament proporcional
+        _angle = _angle + ratAngle/(_radius); //inversament proporcional
         if (_angle > 1) {
             _angle = _angle-1;
-            _radius += 0.004; //valors que mes o menys van: 0.000001, 0.01, 0, 0.05
+            _radius += incrRad; //valors que mes o menys van: 0.000001, 0.01, 0, 0.05
         }
 
         return pos;
@@ -211,7 +227,7 @@
 
 
     //Draws a graph with a big number of nodes but without edges, nodes = JavaArrayList
-    app.graph.drawNodesOnlyGraph = function(nodes){
+    app.graph.drawNodesOnlyGraph = function(nodes, type){
         var g={nodes:[]};
         var i = 0;
         if(typeof _sarr === 'undefined')
@@ -230,10 +246,10 @@
 
             //TODO: rings
             //var pos = _getCircleRandomPos(i*40,i*20);
-            pos = _getNextPosition();
+            pos = _getNextPosition(0.004, 0.0005);
 
             g.nodes.push({
-                id: String(nodes.get(i)[0]),
+                id: String(nodes.get(i)[0])+"-"+type,
                 label: String(nodes.get(i)[1]),
                 x: pos.x,
                 y: pos.y,
@@ -259,7 +275,7 @@
             }
             i++;
         }
-        //If nodes remaining, start a new graph //TODO aixo esta fet?
+        //If nodes remaining, start a new graph //TODO aixo esta fet? -si
         if(g.nodes.length > 0)
         {
             s=new sigma({
@@ -292,7 +308,7 @@
                 si.camera.ratio = s.camera.ratio;
                 si.refresh();
             })
-        }, 5));
+        }, 10));
         
 
     };
@@ -316,10 +332,15 @@
             }
         }
 
+        var customSettings = _settings.graph;
+        customSettings.maxNodeSize = 10;
+        customSettings.minNodeSize = 6;
+
         _sarr = [new sigma({
             graph: g,
-            settings: _settings.graph
+            settings: customSettings
         })];
+
 
         _sarr[0].addRenderer({
             container: 'graph-container',
@@ -406,16 +427,17 @@
 
     app.graph.removeNode = function(id, type){
 
-        for(var i = 0; i < _sarr.length && index == -1; i++)
+        for(var i = 0; i < _sarr.length; i++)
         {
             try {
                 _sarr[i].graph.dropNode(id+"-"+type);
+                app.HGraph.log("yes");
                 _updateSize(_sarr[i].graph.nodes());
                 _sarr[i].refresh();
             }
             catch(err)
             {
-                //app.HGraph.log("no:"+err);
+                app.HGraph.log("no:"+err);
             }
         }
     };

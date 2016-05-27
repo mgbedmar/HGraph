@@ -227,7 +227,7 @@
 
 
     //Draws a graph with a big number of nodes but without edges, nodes = JavaArrayList
-    app.graph.drawNodesOnlyGraph = function(nodes){
+    app.graph.drawNodesOnlyGraph = function(nodes, type){
         var g={nodes:[]};
         var i = 0;
         if(typeof _sarr === 'undefined')
@@ -249,7 +249,7 @@
             pos = _getNextPosition(0.004, 0.0005);
 
             g.nodes.push({
-                id: String(nodes.get(i)[0]),
+                id: String(nodes.get(i)[0])+"-"+type,
                 label: String(nodes.get(i)[1]),
                 x: pos.x,
                 y: pos.y,
@@ -275,7 +275,7 @@
             }
             i++;
         }
-        //If nodes remaining, start a new graph //TODO aixo esta fet?
+        //If nodes remaining, start a new graph //TODO aixo esta fet? -si
         if(g.nodes.length > 0)
         {
             s=new sigma({
@@ -308,7 +308,7 @@
                 si.camera.ratio = s.camera.ratio;
                 si.refresh();
             })
-        }, 5));
+        }, 10));
         
 
     };
@@ -427,7 +427,7 @@
 
     app.graph.removeNode = function(id, type){
 
-        for(var i = 0; i < _sarr.length && index == -1; i++)
+        for(var i = 0; i < _sarr.length; i++)
         {
             try {
                 _sarr[i].graph.dropNode(id+"-"+type);
@@ -450,7 +450,7 @@
         }
         catch(err)
         {
-            app.HGraph.log("no:"+err);
+            //app.HGraph.log("no:"+err);
         }
 
     };
