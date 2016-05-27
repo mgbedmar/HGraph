@@ -41,10 +41,10 @@
 
     var _attInput = function(inputId) {
         var el = document.getElementById(inputId);
-        if (el.getAttribute("data-autoType") === "source" && _inputChoices.source !== '') {
+        if (el.getAttribute("data-autoType") === "source") {
             _inputChoices.source = '';
         }
-        else if (el.getAttribute("data-autoType") === "target" && _inputChoices.target !== '') {
+        else if (el.getAttribute("data-autoType") === "target") {
             _inputChoices.target = '';
         }
         else {
@@ -53,13 +53,13 @@
     };
 
     function _attVisibleInput(inputId) {
-        document.getElementById(inputId).classList.add("attention");
+        document.getElementById(inputId).classList.add("wrong");
     }
 
     function _nonAttInput(selector) {
         var els = document.querySelectorAll("[data-autoType='"+selector+"']");
         for (var i = 0; i < els.length; i++) {
-            els[i].classList.remove("attention");
+            els[i].classList.remove("wrong");
         }
     }
 
@@ -75,9 +75,6 @@
         };
 
 
-        document.getElementById("auto1To1-1").addEventListener("input", function() { _attInput("auto1To1-1")});
-        document.getElementById("auto1To1-2").addEventListener("input", function() { _attInput("auto1To1-2")});
-
 
         //For each type in nodes
         for (var key in app.const.autoInputIds) {
@@ -86,6 +83,7 @@
             if (app.const.autoInputIds.hasOwnProperty(key)) {
                 var element = document.getElementById(app.const.autoInputIds[key]);
 
+                element.addEventListener("input", function() { _attInput(element.id)});
                 /*document.getElementById(app.const.autoInputIds[key])
                     .addEventListener("input", function() { _attInput(app.const.autoInputIds[key])});*/
 
@@ -103,7 +101,7 @@
                     onSelect: ''
                 };
 
-                if (document.getElementById(app.const.autoInputIds[key]).getAttribute("data-autoType") === "source") {
+                if (element.getAttribute("data-autoType") === "source") {
                     _autCom.onSelect = function(e, term, item){
                         var nod = {
                             id: item.dataset.iden,
@@ -116,7 +114,7 @@
                     _autocompletes.push(new autoComplete(_autCom));
                 }
 
-                else if (document.getElementById(app.const.autoInputIds[key]).getAttribute("data-autoType") === "target") {
+                else if (element.getAttribute("data-autoType") === "target") {
                     _autCom.onSelect = function(e, term, item){
                         var nod = {
                             id: item.dataset.iden,
@@ -129,7 +127,7 @@
                     _autocompletes.push(new autoComplete(_autCom));
                 }
 
-                else if (document.getElementById(app.const.autoInputIds[key]).getAttribute("data-autoType") === "ref") {
+                else if (element.getAttribute("data-autoType") === "ref") {
                     _autCom.onSelect = function(e, term, item){
                         var nod = {
                             id: item.dataset.iden,
@@ -380,9 +378,12 @@
         app.events.showPopup(div);
     };
 
-    app.events.hidePopup = function(){
-        _popupShown = false;
-        _hide(app.const.pageIds.popup);
+    app.events.hidePopup = function(cb){
+
+        _hide(app.const.pageIds.popup, function(){
+            _popupShown = false;
+            if(cb) cb();
+        });
     };
     //----/popups
 
@@ -495,14 +496,43 @@
     app.events.addEdge = function(){
         var inputSrc = document.querySelector("#autoedge1");
         var inputDest = document.querySelector("#autoedge2");
-        //TODO: check inputs
+        var fail = false;
+        if (typeof _inputChoices.source === 'undefined' || _inputChoices.source === '') {
+            _inputChoices.source = '';
+            _attVisibleInput("autoedge1");
+            fail = true;
+        }
+        if (typeof _inputChoices.target === 'undefined' || _inputChoices.target === '') {
+            _inputChoices.target = '';
+            _attVisibleInput("autoedge2");
+            fail = true;
+        }
+        if(fail) return;
+        if (_inputChoices.source !== '' && _inputChoices.target !== '') {
+            var paperId;
+            var destId;
+            var destType;
+            if(_inputChoices.source.type == "paper"){
+                paperId =_inputChoices.source.id;
+                destId = _inputChoices.target.id;
+                destType = _inputChoices.target.type;
+            }
+            else{
+                paperId =_inputChoices.target.id;
+                destId = _inputChoices.source.id;
+                destType = _inputChoices.source.type;
+            }
 
-        //TODO: get parameters
-        /*
-        var edgeAdded = app.HGraph.addEdge();
-        if(edgeAdded)
-            app.graph.addEdge();
-            */
+            var edgeAdded = app.HGraph.addEdge(_inputChoices.source.id, _inputChoices.source.type,
+                _inputChoices.target.id, _inputChoices.target.type);
+            if(edgeAdded){
+                //TODO:Notify
+                
+                app.graph.addEdge(destId, destType, paperId);
+
+            }
+
+        }
 
         inputSrc.value = "";
         inputDest.value = "";
@@ -510,27 +540,72 @@
 
     app.events.removeNode = function(){
         var input = document.querySelector("#autonode");
-        //TODO: check input
 
-        //TODO:get parameters
-        /*
-        app.HGraph.removeNode();
-        app.graph.removeNode();
-        */
+        if (typeof _inputChoices.source === 'undefined' || _inputChoices.source === '') {
+            _inputChoices.source = '';
+            _attVisibleInput("autonode");
+            return;
+        }
+        if (_inputChoices.source !== '') {
+            var nodeRemoved = app.HGraph.removeNode(_inputChoices.source.id, _inputChoices.source.type);
+            if(nodeRemoved)
+            {
+                //TODO: notify
+                app.graph.removeNode(_inputChoices.source.id, _inputChoices.source.type);
+                var found = false;
+                var i;
+                for(i = 0; i < _nodes.length && !found; i++)
+                {
+                    found = (_nodes[i][1] == _inputChoices.source.id && _nodes[i][2] == _inputChoices.source.type);
+                }
+                if(found)
+                    _nodes.splice(i, 1);
+                app.HGraph.log("updated");
+            }
+            input.value = "";
+        }
 
-        input.value = "";
+
     };
 
     app.events.removeEdge = function(){
-        var inputSrc = document.querySelector("#autoedge1");
-        var inputDest = document.querySelector("#autoedge2");
-        //TODO: check inputs
+        var inputSrc = document.querySelector("#autofont");
+        var inputDest = document.querySelector("#autodesti");
+        var fail = false;
+        if (typeof _inputChoices.source === 'undefined' || _inputChoices.source === '') {
+            _inputChoices.source = '';
+            _attVisibleInput("autofont");
+            fail = true;
+        }
+        if (typeof _inputChoices.target === 'undefined' || _inputChoices.target === '') {
+            _inputChoices.target = '';
+            _attVisibleInput("autodesti");
+            fail = true;
+        }
+        if(fail) return;
+        if (_inputChoices.source !== '' && _inputChoices.target !== '') {
+            var paperId;
+            var destId;
+            var destType;
+            if(_inputChoices.source.type == "paper"){
+                paperId =_inputChoices.source.id;
+                destId = _inputChoices.target.id;
+                destType = _inputChoices.target.type;
+            }
+            else{
+                paperId =_inputChoices.target.id;
+                destId = _inputChoices.source.id;
+                destType = _inputChoices.source.type;
+            }
+            var edgeRemoved = app.HGraph.removeEdge(_inputChoices.source.id, _inputChoices.source.type,
+                _inputChoices.target.id, _inputChoices.target.type);
+            if(edgeRemoved)
+            {
+                //TODO:notify
+                app.graph.removeEdge(destId, destType, paperId);
+            }
 
-        //TODO: get parameters
-        /*
-         app.HGraph.removeEdge();
-         app.graph.removeEdge();
-         */
+        }
 
         inputSrc.value = "";
         inputDest.value = "";

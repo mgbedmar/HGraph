@@ -78,6 +78,7 @@
 #mainPage input:focus {
     outline: none;
     border-color: #9ecaed;
+    border: 1px solid #678F99;
     box-shadow: 0 0 6px #9ecaed;
 }
 

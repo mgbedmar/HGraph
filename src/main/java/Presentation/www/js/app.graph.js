@@ -158,7 +158,7 @@
                 for (var i = 0; i < edges[type].size(); i++)
                 {
                     g.edges.push({
-                        id: type+i,
+                        id: String(edges[type].get(i)[0])+"-"+type+"-"+String(edges[type].get(i)[1]),
                         source: String(edges[type].get(i)[0]+"-paper"),
                         target: String(edges[type].get(i)[1])+"-"+type
                     })
@@ -362,13 +362,19 @@
 
     app.graph.addNode = function(id, label, type){
         var pos;
+        var index =_sarr.length-1;
         if(_largeGraph)
+        {
             pos = _getNextPosition();
+            index--;
+        }
         else
+        {
             pos = _getCircleRandomPos(10,10);
+        }
 
-        _sarr[_sarr.length-1].graph.addNode({
-            id: id,
+        _sarr[index].graph.addNode({
+            id: id+"-"+type,
             label: label,
             x: pos.x,
             y: pos.y,
@@ -380,12 +386,51 @@
 
     };
 
-    app.graph.addEdge = function(srcId, destId){
+    app.graph.addEdge = function(srcId, typeA, paperId){
         _sarr[_sarr.length-1].graph.addEdge({
-            id: Date.now(),
-            source: srcId,
-            target: destId
+            id: paperId+"-"+typeA+"-"+srcId,
+            source: paperId+"-paper",
+            target: srcId+"-"+typeA,
+            type:"curve"
         });
+
+        _sarr[_sarr.length-1].refresh();
+
+    };
+
+    app.graph.removeNode = function(id, type){
+        app.HGraph.log(JSON.stringify(_sarr[_sarr.length-1])); //{} WTF?????
+        var nodes = _sarr[_sarr.length-1].graph.nodes;
+
+
+        var i;
+        var found = false;
+        for(i = 0; i < nodes.length; i++)
+        {
+            app.HGraph.log("type: "+type+", id:"+id+", "+JSON.stringify(nodes[i]));
+            found = (nodes[i].id == (type+"-"+id));
+        }
+
+        app.HGraph.log("found?"+found);
+        if(found)
+            nodes.splice(i, 1);
+
+        _sarr[_sarr.length-1].refresh();
+
+    };
+
+    app.graph.removeEdge = function(srcId, typeA, paperId){
+        var edges = _sarr[_sarr.length-1].graph.edges;
+
+        var i;
+        var found = false;
+        for(i = 0; i < edges.length; i++)
+        {
+            found = (edges.id == (id+"-"+type));
+        }
+
+        if(found)
+            nodes.splice(i, 1);
 
         _sarr[_sarr.length-1].refresh();
 

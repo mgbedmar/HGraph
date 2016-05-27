@@ -9,7 +9,12 @@
     //Nodes for autocomplete
     var _nodes;
     var _popupShown = false;
-    var _inputChoices = [];
+    var _inputChoices = {
+        source:'',
+        target:'',
+        ref:''
+    };
+
     function _hide(selector, cb){
         document.getElementById(selector).classList.remove("show");
         setTimeout(function(){
@@ -34,19 +39,55 @@
         return names;
     }
 
-    function _initAutoCompletes(){
+    var _attInput = function(inputId) {
+        var el = document.getElementById(inputId);
+        if (el.getAttribute("data-autoType") === "source") {
+            _inputChoices.source = '';
+        }
+        else if (el.getAttribute("data-autoType") === "target") {
+            _inputChoices.target = '';
+        }
+        else {
+            _inputChoices.ref = '';
+        }
+    };
+
+    function _attVisibleInput(inputId) {
+        document.getElementById(inputId).classList.add("wrong");
+    }
+
+    function _nonAttInput(selector) {
+        var els = document.querySelectorAll("[data-autoType='"+selector+"']");
+        for (var i = 0; i < els.length; i++) {
+            els[i].classList.remove("wrong");
+        }
+    }
+
+    function _initAutoCompletes(nodes){
         var mChars;
         if (_nodes.length < 300) mChars = 1;
         else mChars = 3;
+        var _renIt = function (item, search){
+             search = search.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+             var re = new RegExp("(" + search.split(' ').join('|') + ")", "gi");
+             return '<div class="autocomplete-suggestion" data-nom="'+item[0]+'" data-iden="'+item[1]+'" data-tipus="'+item[2]+
+                     '" data-val="'+item[0]+'"> ' + item[0].replace(re, "<b>$1</b>") + '</div>';
+        };
+
+
 
         //For each type in nodes
         for (var key in app.const.autoInputIds) {
 
             //Check if type is a property of nodes
             if (app.const.autoInputIds.hasOwnProperty(key)) {
+                var element = document.getElementById(app.const.autoInputIds[key]);
 
-                _autocompletes.push(new autoComplete({
-                    //TODO: specify inputs..
+                element.addEventListener("input", function() { _attInput(element.id)});
+                /*document.getElementById(app.const.autoInputIds[key])
+                    .addEventListener("input", function() { _attInput(app.const.autoInputIds[key])});*/
+
+                var _autCom = {
                     selector: "#"+app.const.autoInputIds[key],
                     minChars: mChars,
                     source: function(term, suggest){
@@ -56,20 +97,50 @@
                             if (~(_nodes[i][0]+' '+_nodes[i][1]).toLowerCase().indexOf(term)) matches.push(_nodes[i]);
                         suggest(matches);
                     },
-                    renderItem: function (item, search){
-                        search = search.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
-                        var re = new RegExp("(" + search.split(' ').join('|') + ")", "gi");
-                        return '<div class="autocomplete-suggestion" data-nom="'+item[0]+'" data-iden="'+item[1]+'" data-tipus="'+item[2]+
-                                '" data-val="'+item[0]+'"> ' + item[0].replace(re, "<b>$1</b>") + '</div>';
-                    },
-                    onSelect: function(e, term, item){
-                        var ob = [item.getAttribute('data-nom'), item.getAttribute('data-iden'), item.getAttribute('data-tipus')];
-                        _inputChoices.push(ob);
+                    renderItem: _renIt,
+                    onSelect: ''
+                };
+
+                if (element.getAttribute("data-autoType") === "source") {
+                    _autCom.onSelect = function(e, term, item){
+                        var nod = {
+                            id: item.dataset.iden,
+                            name: item.dataset.nom,
+                            type: item.dataset.tipus
+                        };
+                        _inputChoices.source = nod;
+                        _nonAttInput("source");
                     }
-                }));
+                    _autocompletes.push(new autoComplete(_autCom));
+                }
+
+                else if (element.getAttribute("data-autoType") === "target") {
+                    _autCom.onSelect = function(e, term, item){
+                        var nod = {
+                            id: item.dataset.iden,
+                            name: item.dataset.nom,
+                            type: item.dataset.tipus
+                        };
+                        _inputChoices.target = nod;
+                        _nonAttInput("target");
+                    }
+                    _autocompletes.push(new autoComplete(_autCom));
+                }
+
+                else if (element.getAttribute("data-autoType") === "ref") {
+                    _autCom.onSelect = function(e, term, item){
+                        var nod = {
+                            id: item.dataset.iden,
+                            name: item.dataset.nom,
+                            type: item.dataset.tipus
+                        };
+                        _inputChoices.ref = nod;
+                        _nonAttInput("ref");
+                    }
+                    _autocompletes.push(new autoComplete(_autCom));
+                }
             }
         }
-
 
     }
 
@@ -104,7 +175,6 @@
             //TODO posar la linia de dalt quan estiguin els listeners corresponents
             _drawQueryType("author");
         }
-
         //Init autocompletes
         _nodes = nodes;
         _initAutoCompletes();
@@ -293,7 +363,6 @@
             if(cbOk) cbOk();
         });
         if (typeof btnMsgCancel != 'undefined') {
-            app.HGraph.log(typeof btnMsgCancel);
             var cancelbtn = document.createElement("a");
             cancelbtn.innerHTML = btnMsgCancel;
             cancelbtn.addEventListener("click", function(){
@@ -309,9 +378,12 @@
         app.events.showPopup(div);
     };
 
-    app.events.hidePopup = function(){
-        _popupShown = false;
-        _hide(app.const.pageIds.popup);
+    app.events.hidePopup = function(cb){
+
+        _hide(app.const.pageIds.popup, function(){
+            _popupShown = false;
+            if(cb) cb();
+        });
     };
     //----/popups
 
@@ -353,47 +425,37 @@
     //----/QueryMenu
 
     app.events.query1to1 = function() {
-        if (_inputChoices.length === 2) {
-            //TODO: el resultat el coloca java
-            app.HGraph.query1to1(_inputChoices[0][1], _inputChoices[0][2]+"23",
-                                             _inputChoices[1][1], _inputChoices[1][2]);
-            app.events.showLoading();
-/*
-            hm = String(hm);
-            var result = [];
-            var c = {source: _inputChoices[0][0],
-                     target:  _inputChoices[1][0],
-                     hetesim:hm
-            };
 
-            result.push(c);
-            app.events.showLoading();
-            app.graph.drawQuery1to1(result);
-            _inputChoices = [];
-            app.events.hidePopup();
-            */
+        if (typeof _inputChoices.source === 'undefined' || _inputChoices.source === '') {
+            _inputChoices.source = '';
+            _attVisibleInput("auto1To1-1");
         }
-        else {
-            _inputChoices = [];
-            app.events.showInfo("mira...", "no ha anat be", "ok");
-
+        if (typeof _inputChoices.target === 'undefined' || _inputChoices.target === '') {
+            _inputChoices.target = '';
+            _attVisibleInput("auto1To1-2");
+        }
+        if (_inputChoices.source !== '' && _inputChoices.target !== '') {
+            app.HGraph.query1to1(_inputChoices.source.id, _inputChoices.source.type,
+                                 _inputChoices.target.id, _inputChoices.target.type);
+            app.events.showLoading();
         }
     };
 
     app.events.takeQuery1To1Result = function() {
         var hm = String(app.HGraph.getQuery1To1Result());
         var result = [];
-        var c = {source: _inputChoices[0][0],
-                 target:  _inputChoices[1][0],
+        var c = {source: _inputChoices.source.name,
+                 target:  _inputChoices.target.name,
                  hetesim:hm
         };
-
+        app.HGraph.log(hm);
         result.push(c);
         app.graph.drawQuery1to1(result);
-        _inputChoices = [];
         app.events.hidePopup();
 
-    }
+    };
+
+
 
     //---Tools menu----
     app.events.openToolsMenu = function(){
@@ -434,14 +496,43 @@
     app.events.addEdge = function(){
         var inputSrc = document.querySelector("#autoedge1");
         var inputDest = document.querySelector("#autoedge2");
-        //TODO: check inputs
+        var fail = false;
+        if (typeof _inputChoices.source === 'undefined' || _inputChoices.source === '') {
+            _inputChoices.source = '';
+            _attVisibleInput("autoedge1");
+            fail = true;
+        }
+        if (typeof _inputChoices.target === 'undefined' || _inputChoices.target === '') {
+            _inputChoices.target = '';
+            _attVisibleInput("autoedge2");
+            fail = true;
+        }
+        if(fail) return;
+        if (_inputChoices.source !== '' && _inputChoices.target !== '') {
+            var paperId;
+            var destId;
+            var destType;
+            if(_inputChoices.source.type == "paper"){
+                paperId =_inputChoices.source.id;
+                destId = _inputChoices.target.id;
+                destType = _inputChoices.target.type;
+            }
+            else{
+                paperId =_inputChoices.target.id;
+                destId = _inputChoices.source.id;
+                destType = _inputChoices.source.type;
+            }
 
-        //TODO: get parameters
-        /*
-        var edgeAdded = app.HGraph.addEdge();
-        if(edgeAdded)
-            app.graph.addEdge();
-            */
+            var edgeAdded = app.HGraph.addEdge(_inputChoices.source.id, _inputChoices.source.type,
+                _inputChoices.target.id, _inputChoices.target.type);
+            if(edgeAdded){
+                //TODO:Notify
+                
+                app.graph.addEdge(destId, destType, paperId);
+
+            }
+
+        }
 
         inputSrc.value = "";
         inputDest.value = "";
@@ -449,27 +540,72 @@
 
     app.events.removeNode = function(){
         var input = document.querySelector("#autonode");
-        //TODO: check input
 
-        //TODO:get parameters
-        /*
-        app.HGraph.removeNode();
-        app.graph.removeNode();
-        */
+        if (typeof _inputChoices.source === 'undefined' || _inputChoices.source === '') {
+            _inputChoices.source = '';
+            _attVisibleInput("autonode");
+            return;
+        }
+        if (_inputChoices.source !== '') {
+            var nodeRemoved = app.HGraph.removeNode(_inputChoices.source.id, _inputChoices.source.type);
+            if(nodeRemoved)
+            {
+                //TODO: notify
+                app.graph.removeNode(_inputChoices.source.id, _inputChoices.source.type);
+                var found = false;
+                var i;
+                for(i = 0; i < _nodes.length && !found; i++)
+                {
+                    found = (_nodes[i][1] == _inputChoices.source.id && _nodes[i][2] == _inputChoices.source.type);
+                }
+                if(found)
+                    _nodes.splice(i, 1);
+                app.HGraph.log("updated");
+            }
+            input.value = "";
+        }
 
-        input.value = "";
+
     };
 
     app.events.removeEdge = function(){
-        var inputSrc = document.querySelector("#autoedge1");
-        var inputDest = document.querySelector("#autoedge2");
-        //TODO: check inputs
+        var inputSrc = document.querySelector("#autofont");
+        var inputDest = document.querySelector("#autodesti");
+        var fail = false;
+        if (typeof _inputChoices.source === 'undefined' || _inputChoices.source === '') {
+            _inputChoices.source = '';
+            _attVisibleInput("autofont");
+            fail = true;
+        }
+        if (typeof _inputChoices.target === 'undefined' || _inputChoices.target === '') {
+            _inputChoices.target = '';
+            _attVisibleInput("autodesti");
+            fail = true;
+        }
+        if(fail) return;
+        if (_inputChoices.source !== '' && _inputChoices.target !== '') {
+            var paperId;
+            var destId;
+            var destType;
+            if(_inputChoices.source.type == "paper"){
+                paperId =_inputChoices.source.id;
+                destId = _inputChoices.target.id;
+                destType = _inputChoices.target.type;
+            }
+            else{
+                paperId =_inputChoices.target.id;
+                destId = _inputChoices.source.id;
+                destType = _inputChoices.source.type;
+            }
+            var edgeRemoved = app.HGraph.removeEdge(_inputChoices.source.id, _inputChoices.source.type,
+                _inputChoices.target.id, _inputChoices.target.type);
+            if(edgeRemoved)
+            {
+                //TODO:notify
+                app.graph.removeEdge(destId, destType, paperId);
+            }
 
-        //TODO: get parameters
-        /*
-         app.HGraph.removeEdge();
-         app.graph.removeEdge();
-         */
+        }
 
         inputSrc.value = "";
         inputDest.value = "";
