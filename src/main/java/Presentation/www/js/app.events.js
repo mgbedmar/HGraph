@@ -404,7 +404,7 @@
         var typeSelector = document.querySelector("#addNodeSection .typeSelector");
         var type =typeSelector.dataset.selection;
         var input = document.querySelector("#addNodeSection input");
-        //TODO: nopopups
+        //TODO: nopopups?
         if(!type)
         {
             app.events.showInfo("Informació","Si us plau, selecciona un tipus", "D'acord");
@@ -429,6 +429,50 @@
 
         _clearTypeSelector("#addNodeSection .typeSelector");
         input.value = "";
+    };
+
+    app.events.addEdge = function(){
+        var inputSrc = document.querySelector("#autoedge1");
+        var inputDest = document.querySelector("#autoedge2");
+        //TODO: check inputs
+
+        //TODO: get parameters
+        /*
+        var edgeAdded = app.HGraph.addEdge();
+        if(edgeAdded)
+            app.graph.addEdge();
+            */
+
+        inputSrc.value = "";
+        inputDest.value = "";
+    };
+
+    app.events.removeNode = function(){
+        var input = document.querySelector("#autonode");
+        //TODO: check input
+
+        //TODO:get parameters
+        /*
+        app.HGraph.removeNode();
+        app.graph.removeNode();
+        */
+
+        input.value = "";
+    };
+
+    app.events.removeEdge = function(){
+        var inputSrc = document.querySelector("#autoedge1");
+        var inputDest = document.querySelector("#autoedge2");
+        //TODO: check inputs
+
+        //TODO: get parameters
+        /*
+         app.HGraph.removeEdge();
+         app.graph.removeEdge();
+         */
+
+        inputSrc.value = "";
+        inputDest.value = "";
     };
 
     app.events.selectToolsMenuOption = function(e){

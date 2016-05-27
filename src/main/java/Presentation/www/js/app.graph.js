@@ -380,4 +380,15 @@
 
     };
 
+    app.graph.addEdge = function(srcId, destId){
+        _sarr[_sarr.length-1].graph.addEdge({
+            id: Date.now(),
+            source: srcId,
+            target: destId
+        });
+
+        _sarr[_sarr.length-1].refresh();
+
+    };
+
 }).call(window);

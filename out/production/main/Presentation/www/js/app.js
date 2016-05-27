@@ -141,6 +141,12 @@ var app = app || {};
 
         document.querySelector("#mainPage #toolsMenu i[data-action=addNode]")
             .addEventListener("click", app.events.addNode);
+        document.querySelector("#mainPage #toolsMenu i[data-action=addEdge]")
+            .addEventListener("click", app.events.addEdge);
+        document.querySelector("#mainPage #toolsMenu i[data-action=removeNode]")
+            .addEventListener("click", app.events.removeNode);
+        document.querySelector("#mainPage #toolsMenu i[data-action=removeEdge]")
+            .addEventListener("click", app.events.removeEdge);
         document.querySelector("#mainPage #toolsMenu > div[data-action=openToolsMenu]")
             .addEventListener("click", app.events.openToolsMenu);
         //document.querySelector("#mainPage a[data-action=welcome]").addEventListener("click", mainGoToWelcome);

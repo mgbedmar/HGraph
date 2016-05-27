@@ -117,20 +117,20 @@
                     </li>
                     <li class="twoLines">
                         <h1>Afegir aresta</h1>
-                        <div>
+                        <div id="addEdgeSection">
                             <span>Font:</span>
                             <input id="autoedge1"/>
                             <i class="icon ion-checkmark-circled hiddenicon"></i>
                             <span>Destí:</span>
                             <input id="autoedge2"/>
-                            <i class="icon ion-checkmark-circled"></i>
+                            <i data-action="addEdge" class="icon ion-checkmark-circled"></i>
                         </div>
                     </li>
                     <li class="oneLine">
                         <h1>Esborrar node</h1>
                         <div>
                             <input id="autonode"/>
-                            <i class="icon ion-android-locate"></i>
+                            <i data-action="removeNode" class="icon ion-android-locate"></i>
                         </div>
                     </li>
                     <li  class="twoLines">
@@ -141,7 +141,7 @@
                             <i class="icon ion-android-locate hiddenicon"></i>
                             <span>Destí:</span>
                             <input id="autodesti"/>
-                            <i class="icon ion-android-locate"></i>
+                            <i data-action="removeEdge" class="icon ion-android-locate"></i>
                         </div>
                     </li>
                 </ul>

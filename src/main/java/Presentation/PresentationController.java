@@ -85,6 +85,25 @@ public class PresentationController {
         return null;
     }
 
+    public void removeNode(int id, String type){
+        try{
+            dc.removeNode(id, type);
+        }catch (DomainException de) {
+            we.executeScript("app.events.showInfo('Eps!','"+de.getFriendlyMessage()+"', 'Cap problema');");
+        }
+    }
+
+    public boolean addEdge(int idA, String nameA, int idB, String nameB){
+        try {
+            dc.addEdge(idA, nameA, idB, nameB);
+            return true;
+        } catch (DomainException e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
 
 
     public ArrayList<String[]> getNodesOfType(String type){
