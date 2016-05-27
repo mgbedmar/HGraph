@@ -360,102 +360,24 @@
 
     }
 
-    /*
-    app.graph.drawGraph = function(cb){
-        var i,
-            s,
-            o,
-            N = 2000,
-            E = 0,
-            C = 4,
-            d = 0.5,
-            cs = [],
-            g = {
-                nodes: [],
-                edges: []
-            };
+    app.graph.addNode = function(id, label, type){
+        var pos;
+        if(_largeGraph)
+            pos = _getNextPosition();
+        else
+            pos = _getCircleRandomPos(10,10);
 
-// Generate the graph:
-        for (i = 0; i < C; i++)
-            cs.push({
-                id: i,
-                nodes: [],
-                color: '#' + (
-                    Math.floor(Math.random() * 16777215).toString(16) + '000000'
-                ).substr(0, 6)
-            });
-
-        for (i = 0; i < N; i++) {
-            o = cs[(Math.random() * C) | 0];
-            var pos = _getCircleRandomPos();
-            g.nodes.push({
-                id: 'n' + i,
-                label: 'Node' + i,
-                x: pos.x,
-                y: pos.y,
-                size: Math.random()*30,
-                color: o.color
-            });
-            o.nodes.push('n' + i);
-        }
-
-        for (i = 0; i < E; i++) {
-            if (Math.random() < 1 - d)
-                g.edges.push({
-                    id: 'e' + i,
-                    source: 'n' + ((Math.random() * N) | 0),
-                    target: 'n' + ((Math.random() * N) | 0),
-                    size:Math.random()*10,
-                    hidden: true
-                });
-            else {
-                o = cs[(Math.random() * C) | 0]
-                g.edges.push({
-                    id: 'e' + i,
-                    source: o.nodes[(Math.random() * o.nodes.length) | 0],
-                    target: o.nodes[(Math.random() * o.nodes.length) | 0],
-                    size:Math.random()*10,
-                    hidden: true
-                });
-            }
-        }
-
-        s = new sigma({
-            graph: g,
-            container: 'graph-container',
-            settings: {
-                minNodeSize: 2,
-                //maxNodeSize: 2,
-                //minEdgeSize: 1,
-                //maxEdgeSize: 1,
-                eventsEnabled: false
-            }
+        _sarr[_sarr.length-1].graph.addNode({
+            id: id,
+            label: label,
+            x: pos.x,
+            y: pos.y,
+            size:1
+            //TODO: color depenent del type
         });
 
-        sigma.plugins.relativeSize(s, 4);
+        _sarr[_sarr.length-1].refresh();
 
-        //cb();
+    };
 
-// Configure the noverlap layout:
-        var noverlapListener = s.configNoverlap({
-            nodeMargin: 0.05,
-            scaleNodes: 0.9,
-            gridSize: 400,
-            speed:5
-        });
-// Bind the events:
-        noverlapListener.bind('start stop interpolate', function(e) {
-            console.log(e.type);
-            if(e.type === 'start') {
-                console.time('noverlap');
-            }
-            if(e.type === 'stop') {
-                console.timeEnd('noverlap');
-                cb();
-            }
-        });
-// Start the layout:
-        s.startNoverlap();
-
-    };*/
 }).call(window);

@@ -24,6 +24,18 @@ public class PresentationController {
     private WebEngine we;
     private int MAX_FILES;
     private String query1To1Result;
+    private Integer getBigger(ArrayList<Integer> ids) throws DomainException {
+        if(ids.size() == 0)
+            throw new DomainException("Hi ha hagut un problema desconegut.");
+
+        Integer bigger = ids.get(0);
+        for(Integer id : ids){
+            if(id > bigger)
+                bigger = id;
+        }
+
+        return bigger;
+    }
 
     protected void setQuery1To1Result(String r) {
         query1To1Result = r;
@@ -60,6 +72,20 @@ public class PresentationController {
             we.executeScript("app.events.showInfo('Eps!','"+de.getFriendlyMessage()+"', 'Cap problema');");
         }
     }
+
+    public Integer addNode(String label, String type){
+        try{
+            dc.addNode(label, type);
+            ArrayList<Integer> ids = dc.getNodes(label, type);
+            return getBigger(ids);
+        }catch (DomainException de) {
+            we.executeScript("app.events.showInfo('Eps!','"+de.getFriendlyMessage()+"', 'Cap problema');");
+        }
+
+        return null;
+    }
+
+
 
     public ArrayList<String[]> getNodesOfType(String type){
         ArrayList<String[]> res = new ArrayList<>();

@@ -6,6 +6,8 @@
 
     //Private
     var _autocompletes = [];
+    //Nodes for autocomplete
+    var _nodes;
     var _popupShown = false;
     var _inputChoices = [];
     function _hide(selector, cb){
@@ -32,9 +34,9 @@
         return names;
     }
 
-    function _initAutoCompletes(nodes){
+    function _initAutoCompletes(){
         var mChars;
-        if (nodes.length < 300) mChars = 1;
+        if (_nodes.length < 300) mChars = 1;
         else mChars = 3;
 
         //For each type in nodes
@@ -49,10 +51,9 @@
                     minChars: mChars,
                     source: function(term, suggest){
                         term = term.toLowerCase();
-                        var choices = nodes;
                         var matches = [];
-                        for (var i=0; i<choices.length; i++)
-                            if (~(choices[i][0]+' '+choices[i][1]).toLowerCase().indexOf(term)) matches.push(choices[i]);
+                        for (var i=0; i<_nodes.length; i++)
+                            if (~(_nodes[i][0]+' '+_nodes[i][1]).toLowerCase().indexOf(term)) matches.push(_nodes[i]);
                         suggest(matches);
                     },
                     renderItem: function (item, search){
@@ -105,7 +106,8 @@
         }
 
         //Init autocompletes
-        _initAutoCompletes(nodes);
+        _nodes = nodes;
+        _initAutoCompletes();
 
     }
     function _initLoadPage(){
@@ -175,6 +177,7 @@
     }
 
     function _selectType(parentElement, type){
+        parentElement.dataset.selection = type;
         var nodes = parentElement.children;
         for(var i = 0; i < nodes.length; i++)
         {
@@ -184,6 +187,14 @@
                 nodes[i].classList.remove("selected");
         };
 
+    }
+    function _clearTypeSelector(selector){
+        document.querySelector(selector).dataset.selection = "";
+        var children = document.querySelector(selector).children;
+        for(var i = 0; i < children.length; i++)
+        {
+            children[i].classList.remove("selected");
+        }
     }
 
     //Public
@@ -384,13 +395,46 @@
 
     }
 
+    //---Tools menu----
     app.events.openToolsMenu = function(){
             document.querySelector("#"+app.const.pageIds.main + " #toolsMenu").classList.toggle("open");
+    };
+
+    app.events.addNode = function(){
+        var typeSelector = document.querySelector("#addNodeSection .typeSelector");
+        var type =typeSelector.dataset.selection;
+        var input = document.querySelector("#addNodeSection input");
+        //TODO: nopopups
+        if(!type)
+        {
+            app.events.showInfo("Informació","Si us plau, selecciona un tipus", "D'acord");
+            typeSelector.classList.add("wrong");
+            return;
+        }
+        else
+            typeSelector.classList.remove("wrong");
+
+        if(!input.value)
+        {
+            app.events.showInfo("Informació","Si us plau, escriu un nom", "D'acord");
+            input.classList.add("wrong");
+            return;
+        }
+        else
+            input.classList.remove("wrong");
+
+        var id = app.HGraph.addNode(input.value, type);
+        app.graph.addNode(id, input.value, type);
+        _nodes.push([String(input.value),String(id), type]);
+
+        _clearTypeSelector("#addNodeSection .typeSelector");
+        input.value = "";
     };
 
     app.events.selectToolsMenuOption = function(e){
             _selectMenuOption(e.currentTarget, "#toolsMenu");
     };
+    //---/Tools menu---
 
 }).call(window);
 
