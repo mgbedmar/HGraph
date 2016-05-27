@@ -119,28 +119,28 @@
                         <h1>Afegir aresta</h1>
                         <div id="addEdgeSection">
                             <span>Font:</span>
-                            <input id="autoedge1"/>
+                            <input id="autoedge1" data-autoType="source"/>
                             <i class="icon ion-checkmark-circled hiddenicon"></i>
                             <span>Destí:</span>
-                            <input id="autoedge2"/>
+                            <input id="autoedge2" data-autoType="target"/>
                             <i data-action="addEdge" class="icon ion-checkmark-circled"></i>
                         </div>
                     </li>
                     <li class="oneLine">
                         <h1>Esborrar node</h1>
                         <div>
-                            <input id="autonode"/>
-                            <i data-action="removeNode" class="icon ion-android-locate"></i>
+                            <input id="autonode" data-autoType="source"/>
+                            <i data-action="removeNode" class="icon ion-android-locate"></i>1
                         </div>
                     </li>
                     <li  class="twoLines">
                         <h1>Esborrar aresta</h1>
                         <div>
                             <span>Font:</span>
-                            <input id="autofont"/>
+                            <input id="autofont" data-autoType="source"/>
                             <i class="icon ion-android-locate hiddenicon"></i>
                             <span>Destí:</span>
-                            <input id="autodesti"/>
+                            <input id="autodesti" data-autoType="target"/>
                             <i data-action="removeEdge" class="icon ion-android-locate"></i>
                         </div>
                     </li>
@@ -172,7 +172,7 @@
                         <h1>Veïns</h1>
                         <div>
                             <span>Veïns del node:</span>
-                            <input id="autoVeins" />
+                            <input id="autoVeins" data-autoType="source"/>
                             <i class="icon ion-android-locate"></i>
                         </div>
                     </li>
@@ -182,10 +182,10 @@
                         <h1>1 a 1 <i id="info1a1" class="icon ion-information-circled info"></i></h1>
                         <div>
                             <span>Font:</span>
-                            <input id="auto1To1-1"/>
+                            <input id="auto1To1-1" data-autoType="source"/>
                             <i class="icon ion-android-locate hiddenicon"></i>
                             <span>Destí:</span>
-                            <input id="auto1To1-2"/>
+                            <input id="auto1To1-2" data-autoType="target"/>
                             <i id="ok1to1" class="icon ion-android-locate"></i>
                         </div>
                     </li>
@@ -193,7 +193,7 @@
                         <h1>1 a N <i id="info1aN" class="icon ion-information-circled info"></i></h1>
                         <div>
                             <span>Font:</span>
-                            <input id="auto1ToN"/>
+                            <input id="auto1ToN" data-autoType="source"/>
                             <i class="icon ion-android-locate"></i>
                             <span>Destí:</span>
                             <ul class="typeSelector">
@@ -227,13 +227,13 @@
                         <h1>Referència <i id="inforef" class="icon ion-information-circled info"></i></h1>
                         <div>
                             <span>Font (referència):</span>
-                            <input id="autoref1"/>
+                            <input id="autoref1" data-autoType="source"/>
                             <i class="icon ion-android-locate hiddenicon"></i>
                             <span>Destí (referència):</span>
-                            <input id="autoref2"/>
+                            <input id="autoref2" data-autoType="target"/>
                             <i class="icon ion-android-locate hiddenicon"></i>
                             <span>Font:</span>
-                            <input id="autoref3"/>
+                            <input id="autoref3" data-autoType="ref"/>
                             <i class="icon ion-android-locate"></i>
                         </div>
                     </li>

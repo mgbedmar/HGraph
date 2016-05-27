@@ -200,14 +200,22 @@ class Query1To1Task extends Task<String> {
 
         } catch (ExecutionException e) {
             Platform.runLater(new Runnable() {
+                private String message;
                 @Override public void run() {
-                    we.executeScript("app.events.hidePopup(); app.events.showInfo('Error.', '"+e.getMessage()+"', 'OK');");
+                    we.executeScript("app.events.hidePopup();");
+                    String scr = "app.events.showInfo(\"Error\", \"" + message + "\", \"OK\");";
+                    we.executeScript(scr);
                 }
-            });
+
+                public Runnable setParams(String message) {
+                    this.message = message;
+                    return this;
+                }
+            }.setParams(e.getMessage()));
 
             //TODO treure aixo:
             e.printStackTrace();
-            
+
         } catch (InterruptedException e) {
             we.executeScript("app.events.showInfo('Error.', '"+e.getMessage()+"', 'OK');");
         }
