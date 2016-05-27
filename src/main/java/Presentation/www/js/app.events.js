@@ -273,12 +273,26 @@
         for(var i = 0; i < nodes.length; i++)
         {
             if (nodes[i] != element.parentNode) {
-                nodes[i].classList.remove("selected");
+                if (nodes[i].classList.contains("selected")) {
+                    var inputs = nodes[i].querySelectorAll("input");
+                    for (var k = 0; k < inputs.length; k++) {
+                        inputs[k].value = '';
+                        inputs[k].classList.remove("wrong");
+                    }
+                    nodes[i].classList.remove("selected");
+                }
             }
         }
 
         for (var j = 0; j < nodes2.length; j++) {
-            nodes2[j].classList.remove("selected");
+            if (nodes2[j].classList.contains("selected")) {
+                var inputs = nodes2[j].querySelectorAll("input");
+                for (var k = 0; k < inputs.length; k++) {
+                    inputs[k].value = '';
+                    inputs[k].classList.remove("wrong");
+                }
+                nodes2[j].classList.remove("selected");
+            }
         }
 
         element.parentNode.classList.toggle("selected");
