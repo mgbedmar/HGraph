@@ -70,6 +70,7 @@
                 <i class="icon ion-settings"></i>
             </div>
             <div class="scrolleable-y">
+                <!--
                 <ul>
                     <li class="oneLine" data-action="toolsType">
                         <h1>Node actiu</h1>
@@ -98,10 +99,11 @@
                         </ul>
                     </li>
                 </ul>
+                -->
                 <ul>
                     <li class="almostTwoLines">
                         <h1>Afegir node</h1>
-                        <div>
+                        <div id="addNodeSection">
                             <ul class="typeSelector">
                                 <li data-type="author">Autor</li>
                                 <li data-type="paper">Paper</li>
@@ -110,25 +112,25 @@
                             </ul>
                             <span>Nom:</span>
                             <input id="nodeadd"/>
-                            <i class="icon ion-checkmark-circled"></i>
+                            <i data-action="addNode" class="icon ion-checkmark-circled"></i>
                         </div>
                     </li>
                     <li class="twoLines">
                         <h1>Afegir aresta</h1>
-                        <div>
+                        <div id="addEdgeSection">
                             <span>Font:</span>
-                            <input id="autoedge1" data-autoType="source"/>
+                            <input id="autoedge1" data-autoType="source" type="text"/>
                             <i class="icon ion-checkmark-circled hiddenicon"></i>
                             <span>Destí:</span>
                             <input id="autoedge2" data-autoType="target"/>
-                            <i class="icon ion-checkmark-circled"></i>
+                            <i data-action="addEdge" class="icon ion-checkmark-circled"></i>
                         </div>
                     </li>
                     <li class="oneLine">
                         <h1>Esborrar node</h1>
                         <div>
                             <input id="autonode" data-autoType="source"/>
-                            <i class="icon ion-android-locate"></i>
+                            <i data-action="removeNode" class="icon ion-android-locate"></i>
                         </div>
                     </li>
                     <li  class="twoLines">
@@ -139,7 +141,7 @@
                             <i class="icon ion-android-locate hiddenicon"></i>
                             <span>Destí:</span>
                             <input id="autodesti" data-autoType="target"/>
-                            <i class="icon ion-android-locate"></i>
+                            <i data-action="removeEdge" class="icon ion-android-locate"></i>
                         </div>
                     </li>
                 </ul>

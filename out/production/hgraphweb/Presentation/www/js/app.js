@@ -66,6 +66,9 @@ var app = app || {};
                 loadProject: function(project){
                     return;
                 },
+                addNode: function(label, type){
+                    return Date.now();
+                },
                 isProjectSelected: function(){
                     return !document.querySelector("#welcomePage").classList.contains("active");
                 },
@@ -136,6 +139,14 @@ var app = app || {};
         _addInfoEvent();
         document.getElementById("ok1to1").addEventListener("click", app.events.query1to1);
 
+        document.querySelector("#mainPage #toolsMenu i[data-action=addNode]")
+            .addEventListener("click", app.events.addNode);
+        document.querySelector("#mainPage #toolsMenu i[data-action=addEdge]")
+            .addEventListener("click", app.events.addEdge);
+        document.querySelector("#mainPage #toolsMenu i[data-action=removeNode]")
+            .addEventListener("click", app.events.removeNode);
+        document.querySelector("#mainPage #toolsMenu i[data-action=removeEdge]")
+            .addEventListener("click", app.events.removeEdge);
         document.querySelector("#mainPage #toolsMenu > div[data-action=openToolsMenu]")
             .addEventListener("click", app.events.openToolsMenu);
         //document.querySelector("#mainPage a[data-action=welcome]").addEventListener("click", mainGoToWelcome);

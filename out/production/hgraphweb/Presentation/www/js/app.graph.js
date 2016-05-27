@@ -74,7 +74,7 @@
             defaultEdgeType: "curve",
             autoRescale:true,
             edgeLabels:true,
-            enableHovering:false, //etiquetes: posades no funciona be
+            enableHovering:true, //etiquetes: posades no funciona be
             zoomMin:0.001, //no va
             zoomMax:2
         },
@@ -89,11 +89,13 @@
     var _angle = 0;
 
     function _applySettings(s){
+        //Deprecated
+
         /*
         if(typeof _settings.relativeSize !== 'undefined')
             sigma.plugins.relativeSize(s, _settings.relativeSize);
 */
-        /* //Deprecated
+        /*
         if(typeof _settings.nooverlap !== 'undefined' && _settings.nooverlap)
         {
             // Configure the noverlap layout:
@@ -156,7 +158,7 @@
                 for (var i = 0; i < edges[type].size(); i++)
                 {
                     g.edges.push({
-                        id: type+i,
+                        id: String(edges[type].get(i)[0])+"-"+type+"-"+String(edges[type].get(i)[1]),
                         source: String(edges[type].get(i)[0]+"-paper"),
                         target: String(edges[type].get(i)[1])+"-"+type
                     })
@@ -235,6 +237,7 @@
             if(i % app.settings.maxNodes == 0)
             {
                 c = (c+1) %3;
+
                 s=new sigma({
                     container: 'graph-container',
                     graph:g,
@@ -357,102 +360,80 @@
 
     }
 
-    /*
-    app.graph.drawGraph = function(cb){
-        var i,
-            s,
-            o,
-            N = 2000,
-            E = 0,
-            C = 4,
-            d = 0.5,
-            cs = [],
-            g = {
-                nodes: [],
-                edges: []
-            };
-
-// Generate the graph:
-        for (i = 0; i < C; i++)
-            cs.push({
-                id: i,
-                nodes: [],
-                color: '#' + (
-                    Math.floor(Math.random() * 16777215).toString(16) + '000000'
-                ).substr(0, 6)
-            });
-
-        for (i = 0; i < N; i++) {
-            o = cs[(Math.random() * C) | 0];
-            var pos = _getCircleRandomPos();
-            g.nodes.push({
-                id: 'n' + i,
-                label: 'Node' + i,
-                x: pos.x,
-                y: pos.y,
-                size: Math.random()*30,
-                color: o.color
-            });
-            o.nodes.push('n' + i);
+    app.graph.addNode = function(id, label, type){
+        var pos;
+        var index =_sarr.length-1;
+        if(_largeGraph)
+        {
+            pos = _getNextPosition();
+            index--;
+        }
+        else
+        {
+            pos = _getCircleRandomPos(10,10);
         }
 
-        for (i = 0; i < E; i++) {
-            if (Math.random() < 1 - d)
-                g.edges.push({
-                    id: 'e' + i,
-                    source: 'n' + ((Math.random() * N) | 0),
-                    target: 'n' + ((Math.random() * N) | 0),
-                    size:Math.random()*10,
-                    hidden: true
-                });
-            else {
-                o = cs[(Math.random() * C) | 0]
-                g.edges.push({
-                    id: 'e' + i,
-                    source: o.nodes[(Math.random() * o.nodes.length) | 0],
-                    target: o.nodes[(Math.random() * o.nodes.length) | 0],
-                    size:Math.random()*10,
-                    hidden: true
-                });
-            }
+        _sarr[index].graph.addNode({
+            id: id+"-"+type,
+            label: label,
+            x: pos.x,
+            y: pos.y,
+            size:1
+            //TODO: color depenent del type
+        });
+
+        _sarr[_sarr.length-1].refresh();
+
+    };
+
+    app.graph.addEdge = function(srcId, typeA, paperId){
+        _sarr[_sarr.length-1].graph.addEdge({
+            id: paperId+"-"+typeA+"-"+srcId,
+            source: paperId+"-paper",
+            target: srcId+"-"+typeA,
+            type:"curve"
+        });
+
+        _sarr[_sarr.length-1].refresh();
+
+    };
+
+    app.graph.removeNode = function(id, type){
+        app.HGraph.log(JSON.stringify(_sarr[_sarr.length-1])); //{} WTF?????
+        var nodes = _sarr[_sarr.length-1].graph.nodes;
+
+
+        var i;
+        var found = false;
+        for(i = 0; i < nodes.length; i++)
+        {
+            app.HGraph.log("type: "+type+", id:"+id+", "+JSON.stringify(nodes[i]));
+            found = (nodes[i].id == (type+"-"+id));
         }
 
-        s = new sigma({
-            graph: g,
-            container: 'graph-container',
-            settings: {
-                minNodeSize: 2,
-                //maxNodeSize: 2,
-                //minEdgeSize: 1,
-                //maxEdgeSize: 1,
-                eventsEnabled: false
-            }
-        });
+        app.HGraph.log("found?"+found);
+        if(found)
+            nodes.splice(i, 1);
 
-        sigma.plugins.relativeSize(s, 4);
+        _sarr[_sarr.length-1].refresh();
 
-        //cb();
+    };
 
-// Configure the noverlap layout:
-        var noverlapListener = s.configNoverlap({
-            nodeMargin: 0.05,
-            scaleNodes: 0.9,
-            gridSize: 400,
-            speed:5
-        });
-// Bind the events:
-        noverlapListener.bind('start stop interpolate', function(e) {
-            console.log(e.type);
-            if(e.type === 'start') {
-                console.time('noverlap');
-            }
-            if(e.type === 'stop') {
-                console.timeEnd('noverlap');
-                cb();
-            }
-        });
-// Start the layout:
-        s.startNoverlap();
+    app.graph.removeEdge = function(srcId, typeA, paperId){
+        var edges = _sarr[_sarr.length-1].graph.edges;
 
-    };*/
+        var i;
+        var found = false;
+        for(i = 0; i < edges.length; i++)
+        {
+            found = (edges.id == (id+"-"+type));
+        }
+
+        if(found)
+            nodes.splice(i, 1);
+
+        _sarr[_sarr.length-1].refresh();
+
+    };
+
 }).call(window);
