@@ -89,9 +89,10 @@
     var _angle = 0;
 
     function _applySettings(s){
+        /*
         if(typeof _settings.relativeSize !== 'undefined')
             sigma.plugins.relativeSize(s, _settings.relativeSize);
-
+*/
         /* //Deprecated
         if(typeof _settings.nooverlap !== 'undefined' && _settings.nooverlap)
         {
@@ -141,7 +142,8 @@
                         id: String(nodes[type].get(i)[0])+"-"+type,
                         label: String(nodes[type].get(i)[1]),
                         x: pos.x,
-                        y: pos.y
+                        y: pos.y,
+                        size: String(nodes[type].get(i)[2])
                     });
                 }
 
@@ -226,6 +228,7 @@
                 label: String(nodes.get(i)[1]),
                 x: pos.x,
                 y: pos.y,
+                size: String(nodes.get(i)[2]),
                 color: colors[c]
             });
             //If graph is % maxNodes, start a new one
@@ -265,7 +268,8 @@
 
         s = new sigma({
             container: 'graph-container',
-            graph:{nodes:[]}
+            graph:{nodes:[]},
+            settings: _settings.graph
         });
 
         //s.camera.ratio = inizoom;
