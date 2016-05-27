@@ -121,9 +121,17 @@
         */
 
     }
+
+    function _updateSize(nodes) {
+        for(var i = 0; i < nodes.length; i++) {
+            var idType = nodes[i].id.split("-");
+            nodes[i].size = app.HGraph.queryNeighboursSize(idType[0], idType[1]);
+        }
+    }
+
     /* nodes{
-           typeN:ArrayList<String[3]>
-       }*/
+               typeN:ArrayList<String[3]>
+           }*/
     function _createGraph(nodes, edges){
         var g = {nodes:[], edges:[]};
         var totalSize = nodes.author.size()+nodes.paper.size()+nodes.term.size()+nodes.conf.size();
@@ -156,14 +164,11 @@
                         size: String(nodes[type].get(i)[2])
                     });
 
-                    app.HGraph.log(pos.y+" "+tot+" "+pos.x);
 
                     pos.x++;
                     if (pos.x-tot > 0) {
                         pos.x = 0;
                         pos.y++;
-
-                        app.HGraph.log("ifff");
                     }
                 }
 
@@ -410,52 +415,43 @@
     };
 
     app.graph.addEdge = function(srcId, typeA, paperId){
-        _sarr[_sarr.length-1].graph.addEdge({
+        _sarr[0].graph.addEdge({
             id: paperId+"-"+typeA+"-"+srcId,
             source: paperId+"-paper",
             target: srcId+"-"+typeA,
             type:"curve"
         });
 
-        _sarr[_sarr.length-1].refresh();
-
+        _sarr[0].refresh();
     };
 
     app.graph.removeNode = function(id, type){
-        app.HGraph.log(JSON.stringify(_sarr[_sarr.length-1])); //{} WTF?????
-        var nodes = _sarr[_sarr.length-1].graph.nodes;
 
-
-        var i;
-        var found = false;
-        for(i = 0; i < nodes.length; i++)
+        for(var i = 0; i < _sarr.length && index == -1; i++)
         {
-            app.HGraph.log("type: "+type+", id:"+id+", "+JSON.stringify(nodes[i]));
-            found = (nodes[i].id == (type+"-"+id));
+            try {
+                _sarr[i].graph.dropNode(id+"-"+type);
+                _updateSize(_sarr[i].graph.nodes());
+                _sarr[i].refresh();
+            }
+            catch(err)
+            {
+                //app.HGraph.log("no:"+err);
+            }
         }
-
-        app.HGraph.log("found?"+found);
-        if(found)
-            nodes.splice(i, 1);
-
-        _sarr[_sarr.length-1].refresh();
-
     };
 
-    app.graph.removeEdge = function(srcId, typeA, paperId){
-        var edges = _sarr[_sarr.length-1].graph.edges;
+    app.graph.removeEdge = function(destId, destType, paperId){
 
-        var i;
-        var found = false;
-        for(i = 0; i < edges.length; i++)
-        {
-            found = (edges.id == (id+"-"+type));
+        try {
+            _sarr[0].graph.dropEdge(paperId+"-"+destType+"-"+destId);
+            _updateSize(_sarr[0].graph.nodes());
+            _sarr[0].refresh();
         }
-
-        if(found)
-            nodes.splice(i, 1);
-
-        _sarr[_sarr.length-1].refresh();
+        catch(err)
+        {
+            app.HGraph.log("no:"+err);
+        }
 
     };
 

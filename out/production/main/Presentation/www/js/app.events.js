@@ -7,6 +7,7 @@
     //Private
     var _autocompletes = [];
     //Nodes for autocomplete
+    //TODO actualitzar al esborrar, afegir. Controlar excepcions.
     var _nodes;
     var _popupShown = false;
     var _inputChoices = {
@@ -38,6 +39,39 @@
         }
         return names;
     }
+
+    function _clearInputChoices() {
+        _inputChoices.source = '';
+        _inputChoices.target = '';
+        _inputChoices.ref = '';
+    }
+
+    function _checkInputs(idInputSource, idInputTarget, idInputRef) {
+        var ok = true;
+        if (typeof idInputSource != 'undefined') {
+            if (typeof _inputChoices.source === 'undefined' || _inputChoices.source === '') {
+                _inputChoices.source = '';
+                _attVisibleInput(idInputSource);
+                ok = false;
+            }
+        }
+        if (typeof idInputTarget != 'undefined') {
+            if (typeof _inputChoices.target === 'undefined' || _inputChoices.target === '') {
+                _inputChoices.target = '';
+                _attVisibleInput(idInputTarget);
+                ok = false;
+            }
+        }
+        if (typeof idInputRef != 'undefined') {
+            if (typeof _inputChoices.ref === 'undefined' || _inputChoices.ref === '') {
+                _inputChoices.target = '';
+                _attVisibleInput(idInputRef);
+                ok = false;
+            }
+        }
+        return ok;
+    }
+
 
     var _attInput = function(inputId) {
         var el = document.getElementById(inputId);
@@ -75,7 +109,6 @@
         };
 
 
-
         //For each type in nodes
         for (var key in app.const.autoInputIds) {
 
@@ -83,7 +116,7 @@
             if (app.const.autoInputIds.hasOwnProperty(key)) {
                 var element = document.getElementById(app.const.autoInputIds[key]);
 
-                element.addEventListener("input", function() { _attInput(element.id)});
+                element.addEventListener("input", function(e) { _attInput(e.currentTarget.id)});
                 /*document.getElementById(app.const.autoInputIds[key])
                     .addEventListener("input", function() { _attInput(app.const.autoInputIds[key])});*/
 
@@ -233,8 +266,10 @@
         app.graph.drawNodesOnlyGraph(nodes);
     }
 
-    function _selectMenuOption(element,menu){
-        var nodes = document.querySelectorAll(menu +"> div > ul > li");
+    function _selectMenuOption(element, currentMenu, theOtherMenu){
+        var nodes = document.querySelectorAll(currentMenu +"> div > ul > li");
+        var nodes2 = document.querySelectorAll(theOtherMenu +"> div > ul > li");
+
         for(var i = 0; i < nodes.length; i++)
         {
             if (nodes[i] != element.parentNode) {
@@ -242,8 +277,12 @@
             }
         }
 
+        for (var j = 0; j < nodes2.length; j++) {
+            nodes2[j].classList.remove("selected");
+        }
+
         element.parentNode.classList.toggle("selected");
-        _inputChoices=[]; //reset
+        _clearInputChoices();
     }
 
     function _selectType(parentElement, type){
@@ -400,7 +439,7 @@
         document.querySelector("#"+app.const.pageIds.main + " #queryMenu").classList.toggle("open");
     };
     app.events.selectQueryMenuOption = function(e){
-        _selectMenuOption(e.currentTarget, "#queryMenu");
+        _selectMenuOption(e.currentTarget, "#queryMenu", "#toolsMenu");
     };
     app.events.selectTypeOption = function(e){
         _selectType(e.target.parentNode, e.currentTarget.dataset.type);
@@ -426,19 +465,11 @@
 
     app.events.query1to1 = function() {
 
-        if (typeof _inputChoices.source === 'undefined' || _inputChoices.source === '') {
-            _inputChoices.source = '';
-            _attVisibleInput("auto1To1-1");
-        }
-        if (typeof _inputChoices.target === 'undefined' || _inputChoices.target === '') {
-            _inputChoices.target = '';
-            _attVisibleInput("auto1To1-2");
-        }
-        if (_inputChoices.source !== '' && _inputChoices.target !== '') {
-            app.HGraph.query1to1(_inputChoices.source.id, _inputChoices.source.type,
-                                 _inputChoices.target.id, _inputChoices.target.type);
-            app.events.showLoading();
-        }
+        if (!_checkInputs("auto1To1-1", "auto1To1-2")) return;
+        app.HGraph.query1to1(_inputChoices.source.id, _inputChoices.source.type,
+                             _inputChoices.target.id, _inputChoices.target.type);
+        app.events.showLoading();
+
     };
 
     app.events.takeQuery1To1Result = function() {
@@ -491,128 +522,104 @@
 
         _clearTypeSelector("#addNodeSection .typeSelector");
         input.value = "";
+        _clearInputChoices();
     };
 
     app.events.addEdge = function(){
         var inputSrc = document.querySelector("#autoedge1");
         var inputDest = document.querySelector("#autoedge2");
-        var fail = false;
-        if (typeof _inputChoices.source === 'undefined' || _inputChoices.source === '') {
-            _inputChoices.source = '';
-            _attVisibleInput("autoedge1");
-            fail = true;
-        }
-        if (typeof _inputChoices.target === 'undefined' || _inputChoices.target === '') {
-            _inputChoices.target = '';
-            _attVisibleInput("autoedge2");
-            fail = true;
-        }
-        if(fail) return;
-        if (_inputChoices.source !== '' && _inputChoices.target !== '') {
-            var paperId;
-            var destId;
-            var destType;
-            if(_inputChoices.source.type == "paper"){
-                paperId =_inputChoices.source.id;
-                destId = _inputChoices.target.id;
-                destType = _inputChoices.target.type;
-            }
-            else{
-                paperId =_inputChoices.target.id;
-                destId = _inputChoices.source.id;
-                destType = _inputChoices.source.type;
-            }
 
-            var edgeAdded = app.HGraph.addEdge(_inputChoices.source.id, _inputChoices.source.type,
-                _inputChoices.target.id, _inputChoices.target.type);
-            if(edgeAdded){
-                //TODO:Notify
-                
-                app.graph.addEdge(destId, destType, paperId);
+        if(!_checkInputs("autoedge1", "autoedge2")) return;
 
-            }
+        var paperId;
+        var destId;
+        var destType;
+        if(_inputChoices.source.type == "paper"){
+            paperId =_inputChoices.source.id;
+            destId = _inputChoices.target.id;
+            destType = _inputChoices.target.type;
+        }
+        else{
+            paperId =_inputChoices.target.id;
+            destId = _inputChoices.source.id;
+            destType = _inputChoices.source.type;
+        }
+
+        var edgeAdded = app.HGraph.addEdge(_inputChoices.source.id, _inputChoices.source.type,
+            _inputChoices.target.id, _inputChoices.target.type);
+
+       if(edgeAdded){
+            //TODO:Notify
+
+            app.graph.addEdge(destId, destType, paperId);
 
         }
 
-        inputSrc.value = "";
-        inputDest.value = "";
+        inputSrc.value = '';
+        inputDest.value = '';
+        _clearInputChoices();
+
+
     };
 
     app.events.removeNode = function(){
         var input = document.querySelector("#autonode");
 
-        if (typeof _inputChoices.source === 'undefined' || _inputChoices.source === '') {
-            _inputChoices.source = '';
-            _attVisibleInput("autonode");
-            return;
-        }
-        if (_inputChoices.source !== '') {
-            var nodeRemoved = app.HGraph.removeNode(_inputChoices.source.id, _inputChoices.source.type);
-            if(nodeRemoved)
+        if (!_checkInputs("autonode")) return;
+
+        var nodeRemoved = app.HGraph.removeNode(_inputChoices.source.id, _inputChoices.source.type);
+        if(nodeRemoved)
+        {
+            //TODO: notify
+            app.graph.removeNode(_inputChoices.source.id, _inputChoices.source.type);
+            var found = false;
+            var i;
+            for(i = 0; i < _nodes.length && !found; i++)
             {
-                //TODO: notify
-                app.graph.removeNode(_inputChoices.source.id, _inputChoices.source.type);
-                var found = false;
-                var i;
-                for(i = 0; i < _nodes.length && !found; i++)
-                {
-                    found = (_nodes[i][1] == _inputChoices.source.id && _nodes[i][2] == _inputChoices.source.type);
-                }
-                if(found)
-                    _nodes.splice(i, 1);
-                app.HGraph.log("updated");
+                found = (_nodes[i][1] == _inputChoices.source.id && _nodes[i][2] == _inputChoices.source.type);
             }
-            input.value = "";
+            if(found)
+                _nodes.splice((i-1), 1);
+            
         }
-
-
+        input.value = "";
+        _clearInputChoices();
     };
 
     app.events.removeEdge = function(){
         var inputSrc = document.querySelector("#autofont");
         var inputDest = document.querySelector("#autodesti");
-        var fail = false;
-        if (typeof _inputChoices.source === 'undefined' || _inputChoices.source === '') {
-            _inputChoices.source = '';
-            _attVisibleInput("autofont");
-            fail = true;
-        }
-        if (typeof _inputChoices.target === 'undefined' || _inputChoices.target === '') {
-            _inputChoices.target = '';
-            _attVisibleInput("autodesti");
-            fail = true;
-        }
-        if(fail) return;
-        if (_inputChoices.source !== '' && _inputChoices.target !== '') {
-            var paperId;
-            var destId;
-            var destType;
-            if(_inputChoices.source.type == "paper"){
-                paperId =_inputChoices.source.id;
-                destId = _inputChoices.target.id;
-                destType = _inputChoices.target.type;
-            }
-            else{
-                paperId =_inputChoices.target.id;
-                destId = _inputChoices.source.id;
-                destType = _inputChoices.source.type;
-            }
-            var edgeRemoved = app.HGraph.removeEdge(_inputChoices.source.id, _inputChoices.source.type,
-                _inputChoices.target.id, _inputChoices.target.type);
-            if(edgeRemoved)
-            {
-                //TODO:notify
-                app.graph.removeEdge(destId, destType, paperId);
-            }
 
+        if(!_checkInputs("autofont", "autodesti")) return;
+
+        var paperId;
+        var destId;
+        var destType;
+        if(_inputChoices.source.type == "paper"){
+            paperId =_inputChoices.source.id;
+            destId = _inputChoices.target.id;
+            destType = _inputChoices.target.type;
+        }
+        else{
+            paperId =_inputChoices.target.id;
+            destId = _inputChoices.source.id;
+            destType = _inputChoices.source.type;
+        }
+        var edgeRemoved = app.HGraph.removeEdge(_inputChoices.source.id, _inputChoices.source.type,
+            _inputChoices.target.id, _inputChoices.target.type);
+        if(edgeRemoved)
+        {
+            //TODO:notify
+            app.graph.removeEdge(destId, destType, paperId);
         }
 
         inputSrc.value = "";
         inputDest.value = "";
+        _clearInputChoices();
     };
 
     app.events.selectToolsMenuOption = function(e){
-            _selectMenuOption(e.currentTarget, "#toolsMenu");
+        _selectMenuOption(e.currentTarget, "#toolsMenu", "#queryMenu");
     };
     //---/Tools menu---
 
