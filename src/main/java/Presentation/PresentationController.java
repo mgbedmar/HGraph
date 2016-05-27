@@ -123,6 +123,9 @@ public class PresentationController {
         return false;
     }
 
+    public ArrayList<String[]> getNodes() {
+        return dc.getNodes();
+    }
 
 
     public ArrayList<String[]> getNodesOfType(String type){
