@@ -162,7 +162,7 @@
         for (var type in nodes)
         {
 
-            _sqrt = Math.sqrt(totalSize);
+            _sqrt = Math.sqrt(totalSize)+2;
             //Check if type is a property of nodes
             if (nodes.hasOwnProperty(type))
             {
@@ -230,12 +230,11 @@
 
         _pos[type].x++;
 
-        if (_pos[type].x > sqrt+1) {
+        /*if (_pos[type].x > sqrt+1) {
             _pos[type].x = 1;
             _pos[type].y = _pos.global.y;
             _pos.global.y++;
-        }
-        app.HGraph.log(_pos[type].x+" "+_pos[type].y);
+        }*/
         return _pos[type];
     }
 
