@@ -137,6 +137,12 @@ body > div.page{
     height:90%;
     display:-webkit-flex;
     -webkit-flex-wrap:wrap;
+    -webkit-flex-justify-content:center;
+    -webkit-flex-align-content:-webkit-flex-start;
+    width:80%;
+    height:90%;
+    min-width:700px;
+    min-height:400px;
 }
 #result .closeResult {
     position:absolute;
@@ -146,9 +152,16 @@ body > div.page{
     border-radius:50px;
     cursor:pointer;
 }
+
+#result .closeResult .closeButton {
+     color:#ECEDED;
+     font-size:15px;
+     padding:6px;
+}
+
 #result .buttons{
     display:-webkit-flex;
-    -webkit-flex: 1 1 auto;
+    height:70px;
 }
 
 #result .buttons div{
@@ -167,7 +180,7 @@ body > div.page{
 
 #result .content{
     display:-webkit-flex;
-    -webkit-flex:1 1 auto;
+    height:85%;
 }
 
 
@@ -177,21 +190,19 @@ body > div.page{
 }
 
 #result .content .table{
-    -webkit-flex:3 1 auto;
-    max-width:600px;
+    width:75%;
 }
 
 #result .content .filters{
-    -webkit-flex:1 1 auto;
+    width:25%;
     display:-webkit-flex;
-    -webkit-flex-wrap:wrap;
+    -webkit-flex-wrap:no-wrap;
     -webkit-flex-direction: column;
+    -webkit-justify-content:space-around;
+    overflow-y:auto;
+    overflow-x:hidden;
 }
 
-#result .content .filters div{
-    -webkit-flex: 1 1 auto;
-
-}
 #result .content .filters div{
     -webkit-flex: 1 1 auto;
 
@@ -202,7 +213,7 @@ body > div.page{
 }
 #result .content .filters div span{
     display:block;
-    margin:0;
+    margin:0px;
 
 }
 #result .content .filters div ul{
@@ -210,13 +221,13 @@ body > div.page{
     padding:0;
     margin:0;
     height: 100px;
-    overflow-y:scroll;
+    overflow-y:auto;
 }
 
 #result .content div ul li{
     display: -webkit-flex;
-    background-color: #678F99;
-    text-align: center;
+    background-color: #BFDCE3;
+    /*text-align: center;*/
     padding: 5px;
     margin: 2px;
     border-radius: 5px;

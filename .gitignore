@@ -15,6 +15,7 @@ bin
 build/
 docs/
 systest/output
+out
 
 # garbage
 *~
