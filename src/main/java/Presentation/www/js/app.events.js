@@ -327,8 +327,8 @@
 
     app.events.init = function(){
         _show(app.const.pageIds.welcome);
-        var d = document.createElement("div");
-        app.events.showPopup(d);
+        /*var d = document.createElement("div");
+        app.events.showPopup(d);*/
     };
 
     app.events.loadGoToWelcome = function(){
@@ -376,7 +376,7 @@
     //----Popups
     app.events.showPopup = function(element){
         _popupShown = true;
-        //document.getElementById(app.const.pageIds.popupContent).innerHTML = "";
+        document.getElementById(app.const.pageIds.popupContent).innerHTML = "";
         document.getElementById(app.const.pageIds.popupContent).appendChild(element);
         _show(app.const.pageIds.popup);
     };

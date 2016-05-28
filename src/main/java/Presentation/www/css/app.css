@@ -221,8 +221,8 @@ body > div.page{
     overflow:hidden;
     padding:10px;
     color:#00080A;
-    width:40%;
-    max-width:40%;
+   /* width:40%;
+    max-width:40%;*/
 }
 
 #popupPage .resultContent .tableContent table td > div {
@@ -232,7 +232,7 @@ body > div.page{
     width:100%;
 }
 
-#popupPage .resultContent .tableContent table td.thirdCol, #popupPage .resultContent .tableContent table th.thirdCol {
+/*#popupPage .resultContent .tableContent table td.thirdCol,*/ #popupPage .resultContent .tableContent table th.thirdCol {
     width:20%;
 }
 
@@ -261,7 +261,6 @@ body > div.page{
     width:24%;
     overflow-y:auto;
     overflow-x: hidden;
-    margin-left:-10px;
 }
 
 #popupPage .resultContent ul {
@@ -315,6 +314,10 @@ body > div.page{
     display:-webkit-flex;
     -webkit-align-items:center;
     -webkit-justify-content:space-between;
+}
+
+#result {
+    display:none;
 }
 
 
