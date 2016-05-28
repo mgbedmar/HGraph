@@ -150,7 +150,7 @@ var app = app || {};
         document.querySelector("#mainPage #toolsMenu > div[data-action=openToolsMenu]")
             .addEventListener("click", app.events.openToolsMenu);
 
-        document.querySelector("#mainPage #mainMenu div")
+        document.querySelector("#mainPage #mainMenu div[data-action=openMainMenu]")
             .addEventListener("click", app.events.openMainMenu);
         //document.querySelector("#mainPage a[data-action=welcome]").addEventListener("click", mainGoToWelcome);
 

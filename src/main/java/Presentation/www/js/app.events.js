@@ -646,7 +646,13 @@
 
     //---Menu menu---
     app.events.openMainMenu = function(){
-        document.getElementById("#mainMenu").classList.toggle("open");
+        try{
+            document.getElementById("mainMenu").classList.toggle("open");
+
+        }catch(err)
+        {
+            app.HGraph.log(err);
+        }
     };
     //---/Menu menu---
 

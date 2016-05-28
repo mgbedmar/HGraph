@@ -353,13 +353,11 @@
 #mainPage #mainMenu{
     position:absolute;
     width:100%;
-    top:-30px;
-    transition: top 300ms ease;
+    top:-45px;
+    -webkit-transition: top 300ms ease;
+    z-index:1;
 }
 
-#mainPage #mainMenu{
-    top:-45px;
-}
 #mainPage #mainMenu.open{
     top:0px;
 }
@@ -376,7 +374,7 @@
 #mainPage #mainMenu ul{
     text-align: center;
     list-style: none;
-    display: flex;
+    display: -webkit-flex;
     padding: 10px;
     font-size: 25px;
     background-color: #678F99;
@@ -386,5 +384,5 @@
 }
 
 #mainPage #mainMenu ul li{
-    flex:1 1 auto;
+    -webkit-flex:1 1 auto;
 }
