@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>HGraph</title>
+
+
+    <!--App modules, order matters-->
+    <script type="text/javascript" src="js/app.js"></script>
+    <script type="text/javascript" src="js/app.graph.js"></script>
+    <script type="text/javascript" src="js/app.events.js"></script>
+
+    <!--autocomplete-->
+    <script type="text/javascript" src="js/autocomplete/auto-complete.min.js"></script>
+
+    <!--Sigma modules-->
+    <script type="text/javascript" src="js/sigma/sigma.min.js"></script>
+    <script type="text/javascript" src="js/sigma/sigma.plugins.relativeSize.js"></script>
+    <script type="text/javascript" src="js/sigma/sigma.plugins.filter.js"></script>
+    <script type="text/javascript" src="js/sigma/sigma.plugins.animate.js"></script>
+    <script type="text/javascript" src="js/sigma/sigma.layout.noverlap.js"></script>
+
+    <!--Styles-->
+    <link rel="stylesheet" type="text/css" href="css/app.css"/>
+    <link rel="stylesheet" type="text/css" href="css/loadGraph.css"/>
+    <link rel="stylesheet" type="text/css" href="css/main.css"/>
+    <link rel="stylesheet" type="text/css" href="css/welcome.css"/>
+    <link rel="stylesheet" type="text/css" href="css/ionicons.min.css"/>
+    <link rel="stylesheet" type="text/css" href="css/auto-complete.css"/>
+
+</head>
+<body>
+
+    <!--Loading-->
+    <div id="popupPage" class="page">
+        <div id="popupContent">
+            <div id="result" class="with-border">
+                <div class="closeResult"><i class="icon ion-close-round closeButton"></i></div>
+                <div class="buttons">
+                    <div>Expertar</div>
+                    <div>Visualitzar</div>
+                </div>
+                <div class="content">
+                    <div class="table">
+                        <table>
+                            <tr>
+                                <th>Font</th>
+                                <th>Desti</th>
+                                <th>HeteSim</th>
+                            </tr>
+                            <tr>
+                                <td>asdf</td>
+                                <td>asdfasdfasdfa</td>
+                                <td>0.123</td>
+                            </tr>
+                            <tr>
+                                <td>asdf</td>
+                                <td>asdfasdfasdfa</td>
+                                <td>0.123</td>
+                            </tr>
+                            <tr>
+                                <td>asdf</td>
+                                <td>asdfasdfasdfa</td>
+                                <td>0.123</td>
+                            </tr>
+                            <tr>
+                                <td>asdf</td>
+                                <td>asdfasdfasdfa</td>
+                                <td>0.123</td>
+                            </tr>
+                            <tr>
+                                <td>asdf</td>
+                                <td>asdfasdfasdfa</td>
+                                <td>0.123</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="filters">
+                        <div>
+                            <span>Selecciona els noms:</span>
+                            <input />
+                            <ul>
+                                <li>
+                                    <div>Alejandro</div>
+                                    <i class="icon ion-close-round closeEl"></i>
+
+                                </li>
+                                <li>
+                                    <div>Alejandro</div>
+                                    <i class="icon ion-close-round closeEl"></i>
+                                </li>
+                                <li>
+                                    <div>Alejandro</div>
+                                    <i class="icon ion-close-round closeEl"></i>
+                                </li>
+                                <li>
+                                    <div>Alejandro</div>
+                                    <i class="icon ion-close-round closeEl"></i>
+                                </li>
+                            </ul>
+                        </div>
+                        <div>
+                            <span>Amaga els noms:</span>
+                            <input />
+                            <ul>
+                                <li>
+                                    <div>Alejandro</div>
+                                    <i class="icon ion-close-round closeEl"></i>
+                                </li>
+                                <li>
+                                    <div>Alejandro</div>
+                                    <i class="icon ion-close-round closeEl"></i>
+                                </li>
+                                <li>
+                                    <div>Alejandro</div>
+                                    <i class="icon ion-close-round closeEl"></i>
+                                </li>
+                                <li>
+                                    <div>Alejandro</div>
+                                    <i class="icon ion-close-round closeEl"></i>
+                                </li>
+                            </ul>
+                        </div>
+                        <div>
+                            <span>Amaga les files:</span>
+                            <input />
+                            <ul>
+                                <li>
+                                    <div>Alejandro</div>
+                                    <i class="icon ion-close-round closeEl"></i>
+                                </li>
+                                <li>
+                                    <div>Alejandro</div>
+                                    <i class="icon ion-close-round closeEl"></i>
+                                </li>
+                                <li>
+                                    <div>Alejandro</div>
+                                    <i class="icon ion-close-round closeEl"></i>
+                                </li>
+                                <li>
+                                    <div>Alejandro</div>
+                                    <i class="icon ion-close-round closeEl"></i>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--Welcome Page-->
+    <div id="welcomePage" class="page active">
+        <div class="container">
+            <h1>HGraph</h1>
+            <h2>HeteSim made easy</h2>
+            <div class="buttons">
+                <a data-action="newGraph">Nou graf</a>
+                <a data-action="loadGraph">Carregar graf</a>
+            </div>
+        </div>
+    </div>
+
+    <!--Load Graph Page-->
+    <div id="loadGraphPage" class="page">
+        <div id="PLcontainer" class="container">
+            <div id="tornardiv">
+                <a data-action="welcome"><i class="icon ion-chevron-left"></i></a>
+            </div>
+            <div class="container" id="iconsProjectList">
+                <h1>Projectes</h1>
+                <div id="divEditPL"><i class="icon ion-edit"></i></div>
+            </div>
+            <ul id="projectList">
+            </ul>
+        </div>
+    </div>
+
+    <!--Main Page-->
+    <div id="mainPage" class="page">
+        <div id="mainMenu"></div>
+        <div id="toolsMenu">
+            <div class="divext" data-action="openToolsMenu">
+                <i class="icon ion-settings"></i>
+            </div>
+            <div class="scrolleable-y">
+                <!--
+                <ul>
+                    <li class="oneLine" data-action="toolsType">
+                        <h1>Node actiu</h1>
+                        <input id="nodemod"/>
+                        <i class="icon ion-checkmark-circled"></i>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="oneLine" data-action="toolsType">
+                        <h1><i class="icon ion-plus-circled"></i></h1>
+                        <ul class="typeSelector">
+                            <li data-type="author">Autor</li>
+                            <li data-type="paper">Paper</li>
+                            <li data-type="conf">Conf</li>
+                            <li data-type="term">Terme</li>
+                        </ul>
+                    </li>
+                    <li class="oneandahalfLine">
+                        <h1><i class="icon ion-arrow-resize"></i></h1>
+                        <span>De paper a:</span>
+                        <ul class="typeSelector">
+                            <li data-type="author">Autor</li>
+                            <li data-type="paper">Paper</li>
+                            <li data-type="conf">Conf</li>
+                            <li data-type="term">Terme</li>
+                        </ul>
+                    </li>
+                </ul>
+                -->
+                <ul>
+                    <li class="almostTwoLines">
+                        <h1>Afegir node</h1>
+                        <div id="addNodeSection">
+                            <ul class="typeSelector">
+                                <li data-type="author">Autor</li>
+                                <li data-type="paper">Paper</li>
+                                <li data-type="conf">Conf</li>
+                                <li data-type="term">Terme</li>
+                            </ul>
+                            <span>Nom:</span>
+                            <input id="nodeadd"/>
+                            <i data-action="addNode" class="icon ion-checkmark-circled"></i>
+                        </div>
+                    </li>
+                    <li class="twoLines">
+                        <h1>Afegir aresta</h1>
+                        <div id="addEdgeSection">
+                            <span>Font:</span>
+                            <input id="autoedge1" data-autoType="source" type="text"/>
+                            <i class="icon ion-checkmark-circled hiddenicon"></i>
+                            <span>Destí:</span>
+                            <input id="autoedge2" data-autoType="target"/>
+                            <i data-action="addEdge" class="icon ion-checkmark-circled"></i>
+                        </div>
+                    </li>
+                    <li class="oneLine">
+                        <h1>Esborrar node</h1>
+                        <div>
+                            <input id="autonode" data-autoType="source"/>
+                            <i data-action="removeNode" class="icon ion-android-locate"></i>
+                        </div>
+                    </li>
+                    <li  class="twoLines">
+                        <h1>Esborrar aresta</h1>
+                        <div>
+                            <span>Font:</span>
+                            <input id="autofont" data-autoType="source"/>
+                            <i class="icon ion-android-locate hiddenicon"></i>
+                            <span>Destí:</span>
+                            <input id="autodesti" data-autoType="target"/>
+                            <i data-action="removeEdge" class="icon ion-android-locate"></i>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div id="queryMenu">
+            <div class="divext" data-action="openQueryMenu">
+                <i class="icon ion-ios-search-strong"></i>
+            </div>
+            <div class="scrolleable-y">
+                <ul>
+                    <li data-action="completeGraph">
+                        <h1>Complet</h1>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="oneLine" data-action="queryType">
+                        <h1>Tipus</h1>
+                        <ul class="typeSelector">
+                            <li data-type="author">Autor</li>
+                            <li data-type="paper">Paper</li>
+                            <li data-type="conf">Conf</li>
+                            <li data-type="term">Terme</li>
+                        </ul>
+                    </li>
+                    <li class="oneandahalfLine">
+                        <h1>Veïns</h1>
+                        <div>
+                            <span>Veïns del node:</span>
+                            <input id="autoVeins" data-autoType="source"/>
+                            <i class="icon ion-android-locate"></i>
+                        </div>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="twoLines">
+                        <h1>1 a 1 <i id="info1a1" class="icon ion-information-circled info"></i></h1>
+                        <div>
+                            <span>Font:</span>
+                            <input id="auto1To1-1" data-autoType="source"/>
+                            <i class="icon ion-android-locate hiddenicon"></i>
+                            <span>Destí:</span>
+                            <input id="auto1To1-2" data-autoType="target"/>
+                            <i id="ok1to1" class="icon ion-android-locate"></i>
+                        </div>
+                    </li>
+                    <li class="twoLines">
+                        <h1>1 a N <i id="info1aN" class="icon ion-information-circled info"></i></h1>
+                        <div>
+                            <span>Font:</span>
+                            <input id="auto1ToN" data-autoType="source"/>
+                            <i class="icon ion-android-locate"></i>
+                            <span>Destí:</span>
+                            <ul class="typeSelector">
+                                <li data-type="author">Autor</li>
+                                <li data-type="paper">Paper</li>
+                                <li data-type="conf">Conf</li>
+                                <li data-type="term">Terme</li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li  class="threeLines">
+                        <h1>N a N <i id="infoNaN" class="icon ion-information-circled info"></i></h1>
+                        <div>
+                            <span>Font:</span>
+                            <ul class="typeSelector">
+                                <li data-type="author">Autor</li>
+                                <li data-type="paper">Paper</li>
+                                <li data-type="conf">Conf</li>
+                                <li data-type="term">Terme</li>
+                            </ul>
+                            <span>Destí:</span>
+                            <ul class="typeSelector">
+                                <li data-type="author">Autor</li>
+                                <li data-type="paper">Paper</li>
+                                <li data-type="conf">Conf</li>
+                                <li data-type="term">Terme</li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li class="fourLines">
+                        <h1>Referència <i id="inforef" class="icon ion-information-circled info"></i></h1>
+                        <div>
+                            <span>Font (referència):</span>
+                            <input id="autoref1" data-autoType="source"/>
+                            <i class="icon ion-android-locate hiddenicon"></i>
+                            <span>Destí (referència):</span>
+                            <input id="autoref2" data-autoType="target"/>
+                            <i class="icon ion-android-locate hiddenicon"></i>
+                            <span>Font:</span>
+                            <input id="autoref3" data-autoType="ref"/>
+                            <i class="icon ion-android-locate"></i>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div id="graph-container"></div>
+    </div>
+
+</body>
+</html>

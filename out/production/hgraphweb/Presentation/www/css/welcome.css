@@ -1,0 +1,45 @@
+/*Welcome Page*/
+#welcomePage.active{
+    display:-webkit-flex;
+    -webkit-align-items:center;
+    -webkit-justify-content:center;
+    height:100%;
+}
+#welcomePage .container h1,
+#welcomePage .container h2{
+    margin:0;
+    font-weight: normal;
+}
+#welcomePage .container h1{
+    /*font-size: 80px;
+    padding:0px 10px;*/
+    font-size:115px;
+}
+
+#welcomePage .container h2{
+    font-size:20px;
+    margin-top: -20px;
+    margin-left: 16px;
+}
+#welcomePage .container .buttons{
+    display: -webkit-flex;
+    -webkit-wrap-content:nowrap;
+}
+#welcomePage .container .buttons a{
+    display:block;
+    -webkit-flex: 1 1 auto;
+    width:50%;
+    margin:15px;
+    padding: 10px;
+    background-color:#00080A;
+    color:#ECEDED;
+    border-radius:10px;
+    text-align:center;
+    cursor:pointer;
+    -webkit-transition: color 100ms, background-color 100ms;
+}
+
+#welcomePage .container .buttons a:hover{
+    background-color: #678F99;
+    color:#00080A;
+}
