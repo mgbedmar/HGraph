@@ -54,8 +54,6 @@ body > div.page{
 }
 
 #popupPage #popupContent span {
-    text-align: justify;
-    text-justify: inter-word;
 }
 
 #popupPage #popupContent div.accept{
@@ -213,16 +211,14 @@ body > div.page{
     color:#ECEDED;
     background-color:#255C69;
     font-weight:normal;
-    width:40%;
-    max-width:40%;
+    width:35%;
+    max-width:35%;
 }
 
 #popupPage .resultContent .tableContent table td {
     overflow:hidden;
     padding:10px;
     color:#00080A;
-   /* width:40%;
-    max-width:40%;*/
 }
 
 #popupPage .resultContent .tableContent table td > div {
@@ -232,8 +228,12 @@ body > div.page{
     width:100%;
 }
 
-/*#popupPage .resultContent .tableContent table td.thirdCol,*/ #popupPage .resultContent .tableContent table th.thirdCol {
+#popupPage .resultContent .tableContent table th.thirdCol {
     width:20%;
+}
+
+#popupPage .resultContent .tableContent table th.zeroCol {
+    width:10%;
 }
 
 #popupPage .resultContent .tableContent table tr:nth-child(even) {

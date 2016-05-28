@@ -213,7 +213,6 @@
         //Init autocompletes
         _nodes = nodes;
         _initAutoCompletes();
-
     }
     function _initLoadPage(){
         var myList = document.getElementById('projectList');
@@ -492,15 +491,38 @@
 
     app.events.takeQuery1To1Result = function() {
         var hm = String(app.HGraph.getQuery1To1Result());
-        var result = [];
-        var c = {source: _inputChoices.source.name,
-                 target:  _inputChoices.target.name,
-                 hetesim:hm
-        };
-        app.HGraph.log(hm);
-        result.push(c);
-        app.graph.drawQuery1to1(result);
-        app.events.hidePopup();
+
+        var rPveritat = document.getElementById("resultPopup");
+        var rP = rPveritat.cloneNode(true);
+        rP.id = rP.id+145646;
+        document.getElementById("popupContent").appendChild(rP);
+        var table = document.querySelector("#"+rP.id+" table");
+
+        /* La fila */
+        var row = table.insertRow(1);
+        /* Columna de numeracio */
+        var zeroCol = row.insertCell(0);
+        var div = document.createElement("div");
+        div.innerHTML = '1';
+        zeroCol.appendChild(div);
+        /* Columna de la font */
+        var firstCol = row.insertCell(1);
+        var div = document.createElement("div");
+        div.innerHTML = _inputChoices.source.name;
+        firstCol.appendChild(div);
+        /* Columna del desti */
+        var firstCol = row.insertCell(2);
+        var div = document.createElement("div");
+        div.innerHTML = _inputChoices.target.name;
+        firstCol.appendChild(div);
+        app.HGraph.log(table.innerHTML);
+        /* Columna del hetesim */
+        var firstCol = row.insertCell(3);
+        var div = document.createElement("div");
+        div.innerHTML = hm;
+        firstCol.appendChild(div);
+
+        app.events.hidePopup(function() { app.events.showPopup(rP); });
 
     };
 
