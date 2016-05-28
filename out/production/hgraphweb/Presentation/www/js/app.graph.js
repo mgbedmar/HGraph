@@ -251,7 +251,7 @@
 
 
     //Draws a graph with a big number of nodes but without edges, nodes = JavaArrayList
-    app.graph.drawNodesOnlyGraph = function(nodes){
+    app.graph.drawNodesOnlyGraph = function(nodes, type){
         var g={nodes:[]};
         var i = 0;
         if(typeof _sarr === 'undefined')
@@ -265,11 +265,17 @@
         var inizoom = 0.3;
         _radius = 0.004;
         _angle = 0;
-        while(i < 1500*15)//nodes.size()-15000) //TODO posar aixo en no basto
+        while(i < 1500*10)//nodes.size()-15000) //TODO posar aixo en no basto
         {
             //TODO: rings
             //var pos = _getCircleRandomPos(i*40,i*20);
             pos = _getNextPosition(0.004, 0.0005);
+            if(parseInt(nodes.get(i)[2]) < 2 || String(nodes.get(i)[3]) == "term")
+            {
+                i++;
+                continue;
+            }
+
 
             g.nodes.push({
                 id: String(nodes.get(i)[0])+"-"+String(nodes.get(i)[3]),
@@ -295,7 +301,7 @@
             }
             i++;
         }
-        //If nodes remaining, start a new graph //TODO aixo esta fet?
+        //If nodes remaining, start a new graph //TODO aixo esta fet? -si
         if(g.nodes.length > 0)
         {
             s=new sigma({
@@ -328,7 +334,7 @@
                 si.camera.ratio = s.camera.ratio;
                 si.refresh();
             })
-        }, 5));
+        }, 10));
         
 
     };
@@ -449,7 +455,7 @@
 
     app.graph.removeNode = function(id, type){
 
-        for(var i = 0; i < _sarr.length && index == -1; i++)
+        for(var i = 0; i < _sarr.length; i++)
         {
             try {
                 _sarr[i].graph.dropNode(id+"-"+type);
@@ -472,7 +478,7 @@
         }
         catch(err)
         {
-            app.HGraph.log("no:"+err);
+            //app.HGraph.log("no:"+err);
         }
 
     };

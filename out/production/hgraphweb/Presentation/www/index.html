@@ -33,7 +33,47 @@
 
     <!--Loading-->
     <div id="popupPage" class="page">
-        <div id="popupContent"></div>
+        <div id="popupContent">
+            <div class="resultContent with-border">
+                <div class="closeResult"><i class="icon ion-close-round closeButton"></i></div>
+                <div class="buttons">
+                    <a data-action="exportResult">Exportar</a>
+                    <a data-action="resultInGraph">Visualitzar</a>
+                </div>
+                <div class="tableContent">
+                    <div class="tableDiv">
+                        <table>
+                            <tr>
+                                <th class="firstCol"><div>Font</div></th>
+                                <th class="secondCol"><div>Destí</div></th>
+                                <th class="thirdCol"><div>HeteSim</div></th>
+                            </tr>
+                            <tr>
+                                <td class="firstCol"><div>Font</div></td>
+                                <td class="secondCol"><div>hfjkdhfjdhfjdhjfkdhklfdsafdkjfkjfdkjfsljfdklf</div></td>
+                                <td class="thirdCol"><div>HeteSim</div></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="filters">
+                        <ul>
+                            <li>
+                                <h1>Sel·lecciona noms:</h1>
+                                <input id="autoSelect"/>
+                            </li>
+                            <li>
+                                <h1>Amaga noms:</h1>
+                                <input id="autoFilterNames"/>
+                            </li>
+                            <li>
+                                <h1>Amaga files:</h1>
+                                <input id="filterRows"/>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
     <!--Welcome Page-->
     <div id="welcomePage" class="page active">

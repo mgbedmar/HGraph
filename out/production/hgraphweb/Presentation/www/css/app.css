@@ -106,8 +106,164 @@ body > div.page{
 
 #popupPage .accept a:hover {
     background-color: #678F99;
-    color:#00080A;ackground-color:#9FBCC3;
+    color:#00080A;
+    background-color:#9FBCC3;
 }
+
+#popupPage #popupContent {
+    display:-webkit-flex;
+    -webkit-align-items:center;
+    -webkit-justify-content:center;
+    position:relative;
+    height:100%;
+    width:100%;
+}
+
+#popupPage #popupContent .resultContent .closeResult {
+    position:absolute;
+    right:-8px;
+    top:-8px;
+    background-color:#00080A;
+    border-radius:50px;
+    cursor:pointer;
+}
+
+#popupPage .resultContent ul li input {
+    border-radius: 5px;
+    border: 1px solid #678F99;
+    font-size: 14px;
+    margin:6px;
+    width:100%;
+}
+
+#popupPage .resultContent ul li input:focus {
+    outline: none;
+    border-color: #9ecaed;
+    border: 1px solid #678F99;
+    box-shadow: 0 0 6px #9ecaed; /*per que no va?*/
+}
+
+#popupPage #popupContent .resultContent .closeResult .closeButton {
+     color:#ECEDED;
+     font-size:15px;
+     padding:6px;
+}
+
+#popupPage #popupContent .resultContent {
+    display:-webkit-flex;
+    -webkit-flex-direction:column;
+    position:relative;
+    width:80%;
+    height:90%;
+}
+
+#popupPage .resultContent .buttons{
+    display: -webkit-flex;
+    -webkit-wrap-content:nowrap;
+    margin:0px 30px;
+}
+#popupPage .resultContent .buttons a{
+    display:block;
+    -webkit-flex: 1 1 auto;
+    width:50%;
+    margin:15px;
+    padding: 10px;
+    background-color:#BFDCE3;
+    color:#00080A;
+    border-radius:10px;
+    text-align:center;
+    cursor:pointer;
+    -webkit-transition: color 100ms, background-color 100ms;
+}
+
+#popupPage .resultContent .buttons a:hover{
+    background-color: #9FBCC3;
+}
+
+#popuppPage .resultContent .tableContent {
+    position:relative;
+    /*display:-webkit-flex;
+    -webkit-flex-direction:row;
+    -webkit-align-items:stretch;
+    -webkit-justify-content:space-between;*/
+    margin:20px;
+}
+
+#popupPage .resultContent .tableContent .tableDiv {
+    position:absolute;
+    left:30px;
+    top:15%;
+    height:80%;
+    width:70%;
+    overflow-y:auto;
+    overflow-x:auto;
+}
+
+#popupPage .resultContent .tableContent table {
+    margin:auto;
+
+}
+
+#popupPage .resultContent .tableContent table th {
+    text-overflow:ellipsis;
+    overflow:hidden;
+    padding:10px;
+    color:#ECEDED;
+    background-color:#255C69;
+    font-weight:normal;
+}
+
+#popupPage .resultContent .tableContent table td {
+    overflow:hidden;
+    padding:10px;
+    color:#00080A;
+    width:40%;
+    max-width:40%;
+}
+
+#popupPage .resultContent .tableContent table td > div {
+    display:inline;
+    white-space: nowrap;
+    text-overflow:ellipsis;
+    overflow:hidden;
+}
+
+#popupPage .resultContent .tableContent table td.thirdCol {
+    width:20%;
+}
+
+#popupPage .resultContent .tableContent table tr:nth-child(even) {
+    background-color:#BFDCE3;
+
+}
+
+#popupPage .resultContent {
+    color:#00080A;
+    font-weight:normal;
+    font-size:20px;
+}
+
+#popupPage .resultContent h1 {
+    color:#00080A;
+    font-weight:normal;
+    font-size:15px;
+}
+
+#popupPage .filters {
+    position:absolute;
+    right:30px;
+    top:15%;
+    height:80%;
+    width:25%;
+}
+#popupPage .resultContent ul {
+    display:-webkit-flex;
+    list-style-type:none;
+    -webkit-flex-direction:column;
+    -webkit-align-items:center;
+    -webkit-justify-content:center;
+}
+
 
 /*Forms*/
 .wrong{

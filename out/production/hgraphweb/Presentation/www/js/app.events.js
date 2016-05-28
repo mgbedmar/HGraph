@@ -208,7 +208,6 @@
             //TODO posar la linia de dalt quan estiguin els listeners corresponents
             //_drawQueryType("author");
             var nodesAux = app.HGraph.getNodes();
-            app.HGraph.log(nodesAux.size());
             app.graph.drawNodesOnlyGraph(nodesAux);
         }
         //Init autocompletes
@@ -266,7 +265,7 @@
 
     function _drawQueryType (type){
         var nodes = app.HGraph.getNodesOfType(type);
-        app.graph.drawNodesOnlyGraph(nodes);
+        app.graph.drawNodesOnlyGraph(nodes, type);
     }
 
     function _selectMenuOption(element, currentMenu, theOtherMenu){
@@ -328,6 +327,8 @@
 
     app.events.init = function(){
         _show(app.const.pageIds.welcome);
+        var d = document.createElement("div");
+        app.events.showPopup(d);
     };
 
     app.events.loadGoToWelcome = function(){
@@ -375,7 +376,7 @@
     //----Popups
     app.events.showPopup = function(element){
         _popupShown = true;
-        document.getElementById(app.const.pageIds.popupContent).innerHTML = "";
+        //document.getElementById(app.const.pageIds.popupContent).innerHTML = "";
         document.getElementById(app.const.pageIds.popupContent).appendChild(element);
         _show(app.const.pageIds.popup);
     };
@@ -588,6 +589,7 @@
         if(nodeRemoved)
         {
             //TODO: notify
+
             app.graph.removeNode(_inputChoices.source.id, _inputChoices.source.type);
             var found = false;
             var i;
@@ -597,6 +599,8 @@
             }
             if(found)
                 _nodes.splice((i-1), 1);
+        
+
             
         }
         input.value = "";
