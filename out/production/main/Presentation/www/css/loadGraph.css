@@ -149,6 +149,7 @@
 ::-webkit-scrollbar {
     background-color:rgba(25,25,25,0.5);
     width:8px;
+    height:8px;
     border-radius:10px;
 }
 

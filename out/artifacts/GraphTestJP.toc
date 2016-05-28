@@ -1,5 +1,0 @@
-\select@language {catalan}
-\contentsline {section}{\numberline {1}jpAddRemRem}{2}{section.1}
-\contentsline {section}{\numberline {2}jpEdges}{3}{section.2}
-\contentsline {section}{\numberline {3}jpInvalidTypes}{4}{section.3}
-\contentsline {section}{\numberline {4}jpNeighAfterRemNode}{5}{section.4}

@@ -1,4 +1,0 @@
-Node (tipus: author, nom: a) afegit.
-Node (tipus: paper, nom: p) afegit.
-Aresta (tipusA: author, nomA: a, tipusB: paper, nomB: p) afegida.
-Aresta (tipusA: author, nomA: a, tipusB: paper, nomB: p) esborrada.
