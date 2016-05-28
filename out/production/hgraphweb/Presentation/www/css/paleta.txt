@@ -28,3 +28,109 @@ hsl(192, 39%, 82%)
 #ECEDED
 rgba(236, 237, 237, 1)
 hsl(180, 3%, 93%)
+
+
+
+
+
+
+#result .buttons{
+    display: -webkit-flex;
+    -webkit-wrap-content:nowrap;
+    margin:0px 30px;
+}
+
+#result .buttons a{
+    display:block;
+    -webkit-flex: 1 1 auto;
+    width:50%;
+    margin:15px;
+    padding: 10px;
+    background-color:#BFDCE3;
+    color:#00080A;
+    border-radius:10px;
+    text-align:center;
+    cursor:pointer;
+    -webkit-transition: color 100ms, background-color 100ms;
+}
+
+#result .buttons a:hover{
+    background-color: #9FBCC3;
+}
+
+
+
+
+#result span {
+    color:#00080A;
+    font-weight:normal;
+    font-size:12px;
+}
+
+/* Aixo esta en absolute */
+#result .filters {
+    position:absolute;
+    right:30px;
+    top:15%;
+    height:80%;
+    width:25%;
+    overflow-y:auto;
+    overflow-x: hidden;
+
+}
+
+#result ul {
+    display:-webkit-flex;
+    list-style-type:none;
+    -webkit-flex-direction:column;
+    -webkit-align-items:center;
+    -webkit-justify-content:flex-start;
+    margin-right:10px;
+    margin-top:-18px;
+}
+
+#result ul ul li .icon {
+    color:#20282A;
+    font-size:11px;
+    cursor:pointer;
+}
+
+/* Potser hem de tocar el height */
+#result ul ul {
+    list-style-type:none;
+    display:-webkit-flex;
+    margin:20px;
+    -webkit-flex-direction:column;
+    margin:0px;
+    height:80px;
+    overflow-y:auto;
+    overflow-x:hidden;
+    max-width:100%;
+    list-style:none;
+    padding-left:0;
+
+}
+
+#result ul ul li {
+    padding:5px;
+    margin-top:2px;
+    margin-bottom:2px;
+    margin-right:auto;
+    margin-left:auto;
+    background-color:#BFDCE3;
+    color:#00080A;
+    border-radius:10px;
+    width:70%;
+    max-width:100px;
+    min-height:12px;
+    height:12px;
+    text-align:center;
+    font-size:11px;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    display:-webkit-flex;
+    -webkit-align-items:center;
+    -webkit-justify-content:space-between;
+}
+
+
