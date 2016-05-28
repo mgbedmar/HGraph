@@ -206,7 +206,9 @@
             //Trigger draw queryType author
             //document.querySelector("#queryMenu li[data-action=queryType] typeSelector[data-type=author]").click();
             //TODO posar la linia de dalt quan estiguin els listeners corresponents
-            _drawQueryType("author");
+            //_drawQueryType("author");
+            var nodesAux = app.HGraph.getNodes();
+            app.graph.drawNodesOnlyGraph(nodesAux);
         }
         //Init autocompletes
         _nodes = nodes;

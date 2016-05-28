@@ -88,6 +88,23 @@
     var _radius = 0.001;
     var _angle = 0;
 
+    var _pos = {
+        author: {x:0, y:0},
+        paper: {x:0, y:1},
+        term: {x:0, y:2},
+        conf: {x:0, y:3},
+        global: {x:0, y:4}
+    };
+    var _activeType;
+    var _sqrt;
+
+    var _typeColor = {
+        author: "steelblue",
+        paper: "purple",
+        conf: "forestgreen",
+        term: "darkred"
+    };
+
     function _applySettings(s){
         //Deprecated
 
@@ -145,7 +162,7 @@
         for (var type in nodes)
         {
 
-            var tot = Math.sqrt(totalSize);
+            _sqrt = Math.sqrt(totalSize)+2;
             //Check if type is a property of nodes
             if (nodes.hasOwnProperty(type))
             {
@@ -154,22 +171,17 @@
 
                 for (var i = 0; i < nodes[type].size(); i++)
                 {
-                    //var pos = _getNextPosition(1./totalSize, 1/(totalSize));
+                    var pos = _getNextSmallPosition(_sqrt, type);
 
                     g.nodes.push({
                         id: String(nodes[type].get(i)[0])+"-"+type,
                         label: String(nodes[type].get(i)[1]),
                         x: pos.x,
                         y: pos.y,
+                        color: _typeColor[type],
                         size: String(nodes[type].get(i)[2])
                     });
 
-
-                    pos.x++;
-                    if (pos.x-tot > 0) {
-                        pos.x = 0;
-                        pos.y++;
-                    }
                 }
 
             }
@@ -183,7 +195,8 @@
                     g.edges.push({
                         id: String(edges[type].get(i)[0])+"-"+type+"-"+String(edges[type].get(i)[1]),
                         source: String(edges[type].get(i)[0]+"-paper"),
-                        target: String(edges[type].get(i)[1])+"-"+type
+                        target: String(edges[type].get(i)[1])+"-"+type,
+                        color: "black"
                     })
                 }
             }
@@ -213,6 +226,17 @@
         return pos;
     }
 
+    function _getNextSmallPosition(sqrt, type) {
+
+        _pos[type].x++;
+
+        /*if (_pos[type].x > sqrt+1) {
+            _pos[type].x = 1;
+            _pos[type].y = _pos.global.y;
+            _pos.global.y++;
+        }*/
+        return _pos[type];
+    }
 
     //Public
     app.graph = {};
@@ -241,32 +265,34 @@
         var inizoom = 0.3;
         _radius = 0.004;
         _angle = 0;
-        while(i < nodes.size())
+        while(i < 1500*10)//nodes.size()-15000) //TODO posar aixo en no basto
         {
-
             //TODO: rings
             //var pos = _getCircleRandomPos(i*40,i*20);
             pos = _getNextPosition(0.004, 0.0005);
+            if(parseInt(nodes.get(i)[2]) < 2 || String(nodes.get(i)[3]) == "term")
+            {
+                i++;
+                continue;
+            }
+
 
             g.nodes.push({
-                id: String(nodes.get(i)[0])+"-"+type,
+                id: String(nodes.get(i)[0])+"-"+String(nodes.get(i)[3]),
                 label: String(nodes.get(i)[1]),
                 x: pos.x,
                 y: pos.y,
                 size: String(nodes.get(i)[2]),
-                color: colors[c]
+                color: _typeColor[String(nodes.get(i)[3])]
             });
             //If graph is % maxNodes, start a new one
             if(i % app.settings.maxNodes == 0)
             {
-                c = (c+1) %3;
-
                 s=new sigma({
                     container: 'graph-container',
                     graph:g,
                     settings:_settings.graph
                 });
-
                 //s.camera.ratio = inizoom;
                 _applySettings(s);
                 s.refresh();
@@ -398,7 +424,8 @@
         }
         else
         {
-            pos = _getCircleRandomPos(10,10);
+            _sqrt = Math.sqrt(_sqrt+1);
+            pos = _getNextSmallPosition(_sqrt, type)
         }
 
         _sarr[index].graph.addNode({
@@ -406,8 +433,8 @@
             label: label,
             x: pos.x,
             y: pos.y,
-            size:1
-            //TODO: color depenent del type
+            size:1,
+            color: _typeColor[type]
         });
 
         _sarr[_sarr.length-1].refresh();
@@ -419,7 +446,8 @@
             id: paperId+"-"+typeA+"-"+srcId,
             source: paperId+"-paper",
             target: srcId+"-"+typeA,
-            type:"curve"
+            type:"curve",
+            color:"black"
         });
 
         _sarr[0].refresh();
@@ -431,13 +459,12 @@
         {
             try {
                 _sarr[i].graph.dropNode(id+"-"+type);
-                app.HGraph.log("yes");
                 _updateSize(_sarr[i].graph.nodes());
                 _sarr[i].refresh();
             }
             catch(err)
             {
-                app.HGraph.log("no:"+err);
+                //app.HGraph.log("no:"+err);
             }
         }
     };
@@ -451,7 +478,7 @@
         }
         catch(err)
         {
-            app.HGraph.log("no:"+err);
+            //app.HGraph.log("no:"+err);
         }
 
     };

@@ -265,32 +265,34 @@
         var inizoom = 0.3;
         _radius = 0.004;
         _angle = 0;
-        while(i < nodes.size())
+        while(i < 1500*10)//nodes.size()-15000) //TODO posar aixo en no basto
         {
-
             //TODO: rings
             //var pos = _getCircleRandomPos(i*40,i*20);
             pos = _getNextPosition(0.004, 0.0005);
+            if(parseInt(nodes.get(i)[2]) < 2 || String(nodes.get(i)[3]) == "term")
+            {
+                i++;
+                continue;
+            }
+
 
             g.nodes.push({
-                id: String(nodes.get(i)[0])+"-"+type,
+                id: String(nodes.get(i)[0])+"-"+String(nodes.get(i)[3]),
                 label: String(nodes.get(i)[1]),
                 x: pos.x,
                 y: pos.y,
                 size: String(nodes.get(i)[2]),
-                color: colors[c]
+                color: _typeColor[String(nodes.get(i)[3])]
             });
             //If graph is % maxNodes, start a new one
             if(i % app.settings.maxNodes == 0)
             {
-                c = (c+1) %3;
-
                 s=new sigma({
                     container: 'graph-container',
                     graph:g,
                     settings:_settings.graph
                 });
-
                 //s.camera.ratio = inizoom;
                 _applySettings(s);
                 s.refresh();

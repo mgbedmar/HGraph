@@ -206,7 +206,9 @@
             //Trigger draw queryType author
             //document.querySelector("#queryMenu li[data-action=queryType] typeSelector[data-type=author]").click();
             //TODO posar la linia de dalt quan estiguin els listeners corresponents
-            _drawQueryType("author");
+            //_drawQueryType("author");
+            var nodesAux = app.HGraph.getNodes();
+            app.graph.drawNodesOnlyGraph(nodesAux);
         }
         //Init autocompletes
         _nodes = nodes;
@@ -585,17 +587,17 @@
         if(nodeRemoved)
         {
             //TODO: notify
-            try{
-                app.graph.removeNode(_inputChoices.source.id, _inputChoices.source.type);
-                var found = false;
-                var i;
-                for(i = 0; i < _nodes.length && !found; i++)
-                {
-                    found = (_nodes[i][1] == _inputChoices.source.id && _nodes[i][2] == _inputChoices.source.type);
-                }
-                if(found)
-                    _nodes.splice((i-1), 1);
-            }catch(err){app.HGraph.log(err);}
+
+            app.graph.removeNode(_inputChoices.source.id, _inputChoices.source.type);
+            var found = false;
+            var i;
+            for(i = 0; i < _nodes.length && !found; i++)
+            {
+                found = (_nodes[i][1] == _inputChoices.source.id && _nodes[i][2] == _inputChoices.source.type);
+            }
+            if(found)
+                _nodes.splice((i-1), 1);
+        
 
             
         }

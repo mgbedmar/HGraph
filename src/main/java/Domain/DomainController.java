@@ -524,6 +524,27 @@ public class DomainController
     }
 
     /**
+     * Dona tots els nodes del graf, en format portable.
+     * @return Retorna un ArrayList de parelles de String. En la primera posicio
+     * hi ha la id, en la segona, el nom i en la tercera el numero de veins.
+     * En la cuarta, el tipus.
+     */
+    public ArrayList<String[]> getNodes() {
+        ArrayList<String[]> l = new ArrayList<>();
+        for (Node node: g.getSetOfNodes()) {
+            String[] f = new String[4];
+            f[0] = String.valueOf(node.getID());
+            f[1] = node.getName();
+            f[2] = String.valueOf(g.getNeighbours(node).size());
+            f[3] = node.getType();
+            l.add(f);
+        }
+
+        return l;
+    }
+
+
+    /**
      * Dona tots els nodes de tipus <em>type</em> del graf, en format portable.
      * @param type tipus dels nodes que es consulten
      * @return Retorna un ArrayList de parelles de String. En la primera posicio
