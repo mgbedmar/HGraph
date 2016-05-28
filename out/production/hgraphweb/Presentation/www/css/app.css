@@ -76,8 +76,9 @@ body > div.page{
 #popupPage h1 {
     font-weight:normal;
     font-size:25px;
-    margin-left:20px;
     margin-top:20px;
+    margin-bottom:-3px;
+    margin-left: 10px;
 }
 
 #popupPage span {
@@ -201,7 +202,8 @@ body > div.page{
 
 #popupPage .resultContent .tableContent table {
     margin:auto;
-
+    width: 100%;
+    table-layout: fixed;
 }
 
 #popupPage .resultContent .tableContent table th {
@@ -222,10 +224,10 @@ body > div.page{
 }
 
 #popupPage .resultContent .tableContent table td > div {
-    display:inline;
     white-space: nowrap;
     text-overflow:ellipsis;
     overflow:hidden;
+    width:100%;
 }
 
 #popupPage .resultContent .tableContent table td.thirdCol {
@@ -246,7 +248,7 @@ body > div.page{
 #popupPage .resultContent h1 {
     color:#00080A;
     font-weight:normal;
-    font-size:15px;
+    font-size:13px;
 }
 
 #popupPage .filters {
@@ -255,13 +257,61 @@ body > div.page{
     top:15%;
     height:80%;
     width:25%;
+    overflow-y:hidden;
+    overflow-x: hidden;
 }
+
 #popupPage .resultContent ul {
     display:-webkit-flex;
     list-style-type:none;
     -webkit-flex-direction:column;
     -webkit-align-items:center;
-    -webkit-justify-content:center;
+    -webkit-justify-content:flex-start;
+    margin-right:10px;
+    margin-top:-18px;
+}
+
+#popupPage .resultContent ul ul li .closeEl {
+    color:#20282A;
+    font-size:11px;
+    cursor:pointer;
+}
+
+#popupPage .resultContent ul li ul {
+    list-style-type:none;
+    display:-webkit-flex;
+    margin:20px;
+    -webkit-flex-direction:column;
+    margin:0px;
+    max-height:75px;
+    overflow-y:auto;
+    overflow-x:hidden;
+    max-width:100%;
+    list-style:none;
+    padding-left:0;
+
+}
+
+#popupPage .resultContent ul ul li {
+    padding:5px;
+    margin-top:2px;
+    margin-bottom:2px;
+    margin-right:auto;
+    margin-left:auto;
+    background-color:#BFDCE3;
+    color:#00080A;
+    border-radius:10px;
+    width:70%;
+    max-width:100px;
+    min-height:12px;
+    height:12px;
+    text-align:center;
+    font-size:11px;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    display:-webkit-flex;
+    -webkit-align-items:center;
+    -webkit-justify-content:space-between;
 }
 
 
