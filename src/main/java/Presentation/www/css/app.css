@@ -246,8 +246,6 @@ body > div.page{
     overflow:hidden;
     padding:10px;
     color:#00080A;
-    width:40%;
-    max-width:40%;
 }
 #result .content table td > div {
     white-space: nowrap;
@@ -255,7 +253,7 @@ body > div.page{
     overflow:hidden;
     width:100%;
 }
-#result .content table td.thirdCol {
+#result .content table th.thirdCol {
     width:20%;
 }
 #result .content table tr:nth-child(even) {
