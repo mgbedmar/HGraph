@@ -133,6 +133,8 @@ body > div.page{
 
 
 #result{
+    width:80%;
+    height:90%;
     display:-webkit-flex;
     -webkit-flex-wrap:wrap;
 }
@@ -168,12 +170,15 @@ body > div.page{
     -webkit-flex:1 1 auto;
 }
 
+
+
 #result .content .table,#result .content .filters{
     padding:20px;
 }
 
 #result .content .table{
     -webkit-flex:3 1 auto;
+    max-width:600px;
 }
 
 #result .content .filters{
@@ -206,7 +211,6 @@ body > div.page{
     margin:0;
     height: 100px;
     overflow-y:scroll;
-    width:70%;
 }
 
 #result .content div ul li{
@@ -217,11 +221,6 @@ body > div.page{
     margin: 2px;
     border-radius: 5px;
 }
-
-#result input:focus{
-    box-shadow: 0 0 5px 5px red;
-}
-
 
 
 #result .content table {

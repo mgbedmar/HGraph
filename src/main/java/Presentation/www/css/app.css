@@ -133,6 +133,8 @@ body > div.page{
 
 
 #result{
+    width:80%;
+    height:90%;
     display:-webkit-flex;
     -webkit-flex-wrap:wrap;
 }

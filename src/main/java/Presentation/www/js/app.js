@@ -149,6 +149,9 @@ var app = app || {};
             .addEventListener("click", app.events.removeEdge);
         document.querySelector("#mainPage #toolsMenu > div[data-action=openToolsMenu]")
             .addEventListener("click", app.events.openToolsMenu);
+
+        document.querySelector("#mainPage #mainMenu div")
+            .addEventListener("click", app.events.openMainMenu);
         //document.querySelector("#mainPage a[data-action=welcome]").addEventListener("click", mainGoToWelcome);
 
         setTimeout(function(){

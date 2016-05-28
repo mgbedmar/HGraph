@@ -644,6 +644,12 @@
     };
     //---/Tools menu---
 
+    //---Menu menu---
+    app.events.openMainMenu = function(){
+        document.getElementById("#mainMenu").classList.toggle("open");
+    };
+    //---/Menu menu---
+
 }).call(window);
 
 

@@ -238,7 +238,7 @@
 }
 
 
-
+/*Tools*/
 
 #mainPage #toolsMenu.open{
     left:0px;
@@ -263,10 +263,7 @@
     display:-webkit-flex;
     -webkit-align-items:center;
     -webkit-justify-content:center;
-    padding-top:5px;
-    padding-bottom:5px;
-    padding-left:0px;
-    padding-right:0px;
+    padding: 5px 0px;
     width:55px;
     border-radius:10px;
     background-color:#678F99;
@@ -350,4 +347,44 @@
 #mainPage .hiddenicon {
     opacity:0;
     cursor:default;
+}
+
+/* Menu */
+#mainPage #mainMenu{
+    position:absolute;
+    width:100%;
+    top:-30px;
+    transition: top 300ms ease;
+}
+
+#mainPage #mainMenu{
+    top:-45px;
+}
+#mainPage #mainMenu.open{
+    top:0px;
+}
+#mainPage #mainMenu div{
+    margin: -5px auto 0;
+    width: 50px;
+    text-align: center;
+    background-color: #678F99;
+    border-radius: 5px;
+    padding: 5px 0px 0;
+    font-size: 30px;
+}
+
+#mainPage #mainMenu ul{
+    text-align: center;
+    list-style: none;
+    display: flex;
+    padding: 10px;
+    font-size: 25px;
+    background-color: #678F99;
+    width: 200px;
+    border-radius: 5px;
+    margin: -5px auto 0;
+}
+
+#mainPage #mainMenu ul li{
+    flex:1 1 auto;
 }
