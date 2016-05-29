@@ -318,4 +318,8 @@ public class PersistenceController {
             throw new PersistenceException("No s'ha pogut fer rollback");
         }
     }
+
+    public void unSelectProject() {
+        pm.unSelectProject();
+    }
 }

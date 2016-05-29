@@ -528,6 +528,11 @@ public class DomainController
         }
     }
 
+    public void unSelectProject(){
+        pc.unSelectProject();
+        g = new Graph();
+    }
+
     /**
      * Esborra un projecte.
      * @param name projecte a esborrar

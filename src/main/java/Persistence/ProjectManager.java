@@ -85,6 +85,15 @@ public class ProjectManager {
     }
 
     /**
+     * Deixa de tenir seleccionat un projecte
+     */
+    public void unSelectProject()
+    {
+        selectedProject = null;
+    }
+
+
+    /**
      * Comprova si existeix un projecte amb el nom donat
      * @param projectName nom del projecte a comprovar
      * @return <em>true</em> si i nomes si el projecte existeix

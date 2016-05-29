@@ -245,9 +245,12 @@
                 //this gets rid of all the ndoes and edges
                 _sarr[i].graph.clear();
                 _sarr[i].refresh();
+                _sarr[i].kill();
+
             }
 
         }
+        _sarr =[];
     }
 
     //Public

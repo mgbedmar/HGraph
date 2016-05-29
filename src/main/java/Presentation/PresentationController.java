@@ -85,6 +85,10 @@ public class PresentationController {
             we.executeScript("app.events.showInfo(\"Eps!\",\""+de.getFriendlyMessage()+"\", \"Cap problema\")");
         }
     }
+
+    public void unSelectProject(){
+        dc.unSelectProject();
+    }
     public void deleteProject(String projectName){
         try {
             dc.deleteProject(projectName);

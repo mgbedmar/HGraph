@@ -284,7 +284,6 @@
     }
 
     function _initMain(){
-        _clearUIState();
         var large = false;
         var nodes=[];
 
@@ -301,8 +300,8 @@
             //app.HGraph.log(JSON.stringify(nodes));
             //Is it larger than maxNodes?
             large = (nodes.length >= app.settings.maxNodes);
-
         }
+
         app.graph.init(large);
         if(!app.graph.isLarge())
         {
@@ -441,12 +440,6 @@
 
     app.events.loadGoToWelcome = function(){
         _hide(app.const.pageIds.loadGraph, function(){
-            _show(app.const.pageIds.welcome);
-        });
-    };
-
-    app.events.mainGoToWelcome = function(){
-        _hide(app.const.pageIds.main, function(){
             _show(app.const.pageIds.welcome);
         });
     };
@@ -715,7 +708,7 @@
         if(id != null)
         {
             app.graph.addNode(id, input.value, type);
-            //TODO: notify
+            app.events.notify("S'ha creat el node "+input.value);
             _nodes.push([String(input.value),String(id), type]);
             app.modified = true;
         }
@@ -750,7 +743,7 @@
             _inputChoices.target.id, _inputChoices.target.type);
 
        if(edgeAdded){
-            //TODO:Notify
+           app.events.notify("S'ha creat l'aresta ("+destId+", "+paperId+")");
             app.modified = true;
             app.graph.addEdge(destId, destType, paperId);
 
@@ -771,7 +764,7 @@
         var nodeRemoved = app.HGraph.removeNode(_inputChoices.source.id, _inputChoices.source.type);
         if(nodeRemoved)
         {
-            //TODO: notify
+            app.events.notify("S'ha esborrat el node ("+_inputChoices.source.id+")");
             app.modified = true;
             app.graph.removeNode(_inputChoices.source.id, _inputChoices.source.type);
             var found = false;
@@ -814,7 +807,7 @@
         if(edgeRemoved)
         {
             app.modified = true;
-            //TODO:notify
+            app.events.notify("S'ha esborrat l'aresta ("+destId+", "+paperId+")");
             app.graph.removeEdge(destId, destType, paperId);
         }
 
@@ -836,6 +829,8 @@
     app.events.mainToHome = function(){
         function go(){
             _hide(app.const.pageIds.main, function(){
+                _clearUIState();
+                app.HGraph.unSelectProject();
                 _show(app.const.pageIds.welcome);
             });
         }
@@ -849,15 +844,13 @@
     
     app.events.save = function(){
         if(app.newProject){
-            app.events.showPrompt("Guardar el projecte", "Escriu el nom del projecte:", "Guardar", "Cancela", function(name){
-                app.HGraph.saveAs(name);
-                app.newProject = false;
-            });
+            app.events.saveAs();
         }
-        else
+        else{
             app.HGraph.save();
-
-        app.modified = false;
+            app.events.notify("S'ha guardat el projecte");
+            app.modified = false;
+        }
     };
 
     app.events.saveAs = function(){
@@ -865,6 +858,7 @@
             app.HGraph.saveAs(name);
             app.newProject = false;
             app.modified = false;
+            app.events.notify("S'ha guardat el projecte amb el nom "+name);
         });
 
     };
@@ -879,6 +873,26 @@
 
 
     //---/Menu menu---
+
+    app.events.notify = function(msg){
+        var notification = document.createElement("div");
+        notification.innerHTML = msg;
+        var notifyBox = document.getElementById("notifyBox");
+        if(notifyBox.childNodes.length)
+            notifyBox.insertBefore(notification, notifyBox.childNodes[0]);
+        else
+            notifyBox.appendChild(notification);
+
+        setTimeout(function(){
+            notification.classList.add("hide");
+            setTimeout(function(){
+                notification.classList.add("collapse");
+                setTimeout(function(){
+                   notification.remove();
+                }, 200);
+            }, 200);
+        }, 5000);
+    };
 
 }).call(window);
 
