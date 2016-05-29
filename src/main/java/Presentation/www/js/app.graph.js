@@ -267,6 +267,72 @@
 
 
     //Draws a graph with a big number of nodes but without edges, nodes = JavaArrayList
+    app.graph.drawCoolGraph = function(nodes, edges){
+        var g={nodes:[], edges:[]};
+        _clearGraphs();
+        var s;
+        var pos;
+        //For each node
+        _radius = 0.004;
+        _angle = 0;
+        var i = 0;
+        var exists = {
+            "paper":{},
+            "author":{},
+            "conf":{}
+        };
+        for (var type in nodes) {
+            //Check if type is a property of nodes
+            if (nodes.hasOwnProperty(type)) {
+                for (var i = 0; i < nodes[type].size(); i++)
+                {
+                    pos = _getNextPosition(0.004, 0.0005);
+
+                    var random = Math.random();
+                    //TODO: define ratios
+                    if(random < app.settings.marginRatio[type])
+                    {
+                        continue;
+                    }
+
+                    exists[String(nodes.get(i)[3])][String(nodes.get(i)[0])] = true;
+                    g.nodes.push({
+                        id: String(nodes[type].get(i)[0])+"-"+String(nodes[type].get(i)[3]),
+                        label: String(nodes[type].get(i)[1]),
+                        x: pos.x,
+                        y: pos.y,
+                        size: String(nodes[type].get(i)[2]),
+                        color: _typeColor[String(nodes[type].get(i)[3])]
+                    });
+                }
+            }
+        }
+        for (var type in edges) {
+            //Check if type is a property of nodes
+            if (edges.hasOwnProperty(type)) {
+                for (var i = 0; i < edges[type].size(); i++)
+                {
+                    //If source and target exist in graph, draw edge
+                    if(exists[type][String(edges[type].get(i)[1])] && exists["paper"][String(edges[type].get(i)[0])])
+                        g.edges.push({
+                            id: String(edges[type].get(i)[0])+"-"+type+"-"+String(edges[type].get(i)[1]),
+                            source: String(edges[type].get(i)[0]+"-paper"),
+                            target: String(edges[type].get(i)[1])+"-"+type,
+                            //TODO:define edge colors
+                            color: _typeColorEdge[type]
+                        })
+                }
+            }
+        }
+
+        s = new sigma({
+            container: 'graph-container',
+            graph:g,
+            settings: _settings.graph
+        });
+        s.refresh();
+    };
+
     app.graph.drawNodesOnlyGraph = function(nodes, type){
         var g={nodes:[]};
         var i = 0;
@@ -351,7 +417,7 @@
                 si.refresh();
             })
         }, 10));
-        
+
 
     };
     //Draws a bigraph representing a table. Each connected component must be < maxNodes
