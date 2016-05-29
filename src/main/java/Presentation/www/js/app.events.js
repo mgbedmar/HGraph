@@ -369,7 +369,6 @@
 
         //TODO: node distribution?
         nodeobj[app.const.nodeTypes.conf]  = app.HGraph.getRelevantNodesOfType(app.const.nodeTypes.conf, 100);
-        app.HGraph.log("Vale!");
         nodeobj[app.const.nodeTypes.term]  = app.HGraph.getRelevantNodesOfType(app.const.nodeTypes.term, 400);
         var authorCapacity = 1000+(500-nodeobj[app.const.nodeTypes.conf]-nodeobj[app.const.nodeTypes.term]);
         nodeobj[app.const.nodeTypes.author] = app.HGraph.getRelevantNodesOfType(app.const.nodeTypes.author, authorCapacity);

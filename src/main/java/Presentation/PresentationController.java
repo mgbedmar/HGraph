@@ -190,13 +190,12 @@ public class PresentationController {
         return res;
     }
 
-    public ArrayList<String[]> getRelevantNodesOfType(String type, Integer quantity){
+    public ArrayList<String[]> getRelevantNodesOfType(String type, int quantity){
         ArrayList<String[]> res = getNodesOfType(type);
         System.out.println("asdfasdfasdfasdfasdf");
         res.sort( (a, b) -> Integer.parseInt(a[2])-Integer.parseInt(b[2]) );
         System.out.println("asdfasdfasdfasdfasdf2");
-        res = new ArrayList(res.subList(0, Math.min(res.size(), quantity)));
-        System.out.println("asdfasdfasdfasdfasdf3");
+        res = new ArrayList<>(res.subList(0, Math.min(res.size(), quantity)));
         return res;
     }
     public ArrayList<String[]> getEdgesOfType(String type){
