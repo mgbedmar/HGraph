@@ -145,6 +145,7 @@ var app = app || {};
             .addEventListener("click", app.events.drawCompleteGraph);
         _addInfoEvent();
         document.getElementById("ok1to1").addEventListener("click", app.events.query1to1);
+        document.getElementById("ok1toN").addEventListener("click", app.events.query1toN);
 
         document.querySelector("#mainPage #toolsMenu i[data-action=addNode]")
             .addEventListener("click", app.events.addNode);

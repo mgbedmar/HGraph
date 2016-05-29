@@ -23,7 +23,7 @@ import static java.lang.Thread.sleep;
 public class PresentationController {
     private DomainController dc;
     private WebEngine we;
-    private int MAX_FILES;
+    private int MAX_ROWS = 10;
     private String query1To1Result;
     private ArrayList<ArrayList<String>> result;
     private HashMap<Integer,Integer> dicRows;
@@ -60,8 +60,16 @@ public class PresentationController {
         this.result = r;
     }
 
+    protected void addNumsRow(Integer key, Integer value) {
+        this.dicRows.put(key, value);
+    }
+
     public String getQuery1To1Result() {
         return query1To1Result;
+    }
+
+    public ArrayList<ArrayList<String>> getQueryResult() {
+        return result;
     }
 
 
@@ -231,8 +239,12 @@ public class PresentationController {
     }
 
     public void query1toN(String idSource, String typeSource, String typeEnd) {
-        Task<String> task;
-
+        result = new ArrayList<>();
+        dicRows = new HashMap<>();
+        QueryTask task = new Query1toNTask(idSource, typeSource, typeEnd, dc, we, this, MAX_ROWS);
+        Thread th = new Thread(task);
+        th.setDaemon(true);
+        th.start();
     }
 
 
@@ -313,11 +325,13 @@ abstract class QueryTask extends Task<ArrayList<ArrayList<String>>> {
     protected DomainController dc;
     protected WebEngine we;
     protected PresentationController pc;
+    protected int maxRows;
 
-    public QueryTask(DomainController dc, WebEngine we, PresentationController pc) {
+    public QueryTask(DomainController dc, WebEngine we, PresentationController pc, int maxRows) {
         this.dc = dc;
         this.we = we;
         this.pc = pc;
+        this.maxRows = maxRows;
     }
 
     public void done() {
@@ -356,16 +370,29 @@ class Query1toNTask extends QueryTask {
     private String typeSource, typeEnd;
 
     public Query1toNTask(String idSource, String typeSource, String typeEnd,
-                         DomainController dc, WebEngine we, PresentationController pc) {
-        super(dc, we, pc);
+                         DomainController dc, WebEngine we, PresentationController pc, int maxRows) {
+        super(dc, we, pc, maxRows);
         this.idSource = Integer.parseInt(idSource);
         this.typeSource = typeSource;
         this.typeEnd = typeEnd;
     }
 
     public ArrayList<ArrayList<String>> call() throws DomainException {
+        dc.query1toN(idSource, typeSource, typeEnd);
+
         ArrayList<ArrayList<String>> r = new ArrayList<>();
-        
+        ArrayList<String> fila;
+        int i = 1;
+        int numRows = maxRows;
+        if (numRows == 0) numRows = dc.getResultSize();
+
+        while (i <= numRows && (fila = dc.getResultRow()) != null) {
+            pc.addNumsRow(i, Integer.parseInt(fila.get(0)));
+            fila.set(0, String.valueOf(i));
+            fila.add(1, dc.getNodeName(idSource, typeSource)+"{"+String.valueOf(idSource)+"}");
+            r.add(fila);
+            ++i;
+        }
         return r;
     }
 

@@ -547,6 +547,17 @@ public class DomainController
     }
 
     /**
+     * Dona el nom d'un node a partir de la seva id i tipus
+     * @param id id
+     * @param type tipus
+     * @return nom del node amb id <em>id</em> i tipus <em>type</em>
+     * @throws DomainException si el tipus es incorrecte o el node no existeix
+     */
+    public String getNodeName(int id, String type) throws DomainException {
+        return g.getNode(id, type).getName();
+    }
+
+    /**
      * Dona tots els nodes del graf, en format portable.
      * @return Retorna un ArrayList de parelles de String. En la primera posicio
      * hi ha la id, en la segona, el nom i en la tercera el numero de veins.
@@ -565,7 +576,6 @@ public class DomainController
 
         return l;
     }
-
 
     /**
      * Dona tots els nodes de tipus <em>type</em> del graf, en format portable.

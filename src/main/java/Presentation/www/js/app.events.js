@@ -17,6 +17,8 @@
         result:''
     };
 
+    var _regExpr = /\{[0-9]*\}/;
+
     function _hide(selector, cb){
         document.getElementById(selector).classList.remove("show");
         setTimeout(function(){
@@ -420,12 +422,39 @@
         };
 
     }
+
     function _clearTypeSelector(selector){
         document.querySelector(selector).dataset.selection = "";
         var children = document.querySelector(selector).children;
         for(var i = 0; i < children.length; i++)
         {
             children[i].classList.remove("selected");
+        }
+    }
+
+    function _tableCell(index, text, row, title) {
+        var cell, div;
+        div = document.createElement("div");
+        div.innerHTML = text;
+        cell = row.insertCell(index);
+        if (typeof title != 'undefined') cell.title = title;
+        cell.appendChild(div);
+    }
+
+    function _selectTypeFromSelector(selector) {
+        var typeSelector = document.querySelector(selector);
+        var type = typeSelector.dataset.selection;
+
+        //TODO: nopopups?
+        if(!type)
+        {
+            app.events.showInfo("Informació","Si us plau, selecciona un tipus", "D'acord");
+            typeSelector.classList.add("wrong");
+            return false;
+        }
+        else {
+            typeSelector.classList.remove("wrong");
+            return type;
         }
     }
 
@@ -635,13 +664,22 @@
 
     };
 
+    app.events.query1toN = function() {
+        var type = _selectTypeFromSelector("#query1toN .typeSelector");
+        if (!_checkInputs("auto1ToN")) return;
+        if (!type) return;
+        app.HGraph.query1toN(_inputChoices.source.id, _inputChoices.source.type, type);
+        app.events.showLoading();
+    };
+
+
     app.events.takeQuery1To1Result = function() {
         var hm = String(app.HGraph.getQuery1To1Result());
 
         var rPveritat = document.getElementById("resultPopup");
         var rP = rPveritat.cloneNode(true);
-        rP.id = rP.id+1;
         document.getElementById("popupContent").innerHTML = '';
+        rP.id = rP.id+1;
         document.getElementById("popupContent").appendChild(rP);
         var table = document.querySelector("#"+rP.id+" table");
 
@@ -676,16 +714,45 @@
 
     };
 
+    app.events.takeQueryResult = function() {
+        var result = app.HGraph.getQueryResult();
 
+        var rPveritat = document.getElementById("resultPopup");
+        var rP = rPveritat.cloneNode(true);
+        document.getElementById("popupContent").innerHTML = '';
+        rP.id = rP.id+1;
+        document.getElementById("popupContent").appendChild(rP);
+        var table = document.querySelector("#"+rP.id+" table");
 
-    //---Tools menu----
+        for (var i = 0; i < result.size(); i++) {
+            var row = table.insertRow(i+1);
+
+            _tableCell(0, String(result.get(i).get(0)), row);
+
+            for (var j = 1; j <=2; ++j) {
+                var act = String(result.get(i).get(j));
+                var tit = String(_regExpr.exec(act));
+                var nom = act.slice(0, -tit.length);
+                tit = tit.slice(1, -1);
+                _tableCell(j, nom, row, tit);
+            }
+            var hm = String(result.get(i).get(3));
+            hm = hm.slice(0, 5-hm.length);
+            _tableCell(3, hm, row);
+        }
+
+        _addResultEvents(rP);
+        app.events.hidePopup(function() { app.events.showPopup(rP); });
+    };
+
+     //---Tools menu----
     app.events.openToolsMenu = function(){
             document.querySelector("#"+app.const.pageIds.main + " #toolsMenu").classList.toggle("open");
     };
 
     app.events.addNode = function(){
         var typeSelector = document.querySelector("#addNodeSection .typeSelector");
-        var type =typeSelector.dataset.selection;
+        var type = typeSelector.dataset.selection;
         var input = document.querySelector("#addNodeSection input");
         //TODO: nopopups?
         if(!type)
