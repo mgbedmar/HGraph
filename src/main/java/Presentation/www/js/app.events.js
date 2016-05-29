@@ -654,11 +654,13 @@
         zeroCol.appendChild(div);
         /* Columna de la font */
         var firstCol = row.insertCell(1);
+        firstCol.title = _inputChoices.source.id;
         var div = document.createElement("div");
         div.innerHTML = _inputChoices.source.name;
         firstCol.appendChild(div);
         /* Columna del desti */
         var firstCol = row.insertCell(2);
+        firstCol.title = _inputChoices.target.id;
         var div = document.createElement("div");
         div.innerHTML = _inputChoices.target.name;
         firstCol.appendChild(div);

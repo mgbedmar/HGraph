@@ -241,6 +241,11 @@ body > div.page{
 
 }
 
+#popupPage .resultContent .tableContent table tr:nth-child(odd) {
+    background-color:rgba(191, 220, 227, 0.3);
+
+}
+
 #popupPage .resultContent {
     color:#00080A;
     font-weight:normal;

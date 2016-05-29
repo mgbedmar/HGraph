@@ -14,6 +14,7 @@ import javafx.scene.web.WebEngine;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 
@@ -24,6 +25,16 @@ public class PresentationController {
     private WebEngine we;
     private int MAX_FILES;
     private String query1To1Result;
+    private ArrayList<ArrayList<String>> result;
+    private HashMap<Integer,Integer> dicRows;
+
+
+    /**
+     * Retorna la id mes gran de la llista.
+     * @param ids llista d'enters
+     * @return el maxim de la llista <em>ids</em>
+     * @throws DomainException si la llista es buida
+     */
     private Integer getBigger(ArrayList<Integer> ids) throws DomainException {
         if(ids.size() == 0)
             throw new DomainException("Hi ha hagut un problema desconegut.");
@@ -37,8 +48,20 @@ public class PresentationController {
         return bigger;
     }
 
+    /**
+     * Setter del resultat de la consulta 1 a 1. El posa el thread corresponent.
+     * @param r String que conte el hetesim
+     */
     protected void setQuery1To1Result(String r) {
         query1To1Result = r;
+    }
+
+    protected void setQueryResult(ArrayList<ArrayList<String>> r) {
+        this.result = r;
+    }
+
+    public String getQuery1To1Result() {
+        return query1To1Result;
     }
 
 
@@ -60,9 +83,6 @@ public class PresentationController {
         }
     }
 
-    public String getQuery1To1Result() {
-        return query1To1Result;
-    }
 
     public PresentationController(WebEngine webEngine){
         dc = new DomainController();
@@ -188,7 +208,7 @@ public class PresentationController {
 
     /* Inicia una tasca per calcular una consulta 1 a 1 */
     public void query1to1(String idSource, String typeSource,
-                              String idEnd, String typeEnd) {
+                          String idEnd, String typeEnd) {
         Task<String> task = new Query1To1Task(idSource, typeSource, idEnd, typeEnd, dc, we, this);
         Thread th = new Thread(task);
         th.setDaemon(true);
@@ -203,10 +223,15 @@ public class PresentationController {
         /*
         task.progressProperty().addListener((obs, oldProgress, newProgress) ->
                 System.out.println(newProgress));
-                */
+
 
         task.valueProperty().addListener((observable, oldValue, newValue) ->
-                we.executeScript("app.events.showInfo('Resultat','"+newValue+"', 'OK');"));
+                we.executeScript("app.events.showInfo('Resultat','"+newValue+"', 'OK');"));*/
+
+    }
+
+    public void query1toN(String idSource, String typeSource, String typeEnd) {
+        Task<String> task;
 
     }
 
@@ -280,4 +305,68 @@ class Query1To1Task extends Task<String> {
             we.executeScript("app.events.showInfo('Error.', '"+e.getMessage()+"', 'OK');");
         }
     }
+}
+
+
+abstract class QueryTask extends Task<ArrayList<ArrayList<String>>> {
+
+    protected DomainController dc;
+    protected WebEngine we;
+    protected PresentationController pc;
+
+    public QueryTask(DomainController dc, WebEngine we, PresentationController pc) {
+        this.dc = dc;
+        this.we = we;
+        this.pc = pc;
+    }
+
+    public void done() {
+        try {
+            ArrayList<ArrayList<String>> r = get();
+            pc.setQueryResult(r);
+            Platform.runLater(new Runnable() {
+                @Override public void run() {
+                    we.executeScript("app.events.takeQueryResult()");
+                }
+            });
+
+        } catch (ExecutionException e) {
+            Platform.runLater(new Runnable() {
+                private String message;
+                @Override public void run() {
+                    String scr = "app.events.showInfo(\"Error\", \"" + message + "\", \"OK\");";
+                    we.executeScript("app.events.hidePopup(function(){"+scr+"});");
+                }
+
+                public Runnable setParams(String message) {
+                    this.message = message;
+                    return this;
+                }
+            }.setParams(e.getMessage()));
+
+        } catch (InterruptedException e) {
+            //TODO Aixo pot interessar-nos provocar-ho nosaltres mateixos per parar una tasca que duri massa
+            we.executeScript("app.events.showInfo('Error.', '"+e.getMessage()+"', 'OK');");
+        }
+    }
+}
+
+class Query1toNTask extends QueryTask {
+    private int idSource;
+    private String typeSource, typeEnd;
+
+    public Query1toNTask(String idSource, String typeSource, String typeEnd,
+                         DomainController dc, WebEngine we, PresentationController pc) {
+        super(dc, we, pc);
+        this.idSource = Integer.parseInt(idSource);
+        this.typeSource = typeSource;
+        this.typeEnd = typeEnd;
+    }
+
+    public ArrayList<ArrayList<String>> call() throws DomainException {
+        ArrayList<ArrayList<String>> r = new ArrayList<>();
+        
+        return r;
+    }
+
 }

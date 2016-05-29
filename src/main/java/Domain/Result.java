@@ -11,9 +11,9 @@ public class Result {
 
     /**
      * Numero de files que es mostren d'un resultat.
-     * Es una parametre del sistema que pot ser modificat per l'usuari.
+     * Es un parametre del sistema que pot ser modificat per l'usuari.
      */
-    public static int numRowsResult = 10;
+    public static int numRowsResult = 10; //TODO treure d'aqui?
 
     /**
      * Inner class per representar una fila. Els nodes son nomes Strings (el nom).
@@ -22,8 +22,9 @@ public class Result {
         protected String node1;
 
         protected Row(Node a) {
-            this.node1 = a.getName();
+            this.node1 = a.getName() + "{" + a.getID() + "}";
         }
+
 
         protected String getFirstNode() {
             return node1;
@@ -62,7 +63,7 @@ public class Result {
 
         protected Row3Cols(Node a, Node b, float hs) {
             super(a, hs);
-            this.node2 = b.getName();
+            this.node2 = b.getName() + "{" + b.getID() + "}";
         }
 
         protected String getSecondNode() {
@@ -162,9 +163,7 @@ public class Result {
         this.res.add(f);
     }
 
-    /**
-     * Comprova si la fila compleix restriccions per mostrarla...
-     */
+
     /**
      * Comprova si una fila es valida per mostrar, i.e. si ha estat filtrada o seleccionada.
      * @param index l'index de la fila al array <em>res</em>
