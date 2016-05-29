@@ -41,6 +41,25 @@ public class PresentationController {
         query1To1Result = r;
     }
 
+
+    public void saveAs(String name){
+        try {
+            dc.save(name);
+        } catch (DomainException de) {
+            System.err.println(de.getFriendlyMessage());
+            we.executeScript("app.events.showInfo(\"Eps!\",\""+de.getFriendlyMessage()+"\", \"Cap problema\")");
+        }
+    }
+
+    public void save(){
+        try {
+            dc.save();
+        } catch (DomainException de) {
+            System.err.println(de.getFriendlyMessage());
+            we.executeScript("app.events.showInfo(\"Eps!\",\""+de.getFriendlyMessage()+"\", \"Cap problema\")");
+        }
+    }
+
     public String getQuery1To1Result() {
         return query1To1Result;
     }

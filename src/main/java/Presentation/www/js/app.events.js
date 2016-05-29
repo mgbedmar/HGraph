@@ -97,7 +97,7 @@
         }
     }
 
-    function _initAutoCompletes(nodes){
+    function _initAutoCompletes(){
         var mChars;
         if (_nodes.length < 300) mChars = 1;
         else mChars = 3;
@@ -123,6 +123,7 @@
                 var _autCom = {
                     selector: "#"+app.const.autoInputIds[key],
                     minChars: mChars,
+                    cache: false,
                     source: function(term, suggest){
                         term = term.toLowerCase();
                         var matches = [];
@@ -346,6 +347,8 @@
     app.events.loadGoToMain = function() {
         app.events.showLoading();
         _hide(app.const.pageIds.loadGraph, function(){
+            app.modified = false;
+            app.newProject = false;
             _show(app.const.pageIds.main);
             _initMain();
             app.events.hidePopup();
@@ -355,6 +358,8 @@
     app.events.welcomeGoToNewGraph = function(){
         app.events.showLoading();
         _hide(app.const.pageIds.welcome, function(){
+            app.modified = false;
+            app.newProject = true;
             _show(app.const.pageIds.main);
             _initMain();
             app.events.hidePopup();
@@ -431,6 +436,43 @@
         divbtns.appendChild(okbtn);
         div.appendChild(title);
         div.appendChild(text);
+        div.appendChild(divbtns);
+        app.events.showPopup(div);
+    };
+
+    app.events.showPrompt = function(t, msgRequest, okMsg, cancelMsg, cb){
+        if(_popupShown) return;
+        var div = document.createElement("div");
+        div.classList.add("accept");
+        div.classList.add("with-border");
+        var title = document.createElement("h1");
+        title.innerHTML = t || "Pregunta";
+        var text = document.createElement("span");
+        text.innerHTML = msgRequest;
+        if (msgRequest.length > 120) {
+            div.classList.add("large");
+        }
+        else if (msgRequest.length > 80) {
+            div.classList.add("big");
+        }
+        var input = document.createElement("input");
+        var divbtns = document.createElement("div");
+        divbtns.classList.add("divbtns");
+        var okbtn = document.createElement("a");
+        okbtn.innerHTML = okMsg;
+        okbtn.addEventListener("click", function(){
+            app.events.hidePopup();
+            if(cb) cb(input.value);
+        });
+        if (typeof cancelMsg != 'undefined') {
+            var cancelbtn = document.createElement("a");
+            cancelbtn.innerHTML = cancelMsg;
+            divbtns.appendChild(cancelbtn);
+        }
+        divbtns.appendChild(okbtn);
+        div.appendChild(title);
+        div.appendChild(text);
+        div.appendChild(input);
         div.appendChild(divbtns);
         app.events.showPopup(div);
     };
@@ -535,8 +577,14 @@
             input.classList.remove("wrong");
 
         var id = app.HGraph.addNode(input.value, type);
-        app.graph.addNode(id, input.value, type);
-        _nodes.push([String(input.value),String(id), type]);
+        if(id != null)
+        {
+            app.graph.addNode(id, input.value, type);
+            //TODO: notify
+            _nodes.push([String(input.value),String(id), type]);
+            app.modify = true;
+        }
+
 
         _clearTypeSelector("#addNodeSection .typeSelector");
         input.value = "";
@@ -568,7 +616,7 @@
 
        if(edgeAdded){
             //TODO:Notify
-
+            app.modify = true;
             app.graph.addEdge(destId, destType, paperId);
 
         }
@@ -589,7 +637,7 @@
         if(nodeRemoved)
         {
             //TODO: notify
-
+            app.modify = true;
             app.graph.removeNode(_inputChoices.source.id, _inputChoices.source.type);
             var found = false;
             var i;
@@ -599,7 +647,7 @@
             }
             if(found)
                 _nodes.splice((i-1), 1);
-        
+            
 
             
         }
@@ -630,6 +678,7 @@
             _inputChoices.target.id, _inputChoices.target.type);
         if(edgeRemoved)
         {
+            app.modify = true;
             //TODO:notify
             app.graph.removeEdge(destId, destType, paperId);
         }
@@ -646,14 +695,54 @@
 
     //---Menu menu---
     app.events.openMainMenu = function(){
-        try{
-            document.getElementById("mainMenu").classList.toggle("open");
-
-        }catch(err)
-        {
-            app.HGraph.log(err);
-        }
+        document.getElementById("mainMenu").classList.toggle("open");
     };
+
+    app.events.mainToHome = function(){
+        function go(){
+            _hide(app.const.pageIds.main, function(){
+                _show(app.const.pageIds.welcome);
+            });
+        }
+
+        if(app.modified)
+            app.events.showAccept("Sortir", "Si surts es perdràn els canvis que no has desat. Vols continuar?",
+            "Sortir", go);
+        else
+            go();
+    };
+    
+    app.events.save = function(){
+        if(app.newProject){
+            app.events.showPrompt("Guardar el projecte", "Escriu el nom del projecte:", "Guardar", "Cancela", function(name){
+                app.HGraph.saveAs(name);
+                app.newProject = false;
+            });
+        }
+        else
+            app.HGraph.save();
+
+        app.modified = false;
+    };
+
+    app.events.saveAs = function(){
+        app.events.showPrompt("Guardar el projecte", "Escriu el nom del projecte:", "Guardar", "Cancela", function(name){
+            app.HGraph.saveAs(name);
+            app.newProject = false;
+            app.modified = false;
+        });
+
+    };
+
+    app.events.showSettings = function(){
+        //TODO
+    };
+
+    app.events.showHelp = function(){
+        //TODO
+    };
+
+
     //---/Menu menu---
 
 }).call(window);

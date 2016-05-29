@@ -4,7 +4,11 @@ var app = app || {};
 //Init HGraph
 (function(){
     'use strict';
+    //private
+
     //Public
+    app.modified = false;
+    app.newProject = true;
     app.settings={
         //Disables some features on graphs with nodes > maxNodes (large graphs)
         maxNodes:1500
@@ -115,6 +119,7 @@ var app = app || {};
         };
     };
 
+
     app.init = function(){
         if(app.events === undefined || app.graph === undefined){
             app.HGraph.log("Error a les dependencies");
@@ -152,6 +157,16 @@ var app = app || {};
 
         document.querySelector("#mainPage #mainMenu div[data-action=openMainMenu]")
             .addEventListener("click", app.events.openMainMenu);
+        document.querySelector("#mainPage #mainMenu ul li[data-action=mainToHome]")
+            .addEventListener("click", app.events.mainToHome);
+        document.querySelector("#mainPage #mainMenu ul li[data-action=save]")
+            .addEventListener("click", app.events.save);
+        document.querySelector("#mainPage #mainMenu ul li[data-action=saveAS]")
+            .addEventListener("click", app.events.saveAs);
+        document.querySelector("#mainPage #mainMenu ul li[data-action=showSettings]")
+            .addEventListener("click", app.events.showSettings);
+        document.querySelector("#mainPage #mainMenu ul li[data-action=showHelp]")
+            .addEventListener("click", app.events.showHelp);
         //document.querySelector("#mainPage a[data-action=welcome]").addEventListener("click", mainGoToWelcome);
 
         setTimeout(function(){
