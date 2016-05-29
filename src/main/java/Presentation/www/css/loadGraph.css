@@ -21,23 +21,18 @@
 #loadGraphPage ul{
     list-style-type:none;
     display:-webkit-flex;
-    margin:20px;
     -webkit-flex-direction:column;
     margin:0px;
-    max-height:200px;
+    max-height:169px;
     overflow-y:auto;
     overflow-x:hidden;
     padding-right:10px;
 }
 
 #loadGraphPage li {
-    padding:9px;
-    padding-left:20px;
-    padding-right:15px;
-    margin-top:2px; /*3px;*/
-    margin-bottom:2px;
-    margin-right:auto;
-    margin-left:auto;
+    padding: 9px 15px 9px 20px;
+    /*3px;*/
+    margin: 2px auto;
     background-color:#BFDCE3;
     color:#00080A;
     border-radius:10px;
@@ -82,7 +77,6 @@
     padding-left:8px;
     padding-right:8px;
     color:#00080A;
-    background-color:#rgba(0,0,0,0);
     border:thin solid #00080A;
     border-radius:10px;
     cursor:pointer;

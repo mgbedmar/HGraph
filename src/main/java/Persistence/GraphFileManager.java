@@ -232,7 +232,7 @@ public class GraphFileManager {
         deleteBackups(path);
     }
 
-    
+
     /**
      * Denega tots els canvis des del darrer <em>startSaving()</em> i deixa el graf en l'estat anterior.
      * @throws IOException error IO

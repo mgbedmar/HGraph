@@ -352,6 +352,23 @@ public class DomainController
     }
 
     /**
+     * Guarda el graf amb el nom especificat
+     * @param name
+     * @throws DomainException
+     */
+    public void save(String name) throws DomainException {
+        try {
+            pc.createProject(name);
+            pc.selectProject(name);
+            save();
+        }catch (PersistenceException pe)
+        {
+            throw new DomainException("No s'ha pogut guardar el graf: "+pe.getFriendlyMessage());
+        }
+
+    }
+
+    /**
      * Guarda el graf.
      * @throws DomainException si falla l'escriptura
      */
@@ -430,6 +447,7 @@ public class DomainController
         String[] elem;
 
         try {
+            g = new Graph();
             pc.selectProject(projectName);
             pc.startLoading();
             while ((elem = pc.getAuthor()) != null) {
