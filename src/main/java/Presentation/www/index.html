@@ -70,7 +70,7 @@
                 <li data-action="mainToHome"><i class="icon ion-home"></i></li>
                 <li data-action="save"><i class="icon ion-disc"></i></li>
                 <li data-action="saveAS"><i class="icon ion-disc"></i></li>
-                <li data-action="showSettings"><i class="icon ion-gear-a" ></i></li>
+                <li data-action="showSettings"><i class="icon ion-android-settings" ></i></li>
                 <li data-action="showHelp"><i class="icon ion-help" ></i></li>
             </ul>
             <div data-action="openMainMenu"><i class="icon ion-android-menu"></i></div>
@@ -122,7 +122,10 @@
                             </ul>
                             <span>Nom:</span>
                             <input id="nodeadd"/>
-                            <i data-action="addNode" class="icon ion-checkmark-circled"></i>
+                            <!--<i data-action="addNode" class="icon ion-checkmark-circled"></i>-->
+                            <div class="buttons">
+                                <a id="addNode"><i class="icon ion-checkmark"></i></a>
+                            </div>
                         </div>
                     </li>
                     <li class="twoLines">
@@ -130,17 +133,20 @@
                         <div id="addEdgeSection">
                             <span>Font:</span>
                             <input id="autoedge1" data-autoType="source" type="text"/>
-                            <i class="icon ion-checkmark-circled hiddenicon"></i>
                             <span>Destí:</span>
                             <input id="autoedge2" data-autoType="target"/>
-                            <i data-action="addEdge" class="icon ion-checkmark-circled"></i>
+                            <div class="buttons">
+                                <a id="addEdge"><i class="icon ion-checkmark"></i></a>
+                            </div>
                         </div>
                     </li>
                     <li class="oneLine">
                         <h1>Esborrar node</h1>
                         <div>
                             <input id="autonode" data-autoType="source"/>
-                            <i data-action="removeNode" class="icon ion-android-locate"></i>
+                            <div class="buttons">
+                                <a id="removeNode"><i class="icon ion-checkmark"></i></a>
+                            </div>
                         </div>
                     </li>
                     <li  class="twoLines">
@@ -148,10 +154,11 @@
                         <div>
                             <span>Font:</span>
                             <input id="autofont" data-autoType="source"/>
-                            <i class="icon ion-android-locate hiddenicon"></i>
                             <span>Destí:</span>
                             <input id="autodesti" data-autoType="target"/>
-                            <i data-action="removeEdge" class="icon ion-android-locate"></i>
+                            <div class="buttons">
+                                <a id="removeEdge"><i class="icon ion-checkmark"></i></a>
+                            </div>
                         </div>
                     </li>
                 </ul>
@@ -170,7 +177,7 @@
                     </li>
                 </ul>
                 <ul>
-                    <li class="oneLine" data-action="queryType">
+                    <li class="onepointtwoLine" data-action="queryType">
                         <h1>Tipus</h1>
                         <ul class="typeSelector" data-action="drawType">
                             <li data-type="author">Autor</li>
@@ -178,13 +185,20 @@
                             <li data-type="conf">Conf</li>
                             <li data-type="term">Terme</li>
                         </ul>
+                        <div class="buttons">
+                            <a id="seeTipus left-button"><i class="icon ion-eye"></i></a>
+                            <a id="tableTipus right-button"><i class="icon ion-android-list"></i></a>
+                        </div>
                     </li>
                     <li class="oneandahalfLine">
                         <h1>Veïns</h1>
                         <div>
                             <span>Veïns del node:</span>
                             <input id="autoVeins" data-autoType="source"/>
-                            <i class="icon ion-android-locate"></i>
+                            <div class="buttons">
+                                <a id="seeVeins left-button"><i class="icon ion-eye"></i></a>
+                                <a id="tableVeins right-button"><i class="icon ion-android-list"></i></a>
+                            </div>
                         </div>
                     </li>
                 </ul>
@@ -194,18 +208,18 @@
                         <div>
                             <span>Font:</span>
                             <input id="auto1To1-1" data-autoType="source"/>
-                            <i class="icon ion-android-locate hiddenicon"></i>
                             <span>Destí:</span>
                             <input id="auto1To1-2" data-autoType="target"/>
-                            <i id="ok1to1" class="icon ion-android-locate"></i>
+                            <div class="buttons">
+                                <a id="ok1to1"><i class="icon ion-android-list"></i></a>
+                            </div>
                         </div>
                     </li>
-                    <li id="query1toN" class="twoLines">
+                    <li id="query1toN" class="twoandahalfLines">
                         <h1>1 a N <i id="info1aN" class="icon ion-information-circled info"></i></h1>
                         <div>
                             <span>Font:</span>
                             <input id="auto1ToN" data-autoType="source"/>
-                            <i id="ok1toN" class="icon ion-android-locate"></i>
                             <span>Destí:</span>
                             <ul class="typeSelector">
                                 <li data-type="author">Autor</li>
@@ -213,6 +227,9 @@
                                 <li data-type="conf">Conf</li>
                                 <li data-type="term">Terme</li>
                             </ul>
+                            <div class="buttons">
+                                <a id="ok1toN"><i class="icon ion-android-list"></i></a>
+                            </div>
                         </div>
                     </li>
                     <li  class="threeLines">
@@ -232,6 +249,9 @@
                                 <li data-type="conf">Conf</li>
                                 <li data-type="term">Terme</li>
                             </ul>
+                            <div class="buttons">
+                                <a id="okNtoN"><i class="icon ion-android-list"></i></a>
+                            </div>
                         </div>
                     </li>
                     <li class="fourLines">
@@ -239,13 +259,13 @@
                         <div>
                             <span>Font (referència):</span>
                             <input id="autoref1" data-autoType="source"/>
-                            <i class="icon ion-android-locate hiddenicon"></i>
                             <span>Destí (referència):</span>
                             <input id="autoref2" data-autoType="target"/>
-                            <i class="icon ion-android-locate hiddenicon"></i>
                             <span>Font:</span>
                             <input id="autoref3" data-autoType="ref"/>
-                            <i class="icon ion-android-locate"></i>
+                            <div class="buttons">
+                                <a id="okref"><i class="icon ion-android-list"></i></a>
+                            </div>
                         </div>
                     </li>
                 </ul>

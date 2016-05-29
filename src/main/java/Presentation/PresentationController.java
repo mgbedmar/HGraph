@@ -256,6 +256,14 @@ public class PresentationController {
         th.start();
     }
 
+    public void queryNtoN(String typeSource, String typeEnd) {
+        result = new ArrayList<>();
+        dicRows = new HashMap<>();
+        QueryTask task = new QueryNtoNTask(typeSource, typeEnd, dc, we, this, MAX_ROWS);
+        Thread th = new Thread(task);
+        th.setDaemon(true);
+        th.start();
+    }
 
     public void log(String msg){
         System.out.println(msg);
@@ -328,7 +336,6 @@ class Query1To1Task extends Task<String> {
     }
 }
 
-
 abstract class QueryTask extends Task<ArrayList<ArrayList<String>>> {
 
     protected DomainController dc;
@@ -388,6 +395,75 @@ class Query1toNTask extends QueryTask {
 
     public ArrayList<ArrayList<String>> call() throws DomainException {
         dc.query1toN(idSource, typeSource, typeEnd);
+
+        ArrayList<ArrayList<String>> r = new ArrayList<>();
+        ArrayList<String> fila;
+        int i = 1;
+        int numRows = maxRows;
+        if (numRows == 0) numRows = dc.getResultSize();
+
+        while (i <= numRows && (fila = dc.getResultRow()) != null) {
+            pc.addNumsRow(i, Integer.parseInt(fila.get(0)));
+            fila.set(0, String.valueOf(i));
+            fila.add(1, dc.getNodeName(idSource, typeSource)+"{"+String.valueOf(idSource)+"}");
+            r.add(fila);
+            ++i;
+        }
+        return r;
+    }
+
+}
+
+class QueryNtoNTask extends QueryTask {
+    private int idSource;
+    private String typeSource, typeEnd;
+
+    public QueryNtoNTask(String typeSource, String typeEnd,
+                         DomainController dc, WebEngine we, PresentationController pc, int maxRows) {
+        super(dc, we, pc, maxRows);
+        this.typeSource = typeSource;
+        this.typeEnd = typeEnd;
+    }
+
+    public ArrayList<ArrayList<String>> call() throws DomainException {
+        dc.queryNtoN(typeSource, typeEnd);
+
+        ArrayList<ArrayList<String>> r = new ArrayList<>();
+        ArrayList<String> fila;
+        int i = 1;
+        int numRows = maxRows;
+        if (numRows == 0) numRows = dc.getResultSize();
+
+        while (i <= numRows && (fila = dc.getResultRow()) != null) {
+            pc.addNumsRow(i, Integer.parseInt(fila.get(0)));
+            fila.set(0, String.valueOf(i));
+            r.add(fila);
+            ++i;
+        }
+        return r;
+    }
+
+}
+
+class QueryByReferenceTask extends QueryTask {
+    private int idSource, idSourceRef, idEndRef;
+    private String typeSourceRef, typeEndRef, typeSource;
+
+    public QueryByReferenceTask(String nodeRefSourceID, String nodeRefSourceType,
+                                String nodeRefEndID, String nodeRefEndType,
+                                String nodeSourceID, String nodeSourceType,
+                                DomainController dc, WebEngine we, PresentationController pc, int maxRows) {
+        super(dc, we, pc, maxRows);
+        this.idSourceRef = Integer.parseInt(nodeRefSourceID);
+        this.typeSourceRef = nodeRefSourceType;
+        this.idEndRef = Integer.parseInt(nodeRefEndType);
+        this.typeEndRef = nodeRefEndType;
+        this.idSource = Integer.parseInt(nodeSourceID);
+        this.typeSource = nodeSourceType;
+    }
+
+    public ArrayList<ArrayList<String>> call() throws DomainException {
+        dc.queryByReference(idSourceRef, typeSourceRef, idEndRef, typeEndRef, idSource, typeSource);
 
         ArrayList<ArrayList<String>> r = new ArrayList<>();
         ArrayList<String> fila;
