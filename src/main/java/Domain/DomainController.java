@@ -234,9 +234,9 @@ public class DomainController
                                  int nodeRefEndID, String nodeRefEndType,
                                  int nodeSourceID, String nodeSourceType) throws DomainException
     {
-        if (nodeRefSourceType != nodeSourceType) throw new
-                DomainException("El primer i tercer node han de ser del mateix tipus, i no ho son. El primer "+
-                "és de tipus '"+nodeRefSourceType+"' i el segon és de tipus '"+nodeSourceType+"'.");
+        if (!nodeRefSourceType.equals(nodeSourceType)) throw new
+                DomainException("El primer i tercer node han de ser del mateix tipus, i no ho són. El primer "+
+                "és de tipus '"+nodeRefSourceType+"' i el tercer és de tipus '"+nodeSourceType+"'.");
 
         Node refSource = g.getNode(nodeRefSourceID, nodeRefSourceType);
         Node refEnd = g.getNode(nodeRefEndID, nodeRefEndType);

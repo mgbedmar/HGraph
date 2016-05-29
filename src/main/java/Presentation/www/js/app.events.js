@@ -411,6 +411,7 @@
     }
 
     function _selectType(parentElement, type){
+        app.HGraph.log("_se");
         parentElement.dataset.selection = type;
         var nodes = parentElement.children;
         for(var i = 0; i < nodes.length; i++)
@@ -442,17 +443,18 @@
     }
 
     function _selectTypeFromSelector(selector) {
+        app.HGraph.log("sel");
         var typeSelector = document.querySelector(selector);
         var type = typeSelector.dataset.selection;
-
+app.HGraph.log("sel");
         if(!type)
         {
             typeSelector.classList.add("wrong");
-            return false;
+            return false; app.HGraph.log("sel");
         }
         else {
             typeSelector.classList.remove("wrong");
-            return type;
+            return type;app.HGraph.log("sel");
         }
     }
 
@@ -670,6 +672,24 @@
         app.events.showLoading();
     };
 
+    app.events.queryNtoN = function() {
+        var type1 = _selectTypeFromSelector("#primer");
+        var type2 = _selectTypeFromSelector("#segon");
+        if (!type1 || !type2) return;
+        app.HGraph.queryNtoN(type1, type2);
+        app.events.showLoading();
+    };
+
+    app.events.queryByReference = function() {
+        if (!_checkInputs("autoref1", "autoref2", "autoref3")) return;
+        app.HGraph.log("abans");
+        app.HGraph.queryByReference(_inputChoices.source.id, _inputChoices.source.type,
+                                    _inputChoices.target.id, _inputChoices.target.type,
+                                    _inputChoices.ref.id, _inputChoices.ref.type);
+        app.HGraph.log("despres");
+        app.events.showLoading();
+    };
+
 
     app.events.takeQuery1To1Result = function() {
         var hm = String(app.HGraph.getQuery1To1Result());
@@ -735,7 +755,7 @@
                 _tableCell(j, nom, row, tit);
             }
             var hm = String(result.get(i).get(3));
-            hm = hm.slice(0, 5-hm.length);
+            hm = hm.slice(0, 7-hm.length);
             _tableCell(3, hm, row);
         }
 

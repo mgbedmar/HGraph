@@ -30,6 +30,7 @@ var app = app || {};
             veins: "autoVeins",
             ref1: "autoref1",
             ref2: "autoref2",
+            ref3: "autoref3",
             oToN: "auto1ToN",
             oToo: "auto1To1-1",
             oToo2: "auto1To1-2",
@@ -146,6 +147,8 @@ var app = app || {};
         _addInfoEvent();
         document.getElementById("ok1to1").addEventListener("click", app.events.query1to1);
         document.getElementById("ok1toN").addEventListener("click", app.events.query1toN);
+        document.getElementById("okNtoN").addEventListener("click", app.events.queryNtoN);
+        document.getElementById("okref").addEventListener("click", app.events.queryByReference);
 
         document.querySelector("#mainPage #toolsMenu #addNode")
             .addEventListener("click", app.events.addNode);

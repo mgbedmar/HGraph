@@ -256,6 +256,19 @@ public class PresentationController {
         th.start();
     }
 
+    public void queryByReference(String nodeRefSourceID, String nodeRefSourceType,
+                                 String nodeRefEndID, String nodeRefEndType,
+                                 String nodeSourceID, String nodeSourceType) {
+        result = new ArrayList<>();
+        dicRows = new HashMap<>();
+        QueryTask task = new QueryByReferenceTask(nodeRefSourceID, nodeRefSourceType, nodeRefEndID,
+                                                  nodeRefEndType, nodeSourceID, nodeSourceType,
+                                                  dc, we, this, MAX_ROWS);
+        Thread th = new Thread(task);
+        th.setDaemon(true);
+        th.start();
+    }
+
     public void log(String msg){
         System.out.println(msg);
     }
@@ -447,7 +460,7 @@ class QueryByReferenceTask extends QueryTask {
         super(dc, we, pc, maxRows);
         this.idSourceRef = Integer.parseInt(nodeRefSourceID);
         this.typeSourceRef = nodeRefSourceType;
-        this.idEndRef = Integer.parseInt(nodeRefEndType);
+        this.idEndRef = Integer.parseInt(nodeRefEndID);
         this.typeEndRef = nodeRefEndType;
         this.idSource = Integer.parseInt(nodeSourceID);
         this.typeSource = nodeSourceType;
