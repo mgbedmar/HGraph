@@ -147,13 +147,13 @@ var app = app || {};
         document.getElementById("ok1to1").addEventListener("click", app.events.query1to1);
         document.getElementById("ok1toN").addEventListener("click", app.events.query1toN);
 
-        document.querySelector("#mainPage #toolsMenu i[data-action=addNode]")
+        document.querySelector("#mainPage #toolsMenu #addNode")
             .addEventListener("click", app.events.addNode);
-        document.querySelector("#mainPage #toolsMenu i[data-action=addEdge]")
+        document.querySelector("#mainPage #toolsMenu #addEdge")
             .addEventListener("click", app.events.addEdge);
-        document.querySelector("#mainPage #toolsMenu i[data-action=removeNode]")
+        document.querySelector("#mainPage #toolsMenu #removeNode")
             .addEventListener("click", app.events.removeNode);
-        document.querySelector("#mainPage #toolsMenu i[data-action=removeEdge]")
+        document.querySelector("#mainPage #toolsMenu #removeEdge")
             .addEventListener("click", app.events.removeEdge);
         document.querySelector("#mainPage #toolsMenu > div[data-action=openToolsMenu]")
             .addEventListener("click", app.events.openToolsMenu);

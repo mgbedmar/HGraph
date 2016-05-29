@@ -445,10 +445,8 @@
         var typeSelector = document.querySelector(selector);
         var type = typeSelector.dataset.selection;
 
-        //TODO: nopopups?
         if(!type)
         {
-            app.events.showInfo("Informació","Si us plau, selecciona un tipus", "D'acord");
             typeSelector.classList.add("wrong");
             return false;
         }

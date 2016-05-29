@@ -175,34 +175,42 @@
 
 
 #mainPage #queryMenu ul li.oneLine.selected, #mainPage #toolsMenu ul li.oneLine.selected{
-    height:90px;
+    height:125px;
+}
+
+#mainPage #queryMenu ul li.onepointtwoLine.selected, #mainPage #toolsMenu ul li.onepointtwoLine.selected{
+    height:135px;
 }
 
 #mainPage #queryMenu ul li.oneandahalfLine.selected, #mainPage #toolsMenu ul li.oneandahalfLine.selected{
-    height:110px;
+    height:150px;
 }
 
 #mainPage #queryMenu ul li.almostTwoLines.selected, #mainPage #toolsMenu ul li.almostTwoLines.selected{
-    height:140px;
+    height:180px;
 }
 #mainPage #queryMenu ul li.twoLines.selected, #mainPage #toolsMenu ul li.twoLines.selected{
-    height:160px;
+    height:195px;
 }
 
-#mainPage #queryMenu ul li.threeLines.selected, #mainPage #toolsMenu ul li.threeLines.selected{
-    height:185px;
-}
-
-#mainPage #queryMenu ul li.fourLines.selected, #mainPage #toolsMenu ul li.fourLines.selected{
+#mainPage #queryMenu ul li.twoandahalfLines.selected, #mainPage #toolsMenu ul li.twoandahalfLines.selected{
     height:205px;
 }
 
+#mainPage #queryMenu ul li.threeLines.selected, #mainPage #toolsMenu ul li.threeLines.selected{
+    height:220px;
+}
+
+#mainPage #queryMenu ul li.fourLines.selected, #mainPage #toolsMenu ul li.fourLines.selected{
+    height:245px;
+}
+
 #mainPage #queryMenu ul li.fiveLines.selected, #mainPage #toolsMenu ul li.fiveLines.selected{
-    height:230px;
+    height:270px;
 }
 
 #mainPage #queryMenu ul li.sixLines.selected, #mainPage #toolsMenu ul li.sixLines.selected{
-    height:275px;
+    height:305px;
 }
 
 #mainPage #queryMenu ul > li h1{
@@ -416,4 +424,41 @@
 
 #mainPage #notifyBox div.collapse{
     height:0px;
+}
+
+
+/* Buttons */
+#mainPage .buttons{
+    display: -webkit-flex;
+    -webkit-wrap-content:nowrap;
+}
+
+#mainPage .buttons a{
+    display:block;
+    -webkit-flex: 1 1 auto;
+    width:50%;
+    margin:10px;
+    padding:3px;
+    font-size:20px;
+    background-color:#ECEDED;
+    color:#00080A;
+    border-radius:10px;
+    border:thin solid #00080A;
+    text-align:center;
+    cursor:pointer;
+    -webkit-transition: color 100ms, background-color 100ms;
+}
+
+#mainPage .buttons a.left-button{
+    margin-left:10px;
+    margin-right:2px;
+}
+
+#mainPage .buttons a.right-button{
+    margin-left:2px;
+    margin-right:10px;
+}
+
+#mainPage .buttons a:hover{
+    background-color: #BFDCE3;
 }
