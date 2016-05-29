@@ -13,7 +13,8 @@
     var _inputChoices = {
         source:'',
         target:'',
-        ref:''
+        ref:'',
+        result:''
     };
 
     function _hide(selector, cb){
@@ -97,7 +98,7 @@
         }
     }
 
-    function _initAutoCompletes(nodes){
+    function _initAutoCompletes(nodes, isResult){
         var mChars;
         if (_nodes.length < 300) mChars = 1;
         else mChars = 3;
@@ -116,9 +117,15 @@
             if (app.const.autoInputIds.hasOwnProperty(key)) {
                 var element = document.getElementById(app.const.autoInputIds[key]);
 
-                element.addEventListener("input", function(e) { _attInput(e.currentTarget.id)});
-                /*document.getElementById(app.const.autoInputIds[key])
-                    .addEventListener("input", function() { _attInput(app.const.autoInputIds[key])});*/
+                element.addEventListener("input", function(e) {
+                    _attInput(e.currentTarget.id);
+                });
+
+                element.addEventListener("keydown", function(e) {
+                    if (e.keyCode === 9) { //tab
+                        e.preventDefault();
+                    }
+                });
 
                 var _autCom = {
                     selector: "#"+app.const.autoInputIds[key],
@@ -133,48 +140,120 @@
                     renderItem: _renIt,
                     onSelect: ''
                 };
-
-                if (element.getAttribute("data-autoType") === "source") {
-                    _autCom.onSelect = function(e, term, item){
-                        var nod = {
-                            id: item.dataset.iden,
-                            name: item.dataset.nom,
-                            type: item.dataset.tipus
-                        };
-                        _inputChoices.source = nod;
-                        _nonAttInput("source");
+                if (typeof isResult === 'undefined') {
+                    if (element.getAttribute("data-autoType") === "source") {
+                        _autCom.onSelect = function(e, term, item){
+                            var nod = {
+                                id: item.dataset.iden,
+                                name: item.dataset.nom,
+                                type: item.dataset.tipus
+                            };
+                            _inputChoices.source = nod;
+                            _nonAttInput("source");
+                        }
+                        _autocompletes.push(new autoComplete(_autCom));
                     }
-                    _autocompletes.push(new autoComplete(_autCom));
-                }
 
-                else if (element.getAttribute("data-autoType") === "target") {
-                    _autCom.onSelect = function(e, term, item){
-                        var nod = {
-                            id: item.dataset.iden,
-                            name: item.dataset.nom,
-                            type: item.dataset.tipus
-                        };
-                        _inputChoices.target = nod;
-                        _nonAttInput("target");
+                    else if (element.getAttribute("data-autoType") === "target") {
+                        _autCom.onSelect = function(e, term, item){
+                            var nod = {
+                                id: item.dataset.iden,
+                                name: item.dataset.nom,
+                                type: item.dataset.tipus
+                            };
+                            _inputChoices.target = nod;
+                            _nonAttInput("target");
+                        }
+                        _autocompletes.push(new autoComplete(_autCom));
                     }
-                    _autocompletes.push(new autoComplete(_autCom));
-                }
 
-                else if (element.getAttribute("data-autoType") === "ref") {
-                    _autCom.onSelect = function(e, term, item){
-                        var nod = {
-                            id: item.dataset.iden,
-                            name: item.dataset.nom,
-                            type: item.dataset.tipus
+                    else if (element.getAttribute("data-autoType") === "ref") {
+                        _autCom.onSelect = function(e, term, item){
+                            var nod = {
+                                id: item.dataset.iden,
+                                name: item.dataset.nom,
+                                type: item.dataset.tipus
+                            };
+                            _inputChoices.ref = nod;
+                            _nonAttInput("ref");
+                        }
+                        _autocompletes.push(new autoComplete(_autCom));
+                    }
+                }
+                else if (isResult) {
+                    var inp = document.querySelector("#popupContent input[data-autoId="+app.const.autoInputIds[key]+"]");
+                    _autCom.selector = "#popupContent input[data-autoId="+app.const.autoInputIds[key]+"]";
+
+                    
+
+                    if (app.const.autoInputIds[key] === 'autoSelect') {
+                        _autCom.onSelect = function(e, term, item){
+                            var nod = {
+                                id: item.dataset.iden,
+                                name: item.dataset.nom,
+                                type: item.dataset.tipus
+                            };
+                            _inputChoices.result = nod;
+                            var li = document.createElement("li");
+                            var divName = document.createElement("div");
+                            divName.innerHTML = nod.name;
+                            var divButton = document.createElement("div");
+                            var iesp = document.createElement("i");
+                            iesp.className = "icon ion-close-round closeEl";
+                            divButton.appendChild(iesp);
+                            li.appendChild(divName);
+                            li.appendChild(divButton);
+
+
+                            document.querySelector("#popupContent .selectNames").appendChild(li);
+
+                            divButton.addEventListener("click", function(e) {
+                                //TODO treure filtre
+                                e.currentTarget.parentNode.parentNode.removeChild(e.currentTarget.parentNode);
+                                e.stopPropagation();
+                            });
+
                         };
-                        _inputChoices.ref = nod;
-                        _nonAttInput("ref");
+                    }
+
+                    else if (app.const.autoInputIds[key] === 'autoFilterNames') {
+                        _autCom.onSelect = function(e, term, item){
+                            var nod = {
+                                id: item.dataset.iden,
+                                name: item.dataset.nom,
+                                type: item.dataset.tipus
+                            };
+                            _inputChoices.result = nod;
+                            var li = document.createElement("li");
+                            app.HGraph.log("li");
+                            var divName = document.createElement("div");
+                            divName.innerHTML = nod.name;
+                            app.HGraph.log("divName "+divName.innerHTML);
+                            var divButton = document.createElement("div");
+                            var iesp = document.createElement("i");
+                            iesp.className = "icon ion-close-round closeEl";
+                            divButton.appendChild(iesp);
+                            li.appendChild(divName);
+                            li.appendChild(divButton);
+                            document.querySelector("#popupContent .filterNames").appendChild(li);
+
+                            divButton.addEventListener("click", function(e) {
+                                //TODO treure filtre
+                                e.currentTarget.parentNode.parentNode.removeChild(e.currentTarget.parentNode);
+                                e.stopPropagation();
+                            });
+                        };
                     }
                     _autocompletes.push(new autoComplete(_autCom));
                 }
             }
         }
 
+    }
+
+    function _addResultEvents(rp) {
+        document.querySelector("#"+rp.id+" .closeResult").addEventListener("click", app.events.hidePopup);
+        _initAutoCompletes(_nodes, true);
     }
 
     function _initMain(){
@@ -494,7 +573,8 @@
 
         var rPveritat = document.getElementById("resultPopup");
         var rP = rPveritat.cloneNode(true);
-        rP.id = rP.id+145646;
+        rP.id = rP.id+1;
+        document.getElementById("popupContent").innerHTML = '';
         document.getElementById("popupContent").appendChild(rP);
         var table = document.querySelector("#"+rP.id+" table");
 
@@ -522,6 +602,7 @@
         div.innerHTML = hm;
         firstCol.appendChild(div);
 
+        _addResultEvents(rP);
         app.events.hidePopup(function() { app.events.showPopup(rP); });
 
     };

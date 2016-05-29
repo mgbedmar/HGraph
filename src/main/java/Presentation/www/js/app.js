@@ -28,7 +28,9 @@ var app = app || {};
             ref2: "autoref2",
             oToN: "auto1ToN",
             oToo: "auto1To1-1",
-            oToo2: "auto1To1-2"
+            oToo2: "auto1To1-2",
+            select: "autoSelect",
+            filter: "autoFilterNames"
         },
         nodeTypes:{
             author: "author",

@@ -120,11 +120,13 @@ public class GraphFileManager {
      * @param extB extensio del nou fitxer
      * @throws IOException error IO
      */
-    private void backup(String path, String file, String extA, String extB) throws IOException {
+    private void backup(String path, String file, String extA, String extB) throws PersistenceException, IOException {
         File source = new File(path+file+extA);
         if (source.exists()) {
             File target = new File(path + file + extB);
-            Files.copy(source.toPath(), target.toPath(), REPLACE_EXISTING);
+            Boolean succes = source.renameTo(target);
+            if (!succes) throw new PersistenceException("No s'ha pogut guardar. Comprova els permisos o "+
+                                                        "torna a intentar-ho.");
         }
     }
 
@@ -148,7 +150,7 @@ public class GraphFileManager {
      * @param extB extensio del fitxer nou
      * @throws IOException error IO
      */
-    private void makeBackups(String path, String extA, String extB) throws IOException {
+    private void makeBackups(String path, String extA, String extB) throws PersistenceException, IOException {
         backup(path, fileAuthor, extA, extB);
         backup(path, filePaper, extA, extB);
         backup(path, fileTerm, extA, extB);
@@ -209,7 +211,7 @@ public class GraphFileManager {
      * @param path path del graf que es guarda
      * @throws IOException error IO
      */
-    public void startSaving(String path) throws IOException {
+    public void startSaving(String path) throws PersistenceException, IOException {
         this.path = path;
         bufReader = null;
         bufWriter = null;
@@ -230,7 +232,7 @@ public class GraphFileManager {
         deleteBackups(path);
     }
 
-    //TODO que no copii, sino que canvii el nom
+    
     /**
      * Denega tots els canvis des del darrer <em>startSaving()</em> i deixa el graf en l'estat anterior.
      * @throws IOException error IO
