@@ -447,6 +447,7 @@ public class DomainController
         String[] elem;
 
         try {
+            g = new Graph();
             pc.selectProject(projectName);
             pc.startLoading();
             while ((elem = pc.getAuthor()) != null) {

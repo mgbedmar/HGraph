@@ -238,10 +238,23 @@
         return _pos[type];
     }
 
+    function _clearGraphs(){
+        if (typeof _sarr != 'undefined')
+        {
+            for (var i = 0; i < _sarr.length; i++) {
+                //this gets rid of all the ndoes and edges
+                _sarr[i].graph.clear();
+                _sarr[i].refresh();
+            }
+
+        }
+    }
+
     //Public
     app.graph = {};
 
     app.graph.init = function(large){
+        _clearGraphs();
         _largeGraph = large;
     };
 
@@ -349,14 +362,8 @@
         if (typeof edges === 'undefined') g = nodes;
         else g = _createGraph(nodes, edges);
 
-        if (typeof _sarr != 'undefined')
-        {
-            for (var i = 0; i < _sarr.length; ++i) {
-                //this gets rid of all the ndoes and edges
-                _sarr[i].graph.clear();
-                _sarr[i].refresh();
-            }
-        }
+        _clearGraphs();
+
 
         var customSettings = _settings.graph;
         customSettings.maxNodeSize = 10;
@@ -413,7 +420,6 @@
         app.graph.drawGraph(g);
 
     }
-
     app.graph.addNode = function(id, label, type){
         var pos;
         var index =_sarr.length-1;

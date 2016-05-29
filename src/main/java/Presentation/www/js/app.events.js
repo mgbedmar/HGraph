@@ -31,6 +31,31 @@
         }, 1);
     }
 
+    function _clearUIState(){
+        _autocompletes = [];
+        _nodes = [];
+        _popupShown = false;
+        _inputChoices = {
+            source:'',
+            target:'',
+            ref:''
+        };
+        var elements = document.querySelectorAll(".wrong, .selected, .open");
+        for(var i = 0; i < elements.length; i++)
+        {
+            elements[i].classList.remove("wrong");
+            elements[i].classList.remove("selected");
+            elements[i].classList.remove("open");
+        }
+
+        elements = document.getElementsByTagName("input");
+        for(var i = 0; i < elements.length; i++)
+        {
+            elements[i].value = "";
+        }
+
+    }
+
     function _getNames(arrayList, type){
         var names = [];
         for(var i = 0; i < arrayList.size(); i++)
@@ -179,18 +204,21 @@
     }
 
     function _initMain(){
-
+        _clearUIState();
         var large = false;
         var nodes=[];
+
         //If a graph is selected
-        if(app.HGraph.isProjectSelected())
+        if(!app.newProject)
         {
             //Let's see how big it is
             var authorNodes = _getNames(app.HGraph.getNodesOfType(app.const.nodeTypes.author), app.const.nodeTypes.author);
+            //app.HGraph.log(JSON.stringify(authorNodes));
             var termNodes = _getNames(app.HGraph.getNodesOfType(app.const.nodeTypes.term), app.const.nodeTypes.term);
             var paperNodes = _getNames(app.HGraph.getNodesOfType(app.const.nodeTypes.paper), app.const.nodeTypes.paper);
             var confNodes = _getNames(app.HGraph.getNodesOfType(app.const.nodeTypes.conf), app.const.nodeTypes.conf);
             nodes = authorNodes.concat(termNodes.concat(paperNodes.concat(confNodes)));
+            //app.HGraph.log(JSON.stringify(nodes));
             //Is it larger than maxNodes?
             large = (nodes.length >= app.settings.maxNodes);
 
@@ -467,6 +495,9 @@
         if (typeof cancelMsg != 'undefined') {
             var cancelbtn = document.createElement("a");
             cancelbtn.innerHTML = cancelMsg;
+            cancelbtn.addEventListener("click", function(){
+                app.events.hidePopup();
+            });
             divbtns.appendChild(cancelbtn);
         }
         divbtns.appendChild(okbtn);
@@ -582,7 +613,7 @@
             app.graph.addNode(id, input.value, type);
             //TODO: notify
             _nodes.push([String(input.value),String(id), type]);
-            app.modify = true;
+            app.modified = true;
         }
 
 
@@ -616,7 +647,7 @@
 
        if(edgeAdded){
             //TODO:Notify
-            app.modify = true;
+            app.modified = true;
             app.graph.addEdge(destId, destType, paperId);
 
         }
@@ -637,7 +668,7 @@
         if(nodeRemoved)
         {
             //TODO: notify
-            app.modify = true;
+            app.modified = true;
             app.graph.removeNode(_inputChoices.source.id, _inputChoices.source.type);
             var found = false;
             var i;
@@ -678,7 +709,7 @@
             _inputChoices.target.id, _inputChoices.target.type);
         if(edgeRemoved)
         {
-            app.modify = true;
+            app.modified = true;
             //TODO:notify
             app.graph.removeEdge(destId, destType, paperId);
         }
@@ -707,7 +738,7 @@
 
         if(app.modified)
             app.events.showAccept("Sortir", "Si surts es perdràn els canvis que no has desat. Vols continuar?",
-            "Sortir", go);
+            "Sortir", go, "Cancela");
         else
             go();
     };
