@@ -305,6 +305,8 @@
         }
 
         app.graph.init(large);
+        document.querySelector("#mainPage #queryMenu > div > ul > li[data-action=completeGraph]").click();
+        /*
         if(!app.graph.isLarge())
         {
             document.querySelector("#queryMenu li[data-action=completeGraph]").click();
@@ -320,6 +322,7 @@
             var nodesAux = app.HGraph.getNodes();
             app.graph.drawNodesOnlyGraph(nodesAux);
         }
+        */
         //Init autocompletes
         _nodes = nodes;
         _initAutoCompletes();
@@ -358,23 +361,35 @@
         });
     }
 
+
+
     //QueryMenu functions
     function _drawCompleteGraph(){
         var nodeobj = {};
-        nodeobj[app.const.nodeTypes.author] = app.HGraph.getNodesOfType(app.const.nodeTypes.author);
-        nodeobj[app.const.nodeTypes.term]  = app.HGraph.getNodesOfType(app.const.nodeTypes.term);
-        nodeobj[app.const.nodeTypes.paper]  = app.HGraph.getNodesOfType(app.const.nodeTypes.paper);
-        nodeobj[app.const.nodeTypes.conf]  = app.HGraph.getNodesOfType(app.const.nodeTypes.conf);
+
+        //TODO: node distribution?
+        nodeobj[app.const.nodeTypes.conf]  = app.HGraph.getRelevantNodesOfType(app.const.nodeTypes.conf, 100);
+        app.HGraph.log("Vale!");
+        nodeobj[app.const.nodeTypes.term]  = app.HGraph.getRelevantNodesOfType(app.const.nodeTypes.term, 400);
+        var authorCapacity = 1000+(500-nodeobj[app.const.nodeTypes.conf]-nodeobj[app.const.nodeTypes.term]);
+        nodeobj[app.const.nodeTypes.author] = app.HGraph.getRelevantNodesOfType(app.const.nodeTypes.author, authorCapacity);
+        var paperCapacity =1500+(1500-nodeobj[app.const.nodeTypes.author]);
+        nodeobj[app.const.nodeTypes.paper]  = app.HGraph.getRelevantNodesOfType(app.const.nodeTypes.paper, paperCapacity);
+
         var edgeobj = {};
         edgeobj[app.const.nodeTypes.term]  = app.HGraph.getEdgesOfType(app.const.nodeTypes.term);
         edgeobj[app.const.nodeTypes.author]  = app.HGraph.getEdgesOfType(app.const.nodeTypes.author);
         edgeobj[app.const.nodeTypes.conf]  = app.HGraph.getEdgesOfType(app.const.nodeTypes.conf);
-        app.graph.drawGraph(nodeobj, edgeobj);
+
+        app.graph.drawCoolGraph(nodeobj, edgeobj);
     }
 
     function _drawQueryType (type){
+        //TODO: showDrawing()
+        app.events.showLoading();
         var nodes = app.HGraph.getNodesOfType(type);
-        app.graph.drawNodesOnlyGraph(nodes, type);
+        //app.graph.drawNodesOnlyGraph(nodes, type);
+        app.events.hidePopup();
     }
 
     function _selectMenuOption(element, currentMenu, theOtherMenu){
@@ -637,12 +652,17 @@
         _selectType(e.target.parentNode, e.currentTarget.dataset.type);
     };
     app.events.drawCompleteGraph = function(){
-        app.events.showLoading();
-        _drawCompleteGraph();
-        app.events.hidePopup();
+        try{
+            app.events.showLoading();
+            _drawCompleteGraph();
+            app.events.hidePopup();
+        }catch(err){
+            app.HGraph.log(err);
+        }
+
     };
     //e.target is the type button pressed
-    app.events.changeQueryType = function(e){
+    app.events.drawTypeGraph = function(e){
 
         _drawQueryType(e.currentTarget.dataset.type);
     };

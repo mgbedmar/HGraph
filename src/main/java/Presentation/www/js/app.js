@@ -143,6 +143,7 @@ var app = app || {};
         _addMultiEvent("#mainPage ul.typeSelector > li", "click", app.events.selectTypeOption);
         document.querySelector("#mainPage #queryMenu > div > ul > li[data-action=completeGraph]")
             .addEventListener("click", app.events.drawCompleteGraph);
+        _addMultiEvent("#mainPage #queryMenu ul[data-action=drawType] li", "click", app.events.drawTypeGraph);
         _addInfoEvent();
         document.getElementById("ok1to1").addEventListener("click", app.events.query1to1);
         document.getElementById("ok1toN").addEventListener("click", app.events.query1toN);
