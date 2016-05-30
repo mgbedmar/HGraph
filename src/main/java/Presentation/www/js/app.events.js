@@ -20,6 +20,8 @@
 
     var _regExpr = /\{[0-9]*\}/;
 
+    var _sorted = [0, 0, 0];
+
     function _hide(selector, cb){
         document.getElementById(selector).classList.remove("show");
         setTimeout(function(){
@@ -126,6 +128,64 @@
         }
     }
 
+    function _sortListener(j) {
+        _sorted[j] = 1-_sorted[j];
+        return app.HGraph.sortResult(j+1,_sorted[j]);
+    }
+
+    function _resultTable(result) {
+        var table = document.querySelector("#resultPopup1 table");
+        if (table.rows != null) {
+            while (table.rows.length > 1) {
+                table.deleteRow(1);
+            }
+        }
+
+        for (var i = 0; i < result.size(); i++) {
+            var row = table.insertRow(i+1);
+
+            _tableCell(0, String(result.get(i).get(0)), row);
+
+            for (var j = 1; j <=2; ++j) {
+                var act = String(result.get(i).get(j));
+                var tit = String(_regExpr.exec(act));
+                var nom = act.slice(0, -tit.length);
+                tit = tit.slice(1, -1);
+                _tableCell(j, nom, row, tit);
+            }
+            var hm = String(result.get(i).get(3));
+            hm = hm.slice(0, 7-hm.length);
+            _tableCell(3, hm, row);
+        }
+    }
+
+    function _resultTableTable(result) {
+        var rPveritat = document.getElementById("resultPopup");
+        var rP = rPveritat.cloneNode(true);
+        document.getElementById("popupContent").innerHTML = '';
+        rP.id = "resultPopup1";
+        document.getElementById("popupContent").appendChild(rP);
+        var table = document.querySelector("#"+rP.id+" table");
+
+        for (var i = 0; i < result.size(); i++) {
+            var row = table.insertRow(i+1);
+
+            _tableCell(0, String(result.get(i).get(0)), row);
+
+            for (var j = 1; j <=2; ++j) {
+                var act = String(result.get(i).get(j));
+                var tit = String(_regExpr.exec(act));
+                var nom = act.slice(0, -tit.length);
+                tit = tit.slice(1, -1);
+                _tableCell(j, nom, row, tit);
+            }
+            var hm = String(result.get(i).get(3));
+            hm = hm.slice(0, 7-hm.length);
+            _tableCell(3, hm, row);
+        }
+        return rP;
+    }
+
 
     function _initAutoCompletes(isResult){
         var mChars;
@@ -225,7 +285,9 @@
                             };
                             _inputChoices.result = nod;
                             var li = document.createElement("li");
+                            li.setAttribute("data-filter", "selectLI");
                             var divName = document.createElement("div");
+                            divName.className = "text-li-div";
                             divName.innerHTML = nod.name;
                             var divButton = document.createElement("div");
                             var iesp = document.createElement("i");
@@ -235,13 +297,23 @@
                             li.appendChild(divButton);
 
 
-                            document.querySelector("#popupContent .selectNames").appendChild(li);
+                            document.querySelector("#activeFilters").appendChild(li);
+
+                            var resultat = app.HGraph.selectResultName(nod.name);
+                            _resultTable(resultat);
+
 
                             divButton.addEventListener("click", function(e) {
-                                //TODO treure filtre
+                                var li = e.currentTarget.parentNode;
+
+                                var div = li.children[0];
+                                var r = app.HGraph.unselectResultName(div.innerHTML);
+                                _resultTable(r);
                                 e.currentTarget.parentNode.parentNode.removeChild(e.currentTarget.parentNode);
                                 e.stopPropagation();
                             });
+
+                            document.getElementById("autoSelect").value = '';
 
                         };
                     }
@@ -255,23 +327,33 @@
                             };
                             _inputChoices.result = nod;
                             var li = document.createElement("li");
-                            app.HGraph.log("li");
+                            li.setAttribute("data-filter", "filterLI");
                             var divName = document.createElement("div");
+                            divName.className = "text-li-div";
                             divName.innerHTML = nod.name;
-                            app.HGraph.log("divName "+divName.innerHTML);
                             var divButton = document.createElement("div");
                             var iesp = document.createElement("i");
                             iesp.className = "icon ion-close-round closeEl";
                             divButton.appendChild(iesp);
                             li.appendChild(divName);
                             li.appendChild(divButton);
-                            document.querySelector("#popupContent .filterNames").appendChild(li);
+                            document.querySelector("#activeFilters").appendChild(li);
+
+                            var resultat = app.HGraph.hideResultName(nod.name);
+                            _resultTable(resultat);
+
 
                             divButton.addEventListener("click", function(e) {
-                                //TODO treure filtre
+                                var li = e.currentTarget.parentNode;
+
+                                var div = li.children[0];
+                                var r = app.HGraph.unhideResultName(div.innerHTML);
+                                _resultTable(r);
                                 e.currentTarget.parentNode.parentNode.removeChild(e.currentTarget.parentNode);
                                 e.stopPropagation();
                             });
+
+                            document.getElementById("autoFilterNames").value = '';
                         };
                     }
                     _autocompletes.push(new autoComplete(_autCom));
@@ -281,10 +363,25 @@
 
     }
 
+
+
     function _addResultEvents(rp) {
         document.querySelector("#"+rp.id+" .closeResult").addEventListener("click", app.events.hidePopup);
         _initAutoCompletes(true);
+        document.querySelector("#"+rp.id+" .firstCol").addEventListener("click", function() {
+            var res = _sortListener(0);
+            _resultTable(res);
+        });
+        document.querySelector("#"+rp.id+" .secondCol").addEventListener("click", function() {
+            var res = _sortListener(1);
+            _resultTable(res);
+        });
+        document.querySelector("#"+rp.id+" .thirdCol").addEventListener("click", function() {
+            var res = _sortListener(2);
+            _resultTable(res);
+        });
     }
+
 
     function _initMain(cb){
         var large = false;
@@ -437,7 +534,6 @@
     }
 
     function _selectType(parentElement, type){
-        //app.HGraph.log("_se");
         parentElement.dataset.selection = type;
         var nodes = parentElement.children;
         for(var i = 0; i < nodes.length; i++)
@@ -469,14 +565,12 @@
     }
 
     function _selectTypeFromSelector(selector) {
-        //app.HGraph.log("sel");
         var typeSelector = document.querySelector(selector);
         var type = typeSelector.dataset.selection;
-//app.HGraph.log("sel");
         if(!type)
         {
             typeSelector.classList.add("wrong");
-            return false; 
+            return false;
         }
         else {
             typeSelector.classList.remove("wrong");
@@ -489,8 +583,6 @@
 
     app.events.init = function(){
         _show(app.const.pageIds.welcome);
-        /*var d = document.createElement("div");
-        app.events.showPopup(d);*/
     };
 
     app.events.loadGoToWelcome = function(){
@@ -723,11 +815,9 @@
 
     app.events.queryByReference = function() {
         if (!_checkInputs("autoref1", "autoref2", "autoref3")) return;
-        app.HGraph.log("abans");
         app.HGraph.queryByReference(_inputChoices.source.id, _inputChoices.source.type,
                                     _inputChoices.target.id, _inputChoices.target.type,
                                     _inputChoices.ref.id, _inputChoices.ref.type);
-        app.HGraph.log("despres");
         app.events.showLoading();
     };
 
@@ -761,7 +851,6 @@
         var div = document.createElement("div");
         div.innerHTML = _inputChoices.target.name;
         firstCol.appendChild(div);
-        app.HGraph.log(table.innerHTML);
         /* Columna del hetesim */
         var firstCol = row.insertCell(3);
         var div = document.createElement("div");
@@ -776,29 +865,7 @@
     app.events.takeQueryResult = function() {
         var result = app.HGraph.getQueryResult();
 
-        var rPveritat = document.getElementById("resultPopup");
-        var rP = rPveritat.cloneNode(true);
-        document.getElementById("popupContent").innerHTML = '';
-        rP.id = rP.id+1;
-        document.getElementById("popupContent").appendChild(rP);
-        var table = document.querySelector("#"+rP.id+" table");
-
-        for (var i = 0; i < result.size(); i++) {
-            var row = table.insertRow(i+1);
-
-            _tableCell(0, String(result.get(i).get(0)), row);
-
-            for (var j = 1; j <=2; ++j) {
-                var act = String(result.get(i).get(j));
-                var tit = String(_regExpr.exec(act));
-                var nom = act.slice(0, -tit.length);
-                tit = tit.slice(1, -1);
-                _tableCell(j, nom, row, tit);
-            }
-            var hm = String(result.get(i).get(3));
-            hm = hm.slice(0, 7-hm.length);
-            _tableCell(3, hm, row);
-        }
+        var rP = _resultTableTable(result);
 
         _addResultEvents(rP);
         app.events.hidePopup(function() { app.events.showPopup(rP); });

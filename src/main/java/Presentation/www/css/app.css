@@ -213,6 +213,7 @@ body > div.page{
     font-weight:normal;
     width:35%;
     max-width:35%;
+    cursor:pointer;
 }
 
 #popupPage .resultContent .tableContent table td {
@@ -278,28 +279,35 @@ body > div.page{
     margin-top:-18px;
 }
 
+#popupPage .resultContent ul ul li .text-li-div {
+    white-space:nowrap;
+    margin-right:3px;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    max-width:90px;
+}
+
 #popupPage .resultContent ul ul li .closeEl {
+    white-space:nowrap;
     color:#20282A;
     font-size:11px;
     cursor:pointer;
 }
 
-#popupPage .resultContent ul li ul {
+#popupPage .resultContent ul ul {
     list-style-type:none;
     display:-webkit-flex;
     margin:20px;
     -webkit-flex-direction:column;
-    margin:0px;
-    height:105px;
     overflow-y:auto;
     overflow-x:hidden;
-    max-width:100%;
     list-style:none;
     padding-left:0;
 
 }
 
 #popupPage .resultContent ul ul li {
+    white-space:nowrap;
     padding:5px;
     margin-top:2px;
     margin-bottom:2px;
@@ -308,17 +316,24 @@ body > div.page{
     background-color:#BFDCE3;
     color:#00080A;
     border-radius:10px;
-    width:70%;
-    max-width:100px;
+    max-width:120px;
     min-height:12px;
     height:12px;
-    text-align:center;
     font-size:11px;
-    overflow:hidden;
-    text-overflow:ellipsis;
+    text-align:center;
     display:-webkit-flex;
     -webkit-align-items:center;
     -webkit-justify-content:space-between;
+    overflow:hidden;
+}
+
+#popupPage .resultContent ul ul li[data-filter=selectLI] {
+    background-color:rgba(113,230,109,1);
+}
+
+#popupPage .resultContent ul ul li[data-filter=filterLI] {
+    background-color:rgba(255,55,55,0.85);
+
 }
 
 #result {
