@@ -24,7 +24,7 @@ import static java.lang.Thread.sleep;
 public class PresentationController {
     private DomainController dc;
     private WebEngine we;
-    private int MAX_ROWS = 10;
+    private int MAX_ROWS = 100;
     private String query1To1Result;
     private ArrayList<ArrayList<String>> result;
     private int currentNumCols;
