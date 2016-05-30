@@ -11,7 +11,13 @@ var app = app || {};
     app.newProject = true;
     app.settings={
         //Disables some features on graphs with nodes > maxNodes (large graphs)
-        maxNodes:1500
+        maxNodes:1500,
+        marginRatio:{
+            "author": 0.5,
+            "paper": 0.1,
+            "term": 0.5,
+            "conf": 0.8
+        }
     };
     app.const  = {
         pageIds : {

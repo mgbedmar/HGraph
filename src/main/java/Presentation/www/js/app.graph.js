@@ -104,6 +104,12 @@
         conf: "forestgreen",
         term: "darkred"
     };
+    var _typeColorEdge = {
+        author: "steelblue",
+        paper: "purple",
+        conf: "forestgreen",
+        term: "darkred"
+    };
 
     function _applySettings(s){
         //Deprecated
@@ -269,8 +275,12 @@
     //Draws a graph with a big number of nodes but without edges, nodes = JavaArrayList
     app.graph.drawCoolGraph = function(nodes, edges){
         var g={nodes:[], edges:[]};
+        var cachedges = {
+            "author":[],
+            "conf":[],
+            "term":[]
+        };
         _clearGraphs();
-        var s;
         var pos;
         //For each node
         _radius = 0.004;
@@ -279,7 +289,8 @@
         var exists = {
             "paper":{},
             "author":{},
-            "conf":{}
+            "conf":{},
+            "term":{}
         };
         for (var type in nodes) {
             //Check if type is a property of nodes
@@ -292,45 +303,83 @@
                     //TODO: define ratios
                     if(random < app.settings.marginRatio[type])
                     {
+                        --i;
                         continue;
                     }
 
-                    exists[String(nodes.get(i)[3])][String(nodes.get(i)[0])] = true;
+                    var id=String(nodes[type].get(i)[0]);
+                    exists[type][id] = true;
                     g.nodes.push({
-                        id: String(nodes[type].get(i)[0])+"-"+String(nodes[type].get(i)[3]),
+                        id: String(nodes[type].get(i)[0])+"-"+type,
                         label: String(nodes[type].get(i)[1]),
                         x: pos.x,
                         y: pos.y,
                         size: String(nodes[type].get(i)[2]),
-                        color: _typeColor[String(nodes[type].get(i)[3])]
+                        color: _typeColor[type]
                     });
                 }
             }
         }
+
+/*
         for (var type in edges) {
             //Check if type is a property of nodes
             if (edges.hasOwnProperty(type)) {
-                for (var i = 0; i < edges[type].size(); i++)
-                {
-                    //If source and target exist in graph, draw edge
-                    if(exists[type][String(edges[type].get(i)[1])] && exists["paper"][String(edges[type].get(i)[0])])
-                        g.edges.push({
-                            id: String(edges[type].get(i)[0])+"-"+type+"-"+String(edges[type].get(i)[1]),
-                            source: String(edges[type].get(i)[0]+"-paper"),
-                            target: String(edges[type].get(i)[1])+"-"+type,
-                            //TODO:define edge colors
-                            color: _typeColorEdge[type]
-                        })
+            */
+        var ble = ["author", "term", "conf"];
+        var a = 0;
+        function calc(type, cb){
+            app.HGraph.log("ble!"+type);
+            var j = 0;
+            for (var i = 0; i < edges[type].size(); i++)
+            {
+                if(exists[type][String(edges[type].get(i)[1])] && exists["paper"][String(edges[type].get(i)[0])]){
+                    g.edges.push({
+                        id: String(edges[type].get(i)[0])+"-"+type+"-"+String(edges[type].get(i)[1]),
+                        source: String(edges[type].get(i)[0]+"-paper"),
+                        target: String(edges[type].get(i)[1])+"-"+type,
+                        //TODO:define edge colors
+                        color: _typeColorEdge[type]
+                    });
+                    j++;
+                    //app.HGraph.log(String(edges[type].get(i)[0])+"-"+type+"-"+String(edges[type].get(i)[1]));
                 }
             }
+            setTimeout(function(){
+                a++;
+
+                if(a == 3)
+                    cb();
+                else
+                {
+                    app.HGraph.log("ble!"+ble[a]);
+                    calc(ble[a], cb);
+
+                }
+
+
+            }, 1000);
+
         }
 
-        s = new sigma({
-            container: 'graph-container',
-            graph:g,
-            settings: _settings.graph
+        calc(ble[0], function(){
+            app.HGraph.log("blebleble");
+            _sarr[0] = new sigma({
+                container: 'graph-container',
+                graph:g,
+                settings: _settings.graph
+            });
+            _sarr[0].refresh();
+
         });
-        s.refresh();
+
+
+
+    /*        }
+
+
+        }
+*/
     };
 
     app.graph.drawNodesOnlyGraph = function(nodes, type){
