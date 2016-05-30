@@ -275,9 +275,8 @@
         return _largeGraph;
     };
 
-
-    //Draws a graph with a big number of nodes but without edges, nodes = JavaArrayList
-    app.graph.drawOneEdgeTypeGraph = function(edgeType, nodes, edges, cbend){
+    //Draws a graph. id edgeType is specified, then draws only edges of type edgeType
+    app.graph.drawGraph = function(nodes, edges, cbend, edgeType){
         var g={nodes:[], edges:[]};
         _cachedges = {
             "author":[],
@@ -289,17 +288,17 @@
         //For each node
         _radius = 0.004;
         _angle = 0;
-        var i = 0;
         var exists = {
             "paper":{},
             "author":{},
             "conf":{},
             "term":{}
         };
+        var j = 0;
         for (var type in nodes) {
             //Check if type is a property of nodes
             if (nodes.hasOwnProperty(type)) {
-                for (var i = 0; i < nodes[type].size(); i++)
+                for (var i = 0; i < nodes[type].size() && j < 3000; i++)
                 {
                     pos = _getNextPosition(0.004, 0.0005);
 
@@ -321,6 +320,7 @@
                         size: String(nodes[type].get(i)[2]),
                         color: _typeColor[type]
                     });
+                    j++;
                 }
             }
         }
@@ -329,18 +329,21 @@
         var a = 0;
         function calc(type, cb){
             var j = 0;
-            for (var i = 0; i < edges[type].size(); i++)
+            if(edges[type])
             {
-                if(exists[type][String(edges[type].get(i)[1])] && exists["paper"][String(edges[type].get(i)[0])]){
-                    _cachedges[type].push({
-                        id: String(edges[type].get(i)[0])+"-"+type+"-"+String(edges[type].get(i)[1]),
-                        source: String(edges[type].get(i)[0]+"-paper"),
-                        target: String(edges[type].get(i)[1])+"-"+type,
-                        //TODO:define edge colors
-                        color: _typeColorEdge[type]
-                    });
-                    j++;
-                    //app.HGraph.log(String(edges[type].get(i)[0])+"-"+type+"-"+String(edges[type].get(i)[1]));
+                for (var i = 0; i < edges[type].size(); i++)
+                {
+                    if(exists[type][String(edges[type].get(i)[1])] && exists["paper"][String(edges[type].get(i)[0])]){
+                        _cachedges[type].push({
+                            id: String(edges[type].get(i)[0])+"-"+type+"-"+String(edges[type].get(i)[1]),
+                            source: String(edges[type].get(i)[0]+"-paper"),
+                            target: String(edges[type].get(i)[1])+"-"+type,
+                            //TODO:define edge colors
+                            color: _typeColorEdge[type]
+                        });
+                        j++;
+                        //app.HGraph.log(String(edges[type].get(i)[0])+"-"+type+"-"+String(edges[type].get(i)[1]));
+                    }
                 }
             }
             setTimeout(function(){
@@ -356,7 +359,12 @@
         }
 
         calc(ble[0], function(){
-            g.edges = _cachedges[edgeType];
+            if(edgeType)
+                g.edges = _cachedges[edgeType];
+            else
+            {
+                g.edges.concat(_cachedges["author"]).concat(_cachedges["paper"]).concat(_cachedges["term"]);
+            }
             _sarr[0] = new sigma({
                 container: 'graph-container',
                 graph:g,
@@ -391,91 +399,7 @@
         _sarr[0].refresh();
 
     };
-    app.graph.drawNodesOnlyGraph = function(nodes, type){
-        var g={nodes:[]};
-        var i = 0;
-        if(typeof _sarr === 'undefined')
-            _sarr = [];
-        var s;
-        var pos_centre = {x:0, y:0}
-        var pos;
-        var colors = ["#FF0000", "#00FF00", "#0000FF"];
-        //For each node
-        var c = 0;
-        var inizoom = 0.3;
-        _radius = 0.004;
-        _angle = 0;
-        while(i < 1500*10)//nodes.size()-15000) //TODO posar aixo en no basto
-        {
-            //TODO: rings
-            //var pos = _getCircleRandomPos(i*40,i*20);
-            pos = _getNextPosition(0.004, 0.0005);
-            if(parseInt(nodes.get(i)[2]) < 2 || String(nodes.get(i)[3]) == "term")
-            {
-                i++;
-                continue;
-            }
-
-
-            g.nodes.push({
-                id: String(nodes.get(i)[0])+"-"+String(nodes.get(i)[3]),
-                label: String(nodes.get(i)[1]),
-                x: pos.x,
-                y: pos.y,
-                size: String(nodes.get(i)[2]),
-                color: _typeColor[String(nodes.get(i)[3])]
-            });
-            //If graph is % maxNodes, start a new one
-            if(i % app.settings.maxNodes == 0)
-            {
-                s=new sigma({
-                    container: 'graph-container',
-                    graph:g,
-                    settings:_settings.graph
-                });
-                //s.camera.ratio = inizoom;
-                _applySettings(s);
-                s.refresh();
-                _sarr.push(s);
-                g = {nodes:[]};
-            }
-            i++;
-        }
-        //If nodes remaining, start a new graph //TODO aixo esta fet? -si
-        if(g.nodes.length > 0)
-        {
-            s=new sigma({
-                container: 'graph-container',
-                graph:g,
-                settings:_settings.graph
-            });
-
-            //s.camera.ratio = inizoom;
-            _applySettings(s);
-            s.refresh();
-
-
-            _sarr.push(s);
-        }
-
-        s = new sigma({
-            container: 'graph-container',
-            graph:{nodes:[]},
-            settings: _settings.graph
-        });
-
-        //s.camera.ratio = inizoom;
-        s.refresh();
-
-        s.camera.bind('coordinatesUpdated', app.debounce(function(){
-            _sarr.forEach(function(si){
-                si.camera.x = s.camera.x;
-                si.camera.y = s.camera.y;
-                si.camera.ratio = s.camera.ratio;
-                si.refresh();
-            })
-        }, 10));
-
+    app.graph.drawNodesOnlyGraph = function(nodes){
 
     };
     //Draws a bigraph representing a table. Each connected component must be < maxNodes
@@ -483,70 +407,9 @@
         //TODO
     };
 
-    //Draws a normal graph, nodes = {author:JavaArrayList, paper:...}
-    app.graph.drawGraph = function(nodes, edges){
-        var g;
-        if (typeof edges === 'undefined') g = nodes;
-        else g = _createGraph(nodes, edges);
+ 
 
-        _clearGraphs();
-
-
-        var customSettings = _settings.graph;
-        customSettings.maxNodeSize = 10;
-        customSettings.minNodeSize = 6;
-
-        _sarr = [new sigma({
-            graph: g,
-            settings: customSettings
-        })];
-
-
-        _sarr[0].addRenderer({
-            container: 'graph-container',
-            type:'canvas',
-            settings: {
-                batchEdgesDrawing: false
-            }
-        });
-        _sarr[0].refresh();
-
-        _sarr[0].camera.ratio = 1.7;
-        _sarr[0].refresh();
-        _applySettings(_sarr[0]);
-    };
-
-    //result es un [] amb un sol element {source, target, hetesim}
-    app.graph.drawQuery1to1 = function(result) {
-        var g = {
-            nodes: [],
-            edges: []
-        };
-        g.nodes.push({
-            id: result[0].source+"1",
-            label: result[0].source,
-            x: -1,
-            y: -1,
-            //TODO colors corresponents al tipus... problema: el resultat no dona el tipus, cal passarlo
-        });
-
-        g.nodes.push({
-            id: result[0].target+"2",
-            label: result[0].target,
-            x: 1,
-            y: 1,
-            //TODO colors corresponents al tipus... problema: el resultat no dona el tipus, cal passarlo
-        });
-        g.edges.push({
-            id:"1",
-            source:result[0].source+"1",
-            target:result[0].target+"2",
-            label:result[0].hetesim
-        });
-
-        app.graph.drawGraph(g);
-
-    }
+ 
     app.graph.addNode = function(id, label, type){
         var pos;
         var index =_sarr.length-1;

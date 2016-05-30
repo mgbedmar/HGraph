@@ -520,7 +520,7 @@
         }
         else
         {
-            _drawCompleteGraph();
+            _drawCompleteGraph(cb);
         }
         
         //Init autocompletes
@@ -580,11 +580,11 @@
         edgeobj[app.const.nodeTypes.author]  = app.HGraph.getEdgesOfType(app.const.nodeTypes.author);
         edgeobj[app.const.nodeTypes.conf]  = app.HGraph.getEdgesOfType(app.const.nodeTypes.conf);
 
-        app.graph.drawOneEdgeTypeGraph(type, nodeobj, edgeobj, cb);
+        app.graph.drawGraph(nodeobj, edgeobj, cb, type);
         _partialGraphDrawn = true;
     }
 
-    function _drawCompleteGraph(){
+    function _drawCompleteGraph(cb){
         var nodeobj = {};
 
         nodeobj[app.const.nodeTypes.conf]  = app.HGraph.getNodesOfType(app.const.nodeTypes.conf);
@@ -597,15 +597,17 @@
         edgeobj[app.const.nodeTypes.author]  = app.HGraph.getEdgesOfType(app.const.nodeTypes.author);
         edgeobj[app.const.nodeTypes.conf]  = app.HGraph.getEdgesOfType(app.const.nodeTypes.conf);
 
-        app.graph.drawGraph(nodeobj, edgeobj);
+        app.graph.drawGraph(nodeobj, edgeobj, cb);
     }
 
     function _drawQueryType (type){
         app.events.showDrawing();
-        var nodes = app.HGraph.getNodesOfType(type);
-        app.graph.drawNodesOnlyGraph(nodes, type);
-        _partialGraphDrawn = false;
-        app.events.hidePopup();
+        var nodes ={};
+        nodes[type] = app.HGraph.getNodesOfType(type);
+        app.graph.drawGraph(nodes, {}, function(){
+            _partialGraphDrawn = false;
+            app.events.hidePopup();
+        });
     }
 
     function _selectMenuOption(element, currentMenu, theOtherMenu){
@@ -882,16 +884,30 @@
 
 
     };
-    //e.target is the type button pressed
-    app.events.drawTypeGraph = function(e){
 
-        _drawQueryType(e.currentTarget.dataset.type);
+    app.events.queryType = function(){
+        var type = _selectTypeFromSelector("#queryMenu #queryByType .typeSelector");
+        _drawQueryType(type);
+
     };
 
-    //TODO
-    app.events.queryNeighbours = function(nodeid){
-        //app.events.showDrawing();
-        //var nodes = app.HGraph.getNodesOfType(type);
+    app.events.queryNeighbours = function(){
+        if (!_checkInputs("autoVeins")) return;
+        app.events.showDrawing();
+        var nodes = {};
+        try{
+            app.HGraph.log("ble");
+            nodes[app.const.nodeTypes.author] = app.HGraph.queryNeighbours(_inputChoices.source.id, app.const.nodeTypes.author);
+            nodes[app.const.nodeTypes.paper] = app.HGraph.queryNeighbours(_inputChoices.source.id, app.const.nodeTypes.paper);
+            nodes[app.const.nodeTypes.term] = app.HGraph.queryNeighbours(_inputChoices.source.id, app.const.nodeTypes.term);
+            nodes[app.const.nodeTypes.conf] = app.HGraph.queryNeighbours(_inputChoices.source.id, app.const.nodeTypes.conf);
+            app.HGraph.log("ble1");
+            app.graph.drawGraph(nodes,{},function(){
+                app.events.hidePopup();
+            });
+        }catch(err){
+            app.HGraph.log(err);
+        }
 
     };
     //----/QueryMenu
