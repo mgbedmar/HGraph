@@ -24,7 +24,7 @@ import static java.lang.Thread.sleep;
 public class PresentationController {
     private DomainController dc;
     private WebEngine we;
-    private int MAX_ROWS = 200;
+    private int MAX_ROWS = 10;
     private String query1To1Result;
     private ArrayList<ArrayList<String>> result;
     private int currentNumCols;
@@ -70,7 +70,9 @@ public class PresentationController {
 
     private ArrayList<ArrayList<String>> resultDetails() {
         String toAdd;
-        if (result.size() == 0) return new ArrayList<>();
+        if (dc.getResultSize() == 0) return new ArrayList<>();
+        System.out.println("no zero");
+        if (currentNumCols == 2) return basicResult();
         toAdd = result.get(0).get(1);
         return formResult(toAdd);
     }
@@ -248,7 +250,6 @@ public class PresentationController {
 
     private ArrayList<ArrayList<String>> basicResult() {
         ArrayList<ArrayList<String>> r = new ArrayList<>();
-        currentNumCols = 2;
         result = new ArrayList<>();
         ArrayList<String> fila;
         int i = 1;
@@ -256,6 +257,7 @@ public class PresentationController {
         if (numRows == 0) numRows = dc.getResultSize();
 
         while (i <= numRows && (fila = dc.getResultRow()) != null) {
+            System.out.println(i);
             fila.set(0, String.valueOf((Integer.parseInt(fila.get(0)) + 1)));
             r.add(fila);
             ++i;
@@ -265,6 +267,7 @@ public class PresentationController {
 
     public ArrayList<ArrayList<String>> queryByType(String type) {
         try {
+            currentNumCols = 2;
             dc.queryByType(type);
             return basicResult();
         } catch (DomainException e) {
@@ -276,6 +279,7 @@ public class PresentationController {
 
     public ArrayList<ArrayList<String>> queryNeighbours(String id, String type) {
         try {
+            currentNumCols = 2;
             dc.queryNeighbours(Integer.parseInt(id), type);
             return basicResult();
         } catch (DomainException e) {
@@ -342,8 +346,10 @@ public class PresentationController {
 
     public ArrayList<ArrayList<String>> sortResult(int col, int dir) {
         if (currentNumCols == 3) col = col - 1;
+        System.out.println(col);
         if (col == 0) dc.resetResult();
         else dc.sortResultByRow(col, dir);
+        System.out.println("despres de dc");
         return resultDetails();
     }
 

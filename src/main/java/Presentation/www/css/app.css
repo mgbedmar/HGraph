@@ -239,7 +239,7 @@ body > div.page{
 
 #popupPage .resultContent .tableContent table th.zeroCol.basic {
     width:13%;
-    max-width:100px;
+    max-width:50px;
 }
 
 #popupPage .resultContent .tableContent table th.firstCol.basic {

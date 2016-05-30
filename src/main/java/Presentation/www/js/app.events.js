@@ -144,7 +144,10 @@
     }
 
     function _resultTable(result) {
-        if (_basic) _resultBasic(result);
+        if (_basic) {
+            _resultBasic(result);
+            return;
+        }
 
         var table = document.querySelector("#resultPopup1 table");
         if (table.rows != null) {
@@ -178,10 +181,8 @@
                 table.deleteRow(1);
             }
         }
-
         for (var i = 0; i < result.size(); i++) {
             var row = table.insertRow(i+1);
-
             _tableCell(0, String(result.get(i).get(0)), row);
 
             var act = String(result.get(i).get(1));
@@ -199,11 +200,10 @@
         document.getElementById("popupContent").innerHTML = '';
         rP.id = "resultPopup1";
         document.getElementById("popupContent").appendChild(rP);
-        var table = document.querySelector("#"+rP.id+" table");
 
         var sec = document.querySelector("#"+rP.id+" table tr .zeroCol");
         sec.classList.add("basic");
-        document.querySelector("#"+rP.id+" table tr .firstCol");
+        sec = document.querySelector("#"+rP.id+" table tr .firstCol");
         sec.classList.add("basic");
         sec = document.querySelector("#"+rP.id+" table tr .secondCol");
         sec.parentNode.removeChild(sec);
@@ -212,7 +212,7 @@
 
         _resultBasic(result);
 
-        return _rP;
+        return rP;
     }
 
     function _resultTableTable(result) {
@@ -221,7 +221,7 @@
         document.getElementById("popupContent").innerHTML = '';
         rP.id = "resultPopup1";
         document.getElementById("popupContent").appendChild(rP);
-        var table = document.querySelector("#"+rP.id+" table");
+       /* var table = document.querySelector("#"+rP.id+" table");
 
         for (var i = 0; i < result.size(); i++) {
             var row = table.insertRow(i+1);
@@ -238,7 +238,7 @@
             var hm = String(result.get(i).get(3));
             hm = hm.slice(0, 7-hm.length);
             _tableCell(3, hm, row);
-        }
+        }*/ _resultTable(result);
         return rP;
     }
 
@@ -361,7 +361,6 @@
 
                             divButton.addEventListener("click", function(e) {
                                 var li = e.currentTarget.parentNode;
-
                                 var div = li.children[0];
                                 var r = app.HGraph.unselectResultName(div.innerHTML);
                                 _resultTable(r);
@@ -394,7 +393,6 @@
                             li.appendChild(divName);
                             li.appendChild(divButton);
                             document.querySelector("#activeFilters").appendChild(li);
-
                             var resultat = app.HGraph.hideResultName(nod.name);
                             _resultTable(resultat);
 
@@ -408,7 +406,6 @@
                                 e.currentTarget.parentNode.parentNode.removeChild(e.currentTarget.parentNode);
                                 e.stopPropagation();
                             });
-
                             document.getElementById("autoFilterNames").value = '';
                         };
                     }
@@ -914,12 +911,9 @@
         _basic = true;
         app.events.showLoading();
         var result = app.HGraph.queryNeighbours(_inputChoices.source.id, _inputChoices.source.type);
-
         var rP = _resultBasicTable(result);
-
         _addResultEvents(rP, true);
         app.events.hidePopup(function() { app.events.showPopup(rP); });
-
     }
 
     app.events.query1to1 = function() {
@@ -942,16 +936,12 @@
     };
 
     app.events.queryNtoN = function() {
-      try{  app.HGraph.log("pirnticp");
         var type1 = _selectTypeFromSelector("#primer");
         var type2 = _selectTypeFromSelector("#segon");
-        app.HGraph.log("pirnticp "+type1+" "+type2);
         if (!type1 || !type2) return;
         _basic = false;
-        app.HGraph.log("inter");
         app.HGraph.queryNtoN(type1, type2);
         app.events.showLoading();
-        app.HGraph.log("final"); }catch(err){app.HGraph.log(err);}
     };
 
     app.events.queryByReference = function() {
