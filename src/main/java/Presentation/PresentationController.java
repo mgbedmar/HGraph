@@ -27,6 +27,7 @@ public class PresentationController {
     private String query1To1Result;
     private ArrayList<ArrayList<String>> result;
     private HashMap<Integer,Integer> dicRows;
+    private int currentNumCols;
 
 
     /**
@@ -247,6 +248,7 @@ public class PresentationController {
     }
 
     public void query1toN(String idSource, String typeSource, String typeEnd) {
+        currentNumCols = 3;
         result = new ArrayList<>();
         dicRows = new HashMap<>();
         QueryTask task = new Query1toNTask(idSource, typeSource, typeEnd, dc, we, this, MAX_ROWS);
@@ -256,6 +258,7 @@ public class PresentationController {
     }
 
     public void queryNtoN(String typeSource, String typeEnd) {
+        currentNumCols = 4;
         result = new ArrayList<>();
         dicRows = new HashMap<>();
         QueryTask task = new QueryNtoNTask(typeSource, typeEnd, dc, we, this, MAX_ROWS);
@@ -267,6 +270,7 @@ public class PresentationController {
     public void queryByReference(String nodeRefSourceID, String nodeRefSourceType,
                                  String nodeRefEndID, String nodeRefEndType,
                                  String nodeSourceID, String nodeSourceType) {
+        currentNumCols = 3;
         result = new ArrayList<>();
         dicRows = new HashMap<>();
         QueryTask task = new QueryByReferenceTask(nodeRefSourceID, nodeRefSourceType, nodeRefEndID,
@@ -275,6 +279,33 @@ public class PresentationController {
         Thread th = new Thread(task);
         th.setDaemon(true);
         th.start();
+    }
+
+    private ArrayList<ArrayList<String>> formResult(String toAdd) {
+        ArrayList<ArrayList<String>> r = new ArrayList<>();
+        ArrayList<String> fila;
+        int i = 1;
+        int numRows = MAX_ROWS;
+        if (numRows == 0) numRows = dc.getResultSize();
+
+        while (i <= numRows && (fila = dc.getResultRow()) != null) {
+            addNumsRow(i, Integer.parseInt(fila.get(0)));
+            fila.set(0, String.valueOf(i));
+            if (currentNumCols == 3)
+                fila.add(1, toAdd);
+            r.add(fila);
+            ++i;
+        }
+        return r;
+    }
+
+
+    public ArrayList<ArrayList<String>> sortResult(int col, int dir) {
+        dc.sortResultByRow(col, dir);
+        String toAdd;
+        if (result.size() == 0) return new ArrayList<>();
+        toAdd = result.get(0).get(1);
+        return formResult(toAdd);
     }
 
     public void log(String msg){

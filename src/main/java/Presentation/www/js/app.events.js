@@ -19,6 +19,8 @@
 
     var _regExpr = /\{[0-9]*\}/;
 
+    var _sorted = [0, 0, 0];
+
     function _hide(selector, cb){
         document.getElementById(selector).classList.remove("show");
         setTimeout(function(){
@@ -286,10 +288,68 @@
 
     }
 
+    function _sortListener(j) {
+        _sorted[j] = 1-_sorted[j];
+        return app.HGraph.sortResult(j+1,_sorted[j]);
+    }
+
+    function _resultTable(result) {
+        var rPveritat = document.getElementById("resultPopup");
+        var rP = rPveritat.cloneNode(true);
+        document.getElementById("popupContent").innerHTML = '';
+        rP.id = rP.id+1;
+        document.getElementById("popupContent").appendChild(rP);
+        var table = document.querySelector("#"+rP.id+" table");
+
+        for (var i = 0; i < result.size(); i++) {
+            var row = table.insertRow(i+1);
+
+            _tableCell(0, String(result.get(i).get(0)), row);
+
+            for (var j = 1; j <=2; ++j) {
+                var act = String(result.get(i).get(j));
+                var tit = String(_regExpr.exec(act));
+                var nom = act.slice(0, -tit.length);
+                tit = tit.slice(1, -1);
+                _tableCell(j, nom, row, tit);
+            }
+            var hm = String(result.get(i).get(3));
+            hm = hm.slice(0, 7-hm.length);
+            _tableCell(3, hm, row);
+        }
+        app.HGraph.log("hola" +document.querySelector("#"+rP.id+" .tableDiv").innerHTML);
+        return rP;
+    }
+
     function _addResultEvents(rp) {
         document.querySelector("#"+rp.id+" .closeResult").addEventListener("click", app.events.hidePopup);
         _initAutoCompletes(true);
+        document.querySelector("#"+rp.id+" .firstCol").addEventListener("click", function() {
+            var res = _sortListener(0);
+            var pop = document.getElementById("popupContent");
+            pop.innerHTML = '';
+            var rP = _resultTable(res);
+            _addResultEvents(rP);
+            pop.appendChild(rP);
+        });
+        document.querySelector("#"+rp.id+" .secondCol").addEventListener("click", function() {
+            var res = _sortListener(1);
+            var pop = document.getElementById("popupContent");
+            pop.innerHTML = '';
+            var rP = _resultTable(res);
+            _addResultEvents(rP);
+            pop.appendChild(rP);
+        });
+        document.querySelector("#"+rp.id+" .thirdCol").addEventListener("click", function() {
+            var res = _sortListener(2);
+            var pop = document.getElementById("popupContent");
+            pop.innerHTML = '';
+            var rP = _resultTable(res);
+            _addResultEvents(rP);
+            pop.appendChild(rP);
+        });
     }
+
 
     function _initMain(){
         var large = false;
@@ -752,29 +812,7 @@
     app.events.takeQueryResult = function() {
         var result = app.HGraph.getQueryResult();
 
-        var rPveritat = document.getElementById("resultPopup");
-        var rP = rPveritat.cloneNode(true);
-        document.getElementById("popupContent").innerHTML = '';
-        rP.id = rP.id+1;
-        document.getElementById("popupContent").appendChild(rP);
-        var table = document.querySelector("#"+rP.id+" table");
-
-        for (var i = 0; i < result.size(); i++) {
-            var row = table.insertRow(i+1);
-
-            _tableCell(0, String(result.get(i).get(0)), row);
-
-            for (var j = 1; j <=2; ++j) {
-                var act = String(result.get(i).get(j));
-                var tit = String(_regExpr.exec(act));
-                var nom = act.slice(0, -tit.length);
-                tit = tit.slice(1, -1);
-                _tableCell(j, nom, row, tit);
-            }
-            var hm = String(result.get(i).get(3));
-            hm = hm.slice(0, 7-hm.length);
-            _tableCell(3, hm, row);
-        }
+        var rP = _resultTable(result);
 
         _addResultEvents(rP);
         app.events.hidePopup(function() { app.events.showPopup(rP); });

@@ -213,6 +213,7 @@ body > div.page{
     font-weight:normal;
     width:35%;
     max-width:35%;
+    cursor:pointer;
 }
 
 #popupPage .resultContent .tableContent table td {
