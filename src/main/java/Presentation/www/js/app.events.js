@@ -224,7 +224,9 @@
                             };
                             _inputChoices.result = nod;
                             var li = document.createElement("li");
+                            li.setAttribute("data-filter", "selectLI");
                             var divName = document.createElement("div");
+                            divName.className = "text-li-div";
                             divName.innerHTML = nod.name;
                             var divButton = document.createElement("div");
                             var iesp = document.createElement("i");
@@ -234,13 +236,15 @@
                             li.appendChild(divButton);
 
 
-                            document.querySelector("#popupContent .selectNames").appendChild(li);
+                            document.querySelector("#activeFilters").appendChild(li);
 
                             divButton.addEventListener("click", function(e) {
                                 //TODO treure filtre
                                 e.currentTarget.parentNode.parentNode.removeChild(e.currentTarget.parentNode);
                                 e.stopPropagation();
                             });
+
+                            document.getElementById("autoSelect").value = '';
 
                         };
                     }
@@ -254,23 +258,25 @@
                             };
                             _inputChoices.result = nod;
                             var li = document.createElement("li");
-                            app.HGraph.log("li");
+                            li.setAttribute("data-filter", "filterLI");
                             var divName = document.createElement("div");
+                            divName.className = "text-li-div";
                             divName.innerHTML = nod.name;
-                            app.HGraph.log("divName "+divName.innerHTML);
                             var divButton = document.createElement("div");
                             var iesp = document.createElement("i");
                             iesp.className = "icon ion-close-round closeEl";
                             divButton.appendChild(iesp);
                             li.appendChild(divName);
                             li.appendChild(divButton);
-                            document.querySelector("#popupContent .filterNames").appendChild(li);
+                            document.querySelector("#activeFilters").appendChild(li);
 
                             divButton.addEventListener("click", function(e) {
                                 //TODO treure filtre
                                 e.currentTarget.parentNode.parentNode.removeChild(e.currentTarget.parentNode);
                                 e.stopPropagation();
                             });
+
+                            document.getElementById("autoFilterNames").value = '';
                         };
                     }
                     _autocompletes.push(new autoComplete(_autCom));
@@ -425,7 +431,6 @@
     }
 
     function _selectType(parentElement, type){
-        app.HGraph.log("_se");
         parentElement.dataset.selection = type;
         var nodes = parentElement.children;
         for(var i = 0; i < nodes.length; i++)
@@ -457,18 +462,16 @@
     }
 
     function _selectTypeFromSelector(selector) {
-        app.HGraph.log("sel");
         var typeSelector = document.querySelector(selector);
         var type = typeSelector.dataset.selection;
-app.HGraph.log("sel");
         if(!type)
         {
             typeSelector.classList.add("wrong");
-            return false; app.HGraph.log("sel");
+            return false;
         }
         else {
             typeSelector.classList.remove("wrong");
-            return type;app.HGraph.log("sel");
+            return type;
         }
     }
 
@@ -477,8 +480,6 @@ app.HGraph.log("sel");
 
     app.events.init = function(){
         _show(app.const.pageIds.welcome);
-        /*var d = document.createElement("div");
-        app.events.showPopup(d);*/
     };
 
     app.events.loadGoToWelcome = function(){
@@ -701,11 +702,9 @@ app.HGraph.log("sel");
 
     app.events.queryByReference = function() {
         if (!_checkInputs("autoref1", "autoref2", "autoref3")) return;
-        app.HGraph.log("abans");
         app.HGraph.queryByReference(_inputChoices.source.id, _inputChoices.source.type,
                                     _inputChoices.target.id, _inputChoices.target.type,
                                     _inputChoices.ref.id, _inputChoices.ref.type);
-        app.HGraph.log("despres");
         app.events.showLoading();
     };
 
@@ -739,7 +738,6 @@ app.HGraph.log("sel");
         var div = document.createElement("div");
         div.innerHTML = _inputChoices.target.name;
         firstCol.appendChild(div);
-        app.HGraph.log(table.innerHTML);
         /* Columna del hetesim */
         var firstCol = row.insertCell(3);
         var div = document.createElement("div");
