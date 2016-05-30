@@ -26,6 +26,8 @@
 
     var _sorted = [0, 0, 0];
 
+    var _basic = false;
+
     function _hide(selector, cb){
         document.getElementById(selector).classList.remove("show");
         setTimeout(function(){
@@ -142,6 +144,8 @@
     }
 
     function _resultTable(result) {
+        if (_basic) _resultBasic(result);
+
         var table = document.querySelector("#resultPopup1 table");
         if (table.rows != null) {
             while (table.rows.length > 1) {
@@ -165,6 +169,50 @@
             hm = hm.slice(0, 7-hm.length);
             _tableCell(3, hm, row);
         }
+    }
+
+    function _resultBasic(result) {
+        var table = document.querySelector("#resultPopup1 table");
+        if (table.rows != null) {
+            while (table.rows.length > 1) {
+                table.deleteRow(1);
+            }
+        }
+
+        for (var i = 0; i < result.size(); i++) {
+            var row = table.insertRow(i+1);
+
+            _tableCell(0, String(result.get(i).get(0)), row);
+
+            var act = String(result.get(i).get(1));
+            var tit = String(_regExpr.exec(act));
+            var nom = act.slice(0, -tit.length);
+            tit = tit.slice(1, -1);
+            _tableCell(1, nom, row, tit);
+
+        }
+    }
+
+    function _resultBasicTable(result) {
+        var rPveritat = document.getElementById("resultPopup");
+        var rP = rPveritat.cloneNode(true);
+        document.getElementById("popupContent").innerHTML = '';
+        rP.id = "resultPopup1";
+        document.getElementById("popupContent").appendChild(rP);
+        var table = document.querySelector("#"+rP.id+" table");
+
+        var sec = document.querySelector("#"+rP.id+" table tr .zeroCol");
+        sec.classList.add("basic");
+        document.querySelector("#"+rP.id+" table tr .firstCol");
+        sec.classList.add("basic");
+        sec = document.querySelector("#"+rP.id+" table tr .secondCol");
+        sec.parentNode.removeChild(sec);
+        sec = document.querySelector("#"+rP.id+" table tr .thirdCol");
+        sec.parentNode.removeChild(sec);
+
+        _resultBasic(result);
+
+        return _rP;
     }
 
     function _resultTableTable(result) {
@@ -373,21 +421,23 @@
 
 
 
-    function _addResultEvents(rp) {
+    function _addResultEvents(rp, basic) {
         document.querySelector("#"+rp.id+" .closeResult").addEventListener("click", app.events.hidePopup);
         _initAutoCompletes(true);
         document.querySelector("#"+rp.id+" .firstCol").addEventListener("click", function() {
             var res = _sortListener(0);
             _resultTable(res);
         });
-        document.querySelector("#"+rp.id+" .secondCol").addEventListener("click", function() {
-            var res = _sortListener(1);
-            _resultTable(res);
-        });
-        document.querySelector("#"+rp.id+" .thirdCol").addEventListener("click", function() {
-            var res = _sortListener(2);
-            _resultTable(res);
-        });
+        if (typeof basic === 'undefined' || !basic) {
+            document.querySelector("#"+rp.id+" .secondCol").addEventListener("click", function() {
+                var res = _sortListener(1);
+                _resultTable(res);
+            });
+            document.querySelector("#"+rp.id+" .thirdCol").addEventListener("click", function() {
+                var res = _sortListener(2);
+                _resultTable(res);
+            });
+        }
         document.getElementById("filterRows").addEventListener("keyup", function(e) {
             if (e.keyCode === 13) {
                 var filter = e.currentTarget.value;
@@ -840,15 +890,42 @@
 
     //TODO
     app.events.queryNeighbours = function(nodeid){
-        app.events.showDrawing();
-        var nodes = app.HGraph.getNodesOfType(type);
+        //app.events.showDrawing();
+        //var nodes = app.HGraph.getNodesOfType(type);
 
     };
     //----/QueryMenu
 
+    app.events.queryByTypeTable = function() {
+        var type = _selectTypeFromSelector("#queryByType .typeSelector");
+        if (!type) return;
+        _basic = true;
+        app.events.showLoading();
+        var result = app.HGraph.queryByType(type);
+
+        var rP = _resultBasicTable(result);
+
+        _addResultEvents(rP, true);
+        app.events.hidePopup(function() { app.events.showPopup(rP); });
+    }
+
+    app.events.queryNeighboursTable = function() {
+        if (!_checkInputs("autoVeins")) return;
+        _basic = true;
+        app.events.showLoading();
+        var result = app.HGraph.queryNeighbours(_inputChoices.source.id, _inputChoices.source.type);
+
+        var rP = _resultBasicTable(result);
+
+        _addResultEvents(rP, true);
+        app.events.hidePopup(function() { app.events.showPopup(rP); });
+
+    }
+
     app.events.query1to1 = function() {
 
         if (!_checkInputs("auto1To1-1", "auto1To1-2")) return;
+        _basic = false;
         app.HGraph.query1to1(_inputChoices.source.id, _inputChoices.source.type,
                              _inputChoices.target.id, _inputChoices.target.type);
         app.events.showLoading();
@@ -859,20 +936,27 @@
         var type = _selectTypeFromSelector("#query1toN .typeSelector");
         if (!_checkInputs("auto1ToN")) return;
         if (!type) return;
+        _basic = false;
         app.HGraph.query1toN(_inputChoices.source.id, _inputChoices.source.type, type);
         app.events.showLoading();
     };
 
     app.events.queryNtoN = function() {
+      try{  app.HGraph.log("pirnticp");
         var type1 = _selectTypeFromSelector("#primer");
         var type2 = _selectTypeFromSelector("#segon");
+        app.HGraph.log("pirnticp "+type1+" "+type2);
         if (!type1 || !type2) return;
+        _basic = false;
+        app.HGraph.log("inter");
         app.HGraph.queryNtoN(type1, type2);
         app.events.showLoading();
+        app.HGraph.log("final"); }catch(err){app.HGraph.log(err);}
     };
 
     app.events.queryByReference = function() {
         if (!_checkInputs("autoref1", "autoref2", "autoref3")) return;
+        _basic = false;
         app.HGraph.queryByReference(_inputChoices.source.id, _inputChoices.source.type,
                                     _inputChoices.target.id, _inputChoices.target.type,
                                     _inputChoices.ref.id, _inputChoices.ref.type);

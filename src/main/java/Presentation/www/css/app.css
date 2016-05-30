@@ -230,11 +230,20 @@ body > div.page{
 }
 
 #popupPage .resultContent .tableContent table th.thirdCol {
-    width:20%;
+    width:17%;
 }
 
 #popupPage .resultContent .tableContent table th.zeroCol {
-    width:10%;
+    width:13%;
+}
+
+#popupPage .resultContent .tableContent table th.zeroCol.basic {
+    width:13%;
+    max-width:100px;
+}
+
+#popupPage .resultContent .tableContent table th.firstCol.basic {
+    width:87%;
 }
 
 #popupPage .resultContent .tableContent table tr:nth-child(even) {

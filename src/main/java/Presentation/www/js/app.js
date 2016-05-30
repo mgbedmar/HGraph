@@ -156,6 +156,8 @@ var app = app || {};
         document.getElementById("ok1toN").addEventListener("click", app.events.query1toN);
         document.getElementById("okNtoN").addEventListener("click", app.events.queryNtoN);
         document.getElementById("okref").addEventListener("click", app.events.queryByReference);
+        document.getElementById("tableTipus").addEventListener("click", app.events.queryByTypeTable);
+        document.getElementById("tableVeins").addEventListener("click", app.events.queryNeighboursTable);
 
         document.querySelector("#mainPage #toolsMenu #addNode")
             .addEventListener("click", app.events.addNode);

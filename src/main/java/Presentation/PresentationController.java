@@ -11,6 +11,7 @@ import Domain.DomainException;
 import Domain.IntermediateHeteSimMatrix;
 import javafx.scene.web.WebEngine;
 
+import javax.smartcardio.ATR;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -26,7 +27,6 @@ public class PresentationController {
     private int MAX_ROWS = 200;
     private String query1To1Result;
     private ArrayList<ArrayList<String>> result;
-    private HashMap<Integer,Integer> dicRows;
     private int currentNumCols;
 
 
@@ -49,6 +49,33 @@ public class PresentationController {
         return bigger;
     }
 
+
+    private ArrayList<ArrayList<String>> formResult(String toAdd) {
+        ArrayList<ArrayList<String>> r = new ArrayList<>();
+        ArrayList<String> fila;
+        int i = 1;
+        int numRows = MAX_ROWS;
+        if (numRows == 0) numRows = dc.getResultSize();
+
+        while (i <= numRows && (fila = dc.getResultRow()) != null) {
+            //addNumsRow(i, Integer.parseInt(fila.get(0)));
+            fila.set(0, String.valueOf((Integer.parseInt(fila.get(0))+1)));
+            if (currentNumCols == 3)
+                fila.add(1, toAdd);
+            r.add(fila);
+            ++i;
+        }
+        return r;
+    }
+
+    private ArrayList<ArrayList<String>> resultDetails() {
+        String toAdd;
+        if (result.size() == 0) return new ArrayList<>();
+        toAdd = result.get(0).get(1);
+        return formResult(toAdd);
+    }
+
+
     /**
      * Setter del resultat de la consulta 1 a 1. El posa el thread corresponent.
      * @param r String que conte el hetesim
@@ -59,10 +86,6 @@ public class PresentationController {
 
     protected void setQueryResult(ArrayList<ArrayList<String>> r) {
         this.result = r;
-    }
-
-    protected void addNumsRow(Integer key, Integer value) {
-        this.dicRows.put(key, value);
     }
 
     public String getQuery1To1Result() {
@@ -197,6 +220,7 @@ public class PresentationController {
         res = new ArrayList<>(res.subList(0, Math.min(res.size(), quantity)));
         return res;
     }
+
     public ArrayList<String[]> getEdgesOfType(String type){
         ArrayList<String[]> res = new ArrayList<>();
         try{
@@ -219,6 +243,46 @@ public class PresentationController {
             we.executeScript("app.events.showInfo(\"Eps!\",\""+de.getFriendlyMessage()+"\", \"Cap problema\")");
         }
         return res;
+    }
+
+
+    private ArrayList<ArrayList<String>> basicResult() {
+        ArrayList<ArrayList<String>> r = new ArrayList<>();
+        currentNumCols = 2;
+        result = new ArrayList<>();
+        ArrayList<String> fila;
+        int i = 1;
+        int numRows = MAX_ROWS;
+        if (numRows == 0) numRows = dc.getResultSize();
+
+        while (i <= numRows && (fila = dc.getResultRow()) != null) {
+            fila.set(0, String.valueOf((Integer.parseInt(fila.get(0)) + 1)));
+            r.add(fila);
+            ++i;
+        }
+        return r;
+    }
+
+    public ArrayList<ArrayList<String>> queryByType(String type) {
+        try {
+            dc.queryByType(type);
+            return basicResult();
+        } catch (DomainException e) {
+            String scr = "app.events.showInfo(\"Error\", \"" + e.getFriendlyMessage() + "\", \"OK\");";
+            we.executeScript("app.events.hidePopup(function(){"+scr+"});");
+        }
+        return null;
+    }
+
+    public ArrayList<ArrayList<String>> queryNeighbours(String id, String type) {
+        try {
+            dc.queryNeighbours(Integer.parseInt(id), type);
+            return basicResult();
+        } catch (DomainException e) {
+            String scr = "app.events.showInfo(\"Error\", \"" + e.getFriendlyMessage() + "\", \"OK\");";
+            we.executeScript("app.events.hidePopup(function(){"+scr+"});");
+        }
+        return null;
     }
 
     /* Inicia una tasca per calcular una consulta 1 a 1 */
@@ -248,7 +312,6 @@ public class PresentationController {
     public void query1toN(String idSource, String typeSource, String typeEnd) {
         currentNumCols = 3;
         result = new ArrayList<>();
-        dicRows = new HashMap<>();
         QueryTask task = new Query1toNTask(idSource, typeSource, typeEnd, dc, we, this, MAX_ROWS);
         Thread th = new Thread(task);
         th.setDaemon(true);
@@ -258,7 +321,6 @@ public class PresentationController {
     public void queryNtoN(String typeSource, String typeEnd) {
         currentNumCols = 4;
         result = new ArrayList<>();
-        dicRows = new HashMap<>();
         QueryTask task = new QueryNtoNTask(typeSource, typeEnd, dc, we, this, MAX_ROWS);
         Thread th = new Thread(task);
         th.setDaemon(true);
@@ -270,7 +332,6 @@ public class PresentationController {
                                  String nodeSourceID, String nodeSourceType) {
         currentNumCols = 3;
         result = new ArrayList<>();
-        dicRows = new HashMap<>();
         QueryTask task = new QueryByReferenceTask(nodeRefSourceID, nodeRefSourceType, nodeRefEndID,
                                                   nodeRefEndType, nodeSourceID, nodeSourceType,
                                                   dc, we, this, MAX_ROWS);
@@ -278,32 +339,6 @@ public class PresentationController {
         th.setDaemon(true);
         th.start();
     }
-
-    private ArrayList<ArrayList<String>> formResult(String toAdd) {
-        ArrayList<ArrayList<String>> r = new ArrayList<>();
-        ArrayList<String> fila;
-        int i = 1;
-        int numRows = MAX_ROWS;
-        if (numRows == 0) numRows = dc.getResultSize();
-
-        while (i <= numRows && (fila = dc.getResultRow()) != null) {
-            //addNumsRow(i, Integer.parseInt(fila.get(0)));
-            fila.set(0, String.valueOf((Integer.parseInt(fila.get(0))+1)));
-            if (currentNumCols == 3)
-                fila.add(1, toAdd);
-            r.add(fila);
-            ++i;
-        }
-        return r;
-    }
-
-    private ArrayList<ArrayList<String>> resultDetails() {
-        String toAdd;
-        if (result.size() == 0) return new ArrayList<>();
-        toAdd = result.get(0).get(1);
-        return formResult(toAdd);
-    }
-
 
     public ArrayList<ArrayList<String>> sortResult(int col, int dir) {
         if (currentNumCols == 3) col = col - 1;
@@ -492,7 +527,6 @@ class Query1toNTask extends QueryTask {
         if (numRows == 0) numRows = dc.getResultSize();
 
         while (i <= numRows && (fila = dc.getResultRow()) != null) {
-            //pc.addNumsRow(i, Integer.parseInt(fila.get(0)));
             fila.set(0, String.valueOf((Integer.parseInt(fila.get(0))+1)));
             fila.add(1, dc.getNodeName(idSource, typeSource)+"{"+String.valueOf(idSource)+"}");
             r.add(fila);
@@ -524,7 +558,6 @@ class QueryNtoNTask extends QueryTask {
         if (numRows == 0) numRows = dc.getResultSize();
 
         while (i <= numRows && (fila = dc.getResultRow()) != null) {
-            //pc.addNumsRow(i, Integer.parseInt(fila.get(0)));
             fila.set(0, String.valueOf((Integer.parseInt(fila.get(0))+1)));
             r.add(fila);
             ++i;
@@ -561,7 +594,6 @@ class QueryByReferenceTask extends QueryTask {
         if (numRows == 0) numRows = dc.getResultSize();
 
         while (i <= numRows && (fila = dc.getResultRow()) != null) {
-            //pc.addNumsRow(i, Integer.parseInt(fila.get(0)));
             fila.set(0, String.valueOf((Integer.parseInt(fila.get(0))+1)));
             fila.add(1, dc.getNodeName(idSource, typeSource)+"{"+String.valueOf(idSource)+"}");
             r.add(fila);
