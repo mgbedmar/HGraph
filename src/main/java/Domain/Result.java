@@ -336,7 +336,7 @@ public class Result {
      * @param index: numero de la fila que es vol desamagar
      */
     public void unfilter(int index) {
-        filteredRows.remove(index);
+        filteredRows.remove(new Integer(index));
         currentIndex = 0;
     }
 

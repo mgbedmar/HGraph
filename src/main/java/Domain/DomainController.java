@@ -286,6 +286,14 @@ public class DomainController
         r.filter(x);
     }
 
+    /**
+     * Desamaga una fila.
+     * @param x: numero de la fila que es vol desamagar
+     */
+    public void unhideResultRow(Integer x)
+    {
+        r.unfilter(x);
+    }
 
     /**
      * Amaga un rang de files.
@@ -296,6 +304,18 @@ public class DomainController
     {
         for(int i = x1; i < x2; i++)
             r.filter(i);
+        r.resetIndex();
+    }
+
+    /**
+     * Desmaga un rang de files.
+     * @param x1: primer nombre del rang
+     * @param x2: darrer nombre del rang (no inclos)
+     */
+    public void unhideResultRows(Integer x1, Integer x2)
+    {
+        for(int i = x1; i < x2; i++)
+            r.unfilter(i);
         r.resetIndex();
     }
 

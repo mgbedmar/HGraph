@@ -23,7 +23,7 @@ import static java.lang.Thread.sleep;
 public class PresentationController {
     private DomainController dc;
     private WebEngine we;
-    private int MAX_ROWS = 10;
+    private int MAX_ROWS = 200;
     private String query1To1Result;
     private ArrayList<ArrayList<String>> result;
     private HashMap<Integer,Integer> dicRows;
@@ -287,14 +287,13 @@ public class PresentationController {
         if (numRows == 0) numRows = dc.getResultSize();
 
         while (i <= numRows && (fila = dc.getResultRow()) != null) {
-            addNumsRow(i, Integer.parseInt(fila.get(0)));
-            fila.set(0, String.valueOf(i));
+            //addNumsRow(i, Integer.parseInt(fila.get(0)));
+            fila.set(0, String.valueOf((Integer.parseInt(fila.get(0))+1)));
             if (currentNumCols == 3)
                 fila.add(1, toAdd);
             r.add(fila);
             ++i;
         }
-        System.out.println(r.size());
         return r;
     }
 
@@ -307,12 +306,13 @@ public class PresentationController {
 
 
     public ArrayList<ArrayList<String>> sortResult(int col, int dir) {
-        dc.sortResultByRow(col, dir);
+        if (currentNumCols == 3) col = col - 1;
+        if (col == 0) dc.resetResult();
+        else dc.sortResultByRow(col, dir);
         return resultDetails();
     }
 
     public ArrayList<ArrayList<String>> selectResultName(String name) {
-        System.out.println(name+"holahola");
         dc.selectResultName(name);
         return resultDetails();
     }
@@ -329,6 +329,28 @@ public class PresentationController {
 
     public ArrayList<ArrayList<String>> unhideResultName(String name) {
         dc.unhideResultName(name);
+        return resultDetails();
+    }
+
+    public ArrayList<ArrayList<String>> hideResultRow(String index) {
+        dc.hideResultRow(Integer.parseInt(index)-1);
+        return resultDetails();
+    }
+
+    public ArrayList<ArrayList<String>> unhideResultRow(String index) {
+        dc.unhideResultRow(Integer.parseInt(index)-1);
+        return resultDetails();
+    }
+
+    public ArrayList<ArrayList<String>> hideResultRows(String indexs) {
+        String[] params = indexs.split("\\-");
+        dc.hideResultRows(Integer.parseInt(params[0].trim())-1, Integer.parseInt(params[1].trim())-1);
+        return resultDetails();
+    }
+
+    public ArrayList<ArrayList<String>> unhideResultRows(String indexs) {
+        String[] params = indexs.split("\\-");
+        dc.unhideResultRows(Integer.parseInt(params[0].trim())-1, Integer.parseInt(params[1].trim())-1);
         return resultDetails();
     }
 
@@ -470,8 +492,8 @@ class Query1toNTask extends QueryTask {
         if (numRows == 0) numRows = dc.getResultSize();
 
         while (i <= numRows && (fila = dc.getResultRow()) != null) {
-            pc.addNumsRow(i, Integer.parseInt(fila.get(0)));
-            fila.set(0, String.valueOf(i));
+            //pc.addNumsRow(i, Integer.parseInt(fila.get(0)));
+            fila.set(0, String.valueOf((Integer.parseInt(fila.get(0))+1)));
             fila.add(1, dc.getNodeName(idSource, typeSource)+"{"+String.valueOf(idSource)+"}");
             r.add(fila);
             ++i;
@@ -502,8 +524,8 @@ class QueryNtoNTask extends QueryTask {
         if (numRows == 0) numRows = dc.getResultSize();
 
         while (i <= numRows && (fila = dc.getResultRow()) != null) {
-            pc.addNumsRow(i, Integer.parseInt(fila.get(0)));
-            fila.set(0, String.valueOf(i));
+            //pc.addNumsRow(i, Integer.parseInt(fila.get(0)));
+            fila.set(0, String.valueOf((Integer.parseInt(fila.get(0))+1)));
             r.add(fila);
             ++i;
         }
@@ -539,8 +561,8 @@ class QueryByReferenceTask extends QueryTask {
         if (numRows == 0) numRows = dc.getResultSize();
 
         while (i <= numRows && (fila = dc.getResultRow()) != null) {
-            pc.addNumsRow(i, Integer.parseInt(fila.get(0)));
-            fila.set(0, String.valueOf(i));
+            //pc.addNumsRow(i, Integer.parseInt(fila.get(0)));
+            fila.set(0, String.valueOf((Integer.parseInt(fila.get(0))+1)));
             fila.add(1, dc.getNodeName(idSource, typeSource)+"{"+String.valueOf(idSource)+"}");
             r.add(fila);
             ++i;

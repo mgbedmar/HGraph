@@ -18,7 +18,11 @@
         result:''
     };
 
-    var _regExpr = /\{[0-9]*\}/;
+    var _regExpr = /\{[0-9]+\}/;
+
+    var _regFilterARow = /^[0-9]+$/;
+
+    var _regFilterRows = /^[0-9]+\s*\-\s*[0-9]+$/;
 
     var _sorted = [0, 0, 0];
 
@@ -129,6 +133,10 @@
     }
 
     function _sortListener(j) {
+        var filtersRow = document.querySelectorAll("#activeFilters [data-filterType=row]");
+        for (var k = 0; k < filtersRow.length; k++) {
+            filtersRow[k].parentNode.removeChild(filtersRow[k]);
+        }
         _sorted[j] = 1-_sorted[j];
         return app.HGraph.sortResult(j+1,_sorted[j]);
     }
@@ -379,6 +387,56 @@
         document.querySelector("#"+rp.id+" .thirdCol").addEventListener("click", function() {
             var res = _sortListener(2);
             _resultTable(res);
+        });
+        document.getElementById("filterRows").addEventListener("keyup", function(e) {
+            if (e.keyCode === 13) {
+                var filter = e.currentTarget.value;
+                var simple = _regFilterARow.test(filter);
+                var range = _regFilterRows.test(filter);
+                if (simple || range) {
+                    e.currentTarget.classList.remove("wrong");
+                    var li = document.createElement("li");
+                    li.setAttribute("data-filter", "filterLI");
+                    li.setAttribute("data-filterType", "row");
+                    var divName = document.createElement("div");
+                    divName.className = "text-li-div";
+                    divName.innerHTML = filter;
+                    var divButton = document.createElement("div");
+                    var iesp = document.createElement("i");
+                    iesp.className = "icon ion-close-round closeEl";
+                    divButton.appendChild(iesp);
+                    li.appendChild(divName);
+                    li.appendChild(divButton);
+                    document.querySelector("#activeFilters").appendChild(li);
+
+                    divButton.addEventListener("click", function(e) {
+                        var li = e.currentTarget.parentNode;
+
+                        var div = li.children[0];
+                        var r;
+                        if (_regFilterARow.test(div.innerHTML)) {
+                            r = app.HGraph.unhideResultRow(div.innerHTML);
+                        }
+                        else {
+                            r = app.HGraph.unhideResultRows(div.innerHTML);
+                        }
+
+                        _resultTable(r);
+                        e.currentTarget.parentNode.parentNode.removeChild(e.currentTarget.parentNode);
+                        e.stopPropagation();
+                    });
+
+                    document.getElementById("filterRows").value = '';
+
+                    var resultat;
+                    if (simple) resultat = app.HGraph.hideResultRow(filter);
+                    else resultat = app.HGraph.hideResultRows(filter);
+                    _resultTable(resultat);
+                }
+                else {
+                    e.currentTarget.classList.add("wrong");
+                }
+            }
         });
     }
 
