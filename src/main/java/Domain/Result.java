@@ -173,22 +173,29 @@ public class Result {
         if (filteredRows.contains(index)) return false;
 
         Row factual = res.get(index);
-        if (!selectedNames.isEmpty() && (!selectedNames.contains(factual.getFirstNode()))) {
+        String node1, node2;
+        node1 = factual.getFirstNode().split("\\{")[0];
+        if (!selectedNames.isEmpty() && (!selectedNames.contains(node1))) {
         /* no es buit i no esta el primer nom */
             if (nNodes == 1) return false; //si no te altre node ja esta
-            else if (!selectedNames.contains(factual.getSecondNode())) {
+            else {
+                node2 = factual.getSecondNode().split("\\{")[0];
+                if (!selectedNames.contains(node2)) {
                 /* el segon node existeix pero no esta en els desitjats */
-                return false;
+                    return false;
+                }
             }
         }
 
-        if (filteredNames.contains(factual.getFirstNode())) {
+        if (filteredNames.contains(node1)) {
             /* si el primer node es indesitjat */
             return false;
         }
-        if (nNodes == 2 && filteredNames.contains(factual.getSecondNode())) {
-            /* si hi ha segon node i es indesitjat */
-            return false;
+        if (nNodes == 2) {
+            node2 = factual.getSecondNode().split("\\{")[0];
+            if (filteredNames.contains(node2))
+                /* si hi ha segon node i es indesitjat */
+                return false;
         }
 
         /* Si res de lo anterior, es pot mostrar */

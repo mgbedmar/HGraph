@@ -296,16 +296,42 @@ public class PresentationController {
             r.add(fila);
             ++i;
         }
+        System.out.println(r.size());
         return r;
+    }
+
+    private ArrayList<ArrayList<String>> resultDetails() {
+        String toAdd;
+        if (result.size() == 0) return new ArrayList<>();
+        toAdd = result.get(0).get(1);
+        return formResult(toAdd);
     }
 
 
     public ArrayList<ArrayList<String>> sortResult(int col, int dir) {
         dc.sortResultByRow(col, dir);
-        String toAdd;
-        if (result.size() == 0) return new ArrayList<>();
-        toAdd = result.get(0).get(1);
-        return formResult(toAdd);
+        return resultDetails();
+    }
+
+    public ArrayList<ArrayList<String>> selectResultName(String name) {
+        System.out.println(name+"holahola");
+        dc.selectResultName(name);
+        return resultDetails();
+    }
+
+    public ArrayList<ArrayList<String>> unselectResultName(String name) {
+        dc.unselectResultName(name);
+        return resultDetails();
+    }
+
+    public ArrayList<ArrayList<String>> hideResultName(String name) {
+        dc.hideResultName(name);
+        return resultDetails();
+    }
+
+    public ArrayList<ArrayList<String>> unhideResultName(String name) {
+        dc.unhideResultName(name);
+        return resultDetails();
     }
 
     public void log(String msg){

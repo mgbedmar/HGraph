@@ -286,6 +286,7 @@ public class DomainController
         r.filter(x);
     }
 
+
     /**
      * Amaga un rang de files.
      * @param x1: primer nombre del rang
@@ -307,6 +308,11 @@ public class DomainController
         r.filter(x);
     }
 
+    public void unhideResultName(String x)
+    {
+        r.unfilter(x);
+    }
+
     /**
      * Filtra per nom, nomes es mostren els resultats
      * on apareix el nom <em>x</em>.
@@ -315,6 +321,11 @@ public class DomainController
     public void selectResultName(String x)
     {
         r.select(x);
+    }
+
+    public void unselectResultName(String x)
+    {
+        r.unselect(x);
     }
 
     /**
