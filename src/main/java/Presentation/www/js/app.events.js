@@ -6,6 +6,7 @@
 
     //Private
     var _autocompletes = [];
+    var _partialGraphDrawn;
     //Nodes for autocomplete
     //TODO actualitzar al esborrar, afegir. Controlar excepcions.
     var _nodes;
@@ -285,7 +286,7 @@
         _initAutoCompletes(true);
     }
 
-    function _initMain(){
+    function _initMain(cb){
         var large = false;
         var nodes=[];
 
@@ -305,24 +306,18 @@
         }
 
         app.graph.init(large);
-        document.querySelector("#mainPage #queryMenu > div > ul > li[data-action=completeGraph]").click();
-        /*
-        if(!app.graph.isLarge())
+        //document.querySelector("#mainPage #queryMenu > div > ul > li[data-action=completeGraph]").click();
+        
+        
+        if(app.graph.isLarge())
         {
-            document.querySelector("#queryMenu li[data-action=completeGraph]").click();
+            _drawPartialGraph("author", cb);
         }
         else
         {
-            //TODO: disable small graphs features
-            //_disableSmallGraphFeatures(); //TODO la comento perque no esta definida
-            //Trigger draw queryType author
-            //document.querySelector("#queryMenu li[data-action=queryType] typeSelector[data-type=author]").click();
-            //TODO posar la linia de dalt quan estiguin els listeners corresponents
-            //_drawQueryType("author");
-            var nodesAux = app.HGraph.getNodes();
-            app.graph.drawNodesOnlyGraph(nodesAux);
+            _drawCompleteGraph();
         }
-        */
+        
         //Init autocompletes
         _nodes = nodes;
         _initAutoCompletes();
@@ -364,7 +359,7 @@
 
 
     //QueryMenu functions
-    function _drawCompleteGraph(){
+    function _drawPartialGraph(type, cb){
         var nodeobj = {};
 
         //TODO: node distribution?
@@ -380,14 +375,31 @@
         edgeobj[app.const.nodeTypes.author]  = app.HGraph.getEdgesOfType(app.const.nodeTypes.author);
         edgeobj[app.const.nodeTypes.conf]  = app.HGraph.getEdgesOfType(app.const.nodeTypes.conf);
 
-        app.graph.drawCoolGraph(nodeobj, edgeobj);
+        app.graph.drawOneEdgeTypeGraph(type, nodeobj, edgeobj, cb);
+        _partialGraphDrawn = true;
+    }
+
+    function _drawCompleteGraph(){
+        var nodeobj = {};
+
+        nodeobj[app.const.nodeTypes.conf]  = app.HGraph.getNodesOfType(app.const.nodeTypes.conf);
+        nodeobj[app.const.nodeTypes.term]  = app.HGraph.getNodesOfType(app.const.nodeTypes.term);
+        nodeobj[app.const.nodeTypes.author] = app.HGraph.getNodesOfType(app.const.nodeTypes.author);
+        nodeobj[app.const.nodeTypes.paper]  = app.HGraph.getNodesOfType(app.const.nodeTypes.paper);
+
+        var edgeobj = {};
+        edgeobj[app.const.nodeTypes.term]  = app.HGraph.getEdgesOfType(app.const.nodeTypes.term);
+        edgeobj[app.const.nodeTypes.author]  = app.HGraph.getEdgesOfType(app.const.nodeTypes.author);
+        edgeobj[app.const.nodeTypes.conf]  = app.HGraph.getEdgesOfType(app.const.nodeTypes.conf);
+
+        app.graph.drawGraph(nodeobj, edgeobj);
     }
 
     function _drawQueryType (type){
-        //TODO: showDrawing()
-        app.events.showLoading();
+        app.events.showDrawing();
         var nodes = app.HGraph.getNodesOfType(type);
-        //app.graph.drawNodesOnlyGraph(nodes, type);
+        app.graph.drawNodesOnlyGraph(nodes, type);
+        _partialGraphDrawn = false;
         app.events.hidePopup();
     }
 
@@ -425,7 +437,7 @@
     }
 
     function _selectType(parentElement, type){
-        app.HGraph.log("_se");
+        //app.HGraph.log("_se");
         parentElement.dataset.selection = type;
         var nodes = parentElement.children;
         for(var i = 0; i < nodes.length; i++)
@@ -457,18 +469,18 @@
     }
 
     function _selectTypeFromSelector(selector) {
-        app.HGraph.log("sel");
+        //app.HGraph.log("sel");
         var typeSelector = document.querySelector(selector);
         var type = typeSelector.dataset.selection;
-app.HGraph.log("sel");
+//app.HGraph.log("sel");
         if(!type)
         {
             typeSelector.classList.add("wrong");
-            return false; app.HGraph.log("sel");
+            return false; 
         }
         else {
             typeSelector.classList.remove("wrong");
-            return type;app.HGraph.log("sel");
+            return type;
         }
     }
 
@@ -488,24 +500,22 @@ app.HGraph.log("sel");
     };
 
     app.events.loadGoToMain = function() {
-        app.events.showLoading();
+        app.events.showDrawing();
         _hide(app.const.pageIds.loadGraph, function(){
             app.modified = false;
             app.newProject = false;
             _show(app.const.pageIds.main);
-            _initMain();
-            app.events.hidePopup();
+            _initMain(app.events.hidePopup);
         });
     };
 
     app.events.welcomeGoToNewGraph = function(){
-        app.events.showLoading();
+        app.events.showDrawing();
         _hide(app.const.pageIds.welcome, function(){
             app.modified = false;
             app.newProject = true;
             _show(app.const.pageIds.main);
-            _initMain();
-            app.events.hidePopup();
+            _initMain(app.events.hidePopup);
         });
     };
 
@@ -529,6 +539,13 @@ app.HGraph.log("sel");
         _show(app.const.pageIds.popup);
     };
 
+    app.events.showDrawing = function(){
+        var div = document.createElement("div");
+        div.classList.add("with-border");
+        div.style.padding="20px";
+        div.innerHTML = "Dibuixant...";
+        app.events.showPopup(div);
+    };
     app.events.showLoading = function(){
         if(_popupShown) return;
         var div = document.createElement("div");
@@ -650,14 +667,19 @@ app.HGraph.log("sel");
     app.events.selectTypeOption = function(e){
         _selectType(e.target.parentNode, e.currentTarget.dataset.type);
     };
-    app.events.drawCompleteGraph = function(){
-        try{
-            app.events.showLoading();
-            _drawCompleteGraph();
-            app.events.hidePopup();
-        }catch(err){
-            app.HGraph.log(err);
+
+    app.events.filterEdges = function(e){
+        var type = _selectTypeFromSelector("#queryMenu li[data-action=completeGraph] ul[data-action=filterEdges]");
+        if(!_partialGraphDrawn){
+            app.events.showDrawing();
+            _drawPartialGraph(type, function(){
+                app.events.hidePopup();
+            });
         }
+        else
+            app.graph.selectEdges(type);
+
+
 
     };
     //e.target is the type button pressed
@@ -668,9 +690,9 @@ app.HGraph.log("sel");
 
     //TODO
     app.events.queryNeighbours = function(nodeid){
-        app.events.showLoading();
+        app.events.showDrawing();
         var nodes = app.HGraph.getNodesOfType(type);
-        app.graph.drawNodesOnlyGraph(nodes);
+
     };
     //----/QueryMenu
 

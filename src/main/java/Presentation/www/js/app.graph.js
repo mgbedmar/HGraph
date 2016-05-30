@@ -74,7 +74,7 @@
             defaultEdgeType: "curve",
             autoRescale:true,
             edgeLabels:true,
-            enableHovering:true, //etiquetes: posades no funciona be
+            enableHovering:false, //etiquetes: posades no funciona be
             zoomMin:0.001, //no va
             zoomMax:2
         },
@@ -95,7 +95,11 @@
         conf: {x:0, y:3},
         global: {x:0, y:4}
     };
-    var _activeType;
+    var _cachedges={
+        "author":[],
+        "paper":[],
+        "conf":[]
+    };
     var _sqrt;
 
     var _typeColor = {
@@ -273,9 +277,9 @@
 
 
     //Draws a graph with a big number of nodes but without edges, nodes = JavaArrayList
-    app.graph.drawCoolGraph = function(nodes, edges){
+    app.graph.drawOneEdgeTypeGraph = function(edgeType, nodes, edges, cbend){
         var g={nodes:[], edges:[]};
-        var cachedges = {
+        _cachedges = {
             "author":[],
             "conf":[],
             "term":[]
@@ -321,20 +325,14 @@
             }
         }
 
-/*
-        for (var type in edges) {
-            //Check if type is a property of nodes
-            if (edges.hasOwnProperty(type)) {
-            */
         var ble = ["author", "term", "conf"];
         var a = 0;
         function calc(type, cb){
-            app.HGraph.log("ble!"+type);
             var j = 0;
             for (var i = 0; i < edges[type].size(); i++)
             {
                 if(exists[type][String(edges[type].get(i)[1])] && exists["paper"][String(edges[type].get(i)[0])]){
-                    g.edges.push({
+                    _cachedges[type].push({
                         id: String(edges[type].get(i)[0])+"-"+type+"-"+String(edges[type].get(i)[1]),
                         source: String(edges[type].get(i)[0]+"-paper"),
                         target: String(edges[type].get(i)[1])+"-"+type,
@@ -351,37 +349,48 @@
                 if(a == 3)
                     cb();
                 else
-                {
-                    app.HGraph.log("ble!"+ble[a]);
                     calc(ble[a], cb);
 
-                }
-
-
-            }, 1000);
+            }, 200);
 
         }
 
         calc(ble[0], function(){
-            app.HGraph.log("blebleble");
+            g.edges = _cachedges[edgeType];
             _sarr[0] = new sigma({
                 container: 'graph-container',
                 graph:g,
-                settings: _settings.graph
+                settings: _settings.graph,
+                clone:false
             });
+            _sarr[0].camera.ratio=0.3;
             _sarr[0].refresh();
+            document.getElementById("graph-container").style.opacity=0;
+
+            setTimeout(function(){
+                _sarr[0].refresh();
+                document.getElementById("graph-container").style.opacity=1;
+                if(cbend) cbend();
+            },200);
+
+
+
 
         });
 
-
-
-    /*        }
-
-
-        }
-*/
     };
 
+    app.graph.selectEdges = function(type){
+        var edges = _sarr[0].graph.edges();
+        for(var i = 0; i < edges.length; i++)
+        {
+            _sarr[0].graph.dropEdge(edges[i].id);
+        }
+
+        _sarr[0].graph.read({edges:_cachedges[type]});
+        _sarr[0].refresh();
+
+    };
     app.graph.drawNodesOnlyGraph = function(nodes, type){
         var g={nodes:[]};
         var i = 0;

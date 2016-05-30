@@ -148,8 +148,8 @@ var app = app || {};
         _addMultiEvent("#mainPage #queryMenu > div > ul > li > h1", "click", app.events.selectQueryMenuOption);
         _addMultiEvent("#mainPage #toolsMenu > div > ul > li > h1", "click", app.events.selectToolsMenuOption);
         _addMultiEvent("#mainPage ul.typeSelector > li", "click", app.events.selectTypeOption);
-        document.querySelector("#mainPage #queryMenu > div > ul > li[data-action=completeGraph]")
-            .addEventListener("click", app.events.drawCompleteGraph);
+        document.querySelector("#mainPage #queryMenu > div > ul > li[data-action=completeGraph] ul[data-action=filterEdges]")
+            .addEventListener("click", app.events.filterEdges);
         _addMultiEvent("#mainPage #queryMenu ul[data-action=drawType] li", "click", app.events.drawTypeGraph);
         _addInfoEvent();
         document.getElementById("ok1to1").addEventListener("click", app.events.query1to1);
