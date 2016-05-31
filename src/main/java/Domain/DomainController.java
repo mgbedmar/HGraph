@@ -685,8 +685,14 @@ public class DomainController
         Node a = g.getNode(id, type);
         for (Node node: g.getNeighbours(a, typeEnd)) {
             String[] f = new String[2];
-            f[0] = String.valueOf(a.getID());
-            f[1] = String.valueOf(node.getID());
+            if (a.getType().equals(Paper.TYPE)) {
+                f[0] = String.valueOf(a.getID());
+                f[1] = String.valueOf(node.getID());
+            }
+            else {
+                f[0] = String.valueOf(node.getID());
+                f[1] = String.valueOf(a.getID());
+            }
             l.add(f);
         }
         return l;
