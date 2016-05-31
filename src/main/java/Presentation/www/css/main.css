@@ -226,9 +226,8 @@
 }
 
 #mainPage #queryMenu > div > ul > li h1:hover{
-    /*background-color:#022F3A;*/
-    backgroud-color:#678F99;
-    color:#ECEDED;
+
+    color:#00080A;
 }
 
 
@@ -331,22 +330,16 @@
     border-radius:10px;
     color:#022F3A;
     background-color:#ECEDED;
-    -webkit-transition: background-color 100ms, color 100ms;
+    -webkit-transition: color 100ms;
 }
 
 #mainPage #toolsMenu .scrolleable-y ul > li h1 i {
     display: block;
 }
 
-#mainPage #toolsMenu .scrolleable-y ul > li h1:hover i{
-    background-color:#022F3A;
-    color:#ECEDED;
-}
-
 
 #mainPage #toolsMenu .scrolleable-y ul > li h1:hover{
-    background-color:#022F3A;
-    color:#ECEDED;
+    color:#00080A;
 }
 
 #mainPage #toolsMenu .scrolleable-y ul li.selected h1{

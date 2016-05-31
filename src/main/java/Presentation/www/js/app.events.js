@@ -237,7 +237,7 @@
         var _renIt = function (item, search){
              search = search.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
              var re = new RegExp("(" + search.split(' ').join('|') + ")", "gi");
-             return '<div class="autocomplete-suggestion" data-nom="'+item[0]+'" data-iden="'+item[1]+'" data-tipus="'+item[2]+
+             return '<div class="autocomplete-suggestion" title="'+item[0]+' ('+item[1]+')" data-nom="'+item[0]+'" data-iden="'+item[1]+'" data-tipus="'+item[2]+
                      '" data-val="'+item[0]+'"> ' + item[0].replace(re, "<b>$1</b>") + '</div>';
         };
 
