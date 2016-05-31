@@ -436,8 +436,8 @@ body > div.page{
 }
 
 #popupContent .help .faq p {
-    margin:10px 0px;
-
+    margin: 10px 0px;
+}
 /*Autocompletes*/
 .autocomplete-suggestion:hover{
     border-top:thin solid rgba(200,200,255,0.3);
