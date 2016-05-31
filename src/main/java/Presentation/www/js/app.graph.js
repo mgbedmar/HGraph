@@ -179,7 +179,8 @@
         _cachedges = {
             "author":[],
             "conf":[],
-            "term":[]
+            "term":[],
+            "paper":[]
         };
         _clearGraphs();
         var pos;
@@ -226,6 +227,7 @@
         }
 
         var ble = ["author", "term", "conf", "paper"];
+        var baseType = "paper";
         var a = 0;
         function calc(type, cb){
             var j = 0;
@@ -234,10 +236,10 @@
                 for (var i = 0; i < edges[type].size() && i < 7000; i++)
                 {
                     app.HGraph.log("edges"+type+" "+edges[type].size());
-                    if(exists[type][String(edges[type].get(i)[1])] && exists["paper"][String(edges[type].get(i)[0])]){
+                    if(exists[type][String(edges[type].get(i)[1])] && exists[baseType][String(edges[type].get(i)[0])]){
                         _cachedges[type].push({
                             id: String(edges[type].get(i)[0])+"-"+type+"-"+String(edges[type].get(i)[1]),
-                            source: String(edges[type].get(i)[0]+"-paper"),
+                            source: String(edges[type].get(i)[0]+"-"+baseType),
                             target: String(edges[type].get(i)[1])+"-"+type,
                             //TODO:define edge colors
                             color: _typeColorEdge[type]
