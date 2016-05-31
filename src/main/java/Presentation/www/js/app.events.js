@@ -894,10 +894,14 @@
         var nodes = {};
         try{
             app.HGraph.log("ble");
-            nodes[app.const.nodeTypes.author] = app.HGraph.queryNeighbours(_inputChoices.source.id, app.const.nodeTypes.author);
-            nodes[app.const.nodeTypes.paper] = app.HGraph.queryNeighbours(_inputChoices.source.id, app.const.nodeTypes.paper);
-            nodes[app.const.nodeTypes.term] = app.HGraph.queryNeighbours(_inputChoices.source.id, app.const.nodeTypes.term);
-            nodes[app.const.nodeTypes.conf] = app.HGraph.queryNeighbours(_inputChoices.source.id, app.const.nodeTypes.conf);
+            nodes[app.const.nodeTypes.author] = app.HGraph.queryNeighbours(
+                    _inputChoices.source.id, _inputChoices.source.type, app.const.nodeTypes.author);
+            nodes[app.const.nodeTypes.paper] = app.HGraph.queryNeighbours(
+                    _inputChoices.source.id, _inputChoices.source.type, app.const.nodeTypes.paper);
+            nodes[app.const.nodeTypes.term] = app.HGraph.queryNeighbours(
+                    _inputChoices.source.id, _inputChoices.source.type, app.const.nodeTypes.term);
+            nodes[app.const.nodeTypes.conf] = app.HGraph.queryNeighbours(
+                    _inputChoices.source.id, _inputChoices.source.type, app.const.nodeTypes.conf);
             app.HGraph.log("ble1");
             app.graph.drawGraph(nodes,{},function(){
                 app.events.hidePopup();
