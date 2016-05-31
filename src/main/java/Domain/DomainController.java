@@ -651,4 +651,44 @@ public class DomainController
         }
         return l;
     }
+
+    /**
+     * Dona tots els nodes de tipus <em>type</em> del graf, en format portable.
+     * @param type tipus dels nodes que es consulten
+     * @return Retorna un ArrayList de parelles de String. En la primera posicio
+     * hi ha la id, en la segona, el nom i en la tercera el numero de veins
+     * @throws DomainException si el tipus <em>type</em> es incorrecte
+     */
+    public ArrayList<String[]> getNeighbours(int id, String type, String typeEnd) throws DomainException {
+        ArrayList<String[]> l = new ArrayList<>();
+        Node a = g.getNode(id, type);
+        for (Node node: g.getNeighbours(a, typeEnd)) {
+            String[] f = new String[3];
+            f[0] = String.valueOf(node.getID());
+            f[1] = node.getName();
+            f[2] = String.valueOf(g.getNeighbours(node).size());
+            l.add(f);
+        }
+
+        return l;
+    }
+
+    /**
+     * Dona totes les arestes de nodes de tipus Paper cap a nodes de tipus <em>type</em>.
+     * @param type tipus desti de les arestes
+     * @return Un ArrayList de parelles de String. En la primera posicio hi ha la id
+     * del paper i en la segona, la id del vei de tipus <em>type</em>
+     * @throws DomainException si el tipus <em>type</em> es incorrecte
+     */
+    public ArrayList<String[]> getNeighbourEdges(int id, String type, String typeEnd) throws DomainException {
+        ArrayList<String[]> l = new ArrayList<>();
+        Node a = g.getNode(id, type);
+        for (Node node: g.getNeighbours(a, typeEnd)) {
+            String[] f = new String[2];
+            f[0] = String.valueOf(a.getID());
+            f[1] = String.valueOf(node.getID());
+            l.add(f);
+        }
+        return l;
+    }
 }

@@ -204,6 +204,27 @@ public class PresentationController {
         return dc.getNodes();
     }
 
+    public ArrayList<String[]> getNeighbours(String id, String type, String typeEnd){
+        ArrayList<String[]> res = new ArrayList<>();
+        try{
+            res = dc.getNeighbours(Integer.parseInt(id), type, typeEnd);
+        } catch (DomainException de) {
+            System.err.println(de.getFriendlyMessage());
+            we.executeScript("app.events.showInfo(\"Eps!\",\""+de.getFriendlyMessage()+"\", \"Cap problema\")");
+        }
+        return res;
+    }
+
+    public ArrayList<String[]> getNeighbourEdges(String id, String type, String typeEnd){
+        ArrayList<String[]> res = new ArrayList<>();
+        try{
+            res = dc.getNeighbourEdges(Integer.parseInt(id), type, typeEnd);
+        } catch (DomainException de) {
+            System.err.println(de.getFriendlyMessage());
+            we.executeScript("app.events.showInfo(\"Eps!\",\""+de.getFriendlyMessage()+"\", \"Cap problema\")");
+        }
+        return res;
+    }
 
     public ArrayList<String[]> getNodesOfType(String type){
         ArrayList<String[]> res = new ArrayList<>();
@@ -358,10 +379,8 @@ public class PresentationController {
 
     public ArrayList<ArrayList<String>> sortResult(int col, int dir) {
         if (currentNumCols == 3) col = col - 1;
-        System.out.println(col);
         if (col == 0) dc.resetResult();
         else dc.sortResultByRow(col, dir);
-        System.out.println("despres de dc");
         return resultDetails();
     }
 

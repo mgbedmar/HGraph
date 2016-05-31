@@ -196,7 +196,7 @@
         for (var type in nodes) {
             //Check if type is a property of nodes
             if (nodes.hasOwnProperty(type)) {
-                if(!nodes[type]) continue;
+                if(typeof nodes[type] === 'undefined') continue;
 
                 for (var i = 0; i < nodes[type].size() && j < 3000; i++)
                 {
@@ -281,8 +281,6 @@
                 document.getElementById("graph-container").style.opacity=1;
                 if(cbend) cbend();
             },200);
-
-
 
 
         });
