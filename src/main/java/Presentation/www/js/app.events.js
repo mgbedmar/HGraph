@@ -510,17 +510,21 @@
         app.graph.init(large);
         //document.querySelector("#mainPage #queryMenu > div > ul > li[data-action=completeGraph]").click();
         
-        
-        if(app.graph.isLarge())
-        {
-            _drawPartialGraph("author", cb);
+        try{
+            if(app.graph.isLarge())
+            {
+                _drawPartialGraph("author", cb);
+            }
+            else
+            {
+                _drawCompleteGraph(cb);
+            }
+
+
+        }catch(err){
+            app.HGraph.log(err);
         }
-        else
-        {
-            _drawCompleteGraph(cb);
-        }
-        
-        //Init autocompletes
+                //Init autocompletes
         _nodes = nodes;
         _initAutoCompletes();
     }
