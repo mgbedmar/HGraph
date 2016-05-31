@@ -905,6 +905,8 @@
                 _inputChoices.source.id, _inputChoices.source.type, app.const.nodeTypes.conf);
             edges[app.const.nodeTypes.term] = app.HGraph.getNeighbourEdges(
                 _inputChoices.source.id, _inputChoices.source.type, app.const.nodeTypes.term);
+            edges[app.const.nodeTypes.paper] = app.HGraph.getNeighbourEdges(
+                _inputChoices.source.id, _inputChoices.source.type, app.const.nodeTypes.paper);
 
             app.graph.drawGraph(nodes,edges,function(){
                 app.events.hidePopup();

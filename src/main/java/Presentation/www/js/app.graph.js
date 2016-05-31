@@ -225,7 +225,7 @@
             }
         }
 
-        var ble = ["author", "term", "conf"];
+        var ble = ["author", "term", "conf", "paper"];
         var a = 0;
         function calc(type, cb){
             var j = 0;
@@ -233,6 +233,7 @@
             {
                 for (var i = 0; i < edges[type].size() && i < 7000; i++)
                 {
+                    app.HGraph.log("edges"+type+" "+edges[type].size());
                     if(exists[type][String(edges[type].get(i)[1])] && exists["paper"][String(edges[type].get(i)[0])]){
                         _cachedges[type].push({
                             id: String(edges[type].get(i)[0])+"-"+type+"-"+String(edges[type].get(i)[1]),
@@ -247,10 +248,11 @@
                 }
             }
             app.HGraph.log("asdf"+j);
+            app.HGraph.log("\n\n\n\n");
             setTimeout(function(){
                 a++;
 
-                if(a == 3)
+                if(a == 4)
                     cb();
                 else
                     calc(ble[a], cb);
@@ -270,6 +272,8 @@
                     g.edges = g.edges.concat(_cachedges["conf"]);
                 if(_cachedges["term"].length)
                     g.edges = g.edges.concat(_cachedges["term"]);
+                if(_cachedges["paper"].length)
+                    g.edges = g.edges.concat(_cachedges["paper"]);
             }
             _sarr[0] = new sigma({
                 container: 'graph-container',
