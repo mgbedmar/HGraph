@@ -689,7 +689,13 @@
             app.modified = false;
             app.newProject = false;
             _show(app.const.pageIds.main);
-            _initMain(app.events.hidePopup);
+            _initMain(function(){
+                if(!app.graph.isLarge())
+                    app.events.allEdges();
+                setTimeout(function(){
+                    app.events.hidePopup();
+                },500);
+            });
         });
     };
 
@@ -939,10 +945,16 @@
         var type = _selectTypeFromSelector("#queryMenu li[data-action=completeGraph] ul[data-action=filterEdges]");
         if(!_partialGraphDrawn){
             app.events.showDrawing();
-            _drawPartialGraph(function(){
-                app.graph.selectEdges(type);
-                app.events.hidePopup();
-            });
+            if(app.graph.isLarge())
+                _drawPartialGraph(function(){
+                    app.graph.selectEdges(type);
+                    app.events.hidePopup();
+                });
+            else
+                _drawCompleteGraph(function(){
+                    app.graph.selectEdges(type);
+                    app.events.hidePopup();
+                });
         }
         else
             app.graph.selectEdges(type);

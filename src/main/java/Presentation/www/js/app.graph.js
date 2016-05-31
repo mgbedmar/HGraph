@@ -272,23 +272,22 @@
         }
 
         calc(ble[0], function(){
-
             _sarr[0] = new sigma({
                 container: 'graph-container',
                 graph:g,
                 settings: _settings.graph,
                 clone:false
             });
-            _sarr[0].camera.ratio=0.3;
-
+            if(_largeGraph)
+                _sarr[0].camera.ratio=0.3;
+            else
+                _sarr[0].camera.ratio=0.05;
             _sarr[0].refresh();
-            document.getElementById("graph-container").style.opacity=0;
 
             setTimeout(function(){
                 _sarr[0].refresh();
-                document.getElementById("graph-container").style.opacity=1;
                 if(cbend) cbend();
-            },500);
+            },100);
 
 
         });
