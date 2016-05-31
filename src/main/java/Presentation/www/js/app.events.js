@@ -508,6 +508,7 @@
         _nodes = nodes;
         _initAutoCompletes();
     }
+
     function _initLoadPage(){
         var myList = document.getElementById('projectList');
         myList.innerHTML = '';
@@ -824,7 +825,6 @@
     };
 
     app.events.hidePopup = function(cb){
-
         _hide(app.const.pageIds.popup, function(){
             _popupShown = false;
             if(cb) cb();
@@ -838,6 +838,67 @@
         for (var i = 0; i < tr.length; i++) {
             tr[i].classList.toggle("show");
         }
+    };
+
+    app.events.showImportProject = function() {
+        var par = document.createElement("div");
+        par.classList.add("accept");
+        par.classList.add("with-border");
+        var h1 = document.createElement("h1");
+        h1.innerHTML = "Importar projecte";
+
+        var span = document.createElement("span");
+        var divFile = document.createElement("div");
+        divFile.innerHTML = "Arxiu comprimit: ";
+        divFile.className = "dreta-div";
+        var divNom = document.createElement("div");
+        divNom.innerHTML = "Nom del projecte: ";
+        divNom.className = "dreta-div";
+        var input = document.createElement("input");
+        input.className = "zipPath";
+        input.type = "text";
+        input.addEventListener("click", function (e) {
+            var zipPath = app.HGraph.showFileChooser();
+            e.currentTarget.value = zipPath;
+        });
+        divFile.appendChild(input);
+        span.appendChild(divFile);
+
+        var inputNom = document.createElement("input");
+        inputNom.className = "nomProj"
+        inputNom.type = "text";
+        divNom.appendChild(inputNom);
+        span.appendChild(divNom);
+
+        var divbtns = document.createElement("div");
+        divbtns.classList.add("divbtns");
+        var okbtn = document.createElement("a");
+        okbtn.innerHTML = "OK";
+        okbtn.addEventListener("click", function(){
+            var path = document.querySelector(".zipPath");
+            path = path.value;
+
+            var name = document.querySelector(".nomProj").value;
+            if (typeof name == 'undefined' || name == '') {
+                app.events.hidePopup(function() {app.events.showInfo("", "Has de donar un nom al projecte.", "OK");});
+                return;
+            }
+
+            app.events.hidePopup(function() {app.HGraph.importProject(path, name); _initLoadPage(); });
+        });
+
+        var cancelbtn = document.createElement("a");
+        cancelbtn.innerHTML = "Cancela";
+        cancelbtn.addEventListener("click", function(){
+            app.events.hidePopup();
+        });
+        divbtns.appendChild(cancelbtn);
+        divbtns.appendChild(okbtn);
+
+        par.appendChild(h1);
+        par.appendChild(span);
+        par.appendChild(divbtns);
+        app.events.showPopup(par);
     };
 
     //----Query menu

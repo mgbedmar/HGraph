@@ -322,4 +322,8 @@ public class PersistenceController {
     public void unSelectProject() {
         pm.unSelectProject();
     }
+
+    public void importProject(String zipPath, String projectName) throws PersistenceException {
+        pm.importProject(zipPath, projectName);
+    }
 }
