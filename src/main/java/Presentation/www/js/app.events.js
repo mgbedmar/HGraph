@@ -1297,7 +1297,13 @@
         app.settings.hideEdges = document.querySelector("#"+id+" .hideEdges").checked;
         app.settings.showGraphInfo = document.querySelector("#"+id+" .showGraphInfo").checked;
         app.events.notify("S'ha guardat la configuració");
-        app.events.hidePopup();
+        app.events.hidePopup(function(){
+            app.events.notify("Actualitzant el graf...");
+            app.events.showDrawing();
+            setTimeout(function(){
+                _initMain(app.events.hidePopup);
+            }, 10);
+        });
 
     };
 
@@ -1305,8 +1311,6 @@
         var content = document.getElementById("ajustes").cloneNode(true);
         content.id=content.id+1;
         app.events.showPopup(content);
-        try{
-
 
         document.querySelector("#"+content.id+" form").addEventListener("submit", function(e){
             app.events.submitSettings(content.id, e);
@@ -1319,9 +1323,6 @@
         document.querySelector("#"+content.id+" .graphMaxEdges").value = app.settings.maxEdges;
         document.querySelector("#"+content.id+" .hideEdges").checked = app.settings.hideEdges;
         document.querySelector("#"+content.id+" .showGraphInfo").checked = app.settings.showGraphInfo;
-        }catch(err){
-            app.HGraph.log(err);
-        }
         
         
     };
