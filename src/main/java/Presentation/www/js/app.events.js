@@ -207,7 +207,6 @@
         document.getElementById("popupContent").innerHTML = '';
         rP.id = "resultPopup1";
         document.getElementById("popupContent").appendChild(rP);
-
         var sec = document.querySelector("#"+rP.id+" table tr .zeroCol");
         sec.classList.add("basic");
         sec = document.querySelector("#"+rP.id+" table tr .firstCol");
@@ -216,9 +215,7 @@
         sec.parentNode.removeChild(sec);
         sec = document.querySelector("#"+rP.id+" table tr .thirdCol");
         sec.parentNode.removeChild(sec);
-
         _resultBasic(result);
-
         return rP;
     }
 

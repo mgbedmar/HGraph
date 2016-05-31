@@ -71,7 +71,6 @@ public class PresentationController {
     private ArrayList<ArrayList<String>> resultDetails() {
         String toAdd;
         if (dc.getResultSize() == 0) return new ArrayList<>();
-        System.out.println("no zero");
         if (currentNumCols == 2) return basicResult();
         toAdd = result.get(0).get(1);
         return formResult(toAdd);
@@ -143,6 +142,7 @@ public class PresentationController {
     public void unSelectProject(){
         dc.unSelectProject();
     }
+
     public void deleteProject(String projectName){
         try {
             dc.deleteProject(projectName);
@@ -276,9 +276,7 @@ public class PresentationController {
         int i = 1;
         int numRows = MAX_ROWS;
         if (numRows == 0) numRows = dc.getResultSize();
-
         while (i <= numRows && (fila = dc.getResultRow()) != null) {
-            System.out.println(i);
             fila.set(0, String.valueOf((Integer.parseInt(fila.get(0)) + 1)));
             r.add(fila);
             ++i;
@@ -310,7 +308,7 @@ public class PresentationController {
         return null;
     }
 
-    public ArrayList<ArrayList<String>> queryNeighbours(String id, String type, String typeEnd) {
+    public ArrayList<ArrayList<String>> queryNeighboursOfType(String id, String type, String typeEnd) {
         try {
             currentNumCols = 2;
             dc.queryNeighbours(Integer.parseInt(id), type, typeEnd);
