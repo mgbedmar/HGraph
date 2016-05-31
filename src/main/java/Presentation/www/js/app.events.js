@@ -495,22 +495,16 @@
 
         app.graph.init(large);
         //document.querySelector("#mainPage #queryMenu > div > ul > li[data-action=completeGraph]").click();
-        
-        try{
-            if(app.graph.isLarge())
-            {
-                _drawPartialGraph("author", cb);
-            }
-            else
-            {
-                _drawCompleteGraph(cb);
-            }
 
-
-        }catch(err){
-            app.HGraph.log(err);
+        if(app.graph.isLarge())
+        {
+            _drawPartialGraph("author", cb);
         }
-                //Init autocompletes
+        else
+        {
+            _drawCompleteGraph(cb);
+        }
+        //Init autocompletes
         _nodes = nodes;
         _initAutoCompletes();
     }
@@ -1212,12 +1206,69 @@
 
     };
 
+    app.events.submitSettings = function(id, e){
+        e.preventDefault();
+        var checkNumber = new RegExp("^[0-9]+$");
+        if(!checkNumber.test(document.querySelector("#"+id+" .tableMaxRows").value))
+        {
+            document.querySelector("#"+id+" .tableMaxRows").classList.add("wrong");
+            return false;
+        }
+        else
+            document.querySelector("#"+id+" .tableMaxRows").classList.remove("wrong");
+        if(!checkNumber.test(document.querySelector("#"+id+" .graphMaxNodes").value))
+        {
+            document.querySelector("#"+id+" .graphMaxNodes").classList.add("wrong");
+            return false;
+
+        }
+        else document.querySelector("#"+id+" .graphMaxNodes").classList.remove("wrong");
+        if(!checkNumber.test(document.querySelector("#"+id+" .graphMaxEdges").value))
+        {
+            document.querySelector("#"+id+" .graphMaxEdges").classList.add("wrong");
+            return false;
+
+        }
+        else document.querySelector("#"+id+" .graphMaxEdges").classList.remove("wrong");
+        app.settings.maxRows = document.querySelector("#"+id+" .tableMaxRows").value;
+        app.settings.maxNodes = document.querySelector("#"+id+" .graphMaxNodes").value;
+        app.settings.maxEdges = document.querySelector("#"+id+" .graphMaxEdges").value;
+        app.settings.hideEdges = document.querySelector("#"+id+" .hideEdges").checked;
+        app.settings.showGraphInfo = document.querySelector("#"+id+" .showGraphInfo").checked;
+        app.events.notify("S'ha guardat la configuració");
+        app.events.hidePopup();
+
+    };
+
     app.events.showSettings = function(){
-        //TODO
+        var content = document.getElementById("ajustes").cloneNode(true);
+        content.id=content.id+1;
+        app.events.showPopup(content);
+        try{
+
+
+        document.querySelector("#"+content.id+" form").addEventListener("submit", function(e){
+            app.events.submitSettings(content.id, e);
+        });
+        document.querySelector("#"+content.id+" div[data-action=cancelSettings]")
+            .addEventListener("click", app.events.hidePopup);
+
+        document.querySelector("#"+content.id+" .tableMaxRows").value = app.settings.maxRows;
+        document.querySelector("#"+content.id+" .graphMaxNodes").value = app.settings.maxNodes;
+        document.querySelector("#"+content.id+" .graphMaxEdges").value = app.settings.maxEdges;
+        document.querySelector("#"+content.id+" .hideEdges").checked = app.settings.hideEdges;
+        document.querySelector("#"+content.id+" .showGraphInfo").checked = app.settings.showGraphInfo;
+        }catch(err){
+            app.HGraph.log(err);
+        }
+        
+        
     };
 
     app.events.showHelp = function(){
-        //TODO
+        var content = document.getElementById("help").cloneNode(true);
+        content.id=content.id+1;
+        app.events.showPopup(content);
     };
 
 

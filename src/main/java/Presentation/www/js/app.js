@@ -10,8 +10,11 @@ var app = app || {};
     app.modified = false;
     app.newProject = true;
     app.settings={
-        //Disables some features on graphs with nodes > maxNodes (large graphs)
-        maxNodes:1500,
+        maxNodes:3000,
+        maxEdges:7000,
+        maxRows: 200,
+        hideEdges: false,
+        showGraphInfo: false,
         marginRatio:{
             "author": 0.5,
             "paper": 0.1,
@@ -183,6 +186,7 @@ var app = app || {};
             .addEventListener("click", app.events.showSettings);
         document.querySelector("#mainPage #mainMenu ul li[data-action=showHelp]")
             .addEventListener("click", app.events.showHelp);
+        
         //document.querySelector("#mainPage a[data-action=welcome]").addEventListener("click", mainGoToWelcome);
 
         setTimeout(function(){

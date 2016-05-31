@@ -104,7 +104,6 @@ body > div.page{
 }
 
 #popupPage .accept a:hover {
-    background-color: #678F99;
     color:#00080A;
     background-color:#9FBCC3;
 }
@@ -345,6 +344,12 @@ body > div.page{
 
 }
 
+/*Forms*/
+.wrong{
+    border:thin solid rgba(220, 0, 0, 0.76) !important;
+    background-color: rgba(255, 0, 0, 0.22) !important;
+}
+
 #result {
     display:none;
 }
@@ -353,8 +358,39 @@ body > div.page{
     display:none;
 }
 
-/*Forms*/
-.wrong{
-    border:thin solid rgba(220, 0, 0, 0.76) !important;
-    background-color: rgba(255, 0, 0, 0.22) !important;
+
+
+#popupPage .ajustes{
+
+}
+
+#popupPage .ajustes ul ul li .closeEl {
+    white-space:nowrap;
+    color:#20282A;
+    font-size:11px;
+    cursor:pointer;
+}
+#popupPage .ajustes .buttons{
+    text-align:right;
+}
+#popupPage .ajustes .buttons div{
+    display:inline-block;
+}
+#popupPage .ajustes .buttons div,
+#popupPage .ajustes .buttons input[type=submit]{
+    background-color:#00080A; /*    #BFDCE3; */
+    color:#ECEDED;
+    border-radius:10px;
+    cursor:pointer;
+    border:none;
+    outline:none;
+    font-size:15px;
+    padding:5px;
+    margin:5px;
+
+}
+
+#popupPage .ajustes .buttons a:hover{
+    color:#00080A;
+    background-color:#9FBCC3;
 }

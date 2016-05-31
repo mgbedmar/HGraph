@@ -199,7 +199,7 @@
             if (nodes.hasOwnProperty(type)) {
                 if(typeof nodes[type] === 'undefined') continue;
 
-                for (var i = 0; i < nodes[type].size() && j < 3000; i++)
+                for (var i = 0; i < nodes[type].size() && j < app.settings.maxNodes; i++)
                 {
                     pos = _getNextPosition(0.004, 0.0005);
 
@@ -235,7 +235,7 @@
             {
                 var typeColor = type;
                 if (type == "paper") typeColor = baseType;
-                for (var i = 0; i < edges[type].size() && i < 7000; i++)
+                for (var i = 0; i < edges[type].size() && i < app.settings.maxEdges; i++)
                 {
 
                     if(exists[type][String(edges[type].get(i)[1])] && exists[baseType][String(edges[type].get(i)[0])]){
@@ -251,7 +251,6 @@
                     }
                 }
             }
-            app.HGraph.log("asdf"+j);
             setTimeout(function(){
                 a++;
 
@@ -284,7 +283,9 @@
                 settings: _settings.graph,
                 clone:false
             });
-            _sarr[0].camera.ratio=0.3;
+            if(edgeType)
+                _sarr[0].camera.ratio=0.3;
+
             _sarr[0].refresh();
             document.getElementById("graph-container").style.opacity=0;
 
@@ -292,7 +293,7 @@
                 _sarr[0].refresh();
                 document.getElementById("graph-container").style.opacity=1;
                 if(cbend) cbend();
-            },200);
+            },500);
 
 
         });

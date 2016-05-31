@@ -170,7 +170,7 @@
     height:42px;
     overflow:hidden;
     background-color:#ECEDED;
-    -webkit-transition: height 200ms, background-color 100ms, color 100ms;
+    -webkit-transition: height 200ms;
 }
 
 
@@ -226,7 +226,8 @@
 }
 
 #mainPage #queryMenu > div > ul > li h1:hover{
-    background-color:#022F3A;
+    /*background-color:#022F3A;*/
+    backgroud-color:#678F99;
     color:#ECEDED;
 }
 
