@@ -218,7 +218,7 @@ public class PresentationController {
 
     public ArrayList<String[]> getRelevantNodesOfType(String type, int quantity){
         ArrayList<String[]> res = getNodesOfType(type);
-        res.sort( (a, b) -> Integer.parseInt(a[2])-Integer.parseInt(b[2]) );
+        res.sort( (a, b) -> Integer.parseInt(b[2])-Integer.parseInt(a[2]) );
         res = new ArrayList<>(res.subList(0, Math.min(res.size(), quantity)));
         return res;
     }

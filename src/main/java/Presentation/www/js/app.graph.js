@@ -115,40 +115,6 @@
         term: "darkred"
     };
 
-    function _applySettings(s){
-        //Deprecated
-
-        /*
-        if(typeof _settings.relativeSize !== 'undefined')
-            sigma.plugins.relativeSize(s, _settings.relativeSize);
-*/
-        /*
-        if(typeof _settings.nooverlap !== 'undefined' && _settings.nooverlap)
-        {
-            // Configure the noverlap layout:
-            var noverlapListener = s.configNoverlap({
-                nodeMargin: 0.05,
-                scaleNodes: 1,
-                gridSize: 100,
-                speed:10
-            });
-            // Bind the events:
-            noverlapListener.bind('start stop interpolate', function(e) {
-                console.log(e.type);
-                if(e.type === 'start') {
-                    console.time('noverlap');
-                }
-                if(e.type === 'stop') {
-                    console.timeEnd('noverlap');
-
-                }
-            });
-            s.startNoverlap();
-        }
-        */
-
-    }
-
     function _updateSize(nodes) {
         for(var i = 0; i < nodes.length; i++) {
             var idType = nodes[i].id.split("-");
@@ -156,74 +122,6 @@
         }
     }
 
-    /* nodes{
-               typeN:ArrayList<String[3]>
-           }*/
-    function _createGraph(nodes, edges){
-        var g = {nodes:[], edges:[]};
-        var totalSize = nodes.author.size()+nodes.paper.size()+nodes.term.size()+nodes.conf.size();
-
-        var pos = {
-            x: 0,
-            y: 0
-        };
-
-        //For each type in nodes
-        for (var type in nodes)
-        {
-
-            _sqrt = Math.sqrt(totalSize)+2;
-            //Check if type is a property of nodes
-            if (nodes.hasOwnProperty(type))
-            {
-                //TODO: calculate radius and position and color of types
-                //Add nodes of type to the graph
-
-                for (var i = 0; i < nodes[type].size(); i++)
-                {
-                    var pos = _getNextSmallPosition(_sqrt, type);
-
-                    g.nodes.push({
-                        id: String(nodes[type].get(i)[0])+"-"+type,
-                        label: String(nodes[type].get(i)[1]),
-                        x: pos.x,
-                        y: pos.y,
-                        color: _typeColor[type],
-                        size: String(nodes[type].get(i)[2])
-                    });
-
-                }
-
-            }
-        }
-
-        for (type in edges) {
-            if (edges.hasOwnProperty(type))
-            {
-                for (var i = 0; i < edges[type].size(); i++)
-                {
-                    g.edges.push({
-                        id: String(edges[type].get(i)[0])+"-"+type+"-"+String(edges[type].get(i)[1]),
-                        source: String(edges[type].get(i)[0]+"-paper"),
-                        target: String(edges[type].get(i)[1])+"-"+type,
-                        color: "black"
-                    })
-                }
-            }
-        }
-
-        return g;
-    }
-
-    //TODO
-    function _getCircleRandomPos(radius, gap){
-        var t = 2*Math.PI*Math.random();
-        var u = Math.random()*(radius+10)+Math.random()*(radius+10)+gap;
-        var r = u;
-        if(u>1)
-            r = 2-u;
-        return {x: Math.cos(t)*r, y: Math.sin(t)*r};
-    }
 
     function _getNextPosition(incrRad, ratAngle) {
         var pos = {x: Math.cos(2*Math.PI*_angle)*_radius, y: Math.sin(Math.PI*2*_angle)*_radius};
@@ -298,6 +196,8 @@
         for (var type in nodes) {
             //Check if type is a property of nodes
             if (nodes.hasOwnProperty(type)) {
+                if(!nodes[type]) continue;
+
                 for (var i = 0; i < nodes[type].size() && j < 3000; i++)
                 {
                     pos = _getNextPosition(0.004, 0.0005);
@@ -331,7 +231,7 @@
             var j = 0;
             if(edges[type])
             {
-                for (var i = 0; i < edges[type].size(); i++)
+                for (var i = 0; i < edges[type].size() && i < 7000; i++)
                 {
                     if(exists[type][String(edges[type].get(i)[1])] && exists["paper"][String(edges[type].get(i)[0])]){
                         _cachedges[type].push({
@@ -346,6 +246,7 @@
                     }
                 }
             }
+            app.HGraph.log("asdf"+j);
             setTimeout(function(){
                 a++;
 
@@ -397,9 +298,6 @@
 
         _sarr[0].graph.read({edges:_cachedges[type]});
         _sarr[0].refresh();
-
-    };
-    app.graph.drawNodesOnlyGraph = function(nodes){
 
     };
     //Draws a bigraph representing a table. Each connected component must be < maxNodes
