@@ -898,7 +898,7 @@
                     _inputChoices.source.id, _inputChoices.source.type, app.const.nodeTypes.conf);
 
 
-            nodes[_inputChoices.source.type].add([_inputChoices.source.id, _inputChoices.source.name, String(10)]);
+            nodes[_inputChoices.source.type].add([_inputChoices.source.id, _inputChoices.source.name, String(100)]);
             edges[app.const.nodeTypes.author] = app.HGraph.getNeighbourEdges(
                 _inputChoices.source.id, _inputChoices.source.type, app.const.nodeTypes.author);
             edges[app.const.nodeTypes.conf] = app.HGraph.getNeighbourEdges(
