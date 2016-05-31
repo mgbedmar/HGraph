@@ -289,6 +289,18 @@ public class PresentationController {
         return null;
     }
 
+    public ArrayList<ArrayList<String>> queryNeighbours(String id, String type, String typeEnd) {
+        try {
+            currentNumCols = 2;
+            dc.queryNeighbours(Integer.parseInt(id), type, typeEnd);
+            return basicResult();
+        } catch (DomainException e) {
+            String scr = "app.events.showInfo(\"Error\", \"" + e.getFriendlyMessage() + "\", \"OK\");";
+            we.executeScript("app.events.hidePopup(function(){"+scr+"});");
+        }
+        return null;
+    }
+
     /* Inicia una tasca per calcular una consulta 1 a 1 */
     public void query1to1(String idSource, String typeSource,
                           String idEnd, String typeEnd) {
