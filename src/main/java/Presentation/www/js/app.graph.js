@@ -264,7 +264,8 @@
                 g.edges = _cachedges[edgeType];
             else
             {
-                g.edges.concat(_cachedges["author"]).concat(_cachedges["paper"]).concat(_cachedges["term"]);
+                g.edges = _cachedges["author"].concat(_cachedges["paper"]).concat(_cachedges["term"]);
+                app.HGraph.log(JSON.stringify(g.edges));
             }
             _sarr[0] = new sigma({
                 container: 'graph-container',
