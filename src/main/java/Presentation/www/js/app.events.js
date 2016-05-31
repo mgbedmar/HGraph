@@ -68,6 +68,10 @@
 
     }
 
+    function _isEmpty(array) {
+        return (typeof array === 'undefined' || array.isEmpty());
+    }
+
     function _getNames(arrayList, type){
         var names = [];
         for(var i = 0; i < arrayList.size(); i++)
@@ -156,6 +160,7 @@
             }
         }
 
+        if (_isEmpty(result)) return;
         for (var i = 0; i < result.size(); i++) {
             var row = table.insertRow(i+1);
 
@@ -181,6 +186,8 @@
                 table.deleteRow(1);
             }
         }
+
+        if (_isEmpty(result)) return;
         for (var i = 0; i < result.size(); i++) {
             var row = table.insertRow(i+1);
             _tableCell(0, String(result.get(i).get(0)), row);
@@ -221,24 +228,7 @@
         document.getElementById("popupContent").innerHTML = '';
         rP.id = "resultPopup1";
         document.getElementById("popupContent").appendChild(rP);
-       /* var table = document.querySelector("#"+rP.id+" table");
-
-        for (var i = 0; i < result.size(); i++) {
-            var row = table.insertRow(i+1);
-
-            _tableCell(0, String(result.get(i).get(0)), row);
-
-            for (var j = 1; j <=2; ++j) {
-                var act = String(result.get(i).get(j));
-                var tit = String(_regExpr.exec(act));
-                var nom = act.slice(0, -tit.length);
-                tit = tit.slice(1, -1);
-                _tableCell(j, nom, row, tit);
-            }
-            var hm = String(result.get(i).get(3));
-            hm = hm.slice(0, 7-hm.length);
-            _tableCell(3, hm, row);
-        }*/ _resultTable(result);
+        _resultTable(result);
         return rP;
     }
 
@@ -339,7 +329,6 @@
                                 name: item.dataset.nom,
                                 type: item.dataset.tipus
                             };
-                            _inputChoices.result = nod;
                             var li = document.createElement("li");
                             li.setAttribute("data-filter", "selectLI");
                             var divName = document.createElement("div");
