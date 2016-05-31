@@ -885,18 +885,28 @@
         if (!_checkInputs("autoVeins")) return;
         app.events.showDrawing();
         var nodes = {};
+        var edges = {};
         try{
-            app.HGraph.log("ble");
-            nodes[app.const.nodeTypes.author] = app.HGraph.queryNeighbours(
+
+            nodes[app.const.nodeTypes.author] = app.HGraph.getNeighbours(
                     _inputChoices.source.id, _inputChoices.source.type, app.const.nodeTypes.author);
-            nodes[app.const.nodeTypes.paper] = app.HGraph.queryNeighbours(
+            nodes[app.const.nodeTypes.paper] = app.HGraph.getNeighbours(
                     _inputChoices.source.id, _inputChoices.source.type, app.const.nodeTypes.paper);
-            nodes[app.const.nodeTypes.term] = app.HGraph.queryNeighbours(
+            nodes[app.const.nodeTypes.term] = app.HGraph.getNeighbours(
                     _inputChoices.source.id, _inputChoices.source.type, app.const.nodeTypes.term);
-            nodes[app.const.nodeTypes.conf] = app.HGraph.queryNeighbours(
+            nodes[app.const.nodeTypes.conf] = app.HGraph.getNeighbours(
                     _inputChoices.source.id, _inputChoices.source.type, app.const.nodeTypes.conf);
-            app.HGraph.log("ble1");
-            app.graph.drawGraph(nodes,{},function(){
+
+
+            nodes[_inputChoices.source.type].add([_inputChoices.source.id, _inputChoices.source.name, String(10)]);
+            edges[app.const.nodeTypes.author] = app.HGraph.getNeighbourEdges(
+                _inputChoices.source.id, _inputChoices.source.type, app.const.nodeTypes.author);
+            edges[app.const.nodeTypes.conf] = app.HGraph.getNeighbourEdges(
+                _inputChoices.source.id, _inputChoices.source.type, app.const.nodeTypes.conf);
+            edges[app.const.nodeTypes.term] = app.HGraph.getNeighbourEdges(
+                _inputChoices.source.id, _inputChoices.source.type, app.const.nodeTypes.term);
+
+            app.graph.drawGraph(nodes,edges,function(){
                 app.events.hidePopup();
             });
         }catch(err){
