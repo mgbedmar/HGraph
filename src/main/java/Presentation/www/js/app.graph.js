@@ -161,6 +161,14 @@
         _sarr =[];
     }
 
+    function _clearEdges(){
+        var edges = _sarr[0].graph.edges();
+        for(var i = 0; i < edges.length; i++)
+        {
+            _sarr[0].graph.dropEdge(edges[i].id);
+        }
+    }
+
     //Public
     app.graph = {};
 
@@ -174,7 +182,7 @@
     };
 
     //Draws a graph. id edgeType is specified, then draws only edges of type edgeType
-    app.graph.drawGraph = function(nodes, edges, baseType, cbend, edgeType){
+    app.graph.drawGraph = function(nodes, edges, baseType, cbend){
         var g={nodes:[], edges:[]};
         _cachedges = {
             "author":[],
@@ -235,7 +243,7 @@
             {
                 var typeColor = type;
                 if (type == "paper") typeColor = baseType;
-                for (var i = 0; i < edges[type].size() && i < app.settings.maxEdges; i++)
+                for (var i = 0; i < edges[type].size() && j < app.settings.maxEdges; i++)
                 {
 
                     if(exists[type][String(edges[type].get(i)[1])] && exists[baseType][String(edges[type].get(i)[0])]){
@@ -264,27 +272,14 @@
         }
 
         calc(ble[0], function(){
-            if(edgeType)
-                g.edges = _cachedges[edgeType];
-            else
-            {
-                if(_cachedges["author"].length)
-                    g.edges = _cachedges["author"];
-                if(_cachedges["conf"].length)
-                    g.edges = g.edges.concat(_cachedges["conf"]);
-                if(_cachedges["term"].length)
-                    g.edges = g.edges.concat(_cachedges["term"]);
-                if(_cachedges["paper"].length)
-                    g.edges = g.edges.concat(_cachedges["paper"]);
-            }
+
             _sarr[0] = new sigma({
                 container: 'graph-container',
                 graph:g,
                 settings: _settings.graph,
                 clone:false
             });
-            if(edgeType)
-                _sarr[0].camera.ratio=0.3;
+            _sarr[0].camera.ratio=0.3;
 
             _sarr[0].refresh();
             document.getElementById("graph-container").style.opacity=0;
@@ -301,15 +296,28 @@
     };
 
     app.graph.selectEdges = function(type){
-        var edges = _sarr[0].graph.edges();
-        for(var i = 0; i < edges.length; i++)
-        {
-            _sarr[0].graph.dropEdge(edges[i].id);
-        }
+        _clearEdges();
 
         _sarr[0].graph.read({edges:_cachedges[type]});
         _sarr[0].refresh();
 
+    };
+    app.graph.allEdges = function(){
+        var edges = [];
+        _clearEdges();
+        for(var type in _cachedges)
+        {
+            if(_cachedges.hasOwnProperty(type))
+            {
+                edges = edges.concat(_cachedges[type]);
+            }
+        }
+        _sarr[0].graph.read({edges:edges});
+        _sarr[0].refresh();
+    };
+    app.graph.noEdges = function(){
+        _clearEdges();
+        _sarr[0].refresh();
     };
     //Draws a bigraph representing a table. Each connected component must be < maxNodes
     app.graph.drawTableBasedGraph = function(nodes, edges, cb){

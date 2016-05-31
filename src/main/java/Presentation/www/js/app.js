@@ -188,6 +188,9 @@ var app = app || {};
             .addEventListener("click", app.events.showSettings);
         document.querySelector("#mainPage #mainMenu ul li[data-action=showHelp]")
             .addEventListener("click", app.events.showHelp);
+
+        document.getElementById("noEdges").addEventListener("click", app.events.noEdges);
+        document.getElementById("allEdges").addEventListener("click", app.events.allEdges);
         
         //document.querySelector("#mainPage a[data-action=welcome]").addEventListener("click", mainGoToWelcome);
 

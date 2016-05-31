@@ -498,7 +498,7 @@
 
         if(app.graph.isLarge())
         {
-            _drawPartialGraph("author", cb);
+            _drawPartialGraph(cb);
         }
         else
         {
@@ -546,15 +546,15 @@
 
 
     //QueryMenu functions
-    function _drawPartialGraph(type, cb){
+    function _drawPartialGraph(cb){
         var nodeobj = {};
 
         //TODO: node distribution?
-        nodeobj[app.const.nodeTypes.conf]  = app.HGraph.getRelevantNodesOfType(app.const.nodeTypes.conf, 100);
-        nodeobj[app.const.nodeTypes.term]  = app.HGraph.getRelevantNodesOfType(app.const.nodeTypes.term, 400);
-        var authorCapacity = 1000+(500-nodeobj[app.const.nodeTypes.conf].size()-nodeobj[app.const.nodeTypes.term].size());
+        nodeobj[app.const.nodeTypes.conf]  = app.HGraph.getRelevantNodesOfType(app.const.nodeTypes.conf, parseInt(app.settings.maxNodes*0.1));
+        nodeobj[app.const.nodeTypes.term]  = app.HGraph.getRelevantNodesOfType(app.const.nodeTypes.term, parseInt(app.settings.maxNodes*0.15));
+        var authorCapacity = parseInt(app.settings.maxNodes*0.35)+(parseInt(app.settings.maxNodes*0.25)-nodeobj[app.const.nodeTypes.conf].size()-nodeobj[app.const.nodeTypes.term].size());
         nodeobj[app.const.nodeTypes.author] = app.HGraph.getRelevantNodesOfType(app.const.nodeTypes.author, authorCapacity);
-        var paperCapacity =1500+(1500-nodeobj[app.const.nodeTypes.author].size());
+        var paperCapacity =parseInt(app.settings.maxNodes*0.4)+(parseInt(app.settings.maxNodes*0.6)-nodeobj[app.const.nodeTypes.author].size());
         nodeobj[app.const.nodeTypes.paper]  = app.HGraph.getRelevantNodesOfType(app.const.nodeTypes.paper, paperCapacity);
 
         var edgeobj = {};
@@ -562,7 +562,7 @@
         edgeobj[app.const.nodeTypes.author]  = app.HGraph.getEdgesOfType(app.const.nodeTypes.author);
         edgeobj[app.const.nodeTypes.conf]  = app.HGraph.getEdgesOfType(app.const.nodeTypes.conf);
 
-        app.graph.drawGraph(nodeobj, edgeobj, "paper", cb, type);
+        app.graph.drawGraph(nodeobj, edgeobj, "paper", cb);
         _partialGraphDrawn = true;
     }
 
@@ -905,6 +905,29 @@
     app.events.openQueryMenu = function(){
         document.querySelector("#"+app.const.pageIds.main + " #queryMenu").classList.toggle("open");
     };
+    
+    app.events.allEdges = function(){
+        if(!_partialGraphDrawn){
+            app.events.showDrawing();
+            _drawPartialGraph(function(){
+                app.graph.allEdges();
+                app.events.hidePopup();
+            });
+        }
+        else
+            app.graph.allEdges();
+    };
+    app.events.noEdges = function(){
+        if(!_partialGraphDrawn){
+            app.events.showDrawing();
+            _drawPartialGraph(function(){
+                app.graph.noEdges();
+                app.events.hidePopup();
+            });
+        }
+        else
+            app.graph.noEdges();
+    };
     app.events.selectQueryMenuOption = function(e){
         _selectMenuOption(e.currentTarget, "#queryMenu", "#toolsMenu");
     };
@@ -916,7 +939,8 @@
         var type = _selectTypeFromSelector("#queryMenu li[data-action=completeGraph] ul[data-action=filterEdges]");
         if(!_partialGraphDrawn){
             app.events.showDrawing();
-            _drawPartialGraph(type, function(){
+            _drawPartialGraph(function(){
+                app.graph.selectEdges(type);
                 app.events.hidePopup();
             });
         }
