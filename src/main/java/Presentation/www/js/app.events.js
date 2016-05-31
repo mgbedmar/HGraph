@@ -570,7 +570,7 @@
         edgeobj[app.const.nodeTypes.author]  = app.HGraph.getEdgesOfType(app.const.nodeTypes.author);
         edgeobj[app.const.nodeTypes.conf]  = app.HGraph.getEdgesOfType(app.const.nodeTypes.conf);
 
-        app.graph.drawGraph(nodeobj, edgeobj, cb, type);
+        app.graph.drawGraph(nodeobj, edgeobj, "paper", cb, type);
         _partialGraphDrawn = true;
     }
 
@@ -587,14 +587,14 @@
         edgeobj[app.const.nodeTypes.author]  = app.HGraph.getEdgesOfType(app.const.nodeTypes.author);
         edgeobj[app.const.nodeTypes.conf]  = app.HGraph.getEdgesOfType(app.const.nodeTypes.conf);
 
-        app.graph.drawGraph(nodeobj, edgeobj, cb);
+        app.graph.drawGraph(nodeobj, edgeobj, "paper", cb);
     }
 
     function _drawQueryType (type){
         app.events.showDrawing();
         var nodes ={};
         nodes[type] = app.HGraph.getNodesOfType(type);
-        app.graph.drawGraph(nodes, {}, function(){
+        app.graph.drawGraph(nodes, {}, "paper", function(){
             _partialGraphDrawn = false;
             app.events.hidePopup();
         });
@@ -908,7 +908,7 @@
             edges[app.const.nodeTypes.paper] = app.HGraph.getNeighbourEdges(
                 _inputChoices.source.id, _inputChoices.source.type, app.const.nodeTypes.paper);
 
-            app.graph.drawGraph(nodes,edges,function(){
+            app.graph.drawGraph(nodes,edges,_inputChoices.source.type, function(){
                 app.events.hidePopup();
             });
         }catch(err){

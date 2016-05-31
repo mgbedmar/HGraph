@@ -174,7 +174,7 @@
     };
 
     //Draws a graph. id edgeType is specified, then draws only edges of type edgeType
-    app.graph.drawGraph = function(nodes, edges, cbend, edgeType){
+    app.graph.drawGraph = function(nodes, edges, baseType, cbend, edgeType){
         var g={nodes:[], edges:[]};
         _cachedges = {
             "author":[],
@@ -227,22 +227,24 @@
         }
 
         var ble = ["author", "term", "conf", "paper"];
-        var baseType = "paper";
+        baseType = baseType || "paper";
         var a = 0;
         function calc(type, cb){
             var j = 0;
             if(edges[type])
             {
+                var typeColor = type;
+                if (type == "paper") typeColor = baseType;
                 for (var i = 0; i < edges[type].size() && i < 7000; i++)
                 {
-                    app.HGraph.log("edges"+type+" "+edges[type].size());
+
                     if(exists[type][String(edges[type].get(i)[1])] && exists[baseType][String(edges[type].get(i)[0])]){
                         _cachedges[type].push({
                             id: String(edges[type].get(i)[0])+"-"+type+"-"+String(edges[type].get(i)[1]),
                             source: String(edges[type].get(i)[0]+"-"+baseType),
                             target: String(edges[type].get(i)[1])+"-"+type,
                             //TODO:define edge colors
-                            color: _typeColorEdge[type]
+                            color: _typeColorEdge[typeColor]
                         });
                         j++;
                         //app.HGraph.log(String(edges[type].get(i)[0])+"-"+type+"-"+String(edges[type].get(i)[1]));
@@ -250,7 +252,6 @@
                 }
             }
             app.HGraph.log("asdf"+j);
-            app.HGraph.log("\n\n\n\n");
             setTimeout(function(){
                 a++;
 
