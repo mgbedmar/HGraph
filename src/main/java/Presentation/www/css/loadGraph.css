@@ -64,7 +64,7 @@
     font-size:25px;
     color:#00080A;
     font-weight: normal;
-    margin-left:55px;
+    margin-left:48px;
     /*-webkit-flex:1 1 auto;*/
 }
 
@@ -73,9 +73,18 @@
     font-size:25px;
 }
 
-#loadGraphPage .ion-edit {
+#loadGraphPage .ion-edit{
     padding-left:8px;
     padding-right:8px;
+    color:#00080A;
+    border:thin solid #00080A;
+    border-radius:10px;
+    cursor:pointer;
+}
+
+#loadGraphPage .importPL {
+    padding-left:10px;
+    padding-right:10px;
     color:#00080A;
     border:thin solid #00080A;
     border-radius:10px;
@@ -93,7 +102,12 @@
 }
 
 #divEditPL {
-    margin-right:27px;
+    margin-right:20px;
+    margin-left:1px;
+}
+
+#divImportPL {
+    margin-right:-20px;
 }
 
 #tornardiv {

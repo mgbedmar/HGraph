@@ -10,8 +10,11 @@ import Domain.DomainController;
 import Domain.DomainException;
 import Domain.IntermediateHeteSimMatrix;
 import javafx.scene.web.WebEngine;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 
 import javax.smartcardio.ATR;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -24,6 +27,7 @@ import static java.lang.Thread.sleep;
 public class PresentationController {
     private DomainController dc;
     private WebEngine we;
+    private Stage stage;
     private int MAX_ROWS = 100;
     private String query1To1Result;
     private ArrayList<ArrayList<String>> result;
@@ -49,6 +53,9 @@ public class PresentationController {
         return bigger;
     }
 
+    private void handleException(String msg) {
+        we.executeScript("app.events.hidePopup(function() {app.events.showInfo(\"Error\", \"" + msg + "\", \"OK\"); });");
+    }
 
     private ArrayList<ArrayList<String>> formResult(String toAdd) {
         ArrayList<ArrayList<String>> r = new ArrayList<>();
@@ -117,9 +124,10 @@ public class PresentationController {
     }
 
 
-    public PresentationController(WebEngine webEngine){
+    public PresentationController(WebEngine webEngine, Stage stg){
         dc = new DomainController();
         we = webEngine;
+        stage = stg;
     }
 
     public String[] getProjects(){
@@ -149,6 +157,26 @@ public class PresentationController {
         } catch (DomainException de) {
             System.err.println(de.getFriendlyMessage());
             we.executeScript("app.events.showInfo(\"Eps!\",\""+de.getFriendlyMessage()+"\", \"Cap problema\")");
+        }
+    }
+
+    public String showFileChooser() {
+        FileChooser fc = new FileChooser();
+        fc.setTitle("Sel·lecciona un zip");
+        fc.setInitialDirectory(new File(System.getProperty("user.home")));
+        fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("ZIP", "*.zip"));
+        File selected = fc.showOpenDialog(stage);
+        return selected.getAbsolutePath();
+    }
+
+    public void importProject(String zipFile, String projectName) {
+        try {
+            System.out.println(zipFile);
+            dc.importProject(zipFile, projectName);
+        } catch (DomainException e) {
+            System.out.println(e.getMessage());
+            e.printStackTrace();
+            handleException(e.getFriendlyMessage());
         }
     }
 

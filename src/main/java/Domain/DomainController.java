@@ -581,6 +581,15 @@ public class DomainController
         }
     }
 
+    public void importProject(String zipPath, String projectName) throws DomainException {
+        try {
+            pc.importProject(zipPath, projectName);
+        } catch (PersistenceException e) {
+            throw new DomainException(e.getFriendlyMessage());
+        }
+
+    }
+
     /**
      * Dona el nom d'un node a partir de la seva id i tipus
      * @param id id

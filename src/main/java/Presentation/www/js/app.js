@@ -140,6 +140,8 @@ var app = app || {};
             .addEventListener("click", app.events.welcomeGoToloadGraph);
         document.querySelector("#tornardiv")
             .addEventListener("click", app.events.loadGoToWelcome);
+        document.getElementById("divImportPL")
+            .addEventListener("click", app.events.showImportProject);
         document.getElementById("divEditPL")
             .addEventListener("click", app.events.editProjects);
 

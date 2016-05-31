@@ -353,6 +353,14 @@ body > div.page{
     display:none;
 }
 
+#popupContent .zipPath, #popupContent .nomProj {
+    max-width:300px;
+}
+
+#popupContent .dreta-div {
+    text-align:right;
+}
+
 /*Forms*/
 .wrong{
     border:thin solid rgba(220, 0, 0, 0.76) !important;

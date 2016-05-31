@@ -7,13 +7,13 @@ import static java.nio.file.StandardCopyOption.*;
 
 public class GraphFileManager {
     private String path;
-    private static String fileAuthor = "/author";
-    private static String filePaper = "/paper";
-    private static String fileTerm = "/term";
-    private static String fileConf = "/conf";
-    private static String filePaperAuthor = "/paper_author";
-    private static String filePaperTerm = "/paper_term";
-    private static String filePaperConf = "/paper_conf";
+    protected static String fileAuthor = "/author";
+    protected static String filePaper = "/paper";
+    protected static String fileTerm = "/term";
+    protected static String fileConf = "/conf";
+    protected static String filePaperAuthor = "/paper_author";
+    protected static String filePaperTerm = "/paper_term";
+    protected static String filePaperConf = "/paper_conf";
     private static String normExt = ".txt";
     private static String backupExt = ".bak";
     private BufferedReader bufReader;

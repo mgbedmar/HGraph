@@ -1,9 +1,11 @@
 package Persistence;
 
 
-import java.io.File;
-import java.io.FilenameFilter;
+import java.io.*;
 import java.net.URISyntaxException;
+import java.util.Enumeration;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 
 public class ProjectManager {
     private final String JAR_PATH = getJAR_PATH();
@@ -22,6 +24,82 @@ public class ProjectManager {
         }catch (URISyntaxException ue) {
             return "";
         }
+    }
+
+    private void extractFolder(String zipFile, String extractFolder) throws IOException
+    {
+        int BUFFER = 2048;
+        File file = new File(zipFile);
+
+        ZipFile zip = new ZipFile(file);
+        String newPath = extractFolder;
+
+        new File(newPath).mkdir();
+        Enumeration zipFileEntries = zip.entries();
+
+        // Process each entry
+        while (zipFileEntries.hasMoreElements())
+        {
+            // grab a zip file entry
+            ZipEntry entry = (ZipEntry) zipFileEntries.nextElement();
+            String currentEntry = entry.getName();
+            String [] spl = currentEntry.split("/");
+            currentEntry = spl[spl.length-1];
+
+            if (!entry.isDirectory())
+            {
+
+                File destFile = new File(newPath, currentEntry);
+                //destFile = new File(newPath, destFile.getName());
+                File destinationParent = destFile.getParentFile();
+
+                // create the parent directory structure if needed
+                //destinationParent.mkdirs();
+
+                BufferedInputStream is = new BufferedInputStream(zip.getInputStream(entry));
+                int currentByte;
+                // establish buffer for writing file
+                byte data[] = new byte[BUFFER];
+
+                // write the current file to disk
+                FileOutputStream fos = new FileOutputStream(destFile);
+                BufferedOutputStream dest = new BufferedOutputStream(fos,
+                        BUFFER);
+
+                // read and write until last byte is encountered
+                while ((currentByte = is.read(data, 0, BUFFER)) != -1) {
+                    dest.write(data, 0, currentByte);
+                }
+                dest.flush();
+                dest.close();
+                is.close();
+            }
+
+
+        }
+
+    }
+
+    private boolean checkFile(String file) throws IOException {
+        File f = new File(file);
+        return !f.createNewFile();
+    }
+
+    /**
+     * Comprova si esta ben format el projecte.
+     * @throws IOException error IO
+     */
+    private boolean checkFolder(String path) throws IOException {
+        boolean creat = true;
+        String normExt = ".txt";
+        creat = creat && checkFile(path+GraphFileManager.fileAuthor+normExt);
+        creat = creat && checkFile(path+GraphFileManager.filePaper+normExt);
+        creat = creat && checkFile(path+GraphFileManager.fileTerm+normExt);
+        creat = creat && checkFile(path+GraphFileManager.fileConf+normExt);
+        creat = creat && checkFile(path+GraphFileManager.filePaperTerm+normExt);
+        creat = creat && checkFile(path+GraphFileManager.filePaperConf+normExt);
+        creat = creat && checkFile(path+GraphFileManager.filePaperAuthor+normExt);
+        return creat;
     }
 
     /**
@@ -69,6 +147,23 @@ public class ProjectManager {
         }
         else
             throw new PersistenceException("El projecte no existeix");
+    }
+
+    public void importProject(String zipFile, String projectName) throws PersistenceException {
+        if (projectExists(projectName)) {
+            throw new PersistenceException("El projecte ja existeix.");
+        }
+        else {
+            try {
+                extractFolder(zipFile, JAR_PATH+"/"+PROJECTS_FOLDER_PATH+"/"+projectName);
+                if (!checkFolder(JAR_PATH+"/"+PROJECTS_FOLDER_PATH+"/"+projectName)) {
+                    deleteProject(projectName);
+                    throw new PersistenceException("El zip no està ben format");
+                }
+            } catch (IOException e) {
+                throw new PersistenceException("No s'ha pogut importar el projecte.");
+            }
+        }
     }
 
     /**
