@@ -394,6 +394,7 @@ body > div.page{
     background-color:#9FBCC3;
 }
 
+
 #popupContent .help {
     height:90%;
     width:90%;
@@ -436,4 +437,29 @@ body > div.page{
 
 #popupContent .help .faq p {
     margin:10px 0px;
+
+/*Autocompletes*/
+.autocomplete-suggestion:hover{
+    border-top:thin solid rgba(200,200,255,0.3);
+    border-bottom:thin solid rgba(200,200,255,0.3);
+    border-style:inset;
+}
+.autocomplete-suggestion[data-tipus=author],
+.autocomplete-suggestion[data-tipus=author]:hover{
+    background-color:rgb(195, 210, 222);
+}
+
+.autocomplete-suggestion[data-tipus=paper],
+.autocomplete-suggestion[data-tipus=paper]:hover{
+    background-color:#DABEDA;
+}
+
+.autocomplete-suggestion[data-tipus=conf],
+.autocomplete-suggestion[data-tipus=conf]:hover{
+    background-color:#9CCC9C;
+}
+
+.autocomplete-suggestion[data-tipus=term],
+.autocomplete-suggestion[data-tipus=term]:hover{
+    background-color:#EAB4B4;
 }
