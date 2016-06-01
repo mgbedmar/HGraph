@@ -1,57 +1,3 @@
-/*
-         settings: {
-
--            minNodeSize: 1,
-
--            maxNodeSize: 4,
-
-+            minNodeSize: 0.5,
-
-+            maxNodeSize: 3,
-
-             minEdgeSize: 0.2,
-
-             maxEdgeSize: 0.5,
-
--            eventsEnabled: true,
-
--            minRatio: 10, // How far can we zoom out?
-
--            maxRatio: 20, // How far can we zoom in?
-
-+            eventsEnabled: false,
-
-+            minRatio: 0, // How far can we zoom out?
-
-+            maxRatio: 0, // How far can we zoom in?
-
-             defaultLabelColor: "#000",
-
--            defaultLabelSize: 14,
-
-+            defaultLabelSize: 15,
-
-             defaultLabelBGColor: "#ddd",
-
-             defaultHoverLabelBGColor: "#002147",
-
-             defaultLabelHoverColor: "#fff",
-
--            labelThreshold: 10,
-
-+            labelThreshold: 18,
-
-             defaultEdgeType: "curve",
-
--            hoverFontStyle: "bold",
-
-             fontStyle: "bold",
-
-             activeFontStyle: "bold"
-
-         }
-         */
-
 (function() {
     'use strict';
 
@@ -74,8 +20,8 @@
             defaultEdgeType: "curve",
             autoRescale:true,
             edgeLabels:true,
-            enableHovering:false, //etiquetes: posades no funciona be
-            zoomMin:0.001, //no va
+            enableHovering:false,
+            zoomMin:0.001,
             zoomMax:2
         }
 
@@ -117,7 +63,7 @@
         _angle = _angle + ratAngle/(_radius); //inversament proporcional
         if (_angle > 1) {
             _angle = _angle-1;
-            _radius += incrRad; //valors que mes o menys van: 0.000001, 0.01, 0, 0.05
+            _radius += incrRad; //valors adequats per grafs grans: 0.000001, 0.01, 0, 0.05
         }
 
         return pos;

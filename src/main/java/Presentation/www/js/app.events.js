@@ -1312,18 +1312,9 @@
 
     app.events.mainToHome = function(){
         function go(){
-            _hide(app.const.pageIds.main, function(){
-                _clearUIState();
-                app.HGraph.unSelectProject();
-                _show(app.const.pageIds.welcome);
-            });
+            app.events.reload();
         }
-
-        if(app.modified)
-            app.events.showAccept("Sortir", "Si surts es perdràn els canvis que no has desat. Vols continuar?",
-            "Sortir", go, "Cancela");
-        else
-            go();
+        go();
     };
     
     app.events.save = function(){
@@ -1353,7 +1344,6 @@
             _tmpSettings.maxRows = document.querySelector("#"+id+" .tableMaxRows").value;
             _tmpSettings.maxNodes = document.querySelector("#"+id+" .graphMaxNodes").value;
             _tmpSettings.maxEdges = document.querySelector("#"+id+" .graphMaxEdges").value;
-            //_tmpSettings.path = document.querySelector("#"+id+" .inputPath").value;
             _tmpSettings.hideEdges = document.querySelector("#"+id+" .hideEdges").checked;
             _tmpSettings.labelThreshold = document.querySelector("#"+id+" .labelThreshold").value;
 
@@ -1433,7 +1423,7 @@
         content.id=content.id+1;
         app.events.showPopup(content);
 
-        document.querySelector("#"+content.id+" form").addEventListener("submit", function(e){
+        document.querySelector("#"+content.id+" div[data-action=acceptSettings]").addEventListener("click", function(e){
             app.events.submitSettings(content.id, e);
         });
         document.querySelector("#"+content.id+" div[data-action=cancelSettings]")
