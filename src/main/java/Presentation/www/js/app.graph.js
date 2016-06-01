@@ -221,7 +221,6 @@
                 if (type == "paper") typeColor = baseType;
                 for (var i = 0; i < edges[type].size() && j < app.settings.maxEdges; i++)
                 {
-
                     if(exists[type][String(edges[type].get(i)[1])] && exists[baseType][String(edges[type].get(i)[0])]){
                         _cachedges[type].push({
                             id: String(edges[type].get(i)[0])+"-"+type+"-"+String(edges[type].get(i)[1]),
@@ -230,7 +229,6 @@
                             color: _typeColorEdge[typeColor]
                         });
                         j++;
-                        //app.HGraph.log(String(edges[type].get(i)[0])+"-"+type+"-"+String(edges[type].get(i)[1]));
                     }
                 }
             }
@@ -323,26 +321,66 @@
     };
 
     app.graph.addEdge = function(srcId, typeA, paperId){
-        _sarr[0].graph.addEdge({
-            id: paperId+"-"+typeA+"-"+srcId,
+        var dropId =paperId+"-"+typeA+"-"+srcId;
+        var edge = {
+            id: dropId,
             source: paperId+"-paper",
             target: srcId+"-"+typeA,
             type:"curve",
-            color:"black"
-        });
+            color:_typeColor[typeA]
+        };
+        _removeEdgeFromCache(dropId);
+        _cachedges[typeA].push(edge);
+        _sarr[0].graph.addEdge(edge);
 
         _sarr[0].refresh();
     };
 
     app.graph.removeNode = function(id, type){
-        _sarr[0].graph.dropNode(id+"-"+type);
+        var nodeId = id+"-"+type;
+        _removeNodeFromCache(nodeId);
+        _sarr[0].graph.dropNode(nodeId);
         _updateSize(_sarr[0].graph.nodes());
         _sarr[0].refresh();
     };
 
-    app.graph.removeEdge = function(destId, destType, paperId){
+    function _removeNodeFromCache(nodeId){
+        for(var type in _cachedges)
+        {
+            if(_cachedges.hasOwnProperty(type))
+            {
+                for(var i = 0; i < _cachedges[type].length; i++)
+                {
+                    if(_cachedges[type][i].source == nodeId ||
+                        _cachedges[type][i].target == nodeId){
+                        _cachedges[type].splice(i, 1);
+                    }
+                }
+            }
+        }
+    }
 
-        _sarr[0].graph.dropEdge(paperId+"-"+destType+"-"+destId);
+    function _removeEdgeFromCache(dropId){
+        for(var type in _cachedges)
+        {
+            if(_cachedges.hasOwnProperty(type))
+            {
+                for(var i = 0; i < _cachedges[type].length; i++)
+                {
+                    if(_cachedges[type][i].id == dropId){
+                        _cachedges[type].splice(i, 1);
+                        return;
+                    }
+                }
+            }
+        }
+
+    }
+    app.graph.removeEdge = function(destId, destType, paperId){
+        var dropId = paperId+"-"+destType+"-"+destId;
+        _sarr[0].graph.dropEdge(dropId);
+
+        _removeEdgeFromCache(dropId);
         _updateSize(_sarr[0].graph.nodes());
         _sarr[0].refresh();
 

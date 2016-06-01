@@ -17,7 +17,7 @@
         ref:'',
         result:''
     };
-
+    var _lastDraw;
     var _regExpr = /\{[0-9]+\}/;
 
     var _regFilterARow = /^[0-9]+$/;
@@ -243,6 +243,7 @@
         var mChars;
         if (_nodes.length < 300) mChars = 1;
         else mChars = 3;
+
         var _renIt = function (item, search){
              search = search.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
              var re = new RegExp("(" + search.split(' ').join('|') + ")", "gi");
@@ -505,7 +506,12 @@
         app.graph.init(large);
         //document.querySelector("#mainPage #queryMenu > div > ul > li[data-action=completeGraph]").click();
 
-        if(app.graph.isLarge())
+        app.HGraph.log(_lastDraw);
+        if(_lastDraw && _lastDraw == "type")
+            app.events.queryType();
+        else if(_lastDraw && _lastDraw == "neighbours")
+            app.events.queryNeighbours();
+        else if(app.graph.isLarge())
         {
             _drawRelevanceGraph(cb);
         }
@@ -985,44 +991,45 @@
     };
 
     app.events.queryType = function(){
+        //_lastDraw = "type";
         var type = _selectTypeFromSelector("#queryMenu #queryByType .typeSelector");
-        _drawQueryType(type);
+        if(type)
+            _drawQueryType(type);
 
     };
 
     app.events.queryNeighbours = function(){
+        //_lastDraw = "neighbours";
         if (!_checkInputs("autoVeins")) return;
         app.events.showDrawing();
         var nodes = {};
         var edges = {};
-        try{
 
-            nodes[app.const.nodeTypes.author] = app.HGraph.getNeighbours(
-                    _inputChoices.source.id, _inputChoices.source.type, app.const.nodeTypes.author);
-            nodes[app.const.nodeTypes.paper] = app.HGraph.getNeighbours(
-                    _inputChoices.source.id, _inputChoices.source.type, app.const.nodeTypes.paper);
-            nodes[app.const.nodeTypes.term] = app.HGraph.getNeighbours(
-                    _inputChoices.source.id, _inputChoices.source.type, app.const.nodeTypes.term);
-            nodes[app.const.nodeTypes.conf] = app.HGraph.getNeighbours(
-                    _inputChoices.source.id, _inputChoices.source.type, app.const.nodeTypes.conf);
-
-
-            nodes[_inputChoices.source.type].add([_inputChoices.source.id, _inputChoices.source.name, String(100)]);
-            edges[app.const.nodeTypes.author] = app.HGraph.getNeighbourEdges(
+        nodes[app.const.nodeTypes.author] = app.HGraph.getNeighbours(
                 _inputChoices.source.id, _inputChoices.source.type, app.const.nodeTypes.author);
-            edges[app.const.nodeTypes.conf] = app.HGraph.getNeighbourEdges(
-                _inputChoices.source.id, _inputChoices.source.type, app.const.nodeTypes.conf);
-            edges[app.const.nodeTypes.term] = app.HGraph.getNeighbourEdges(
-                _inputChoices.source.id, _inputChoices.source.type, app.const.nodeTypes.term);
-            edges[app.const.nodeTypes.paper] = app.HGraph.getNeighbourEdges(
+        nodes[app.const.nodeTypes.paper] = app.HGraph.getNeighbours(
                 _inputChoices.source.id, _inputChoices.source.type, app.const.nodeTypes.paper);
+        nodes[app.const.nodeTypes.term] = app.HGraph.getNeighbours(
+                _inputChoices.source.id, _inputChoices.source.type, app.const.nodeTypes.term);
+        nodes[app.const.nodeTypes.conf] = app.HGraph.getNeighbours(
+                _inputChoices.source.id, _inputChoices.source.type, app.const.nodeTypes.conf);
 
-            app.graph.drawGraph(nodes,edges,_inputChoices.source.type, function(){
-                app.events.hidePopup();
-            });
-        }catch(err){
-            app.HGraph.log(err);
-        }
+
+        nodes[_inputChoices.source.type].add([_inputChoices.source.id, _inputChoices.source.name, String(5)]);
+        edges[app.const.nodeTypes.author] = app.HGraph.getNeighbourEdges(
+            _inputChoices.source.id, _inputChoices.source.type, app.const.nodeTypes.author);
+        edges[app.const.nodeTypes.conf] = app.HGraph.getNeighbourEdges(
+            _inputChoices.source.id, _inputChoices.source.type, app.const.nodeTypes.conf);
+        edges[app.const.nodeTypes.term] = app.HGraph.getNeighbourEdges(
+            _inputChoices.source.id, _inputChoices.source.type, app.const.nodeTypes.term);
+        edges[app.const.nodeTypes.paper] = app.HGraph.getNeighbourEdges(
+            _inputChoices.source.id, _inputChoices.source.type, app.const.nodeTypes.paper);
+
+
+        app.graph.drawGraph(nodes,edges,_inputChoices.source.type, function(){
+            app.events.allEdges();
+            app.events.hidePopup();
+        });
 
     };
     //----/QueryMenu
@@ -1228,22 +1235,17 @@
         var nodeRemoved = app.HGraph.removeNode(_inputChoices.source.id, _inputChoices.source.type);
         if(nodeRemoved)
         {
-            try{
-                app.events.notify("S'ha esborrat el node ("+_inputChoices.source.id+")");
-                app.modified = true;
-                app.graph.removeNode(_inputChoices.source.id, _inputChoices.source.type);
-                var found = false;
-                var i;
-                for(i = 0; i < _nodes.length && !found; i++)
-                {
-                    found = (_nodes[i][1] == _inputChoices.source.id && _nodes[i][2] == _inputChoices.source.type);
-                }
-                if(found)
-                    _nodes.splice((i-1), 1);
-
-            }catch(err){
-                app.HGraph.log(err);
+            app.events.notify("S'ha esborrat el node ("+_inputChoices.source.id+")");
+            app.modified = true;
+            app.graph.removeNode(_inputChoices.source.id, _inputChoices.source.type);
+            var found = false;
+            var i;
+            for(i = 0; i < _nodes.length && !found; i++)
+            {
+                found = (_nodes[i][1] == _inputChoices.source.id && _nodes[i][2] == _inputChoices.source.type);
             }
+            if(found)
+                _nodes.splice((i-1), 1);
 
 
             
