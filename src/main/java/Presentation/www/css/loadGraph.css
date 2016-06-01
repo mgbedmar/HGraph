@@ -40,7 +40,8 @@
     min-height:20px;
     text-align:center;
     cursor:pointer;
-
+    overflow:hidden;
+    text-overflow:ellipsis;
     display:-webkit-flex;
     -webkit-align-items:center;
     -webkit-justify-content:space-between;

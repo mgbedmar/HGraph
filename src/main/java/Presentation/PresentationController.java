@@ -561,6 +561,12 @@ public class PresentationController {
         th.start();
     }
 
+    /**
+     * Ordena el resultat segons la columna col, ascendenment si dir es cert
+     * @param col columna de la taula
+     * @param dir ascendent?
+     * @return les noves files del resultat per representar
+     */
     public ArrayList<ArrayList<String>> sortResult(int col, int dir) {
         if (currentNumCols == 3) col = col - 1;
         if (col == 0) dc.resetResult();
@@ -568,42 +574,82 @@ public class PresentationController {
         return resultDetails();
     }
 
+    /**
+     * Selecciona les files del resultat que contenen el nom <em>name</em>
+     * @param name nom seleccionat
+     * @return les noves files del resultat per representar
+     */
     public ArrayList<ArrayList<String>> selectResultName(String name) {
         dc.selectResultName(name);
         return resultDetails();
     }
 
+    /**
+     * Desfa el filtre de l'operacio anterior.
+     * @param name nom seleccionat
+     * @return les noves files del resultat per representar
+     */
     public ArrayList<ArrayList<String>> unselectResultName(String name) {
         dc.unselectResultName(name);
         return resultDetails();
     }
 
+    /**
+     * Amaga les files del resultat que contenen el nom <em>name</em>
+     * @param name nom amagat
+     * @return les noves files del resultat per representar
+     */
     public ArrayList<ArrayList<String>> hideResultName(String name) {
         dc.hideResultName(name);
         return resultDetails();
     }
 
+    /**
+     * Desfa el filtre de l'operacio anterior.
+     * @param name nom amagat
+     * @return les noves files del resultat per representar
+     */
     public ArrayList<ArrayList<String>> unhideResultName(String name) {
         dc.unhideResultName(name);
         return resultDetails();
     }
 
+    /**
+     * Amaga la fila del resultat amb numero de fila <em>index</em>.
+     * @param index fila amagada
+     * @return les noves files del resultat per representar
+     */
     public ArrayList<ArrayList<String>> hideResultRow(String index) {
         dc.hideResultRow(Integer.parseInt(index)-1);
         return resultDetails();
     }
 
+    /**
+     * Desmaga la fila del resultat amb numero de fila <em>index</em>.
+     * @param index fila amagada
+     * @return les noves files del resultat per representar
+     */
     public ArrayList<ArrayList<String>> unhideResultRow(String index) {
         dc.unhideResultRow(Integer.parseInt(index)-1);
         return resultDetails();
     }
 
+    /**
+     * Amaga el rang de files donat per <em>indexs</em>.
+     * @param indexs string de la forma n-m, on n es un natural i m un altre
+     * @return les noves files del resultat per representar
+     */
     public ArrayList<ArrayList<String>> hideResultRows(String indexs) {
         String[] params = indexs.split("\\-");
         dc.hideResultRows(Integer.parseInt(params[0].trim())-1, Integer.parseInt(params[1].trim())-1);
         return resultDetails();
     }
 
+    /**
+     * Desamaga el rang de files donat per <em>indexs</em>.
+     * @param indexs string de la forma n-m, on n es un natural i m un altre
+     * @return les noves files del resultat per representar
+     */
     public ArrayList<ArrayList<String>> unhideResultRows(String indexs) {
         String[] params = indexs.split("\\-");
         dc.unhideResultRows(Integer.parseInt(params[0].trim())-1, Integer.parseInt(params[1].trim())-1);
@@ -615,7 +661,11 @@ public class PresentationController {
     }
 }
 
-
+/*
+ * Classes que calculen les queries en un thread diferent. La funcio call()
+ * crida en cada cas a la consulta corresponent amb els paràmetres que de la classe.
+ * La funcio done() recull el resultat i el posa al controlador amb un runLater.
+ */
 class Query1To1Task extends Task<String> {
 
     private String idSource, idEnd, typeSource, typeEnd;
@@ -705,7 +755,7 @@ abstract class QueryTask extends Task<ArrayList<ArrayList<String>>> {
                 }
             });
 
-        } catch (ExecutionException e) {
+        } catch (ExecutionException | InterruptedException e) {
             Platform.runLater(new Runnable() {
                 private String message;
                 @Override public void run() {
@@ -719,9 +769,6 @@ abstract class QueryTask extends Task<ArrayList<ArrayList<String>>> {
                 }
             }.setParams(e.getMessage()));
 
-        } catch (InterruptedException e) {
-            //TODO Aixo pot interessar-nos provocar-ho nosaltres mateixos per parar una tasca que duri massa
-            we.executeScript("app.events.showInfo('Error.', '"+e.getMessage()+"', 'OK');");
         }
     }
 }

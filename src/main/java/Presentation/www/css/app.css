@@ -141,6 +141,10 @@ body > div.page{
     box-shadow: 0 0 6px #9ecaed; /*per que no va?*/
 }
 
+#popupContent .resultContent .sort {
+    -webkit-transform:rotate(-90deg);
+}
+
 #popupPage #popupContent .closeResult .closeButton {
      color:#ECEDED;
      font-size:15px;
