@@ -1359,7 +1359,7 @@
                 app.events.hidePopup(function() {
                     app.events.showAccept("Avís.", "Algun dels paràmetres que has triat està per sobre dels "
                     + "màxims recomanats, que són "+app.settings.maxRecRows+" files, "+app.settings.maxRecNodes
-                    + "nodes i "+app.settings.maxRecEdges+" arestes. El rendiment es podria veure afectat i, "
+                    + " nodes i "+app.settings.maxRecEdges+" arestes. El rendiment es podria veure afectat i, "
                     + "en casos extrems, bloquejar el programa. Continua sota la teva responsabilitat.",
                     "Continua", function() {
                         app.events.submitSettings(id, e, true);
