@@ -8,7 +8,6 @@
     var _autocompletes = [];
     var _partialGraphDrawn;
     //Nodes for autocomplete
-    //TODO actualitzar al esborrar, afegir. Controlar excepcions.
     var _nodes;
     var _popupShown = false;
     var _inputChoices = {

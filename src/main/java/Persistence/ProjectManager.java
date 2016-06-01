@@ -7,9 +7,24 @@ import java.util.Enumeration;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
+/**
+ * @author Gerard
+ */
+
 public class ProjectManager {
+    /**
+     * Path del jar que s'esta executant.
+     */
     private final String JAR_PATH = getJAR_PATH();
+
+    /**
+     * Nom de la carpeta de projectes.
+     */
     private final String PROJECTS_FOLDER_PATH = "projects";
+
+    /**
+     * Projecte actual.
+     */
     private String selectedProject;
 
     /**
@@ -26,6 +41,12 @@ public class ProjectManager {
         }
     }
 
+    /**
+     * Extreu el contingut d'un zip a una carpeta especificada.
+     * @param zipFile path absolut del zip
+     * @param extractFolder path absolut de la carpeta desti
+     * @throws IOException error IO
+     */
     private void extractFolder(String zipFile, String extractFolder) throws IOException
     {
         int BUFFER = 2048;
@@ -37,10 +58,8 @@ public class ProjectManager {
         new File(newPath).mkdir();
         Enumeration zipFileEntries = zip.entries();
 
-        // Process each entry
         while (zipFileEntries.hasMoreElements())
         {
-            // grab a zip file entry
             ZipEntry entry = (ZipEntry) zipFileEntries.nextElement();
             String currentEntry = entry.getName();
             String [] spl = currentEntry.split("/");
@@ -50,23 +69,16 @@ public class ProjectManager {
             {
 
                 File destFile = new File(newPath, currentEntry);
-                //destFile = new File(newPath, destFile.getName());
                 File destinationParent = destFile.getParentFile();
-
-                // create the parent directory structure if needed
-                //destinationParent.mkdirs();
 
                 BufferedInputStream is = new BufferedInputStream(zip.getInputStream(entry));
                 int currentByte;
-                // establish buffer for writing file
                 byte data[] = new byte[BUFFER];
 
-                // write the current file to disk
                 FileOutputStream fos = new FileOutputStream(destFile);
                 BufferedOutputStream dest = new BufferedOutputStream(fos,
                         BUFFER);
 
-                // read and write until last byte is encountered
                 while ((currentByte = is.read(data, 0, BUFFER)) != -1) {
                     dest.write(data, 0, currentByte);
                 }
@@ -80,6 +92,12 @@ public class ProjectManager {
 
     }
 
+    /**
+     * Comprova si un fitxer ja existeix.
+     * @param file path absolut del fitxer
+     * @return true si el fitxer ja existeix
+     * @throws IOException error IO
+     */
     private boolean checkFile(String file) throws IOException {
         File f = new File(file);
         return !f.createNewFile();
@@ -87,6 +105,7 @@ public class ProjectManager {
 
     /**
      * Comprova si esta ben format el projecte.
+     * @path path del projecte
      * @throws IOException error IO
      */
     private boolean checkFolder(String path) throws IOException {

@@ -4,8 +4,17 @@ package Persistence;
 import java.io.IOException;
 
 public class PersistenceController {
+
+    /**
+     * Guarda i carrega les dades del graf.
+     */
     private GraphFileManager gfm;
+
+    /**
+     * Te control dels projectes i del projecte actiu.
+     */
     private ProjectManager pm;
+
 
     /**
      * Constructora.
@@ -318,10 +327,19 @@ public class PersistenceController {
         }
     }
 
+    /**
+     * Des-selecciona el projecte actiu.
+     */
     public void unSelectProject() {
         pm.unSelectProject();
     }
 
+    /**
+     * Importa un projecte a partir d'un zip com el de la DBLP.
+     * @param zipPath path absolut del zip
+     * @param projectName nom del projecte
+     * @throws PersistenceException error IO o zip mal format
+     */
     public void importProject(String zipPath, String projectName) throws PersistenceException {
         pm.importProject(zipPath, projectName);
     }

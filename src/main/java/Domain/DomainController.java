@@ -15,8 +15,19 @@ import java.util.Set;
  */
 public class DomainController
 {
+    /**
+     * Graf actiu de l'aplicacio.
+     */
     private Graph g;
+
+    /**
+     * Ultim resultat obtingut per consulta.
+     */
     private Result r;
+
+    /**
+     * Controlador de persistencia.
+     */
     private PersistenceController pc;
 
     /**
@@ -207,15 +218,6 @@ public class DomainController
     {
         Node source = g.getNode(idSource, typeSource);
         r = Query.query1toN(g, source, Query.defaultPath.get(typeSource).get(typeEnd));
-    }
-
-    /**
-     * Rep un cami expressat com al paper i canvia el path per defecte.
-     * @param path path nou
-     */
-    public void modifyPath(String path) {
-
-
     }
 
     /**
@@ -572,6 +574,9 @@ public class DomainController
         }
     }
 
+    /**
+     * Des-selecciona el projecte actual.
+     */
     public void unSelectProject(){
         pc.unSelectProject();
         g = new Graph();
@@ -590,6 +595,12 @@ public class DomainController
         }
     }
 
+    /**
+     * Importa un projecte a partir d'un zip com el de la DBLP.
+     * @param zipPath path absolut del zip
+     * @param projectName nom del projecte
+     * @throws DomainException error IO o zip mal format
+     */
     public void importProject(String zipPath, String projectName) throws DomainException {
         try {
             pc.importProject(zipPath, projectName);

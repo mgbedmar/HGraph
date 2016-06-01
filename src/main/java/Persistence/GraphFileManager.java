@@ -6,7 +6,11 @@ import java.util.*;
 import static java.nio.file.StandardCopyOption.*;
 
 public class GraphFileManager {
+    /**
+     * Path del fitxers del graf.
+     */
     private String path;
+
     protected static String fileAuthor = "/author";
     protected static String filePaper = "/paper";
     protected static String fileTerm = "/term";
@@ -14,10 +18,30 @@ public class GraphFileManager {
     protected static String filePaperAuthor = "/paper_author";
     protected static String filePaperTerm = "/paper_term";
     protected static String filePaperConf = "/paper_conf";
+
+    /**
+     * Extensio dels fitxers del graf.
+     */
     private static String normExt = ".txt";
+
+    /**
+     * Extensio dels backups.
+     */
     private static String backupExt = ".bak";
+
+    /**
+     * Lector de fitxers.
+     */
     private BufferedReader bufReader;
+
+    /**
+     * Escriptor de fitxers.
+     */
     private BufferedWriter bufWriter;
+
+    /**
+     * Fitxer obert.
+     */
     private String currentFile;
 
 
@@ -118,6 +142,7 @@ public class GraphFileManager {
      * @param file nom del fitxer
      * @param extA extensio del fitxer antic
      * @param extB extensio del nou fitxer
+     * @throws PersistenceException error IO
      * @throws IOException error IO
      */
     private void backup(String path, String file, String extA, String extB) throws PersistenceException, IOException {
@@ -134,7 +159,7 @@ public class GraphFileManager {
      * Esborra el backup del fitxer amb path <em>path</em> i nom <em>file</em>.
      * @param path path del sistema
      * @param file nom del fitxer (sense extensio)
-     * @throws IOException error IO
+     * @throws PersistenceException error IO
      */
     private void deleteBackup(String path, String file) throws PersistenceException {
         File a = new File(path+file+backupExt);
@@ -148,6 +173,7 @@ public class GraphFileManager {
      * @param path path del sistema
      * @param extA extensio del fitxer antic
      * @param extB extensio del fitxer nou
+     * @throws PersistenceException error IO
      * @throws IOException error IO
      */
     private void makeBackups(String path, String extA, String extB) throws PersistenceException, IOException {
@@ -163,7 +189,7 @@ public class GraphFileManager {
     /**
      * Esborra tots els backups del graf.
      * @param path path del sistema
-     * @throws IOException error IO
+     * @throws PersistenceException error IO
      */
     private void deleteBackups(String path) throws PersistenceException {
         deleteBackup(path, fileAuthor);
@@ -209,6 +235,7 @@ public class GraphFileManager {
     /**
      * Inicialitza el sistema i crea els backups abans de comencar a guardar dades.
      * @param path path del graf que es guarda
+     * @throws PersistenceException error IO
      * @throws IOException error IO
      */
     public void startSaving(String path) throws PersistenceException, IOException {
@@ -220,6 +247,7 @@ public class GraphFileManager {
 
     /**
      * Confirma els canvis guardats fins ara i esborra els backups.
+     * @throws PersistenceException error IO
      * @throws IOException error IO
      */
     public void commit() throws IOException, PersistenceException {
@@ -235,6 +263,7 @@ public class GraphFileManager {
 
     /**
      * Denega tots els canvis des del darrer <em>startSaving()</em> i deixa el graf en l'estat anterior.
+     * @throws PersistenceException error IO
      * @throws IOException error IO
      */
     public void rollback() throws IOException, PersistenceException {

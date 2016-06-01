@@ -24,11 +24,34 @@ import java.util.concurrent.ExecutorService;
 
 import static java.lang.Thread.sleep;
 
+/**
+ * @author Alejandro i Dani
+ */
+
 public class PresentationController {
+    /**
+     * Controlador de domini.
+     */
     private DomainController dc;
+
+    /**
+     * WebEngine (comunicacio amb Javascript).
+     */
     private WebEngine we;
+
+    /**
+     * Stage de la UI.
+     */
     private Stage stage;
+
+    /**
+     * Maxim de files que surt per pantalla en un resultat.
+     */
     private int MAX_ROWS = 100;
+
+    /**
+     * Resultat de la consulta 1 a 1.
+     */
     private String query1To1Result;
     private ArrayList<ArrayList<String>> result;
     private int currentNumCols;
@@ -52,10 +75,19 @@ public class PresentationController {
         return bigger;
     }
 
+    /**
+     * Gestiona una excepcio traient un popup.
+     * @param msg missatge de l'excepcio.
+     */
     private void handleException(String msg) {
         we.executeScript("app.events.hidePopup(function() {app.events.showInfo(\"Error\", \"" + msg + "\", \"OK\"); });");
     }
 
+    /**
+     * Forma el resultat d'una consulta en un format adequat pel Javascript.
+     * @param toAdd String per afegir repetit a la primera columna
+     * @return array amb les files del resultat, que porten un numero de fila, els noms i el hetesim
+     */
     private ArrayList<ArrayList<String>> formResult(String toAdd) {
         ArrayList<ArrayList<String>> r = new ArrayList<>();
         ArrayList<String> fila;
@@ -64,7 +96,6 @@ public class PresentationController {
         if (numRows == 0) numRows = dc.getResultSize();
 
         while (i <= numRows && (fila = dc.getResultRow()) != null) {
-            //addNumsRow(i, Integer.parseInt(fila.get(0)));
             fila.set(0, String.valueOf((Integer.parseInt(fila.get(0))+1)));
             if (currentNumCols == 3)
                 fila.add(1, toAdd);
@@ -74,12 +105,35 @@ public class PresentationController {
         return r;
     }
 
+    /**
+     * Forma el resultat amb alguns retocs depenent del tipus de consulta.
+     * @return array amb les files del resultat, que porten un numero de fila, els noms i el hetesim
+     */
     private ArrayList<ArrayList<String>> resultDetails() {
         String toAdd;
         if (dc.getResultSize() == 0) return new ArrayList<>();
         if (currentNumCols == 2) return basicResult();
         toAdd = result.get(0).get(1);
         return formResult(toAdd);
+    }
+
+    /**
+     * Forma el resultat d'una consulta en un format adequat pel Javascript.
+     * @return array amb les files del resultat, que porten un numero de fila, els noms i el hetesim
+     */
+    private ArrayList<ArrayList<String>> basicResult() {
+        ArrayList<ArrayList<String>> r = new ArrayList<>();
+        result = new ArrayList<>();
+        ArrayList<String> fila;
+        int i = 1;
+        int numRows = MAX_ROWS;
+        if (numRows == 0) numRows = dc.getResultSize();
+        while (i <= numRows && (fila = dc.getResultRow()) != null) {
+            fila.set(0, String.valueOf((Integer.parseInt(fila.get(0)) + 1)));
+            r.add(fila);
+            ++i;
+        }
+        return r;
     }
 
 
@@ -91,78 +145,125 @@ public class PresentationController {
         query1To1Result = r;
     }
 
+
+    /**
+     * Posa el resultat de la consulta. Ho fa el thread que s'encarrega de la consulta.
+     * @param r resultat
+     */
     protected void setQueryResult(ArrayList<ArrayList<String>> r) {
         this.result = r;
     }
 
-    public String getQuery1To1Result() {
-        return query1To1Result;
-    }
 
-    public ArrayList<ArrayList<String>> getQueryResult() {
-        return result;
-    }
-
-
-    public void saveAs(String name){
-        try {
-            dc.save(name);
-        } catch (DomainException de) {
-            System.err.println(de.getFriendlyMessage());
-            we.executeScript("app.events.showInfo(\"Eps!\",\""+de.getFriendlyMessage()+"\", \"Cap problema\")");
-        }
-    }
-
-    public void save(){
-        try {
-            dc.save();
-        } catch (DomainException de) {
-            System.err.println(de.getFriendlyMessage());
-            we.executeScript("app.events.showInfo(\"Eps!\",\""+de.getFriendlyMessage()+"\", \"Cap problema\")");
-        }
-    }
-
-
+    /**
+     * Constructora. Instancia el controlador de presentacio.
+     * @param webEngine webEngine per comunicar-se amb la vista (JS)
+     * @param stg Stage de l'aplicacio
+     */
     public PresentationController(WebEngine webEngine, Stage stg){
         dc = new DomainController();
         we = webEngine;
         stage = stg;
     }
 
+    /**
+     * Obte el resultat de la consulta. La crida el Javascript.
+     * @return hetesim en un String
+     */
+    public String getQuery1To1Result() {
+        return query1To1Result;
+    }
+
+    /**
+     * Dona el resultat de la ultima consulta (no 1 a 1) realitzada.
+     * @return resultat
+     */
+    public ArrayList<ArrayList<String>> getQueryResult() {
+        return result;
+    }
+
+    /**
+     * Desa el projecte actiu amb un altre nom.
+     * @param name nom nou del projecte
+     */
+    public void saveAs(String name){
+        try {
+            dc.save(name);
+        } catch (DomainException de) {
+            handleException(de.getFriendlyMessage());
+        }
+    }
+
+    /**
+     * Desa els canvis del projecte actiu.
+     */
+    public void save(){
+        try {
+            dc.save();
+        } catch (DomainException de) {
+            handleException(de.getFriendlyMessage());
+        }
+    }
+
+    /**
+     * Posa a <em>maxRows</em> l'atribut <em>MAX_ROWS</em>.
+     * @param maxRows nou valor per <em>MAX_ROWS</em>
+     */
     public void setMaxRows(int maxRows) {
         MAX_ROWS = maxRows;
     }
 
+    /**
+     * Dona una llista dels projectes existents.
+     * @return llista amb els noms dels projectes
+     */
     public String[] getProjects(){
         return dc.getProjectList();
     }
 
+    /**
+     * Consulta si hi ha un projecte actiu o no.
+     * @return cert si i nomes si hi ha un projecte actiu
+     */
     public boolean isProjectSelected(){
         return dc.isProjectSelected();
     }
 
+    /**
+     * Carrega un projecte.
+     * @param projectName nom del projecte
+     */
     public void loadProject(String projectName) {
         try {
             dc.load(projectName);
         } catch (DomainException de) {
-            System.err.println(de.getFriendlyMessage());
-            we.executeScript("app.events.showInfo(\"Eps!\",\""+de.getFriendlyMessage()+"\", \"Cap problema\")");
+            handleException(de.getFriendlyMessage());
         }
     }
 
+    /**
+     * Des-selecciona el projecte actiu.
+     */
     public void unSelectProject(){
         dc.unSelectProject();
     }
 
+    /**
+     * Esborra un projecte.
+     * @param projectName nom del projecte
+     */
     public void deleteProject(String projectName){
         try {
             dc.deleteProject(projectName);
         } catch (DomainException de) {
-            System.err.println(de.getFriendlyMessage());
-            we.executeScript("app.events.showInfo(\"Eps!\",\""+de.getFriendlyMessage()+"\", \"Cap problema\")");
+            handleException(de.getFriendlyMessage());
         }
     }
 
+    /**
+     * Mostra un file chooser per a que l'usuari esculli un arxiu zip per importar.
+     * @return el path absolut del arxiu escollit
+     */
     public String showFileChooser() {
         FileChooser fc = new FileChooser();
         fc.setTitle("Sel·lecciona un zip");
@@ -172,48 +273,68 @@ public class PresentationController {
         return selected.getAbsolutePath();
     }
 
+    /**
+     * Importa un projecte a partir d'un zip com el de la DBLP.
+     * @param zipFile path absolut del zip
+     * @param projectName nom del projecte
+     */
     public void importProject(String zipFile, String projectName) {
         try {
             System.out.println(zipFile);
             dc.importProject(zipFile, projectName);
         } catch (DomainException e) {
-            System.out.println(e.getMessage());
-            e.printStackTrace();
             handleException(e.getFriendlyMessage());
         }
     }
 
+    /**
+     * Afegeix un node al graf.
+     * @param label nom del node
+     * @param type tipus del node
+     * @return id assignada al node
+     */
     public Integer addNode(String label, String type){
         try{
             dc.addNode(label, type);
             ArrayList<Integer> ids = dc.getNodes(label, type);
             return getBigger(ids);
         }catch (DomainException de) {
-            System.err.println(de.getFriendlyMessage());
-            we.executeScript("app.events.showInfo(\"Eps!\",\""+de.getFriendlyMessage()+"\", \"Cap problema\")");
+            handleException(de.getFriendlyMessage());
         }
 
         return null;
     }
 
+    /**
+     * Elimina un node del graf.
+     * @param id id del node
+     * @param type tipus del node
+     * @return cert si i nomes si s'ha eliminat el node
+     */
     public boolean removeNode(int id, String type){
         try{
             dc.removeNode(id, type);
             return true;
         }catch (DomainException de) {
-            System.err.println(de.getFriendlyMessage());
-            we.executeScript("app.events.showInfo(\"Eps!\",\""+de.getFriendlyMessage()+"\", \"Cap problema\")");
+            handleException(de.getFriendlyMessage());
         }
         return false;
     }
 
-    public boolean addEdge(int idA, String nameA, int idB, String nameB){
+    /**
+     * Afegeix una aresta al graf entre el node A i el B
+     * @param idA id del node A
+     * @param typeA tipus del node A
+     * @param idB id del node B
+     * @param typeB nom
+     * @return
+     */
+    public boolean addEdge(int idA, String typeA, int idB, String typeB){
         try {
-            dc.addEdge(idA, nameA, idB, nameB);
+            dc.addEdge(idA, typeA, idB, typeB);
             return true;
         } catch (DomainException de) {
-            System.err.println(de.getFriendlyMessage());
-            we.executeScript("app.events.showInfo(\"Eps!\",\""+de.getFriendlyMessage()+"\", \"Cap problema\")");
+            handleException(de.getFriendlyMessage());
         }
 
         return false;
@@ -231,10 +352,24 @@ public class PresentationController {
         return false;
     }
 
+    /**
+     * Dona tots els nodes del graf, en format portable.
+     * @return Retorna un ArrayList de parelles de String. En la primera posicio
+     * hi ha la id, en la segona, el nom i en la tercera el numero de veins.
+     * En la quarta, el tipus.
+     */
     public ArrayList<String[]> getNodes() {
         return dc.getNodes();
     }
 
+    /**
+     * Retorna els veins d'un determinat tipus d'un node donat.
+     * @param id id del node
+     * @param type tipus del node
+     * @param typeEnd tipus de les arestes
+     * @return Retorna un ArrayList de parelles de String. En la primera posicio
+     * hi ha la id, en la segona, el nom i en la tercera el numero de veins.
+     */
     public ArrayList<String[]> getNeighbours(String id, String type, String typeEnd){
         ArrayList<String[]> res = new ArrayList<>();
         try{
@@ -246,6 +381,14 @@ public class PresentationController {
         return res;
     }
 
+    /**
+     * Retorna les arestes d'un node.
+     * @param id id del node
+     * @param type tipus del node
+     * @param typeEnd tipus de les arestes
+     * @return Retorna un ArrayList de parelles de String. En la primera posicio
+     * hi ha la id del node i en la segona, la id del vei
+     */
     public ArrayList<String[]> getNeighbourEdges(String id, String type, String typeEnd){
         ArrayList<String[]> res = new ArrayList<>();
         try{
@@ -257,6 +400,12 @@ public class PresentationController {
         return res;
     }
 
+    /**
+     * Retorna tots el nodes d'un tipus donat.
+     * @param type el tipus
+     * @return Retorna un ArrayList de parelles de String. En la primera posicio
+     * hi ha la id, en la segona, el nom i en la tercera el numero de veins.
+     */
     public ArrayList<String[]> getNodesOfType(String type){
         ArrayList<String[]> res = new ArrayList<>();
         try{
@@ -268,6 +417,13 @@ public class PresentationController {
         return res;
     }
 
+    /**
+     * Obte els <em>quantity</em> nodes del tipus <em>type</em> que mes veins.
+     * @param type tipus dels nodes
+     * @param quantity quantitat maxima que es retorna
+     * @return Retorna un ArrayList de parelles de String. En la primera posicio
+     * hi ha la id, en la segona, el nom i en la tercera el numero de veins.
+     */
     public ArrayList<String[]> getRelevantNodesOfType(String type, int quantity){
         ArrayList<String[]> res = getNodesOfType(type);
         res.sort( (a, b) -> Integer.parseInt(b[2])-Integer.parseInt(a[2]) );
@@ -275,46 +431,45 @@ public class PresentationController {
         return res;
     }
 
+    /**
+     * Obte les arestes d'un determinat tipus
+     * @param type tipus de les arestes
+     * @return Retorna un ArrayList de parelles de String. En la primera posicio
+     * hi ha la id, en la segona, la id del vei.
+     */
     public ArrayList<String[]> getEdgesOfType(String type){
         ArrayList<String[]> res = new ArrayList<>();
         try{
             res = dc.getEdges(type);
         } catch (DomainException de) {
-            System.err.println(de.getFriendlyMessage());
-            we.executeScript("app.events.showInfo(\"Eps!\",\""+de.getFriendlyMessage()+"\", \"Cap problema\")");
+            handleException(de.getFriendlyMessage());
         }
         return res;
 
     }
 
+    /**
+     * Retorna el tamany del resultat a la consulta de veins.
+     * @param id id del node
+     * @param type tipus del node
+     * @return numero de veins
+     */
     public int queryNeighboursSize(String id, String type){
         int res = 0;
         try{
             dc.queryNeighbours(Integer.parseInt(id), type);
             res = dc.getResultSize();
         } catch (DomainException de) {
-            System.err.println(de.getFriendlyMessage());
-            we.executeScript("app.events.showInfo(\"Eps!\",\""+de.getFriendlyMessage()+"\", \"Cap problema\")");
+            handleException(de.getFriendlyMessage());
         }
         return res;
     }
 
-
-    private ArrayList<ArrayList<String>> basicResult() {
-        ArrayList<ArrayList<String>> r = new ArrayList<>();
-        result = new ArrayList<>();
-        ArrayList<String> fila;
-        int i = 1;
-        int numRows = MAX_ROWS;
-        if (numRows == 0) numRows = dc.getResultSize();
-        while (i <= numRows && (fila = dc.getResultRow()) != null) {
-            fila.set(0, String.valueOf((Integer.parseInt(fila.get(0)) + 1)));
-            r.add(fila);
-            ++i;
-        }
-        return r;
-    }
-
+    /**
+     *
+     * @param type
+     * @return
+     */
     public ArrayList<ArrayList<String>> queryByType(String type) {
         try {
             currentNumCols = 2;
