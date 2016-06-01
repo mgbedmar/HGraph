@@ -447,6 +447,7 @@ body > div.page{
 
 sub{
     vertical-align:middle;
+    cursor:pointer;
 }
 .mistery{
     font-size:8px;

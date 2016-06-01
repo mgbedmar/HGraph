@@ -70,17 +70,14 @@
             minEdgeSize: 0.2,
             maxEdgeSize: 0.5,
             eventsEnabled: true,
-            labelThreshold: 11.5,
+            labelThreshold: app.settings.labelThreshold,
             defaultEdgeType: "curve",
             autoRescale:true,
             edgeLabels:true,
             enableHovering:false, //etiquetes: posades no funciona be
             zoomMin:0.001, //no va
             zoomMax:2
-        },
-        relativeSize:0.5,
-        edgeLabels:true,
-        nooverlap:false
+        }
 
     };
 
@@ -88,19 +85,11 @@
     var _radius = 0.001;
     var _angle = 0;
 
-    var _pos = {
-        author: {x:0, y:0},
-        paper: {x:0, y:1},
-        term: {x:0, y:2},
-        conf: {x:0, y:3},
-        global: {x:0, y:4}
-    };
     var _cachedges={
         "author":[],
         "paper":[],
         "conf":[]
     };
-    var _sqrt;
 
     var _typeColor = {
         author: "steelblue",
@@ -256,7 +245,6 @@
             }, 200);
 
         }
-
         calc(ble[0], function(){
             _sarr[0] = new sigma({
                 graph:g,
@@ -267,7 +255,7 @@
                     type: 'canvas',
                     settings:{
                         font: 'sans-serif',
-                        labelThreshold: 6,
+                        labelThreshold: app.settings.labelThreshold,
                         hideEdgesOnMove: app.settings.hideEdges
                     }
                 }]
@@ -279,13 +267,10 @@
                 _sarr[0].camera.ratio=0.05;
 
 
-
-            _sarr[0].refresh();
-
             setTimeout(function(){
                 _sarr[0].refresh();
                 if(cbend) cbend();
-            },100);
+            },200);
 
 
         });
@@ -321,7 +306,7 @@
  
     app.graph.addNode = function(id, label, type){
         var pos;
-        pos = _getNextPosition();
+        pos = _getNextPosition(0.004, 0.0005);
 
         _sarr[0].graph.addNode({
             id: id+"-"+type,
@@ -333,6 +318,7 @@
         });
 
         _sarr[0].refresh();
+
 
     };
 
@@ -349,7 +335,7 @@
     };
 
     app.graph.removeNode = function(id, type){
-        _sarr[0].dropNode(id+"-"+type);
+        _sarr[0].graph.dropNode(id+"-"+type);
         _updateSize(_sarr[0].graph.nodes());
         _sarr[0].refresh();
     };

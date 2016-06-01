@@ -34,7 +34,7 @@
         maxEdges:7000,
         path:"APA",
         hideEdges:true,
-        showGraphInfo:true
+        labelThreshold:true
     };
 
     function _hide(selector, cb){
@@ -1164,7 +1164,6 @@
         else
             input.classList.remove("wrong");
         try{
-
             var id = app.HGraph.addNode(input.value, type);
             if(id != null)
             {
@@ -1229,18 +1228,23 @@
         var nodeRemoved = app.HGraph.removeNode(_inputChoices.source.id, _inputChoices.source.type);
         if(nodeRemoved)
         {
-            app.events.notify("S'ha esborrat el node ("+_inputChoices.source.id+")");
-            app.modified = true;
-            app.graph.removeNode(_inputChoices.source.id, _inputChoices.source.type);
-            var found = false;
-            var i;
-            for(i = 0; i < _nodes.length && !found; i++)
-            {
-                found = (_nodes[i][1] == _inputChoices.source.id && _nodes[i][2] == _inputChoices.source.type);
+            try{
+                app.events.notify("S'ha esborrat el node ("+_inputChoices.source.id+")");
+                app.modified = true;
+                app.graph.removeNode(_inputChoices.source.id, _inputChoices.source.type);
+                var found = false;
+                var i;
+                for(i = 0; i < _nodes.length && !found; i++)
+                {
+                    found = (_nodes[i][1] == _inputChoices.source.id && _nodes[i][2] == _inputChoices.source.type);
+                }
+                if(found)
+                    _nodes.splice((i-1), 1);
+
+            }catch(err){
+                app.HGraph.log(err);
             }
-            if(found)
-                _nodes.splice((i-1), 1);
-            
+
 
             
         }
@@ -1336,11 +1340,11 @@
             _tmpSettings.maxEdges = document.querySelector("#"+id+" .graphMaxEdges").value;
             //_tmpSettings.path = document.querySelector("#"+id+" .inputPath").value;
             _tmpSettings.hideEdges = document.querySelector("#"+id+" .hideEdges").checked;
-            _tmpSettings.showGraphInfo = document.querySelector("#"+id+" .showGraphInfo").checked;
+            _tmpSettings.labelThreshold = document.querySelector("#"+id+" .labelThreshold").value;
 
             var checkNumber = new RegExp("^[0-9]+$");
             if(!checkNumber.test(_tmpSettings.maxRows))
-            {app.HGraph.log("hoa 3iofd");
+            {
                 document.querySelector("#"+id+" .tableMaxRows").classList.add("wrong");
                 return false;
             }
@@ -1363,20 +1367,28 @@
             }
             else document.querySelector("#"+id+" .graphMaxEdges").classList.remove("wrong");
 
+            if(!checkNumber.test(document.querySelector("#"+id+" .labelThreshold").value))
+            {
+                document.querySelector("#"+id+" .labelThreshold").classList.add("wrong");
+                return false;
+
+            }
+            else document.querySelector("#"+id+" .labelThreshold").classList.remove("wrong");
+
             if (_tmpSettings.maxRows > app.settings.maxRecRows ||
                 _tmpSettings.maxNodes > app.settings.maxRecNodes ||
                 _tmpSettings.maxEdges > app.settings.maxRecEdges)
             {
                 app.events.hidePopup(function() {
                     app.events.showAccept("Avís.", "Algun dels paràmetres que has triat està per sobre dels "
-                    + "màxims recomanats, que són "+app.settings.maxRecRows+" files, "+app.settings.maxRecNodes
-                    + "nodes i "+app.settings.maxRecEdges+" arestes. El rendiment es podria veure afectat i, "
-                    + "en casos extrems, bloquejar el programa. Continua sota la teva responsabilitat.",
-                    "Continua", function() {
-                        app.events.submitSettings(id, e, true);
-                    }, "Cancela", function() {
-                        app.events.showSettings();
-                    });
+                        + "màxims recomanats, que són "+app.settings.maxRecRows+" files, "+app.settings.maxRecNodes
+                        + "nodes i "+app.settings.maxRecEdges+" arestes. El rendiment es podria veure afectat i, "
+                        + "en casos extrems, bloquejar el programa. Continua sota la teva responsabilitat.",
+                        "Continua", function() {
+                            app.events.submitSettings(id, e, true);
+                        }, "Cancela", function() {
+                            app.events.showSettings();
+                        });
                 });
                 return false;
             }
@@ -1387,7 +1399,7 @@
         app.settings.maxNodes = _tmpSettings.maxNodes;
         app.settings.maxEdges = _tmpSettings.maxEdges;
         app.settings.hideEdges = _tmpSettings.hideEdges;
-        app.settings.showGraphInfo = _tmpSettings.showGraphInfo;
+        app.settings.labelThreshold = _tmpSettings.labelThreshold;
         app.events.notify("S'ha guardat la configuració");
         app.events.hidePopup(function(){
             app.events.notify("Actualitzant el graf...");
@@ -1396,6 +1408,8 @@
                 _initMain(app.events.hidePopup);
             }, 10);
         });
+
+
 
     };
 
@@ -1414,7 +1428,7 @@
         document.querySelector("#"+content.id+" .graphMaxNodes").value = app.settings.maxNodes;
         document.querySelector("#"+content.id+" .graphMaxEdges").value = app.settings.maxEdges;
         document.querySelector("#"+content.id+" .hideEdges").checked = app.settings.hideEdges;
-        document.querySelector("#"+content.id+" .showGraphInfo").checked = app.settings.showGraphInfo;
+        document.querySelector("#"+content.id+" .labelThreshold").value = app.settings.labelThreshold;
         
 
     };

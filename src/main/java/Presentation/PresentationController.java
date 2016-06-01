@@ -49,7 +49,6 @@ public class PresentationController {
             if(id > bigger)
                 bigger = id;
         }
-
         return bigger;
     }
 

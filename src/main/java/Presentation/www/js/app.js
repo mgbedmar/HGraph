@@ -17,7 +17,7 @@ var app = app || {};
         maxRows: 100,
         maxRecRows:300,
         hideEdges: false,
-        showGraphInfo: false,
+        labelThreshold: 10,
         marginRatio:{
             "author": 0.5,
             "paper": 0.1,
@@ -215,8 +215,7 @@ var app = app || {};
 
         document.getElementById("noEdges").addEventListener("click", app.events.noEdges);
         document.getElementById("allEdges").addEventListener("click", app.events.allEdges);
-        
-        //document.querySelector("#mainPage a[data-action=welcome]").addEventListener("click", mainGoToWelcome);
+
 
         _initShortcuts();
         setTimeout(function(){
