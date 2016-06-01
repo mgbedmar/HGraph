@@ -11,8 +11,11 @@ var app = app || {};
     app.newProject = true;
     app.settings={
         maxNodes:3000,
+        maxRecNodes:5000,
         maxEdges:4000,
-        maxRows: 200,
+        maxRecEdges:7000,
+        maxRows: 100,
+        maxRecRows:300,
         hideEdges: false,
         showGraphInfo: false,
         marginRatio:{

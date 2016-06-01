@@ -130,6 +130,10 @@ public class PresentationController {
         stage = stg;
     }
 
+    public void setMaxRows(int maxRows) {
+        MAX_ROWS = maxRows;
+    }
+
     public String[] getProjects(){
         return dc.getProjectList();
     }

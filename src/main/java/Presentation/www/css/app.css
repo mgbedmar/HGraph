@@ -438,6 +438,13 @@ body > div.page{
 #popupContent .help .faq p {
     margin: 10px 0px;
 }
+
+
+
+#popupContent .inputRight input {
+    margin-left:50px;
+}
+
 sub{
     vertical-align:middle;
 }
