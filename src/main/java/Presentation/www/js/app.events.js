@@ -1321,8 +1321,8 @@
         e.preventDefault();
         if (typeof directe === 'undefined' && !directe) {
             _tmpSettings.maxRows = document.querySelector("#"+id+" .tableMaxRows").value;
-            _tmpSettings.maxNodes = document.querySelector("#"+id+" .graphMaxNodes");
-            _tmpSettings.maxEdges = document.querySelector("#"+id+" .graphMaxEdges");
+            _tmpSettings.maxNodes = document.querySelector("#"+id+" .graphMaxNodes").value;
+            _tmpSettings.maxEdges = document.querySelector("#"+id+" .graphMaxEdges").value;
             //_tmpSettings.path = document.querySelector("#"+id+" .inputPath").value;
             _tmpSettings.hideEdges = document.querySelector("#"+id+" .hideEdges").checked;
             _tmpSettings.showGraphInfo = document.querySelector("#"+id+" .showGraphInfo").checked;
@@ -1385,6 +1385,7 @@
                 _initMain(app.events.hidePopup);
             }, 10);
         });
+
     };
 
     app.events.showSettings = function(){
