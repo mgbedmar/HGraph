@@ -28,6 +28,15 @@
 
     var _basic = false;
 
+    var _tmpSettings = {
+        maxRows:100,
+        maxNodes:3000,
+        maxEdges:7000,
+        path:"APA",
+        hideEdges:true,
+        showGraphInfo:true
+    };
+
     function _hide(selector, cb){
         document.getElementById(selector).classList.remove("show");
         setTimeout(function(){
@@ -1267,35 +1276,71 @@
 
     };
 
-    app.events.submitSettings = function(id, e){
+    app.events.submitSettings = function(id, e, directe){ try{
         e.preventDefault();
-        var checkNumber = new RegExp("^[0-9]+$");
-        if(!checkNumber.test(document.querySelector("#"+id+" .tableMaxRows").value))
-        {
-            document.querySelector("#"+id+" .tableMaxRows").classList.add("wrong");
-            return false;
-        }
-        else
-            document.querySelector("#"+id+" .tableMaxRows").classList.remove("wrong");
-        if(!checkNumber.test(document.querySelector("#"+id+" .graphMaxNodes").value))
-        {
-            document.querySelector("#"+id+" .graphMaxNodes").classList.add("wrong");
-            return false;
+        app.HGraph.log("hola");
+        if (typeof directe === 'undefined' && !directe) {
+            app.HGraph.log("hola");
+            _tmpSettings.maxRows = document.querySelector("#"+id+" .tableMaxRows").value;
+            _tmpSettings.maxNodes = document.querySelector("#"+id+" .graphMaxNodes");
+            _tmpSettings.maxEdges = document.querySelector("#"+id+" .graphMaxEdges");
+            //_tmpSettings.path = document.querySelector("#"+id+" .inputPath").value;
+            _tmpSettings.hideEdges = document.querySelector("#"+id+" .hideEdges").checked;
+            _tmpSettings.showGraphInfo = document.querySelector("#"+id+" .showGraphInfo").checked;
+
+            var checkNumber = new RegExp("^[0-9]+$");
+            if(!checkNumber.test(_tmpSettings.maxRows))
+            {app.HGraph.log("hoa 3iofd");
+                document.querySelector("#"+id+" .tableMaxRows").classList.add("wrong");
+                return false;
+            }
+            else
+                document.querySelector("#"+id+" .tableMaxRows").classList.remove("wrong");
+
+                app.HGraph.log("hoa 3iofd");
+            if(!checkNumber.test(document.querySelector("#"+id+" .graphMaxNodes").value))
+            {
+                document.querySelector("#"+id+" .graphMaxNodes").classList.add("wrong");
+                return false;
+
+            }
+            else document.querySelector("#"+id+" .graphMaxNodes").classList.remove("wrong");
+
+            app.HGraph.log("hoa 3iofd");
+            if(!checkNumber.test(document.querySelector("#"+id+" .graphMaxEdges").value))
+            {
+                document.querySelector("#"+id+" .graphMaxEdges").classList.add("wrong");
+                return false;
+
+            }
+            else document.querySelector("#"+id+" .graphMaxEdges").classList.remove("wrong");
+
+app.HGraph.log("hoa 3iofd");
+            if (_tmpSettings.maxRows > app.settings.maxRecRows ||
+                _tmpSettings.maxNodes > app.settings.maxRecNodes ||
+                _tmpSettings.maxEdges > app.settings.maxRecEdges)
+            {
+                app.events.hidePopup(function() {
+                    app.events.showAccept("Avís.", "Algun dels paràmetres que has triat està per sobre dels "
+                    + "màxims recomanats, que són "+app.settings.maxRecRows+" files, "+app.settings.maxRecNodes
+                    + "nodes i "+app.settings.maxRecEdges+" arestes. El rendiment es podria veure afectat i, "
+                    + "en casos extrems, bloquejar el programa. Continua sota la teva responsabilitat.",
+                    "Continua", function() {
+                        app.events.submitSettings(id, e, true);
+                    }, "Cancela", function() {
+                        app.events.showSettings();
+                    });
+                });
+                return false;
+            }
 
         }
-        else document.querySelector("#"+id+" .graphMaxNodes").classList.remove("wrong");
-        if(!checkNumber.test(document.querySelector("#"+id+" .graphMaxEdges").value))
-        {
-            document.querySelector("#"+id+" .graphMaxEdges").classList.add("wrong");
-            return false;
-
-        }
-        else document.querySelector("#"+id+" .graphMaxEdges").classList.remove("wrong");
-        app.settings.maxRows = document.querySelector("#"+id+" .tableMaxRows").value;
-        app.settings.maxNodes = document.querySelector("#"+id+" .graphMaxNodes").value;
-        app.settings.maxEdges = document.querySelector("#"+id+" .graphMaxEdges").value;
-        app.settings.hideEdges = document.querySelector("#"+id+" .hideEdges").checked;
-        app.settings.showGraphInfo = document.querySelector("#"+id+" .showGraphInfo").checked;
+        app.settings.maxRows = _tmpSettings.maxRows;
+        app.HGraph.MAX_ROWS = _tmpSettings.maxRecRows;
+        app.settings.maxNodes = _tmpSettings.maxNodes;
+        app.settings.maxEdges = _tmpSettings.maxEdges;
+        app.settings.hideEdges = _tmpSettings.hideEdges;
+        app.settings.showGraphInfo = _tmpSettings.showGraphInfo;
         app.events.notify("S'ha guardat la configuració");
         app.events.hidePopup(function(){
             app.events.notify("Actualitzant el graf...");
@@ -1304,11 +1349,11 @@
                 _initMain(app.events.hidePopup);
             }, 10);
         });
-
+}catch(err) {app.HGraph.log(err); }
     };
 
     app.events.showSettings = function(){
-        var content = document.getElementById("ajustes").cloneNode(true);
+ try{       var content = document.getElementById("ajustes").cloneNode(true);
         content.id=content.id+1;
         app.events.showPopup(content);
 
@@ -1324,7 +1369,7 @@
         document.querySelector("#"+content.id+" .hideEdges").checked = app.settings.hideEdges;
         document.querySelector("#"+content.id+" .showGraphInfo").checked = app.settings.showGraphInfo;
         
-        
+        }catch(err) { app.HGraph.log(err); }
     };
 
     app.events.showHelp = function(){

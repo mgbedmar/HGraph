@@ -28,7 +28,7 @@ public class PresentationController {
     private DomainController dc;
     private WebEngine we;
     private Stage stage;
-    private int MAX_ROWS = 100;
+    public int MAX_ROWS = 100;
     private String query1To1Result;
     private ArrayList<ArrayList<String>> result;
     private int currentNumCols;

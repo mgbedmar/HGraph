@@ -210,6 +210,15 @@ public class DomainController
     }
 
     /**
+     * Rep un cami expressat com al paper i canvia el path per defecte.
+     * @param path path nou
+     */
+    public void modifyPath(String path) {
+
+
+    }
+
+    /**
      * Coloca a <em>r</em> el resultat de fer una consulta N a N
      * @param typeSource Tipus font
      * @param typeEnd Tipus desti
