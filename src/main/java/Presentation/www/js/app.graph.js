@@ -273,15 +273,27 @@
 
         calc(ble[0], function(){
             _sarr[0] = new sigma({
-                container: 'graph-container',
                 graph:g,
                 settings: _settings.graph,
-                clone:false
+                clone:false,
+                renderers:[{
+                    container: document.getElementById("graph-container"),
+                    type: 'canvas',
+                    settings:{
+                        font: 'sans-serif',
+                        labelThreshold: 6,
+                        hideEdgesOnMove: app.settings.hideEdges
+                    }
+                }]
             });
+
             if(_largeGraph)
                 _sarr[0].camera.ratio=0.3;
             else
                 _sarr[0].camera.ratio=0.05;
+
+
+
             _sarr[0].refresh();
 
             setTimeout(function(){
@@ -328,19 +340,9 @@
  
     app.graph.addNode = function(id, label, type){
         var pos;
-        var index =_sarr.length-1;
-        if(_largeGraph)
-        {
-            pos = _getNextPosition();
-            index--;
-        }
-        else
-        {
-            _sqrt = Math.sqrt(_sqrt+1);
-            pos = _getNextSmallPosition(_sqrt, type)
-        }
+        pos = _getNextPosition();
 
-        _sarr[index].graph.addNode({
+        _sarr[0].graph.addNode({
             id: id+"-"+type,
             label: label,
             x: pos.x,
@@ -349,7 +351,7 @@
             color: _typeColor[type]
         });
 
-        _sarr[_sarr.length-1].refresh();
+        _sarr[0].refresh();
 
     };
 
@@ -366,32 +368,16 @@
     };
 
     app.graph.removeNode = function(id, type){
-
-        for(var i = 0; i < _sarr.length; i++)
-        {
-            try {
-                _sarr[i].graph.dropNode(id+"-"+type);
-                _updateSize(_sarr[i].graph.nodes());
-                _sarr[i].refresh();
-            }
-            catch(err)
-            {
-                //app.HGraph.log("no:"+err);
-            }
-        }
+        _sarr[0].dropNode(id+"-"+type);
+        _updateSize(_sarr[0].graph.nodes());
+        _sarr[0].refresh();
     };
 
     app.graph.removeEdge = function(destId, destType, paperId){
 
-        try {
-            _sarr[0].graph.dropEdge(paperId+"-"+destType+"-"+destId);
-            _updateSize(_sarr[0].graph.nodes());
-            _sarr[0].refresh();
-        }
-        catch(err)
-        {
-            //app.HGraph.log("no:"+err);
-        }
+        _sarr[0].graph.dropEdge(paperId+"-"+destType+"-"+destId);
+        _updateSize(_sarr[0].graph.nodes());
+        _sarr[0].refresh();
 
     };
 

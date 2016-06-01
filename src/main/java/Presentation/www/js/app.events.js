@@ -498,7 +498,7 @@
 
         if(app.graph.isLarge())
         {
-            _drawPartialGraph(cb);
+            _drawRelevanceGraph(cb);
         }
         else
         {
@@ -546,7 +546,7 @@
 
 
     //QueryMenu functions
-    function _drawPartialGraph(cb){
+    function _drawRelevanceGraph(cb){
         var nodeobj = {};
 
         //TODO: node distribution?
@@ -915,7 +915,7 @@
     app.events.allEdges = function(){
         if(!_partialGraphDrawn){
             app.events.showDrawing();
-            _drawPartialGraph(function(){
+            _drawRelevanceGraph(function(){
                 app.graph.allEdges();
                 app.events.hidePopup();
             });
@@ -926,7 +926,7 @@
     app.events.noEdges = function(){
         if(!_partialGraphDrawn){
             app.events.showDrawing();
-            _drawPartialGraph(function(){
+            _drawRelevanceGraph(function(){
                 app.graph.noEdges();
                 app.events.hidePopup();
             });
@@ -946,7 +946,7 @@
         if(!_partialGraphDrawn){
             app.events.showDrawing();
             if(app.graph.isLarge())
-                _drawPartialGraph(function(){
+                _drawRelevanceGraph(function(){
                     app.graph.selectEdges(type);
                     app.events.hidePopup();
                 });
@@ -1125,10 +1125,9 @@
         var typeSelector = document.querySelector("#addNodeSection .typeSelector");
         var type = typeSelector.dataset.selection;
         var input = document.querySelector("#addNodeSection input");
-        //TODO: nopopups?
         if(!type)
         {
-            app.events.showInfo("Informació","Si us plau, selecciona un tipus", "D'acord");
+            app.events.notify("Si us plau, selecciona un tipus");
             typeSelector.classList.add("wrong");
             return;
         }
@@ -1137,20 +1136,25 @@
 
         if(!input.value)
         {
-            app.events.showInfo("Informació","Si us plau, escriu un nom", "D'acord");
+            app.events.notify("Si us plau, escriu un nom");
             input.classList.add("wrong");
             return;
         }
         else
             input.classList.remove("wrong");
+        try{
 
-        var id = app.HGraph.addNode(input.value, type);
-        if(id != null)
-        {
-            app.graph.addNode(id, input.value, type);
-            app.events.notify("S'ha creat el node "+input.value);
-            _nodes.push([String(input.value),String(id), type]);
-            app.modified = true;
+            var id = app.HGraph.addNode(input.value, type);
+            if(id != null)
+            {
+                app.graph.addNode(id, input.value, type);
+                app.events.notify("S'ha creat el node "+input.value);
+                _nodes.push([String(input.value),String(id), type]);
+                app.modified = true;
+            }
+
+        }catch(err){
+            app.HGraph.log(err);
         }
 
 
