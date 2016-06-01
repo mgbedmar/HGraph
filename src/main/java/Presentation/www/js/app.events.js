@@ -1317,7 +1317,7 @@
 
     };
 
-    app.events.submitSettings = function(id, e, directe){ try{
+    app.events.submitSettings = function(id, e, directe){
         e.preventDefault();
         if (typeof directe === 'undefined' && !directe) {
             _tmpSettings.maxRows = document.querySelector("#"+id+" .tableMaxRows").value;
