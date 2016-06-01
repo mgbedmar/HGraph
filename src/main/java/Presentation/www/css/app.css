@@ -438,6 +438,12 @@ body > div.page{
 #popupContent .help .faq p {
     margin: 10px 0px;
 }
+sub{
+    vertical-align:middle;
+}
+.mistery{
+    font-size:8px;
+}
 /*Autocompletes*/
 .autocomplete-suggestion:hover{
     border-top:thin solid rgba(200,200,255,0.3);

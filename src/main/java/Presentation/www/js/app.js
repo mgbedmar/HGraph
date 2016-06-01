@@ -12,7 +12,7 @@ var app = app || {};
     app.settings={
         maxNodes:3000,
         maxRecNodes:5000,
-        maxEdges:7000,
+        maxEdges:4000,
         maxRecEdges:7000,
         maxRows: 100,
         maxRecRows:300,
@@ -191,6 +191,9 @@ var app = app || {};
             .addEventListener("click", app.events.showSettings);
         document.querySelector("#mainPage #mainMenu ul li[data-action=showHelp]")
             .addEventListener("click", app.events.showHelp);
+
+        document.getElementById("noEdges").addEventListener("click", app.events.noEdges);
+        document.getElementById("allEdges").addEventListener("click", app.events.allEdges);
         
         //document.querySelector("#mainPage a[data-action=welcome]").addEventListener("click", mainGoToWelcome);
 

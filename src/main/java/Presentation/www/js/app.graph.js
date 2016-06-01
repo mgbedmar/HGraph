@@ -161,6 +161,14 @@
         _sarr =[];
     }
 
+    function _clearEdges(){
+        var edges = _sarr[0].graph.edges();
+        for(var i = 0; i < edges.length; i++)
+        {
+            _sarr[0].graph.dropEdge(edges[i].id);
+        }
+    }
+
     //Public
     app.graph = {};
 
@@ -174,7 +182,7 @@
     };
 
     //Draws a graph. id edgeType is specified, then draws only edges of type edgeType
-    app.graph.drawGraph = function(nodes, edges, baseType, cbend, edgeType){
+    app.graph.drawGraph = function(nodes, edges, baseType, cbend){
         var g={nodes:[], edges:[]};
         _cachedges = {
             "author":[],
@@ -235,7 +243,7 @@
             {
                 var typeColor = type;
                 if (type == "paper") typeColor = baseType;
-                for (var i = 0; i < edges[type].size() && i < app.settings.maxEdges; i++)
+                for (var i = 0; i < edges[type].size() && j < app.settings.maxEdges; i++)
                 {
 
                     if(exists[type][String(edges[type].get(i)[1])] && exists[baseType][String(edges[type].get(i)[0])]){
@@ -264,36 +272,34 @@
         }
 
         calc(ble[0], function(){
-            if(edgeType)
-                g.edges = _cachedges[edgeType];
-            else
-            {
-                if(_cachedges["author"].length)
-                    g.edges = _cachedges["author"];
-                if(_cachedges["conf"].length)
-                    g.edges = g.edges.concat(_cachedges["conf"]);
-                if(_cachedges["term"].length)
-                    g.edges = g.edges.concat(_cachedges["term"]);
-                if(_cachedges["paper"].length)
-                    g.edges = g.edges.concat(_cachedges["paper"]);
-            }
             _sarr[0] = new sigma({
-                container: 'graph-container',
                 graph:g,
                 settings: _settings.graph,
-                clone:false
+                clone:false,
+                renderers:[{
+                    container: document.getElementById("graph-container"),
+                    type: 'canvas',
+                    settings:{
+                        font: 'sans-serif',
+                        labelThreshold: 6,
+                        hideEdgesOnMove: app.settings.hideEdges
+                    }
+                }]
             });
-            if(edgeType)
+
+            if(_largeGraph)
                 _sarr[0].camera.ratio=0.3;
+            else
+                _sarr[0].camera.ratio=0.05;
+
+
 
             _sarr[0].refresh();
-            document.getElementById("graph-container").style.opacity=0;
 
             setTimeout(function(){
                 _sarr[0].refresh();
-                document.getElementById("graph-container").style.opacity=1;
                 if(cbend) cbend();
-            },500);
+            },100);
 
 
         });
@@ -301,15 +307,28 @@
     };
 
     app.graph.selectEdges = function(type){
-        var edges = _sarr[0].graph.edges();
-        for(var i = 0; i < edges.length; i++)
-        {
-            _sarr[0].graph.dropEdge(edges[i].id);
-        }
+        _clearEdges();
 
         _sarr[0].graph.read({edges:_cachedges[type]});
         _sarr[0].refresh();
 
+    };
+    app.graph.allEdges = function(){
+        var edges = [];
+        _clearEdges();
+        for(var type in _cachedges)
+        {
+            if(_cachedges.hasOwnProperty(type))
+            {
+                edges = edges.concat(_cachedges[type]);
+            }
+        }
+        _sarr[0].graph.read({edges:edges});
+        _sarr[0].refresh();
+    };
+    app.graph.noEdges = function(){
+        _clearEdges();
+        _sarr[0].refresh();
     };
     //Draws a bigraph representing a table. Each connected component must be < maxNodes
     app.graph.drawTableBasedGraph = function(nodes, edges, cb){
@@ -321,19 +340,9 @@
  
     app.graph.addNode = function(id, label, type){
         var pos;
-        var index =_sarr.length-1;
-        if(_largeGraph)
-        {
-            pos = _getNextPosition();
-            index--;
-        }
-        else
-        {
-            _sqrt = Math.sqrt(_sqrt+1);
-            pos = _getNextSmallPosition(_sqrt, type)
-        }
+        pos = _getNextPosition();
 
-        _sarr[index].graph.addNode({
+        _sarr[0].graph.addNode({
             id: id+"-"+type,
             label: label,
             x: pos.x,
@@ -342,7 +351,7 @@
             color: _typeColor[type]
         });
 
-        _sarr[_sarr.length-1].refresh();
+        _sarr[0].refresh();
 
     };
 
@@ -359,32 +368,16 @@
     };
 
     app.graph.removeNode = function(id, type){
-
-        for(var i = 0; i < _sarr.length; i++)
-        {
-            try {
-                _sarr[i].graph.dropNode(id+"-"+type);
-                _updateSize(_sarr[i].graph.nodes());
-                _sarr[i].refresh();
-            }
-            catch(err)
-            {
-                //app.HGraph.log("no:"+err);
-            }
-        }
+        _sarr[0].dropNode(id+"-"+type);
+        _updateSize(_sarr[0].graph.nodes());
+        _sarr[0].refresh();
     };
 
     app.graph.removeEdge = function(destId, destType, paperId){
 
-        try {
-            _sarr[0].graph.dropEdge(paperId+"-"+destType+"-"+destId);
-            _updateSize(_sarr[0].graph.nodes());
-            _sarr[0].refresh();
-        }
-        catch(err)
-        {
-            //app.HGraph.log("no:"+err);
-        }
+        _sarr[0].graph.dropEdge(paperId+"-"+destType+"-"+destId);
+        _updateSize(_sarr[0].graph.nodes());
+        _sarr[0].refresh();
 
     };
 
