@@ -28,7 +28,7 @@ public class PresentationController {
     private DomainController dc;
     private WebEngine we;
     private Stage stage;
-    public int MAX_ROWS = 100;
+    private int MAX_ROWS = 100;
     private String query1To1Result;
     private ArrayList<ArrayList<String>> result;
     private int currentNumCols;
@@ -128,6 +128,10 @@ public class PresentationController {
         dc = new DomainController();
         we = webEngine;
         stage = stg;
+    }
+
+    public void setMaxRows(int maxRows) {
+        MAX_ROWS = maxRows;
     }
 
     public String[] getProjects(){

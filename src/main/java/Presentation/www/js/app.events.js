@@ -804,6 +804,7 @@
         var div = document.createElement("div");
         div.classList.add("accept");
         div.classList.add("with-border");
+        div.classList.add("inputRight");
         var title = document.createElement("h1");
         title.innerHTML = t || "Pregunta";
         var text = document.createElement("span");
@@ -1318,9 +1319,7 @@
 
     app.events.submitSettings = function(id, e, directe){ try{
         e.preventDefault();
-        app.HGraph.log("hola");
         if (typeof directe === 'undefined' && !directe) {
-            app.HGraph.log("hola");
             _tmpSettings.maxRows = document.querySelector("#"+id+" .tableMaxRows").value;
             _tmpSettings.maxNodes = document.querySelector("#"+id+" .graphMaxNodes");
             _tmpSettings.maxEdges = document.querySelector("#"+id+" .graphMaxEdges");
@@ -1337,7 +1336,6 @@
             else
                 document.querySelector("#"+id+" .tableMaxRows").classList.remove("wrong");
 
-                app.HGraph.log("hoa 3iofd");
             if(!checkNumber.test(document.querySelector("#"+id+" .graphMaxNodes").value))
             {
                 document.querySelector("#"+id+" .graphMaxNodes").classList.add("wrong");
@@ -1346,7 +1344,6 @@
             }
             else document.querySelector("#"+id+" .graphMaxNodes").classList.remove("wrong");
 
-            app.HGraph.log("hoa 3iofd");
             if(!checkNumber.test(document.querySelector("#"+id+" .graphMaxEdges").value))
             {
                 document.querySelector("#"+id+" .graphMaxEdges").classList.add("wrong");
@@ -1355,7 +1352,6 @@
             }
             else document.querySelector("#"+id+" .graphMaxEdges").classList.remove("wrong");
 
-app.HGraph.log("hoa 3iofd");
             if (_tmpSettings.maxRows > app.settings.maxRecRows ||
                 _tmpSettings.maxNodes > app.settings.maxRecNodes ||
                 _tmpSettings.maxEdges > app.settings.maxRecEdges)
@@ -1376,7 +1372,7 @@ app.HGraph.log("hoa 3iofd");
 
         }
         app.settings.maxRows = _tmpSettings.maxRows;
-        app.HGraph.MAX_ROWS = _tmpSettings.maxRecRows;
+        app.HGraph.setMaxRows(_tmpSettings.maxRows);
         app.settings.maxNodes = _tmpSettings.maxNodes;
         app.settings.maxEdges = _tmpSettings.maxEdges;
         app.settings.hideEdges = _tmpSettings.hideEdges;
@@ -1389,11 +1385,10 @@ app.HGraph.log("hoa 3iofd");
                 _initMain(app.events.hidePopup);
             }, 10);
         });
-}catch(err) {app.HGraph.log(err); }
     };
 
     app.events.showSettings = function(){
- try{       var content = document.getElementById("ajustes").cloneNode(true);
+        var content = document.getElementById("ajustes").cloneNode(true);
         content.id=content.id+1;
         app.events.showPopup(content);
 
@@ -1409,7 +1404,7 @@ app.HGraph.log("hoa 3iofd");
         document.querySelector("#"+content.id+" .hideEdges").checked = app.settings.hideEdges;
         document.querySelector("#"+content.id+" .showGraphInfo").checked = app.settings.showGraphInfo;
         
-        }catch(err) { app.HGraph.log(err); }
+
     };
 
     app.events.showHelp = function(){
