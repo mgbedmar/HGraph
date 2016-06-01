@@ -134,18 +134,6 @@
         return pos;
     }
 
-    function _getNextSmallPosition(sqrt, type) {
-
-        _pos[type].x++;
-
-        /*if (_pos[type].x > sqrt+1) {
-            _pos[type].x = 1;
-            _pos[type].y = _pos.global.y;
-            _pos.global.y++;
-        }*/
-        return _pos[type];
-    }
-
     function _clearGraphs(){
         if (typeof _sarr != 'undefined')
         {
