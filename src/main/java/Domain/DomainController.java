@@ -399,8 +399,8 @@ public class DomainController
 
     /**
      * Guarda el graf amb el nom especificat
-     * @param name
-     * @throws DomainException
+     * @param name nom del projecte
+     * @throws DomainException no s'ha pogut guardar el graf
      */
     public void save(String name) throws DomainException {
         try {
@@ -682,11 +682,13 @@ public class DomainController
     }
 
     /**
-     * Dona tots els nodes de tipus <em>type</em> del graf, en format portable.
-     * @param type tipus dels nodes que es consulten
+     * Dona tots els veins de tipus <em>typeEnd</em> del node donat.
+     * @param id id del node
+     * @param type tipus del node
+     * @param typeEnd tipus dels veins
      * @return Retorna un ArrayList de parelles de String. En la primera posicio
      * hi ha la id, en la segona, el nom i en la tercera el numero de veins
-     * @throws DomainException si el tipus <em>type</em> es incorrecte
+     * @throws DomainException si el tipus <em>type</em> es incorrecte o el node no existeix
      */
     public ArrayList<String[]> getNeighbours(int id, String type, String typeEnd) throws DomainException {
         ArrayList<String[]> l = new ArrayList<>();
@@ -703,8 +705,10 @@ public class DomainController
     }
 
     /**
-     * Dona totes les arestes de nodes de tipus Paper cap a nodes de tipus <em>type</em>.
-     * @param type tipus desti de les arestes
+     * Dona les arestes del node donat cap a nodes de tipus <em>typeEnd</em>, en format portable.
+     * @param id id del node
+     * @param type tipus del node
+     * @param typeEnd tipus desti de les arestes
      * @return Un ArrayList de parelles de String. En la primera posicio hi ha la id
      * del paper i en la segona, la id del vei de tipus <em>type</em>
      * @throws DomainException si el tipus <em>type</em> es incorrecte

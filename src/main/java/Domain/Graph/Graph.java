@@ -111,10 +111,10 @@ public class Graph {
     public Graph()
     {
 		elements = new TreeMap<>();
-		elements.put(Author.TYPE, new HashMap<>());
-		elements.put(Paper.TYPE, new HashMap<>());
-		elements.put(Conf.TYPE,new HashMap<>());
-		elements.put(Term.TYPE,new HashMap<>());
+		elements.put(Author.TYPE, new HashMap<Node,Node>());
+		elements.put(Paper.TYPE, new HashMap<Node,Node>());
+		elements.put(Conf.TYPE,new HashMap<Node,Node>());
+		elements.put(Term.TYPE,new HashMap<Node,Node>());
 
         dicNameNodes = new HashMap<>();
 

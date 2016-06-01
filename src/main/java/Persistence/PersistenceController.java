@@ -277,7 +277,7 @@ public class PersistenceController {
 
     /**
      * Confirma els canvis guardats fins ara i esborra els backups.
-     * @throws PersistenceException
+     * @throws PersistenceException error IO
      */
     public void commit() throws PersistenceException {
         try {

@@ -105,7 +105,8 @@ public class ProjectManager {
 
     /**
      * Comprova si esta ben format el projecte.
-     * @path path del projecte
+     * @param path path del projecte
+     * @return cert si existeix
      * @throws IOException error IO
      */
     private boolean checkFolder(String path) throws IOException {

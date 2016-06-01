@@ -88,6 +88,7 @@ public class GraphFileManager {
      * Dona una linia (dos strings) del fitxer que s'estigui llegint actualment
      * (i.e. el del reader).
      * @return la linia que toca del fitxer obert
+     * @throws PersistenceException si hi ha error IO
      * @throws IOException si hi ha error IO
      */
     private String[] getLine() throws IOException, PersistenceException {
@@ -418,7 +419,6 @@ public class GraphFileManager {
      * Guarda una nova aresta al graf. Una vegada es comencen a guardar arestes d'aquest tipus,
      * s'han de guardar totes.
      * @param data (id_paper, id_altre)
-     * @throws PersistenceException si no existeix el fitxer
      * @throws IOException error IO
      */
     public void addPaperTerm(String[] data) throws IOException {
@@ -429,7 +429,6 @@ public class GraphFileManager {
      * Guarda una nova aresta al graf. Una vegada es comencen a guardar arestes d'aquest tipus,
      * s'han de guardar totes.
      * @param data (id_paper, id_altre)
-     * @throws PersistenceException si no existeix el fitxer
      * @throws IOException error IO
      */
     public void addPaperConf(String[] data) throws IOException {

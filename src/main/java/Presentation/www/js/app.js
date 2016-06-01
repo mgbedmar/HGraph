@@ -58,7 +58,9 @@ var app = app || {};
         //Adds a delay before showing the main screen
         dramaticWait: 500,
         //Page transition duration
-        transitionDelay: 200
+        transitionDelay: 200,
+
+        defaultSize: 5
     };
 
 

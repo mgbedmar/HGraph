@@ -327,7 +327,7 @@ public class PresentationController {
      * @param typeA tipus del node A
      * @param idB id del node B
      * @param typeB nom
-     * @return
+     * @return cert si l'aresta s'ha afegit
      */
     public boolean addEdge(int idA, String typeA, int idB, String typeB){
         try {
@@ -340,13 +340,20 @@ public class PresentationController {
         return false;
     }
 
-    public boolean removeEdge(int idA, String nameA, int idB, String nameB){
+    /**
+     * Esborra una aresta al graf entre el node A i el B
+     * @param idA id del node A
+     * @param typeA tipus del node A
+     * @param idB id del node B
+     * @param typeB nom
+     * @return cert si l'aresta s'ha esborrat
+     */
+    public boolean removeEdge(int idA, String typeA, int idB, String typeB){
         try {
-            dc.removeEdge(idA, nameA, idB, nameB);
+            dc.removeEdge(idA, typeA, idB, typeB);
             return true;
         } catch (DomainException de) {
-            System.err.println(de.getFriendlyMessage());
-            we.executeScript("app.events.showInfo(\"Eps!\",\""+de.getFriendlyMessage()+"\", \"Cap problema\")");
+            handleException(de.getFriendlyMessage());
         }
 
         return false;
@@ -466,9 +473,9 @@ public class PresentationController {
     }
 
     /**
-     *
-     * @param type
-     * @return
+     * Fa una consulta per tipus del tipus <em>type</em>.
+     * @param type tipus de la consulta
+     * @return resultat
      */
     public ArrayList<ArrayList<String>> queryByType(String type) {
         try {
@@ -476,24 +483,35 @@ public class PresentationController {
             dc.queryByType(type);
             return basicResult();
         } catch (DomainException e) {
-            String scr = "app.events.showInfo(\"Error\", \"" + e.getFriendlyMessage() + "\", \"OK\");";
-            we.executeScript("app.events.hidePopup(function(){"+scr+"});");
+            handleException(e.getFriendlyMessage());
         }
         return null;
     }
 
+    /**
+     * Fa una consulta de veins del node donat.
+     * @param id id del node
+     * @param type tipus del node
+     * @return resultat
+     */
     public ArrayList<ArrayList<String>> queryNeighbours(String id, String type) {
         try {
             currentNumCols = 2;
             dc.queryNeighbours(Integer.parseInt(id), type);
             return basicResult();
         } catch (DomainException e) {
-            String scr = "app.events.showInfo(\"Error\", \"" + e.getFriendlyMessage() + "\", \"OK\");";
-            we.executeScript("app.events.hidePopup(function(){"+scr+"});");
+            handleException(e.getFriendlyMessage());
         }
         return null;
     }
 
+    /**
+     * Consulta dels veins d'un node de tipus <em>typeEnd</em>.
+     * @param id id del node
+     * @param type tipus del node
+     * @param typeEnd tipus dels veins a consultar
+     * @return resultat
+     */
     public ArrayList<ArrayList<String>> queryNeighboursOfType(String id, String type, String typeEnd) {
         try {
             currentNumCols = 2;
@@ -506,7 +524,13 @@ public class PresentationController {
         return null;
     }
 
-    /* Inicia una tasca per calcular una consulta 1 a 1 */
+    /**
+     * Fa una consulta 1 a 1 entre els dos nodes donats, en un thread separat.
+     * @param idSource id font
+     * @param typeSource tipus font
+     * @param idEnd id desti
+     * @param typeEnd tipus desti
+     */
     public void query1to1(String idSource, String typeSource,
                           String idEnd, String typeEnd) {
         Task<String> task = new Query1To1Task(idSource, typeSource, idEnd, typeEnd, dc, we, this);
@@ -530,6 +554,12 @@ public class PresentationController {
 
     }
 
+    /**
+     * Fa una consulta 1 a N entre el node i el tipus donats, en un thread separat.
+     * @param idSource id font
+     * @param typeSource tipus font
+     * @param typeEnd tipus desti
+     */
     public void query1toN(String idSource, String typeSource, String typeEnd) {
         currentNumCols = 3;
         result = new ArrayList<>();
@@ -539,6 +569,12 @@ public class PresentationController {
         th.start();
     }
 
+
+    /**
+     * Fa una consulta N a N entre el node i el tipus donats, en un thread separat.
+     * @param typeSource tipus font
+     * @param typeEnd tipus desti
+     */
     public void queryNtoN(String typeSource, String typeEnd) {
         currentNumCols = 4;
         result = new ArrayList<>();
@@ -548,6 +584,15 @@ public class PresentationController {
         th.start();
     }
 
+    /**
+     * Fa una consulta per referencia entre la parella de nodes i el tercer node.
+     * @param nodeRefSourceID id node referencia font
+     * @param nodeRefSourceType tipus node referencia font
+     * @param nodeRefEndID id node referencia desti
+     * @param nodeRefEndType tipus node referencia desti
+     * @param nodeSourceID id node font
+     * @param nodeSourceType tipus node font
+     */
     public void queryByReference(String nodeRefSourceID, String nodeRefSourceType,
                                  String nodeRefEndID, String nodeRefEndType,
                                  String nodeSourceID, String nodeSourceType) {
