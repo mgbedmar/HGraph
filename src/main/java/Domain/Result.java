@@ -10,12 +10,6 @@ import Domain.Graph.*;
 public class Result {
 
     /**
-     * Numero de files que es mostren d'un resultat.
-     * Es un parametre del sistema que pot ser modificat per l'usuari.
-     */
-    public static int numRowsResult = 10; //TODO treure d'aqui?
-
-    /**
      * Inner class per representar una fila. Els nodes son nomes Strings (el nom).
      */
     protected class Row {

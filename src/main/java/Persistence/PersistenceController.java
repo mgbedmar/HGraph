@@ -39,8 +39,7 @@ public class PersistenceController {
     public void startSaving() throws PersistenceException {
         try {
             gfm.startSaving(pm.getProjectPath());
-        } catch (IOException e) {//TODO stacktrace??
-            e.printStackTrace(System.err);
+        } catch (IOException e) {
             throw new PersistenceException("Ha fallat la escriptura. (Permisos? Espai al disc?)");
         }
     }

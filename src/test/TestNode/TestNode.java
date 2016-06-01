@@ -218,7 +218,6 @@ public class TestNode {
         }
         catch (DomainException e)
         {
-            // TODO Auto-generated catch block
         	System.out.println(e.getFriendlyMessage());
             if(debug)
                 e.printStackTrace(System.err);
@@ -424,7 +423,6 @@ public class TestNode {
     }
 
     public static void main(String[] args) {
-        // TODO Auto-generated method stub
         TestNode mitest = new TestNode();
         initParams(args);
         Node n = null;
