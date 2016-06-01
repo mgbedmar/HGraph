@@ -238,7 +238,6 @@
                             id: String(edges[type].get(i)[0])+"-"+type+"-"+String(edges[type].get(i)[1]),
                             source: String(edges[type].get(i)[0]+"-"+baseType),
                             target: String(edges[type].get(i)[1])+"-"+type,
-                            //TODO:define edge colors
                             color: _typeColorEdge[typeColor]
                         });
                         j++;
@@ -317,11 +316,6 @@
         _clearEdges();
         _sarr[0].refresh();
     };
-    //Draws a bigraph representing a table. Each connected component must be < maxNodes
-    app.graph.drawTableBasedGraph = function(nodes, edges, cb){
-        //TODO
-    };
-
  
 
  

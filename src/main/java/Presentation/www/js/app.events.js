@@ -558,7 +558,6 @@
     function _drawRelevanceGraph(cb){
         var nodeobj = {};
 
-        //TODO: node distribution?
         nodeobj[app.const.nodeTypes.conf]  = app.HGraph.getRelevantNodesOfType(app.const.nodeTypes.conf, parseInt(app.settings.maxNodes*0.1));
         nodeobj[app.const.nodeTypes.term]  = app.HGraph.getRelevantNodesOfType(app.const.nodeTypes.term, parseInt(app.settings.maxNodes*0.15));
         var authorCapacity = parseInt(app.settings.maxNodes*0.35)+(parseInt(app.settings.maxNodes*0.25)-nodeobj[app.const.nodeTypes.conf].size()-nodeobj[app.const.nodeTypes.term].size());
@@ -848,7 +847,7 @@
     };
     //----/popups
 
-    app.events.editProjects = function() { //TODO transicio
+    app.events.editProjects = function() { 
         var tr = document.querySelectorAll("#loadGraphPage .ion-close-round");
 
         for (var i = 0; i < tr.length; i++) {
