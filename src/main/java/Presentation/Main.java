@@ -11,6 +11,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebEvent;
 import javafx.scene.web.WebView;
@@ -47,6 +48,7 @@ class Browser extends Region {
         // load the web page
         URL url = getClass().getResource("www/index.html");
         webEngine.load(url.toExternalForm());
+        Font.loadFont(getClass().getResource("www/fonts/ionicons.ttf").toExternalForm(),10);
 
         browser.setContextMenuEnabled(false);
 

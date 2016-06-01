@@ -268,9 +268,5 @@ public class DomainController
     public void resetResult() {
         r.resetIndex();
     }
-/*
-    public void selectResultRows(Integer x1, Integer x2) {
-        //TODO
-    }
-    */
+
 }
