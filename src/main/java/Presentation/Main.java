@@ -23,7 +23,7 @@ public class Main extends Application {
     private Scene scene;
     @Override public void start(Stage stage) {
         // create the scene
-        stage.setTitle("HGraph v0.1a");
+        stage.setTitle("HGraph v1.0b");
         scene = new Scene(new Browser(stage),900,600, Color.web("#666970"));
         stage.setScene(scene);
         //scene.getStylesheets().add("webviewsample/BrowserToolbar.css");
@@ -47,6 +47,8 @@ class Browser extends Region {
         // load the web page
         URL url = getClass().getResource("www/index.html");
         webEngine.load(url.toExternalForm());
+
+        browser.setContextMenuEnabled(false);
 
         webEngine.getLoadWorker().stateProperty()
                 .addListener((obs, oldValue, newValue) -> {
