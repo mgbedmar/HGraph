@@ -143,6 +143,8 @@ body > div.page{
 
 #popupContent .resultContent .sort {
     -webkit-transform:rotate(-90deg);
+    display:inline-block;
+    margin-left:10px;
 }
 
 #popupPage #popupContent .closeResult .closeButton {
@@ -404,6 +406,9 @@ body > div.page{
     width:90%;
 }
 
+.help {
+    display:none;
+}
 
 #popupContent .help .about {
     margin:40px;

@@ -52,6 +52,10 @@
     }
 
     function _clearUIState(){
+        for (var index = 0; index < _autocompletes.length; ++index) {
+            _autocompletes[index].destroy();
+        }
+
         _autocompletes = [];
         _nodes = [];
         _popupShown = false;
