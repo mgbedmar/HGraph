@@ -200,7 +200,6 @@
                     pos = _getNextPosition(0.004, 0.0005);
 
                     var random = Math.random();
-                    //TODO: define ratios
                     if(random < app.settings.marginRatio[type])
                     {
                         --i;
