@@ -122,6 +122,27 @@ var app = app || {};
 
     }
 
+    function _initShortcuts(){
+
+        document.addEventListener("keypress", function(e){
+            if(e.ctrlKey && e.keyCode == 18) //ctrl+R
+                app.events.reload();
+            if(e.ctrlKey && e.keyCode == 19) //ctrl+S
+                app.events.save();
+            if(e.ctrlKey && e.shiftKey && e.keyCode == 83) //ctrl+shift+S
+                app.events.saveAs();
+            if(e.ctrlKey && e.keyCode == 13) //ctrl+M
+                app.events.showHelp();
+            if(e.ctrlKey && e.keyCode == 15) //ctrl+O
+                app.events.showSettings();
+            if(e.ctrlKey && e.keyCode == 17) //ctrl+Q
+                app.events.openQueryMenu();
+            if(e.ctrlKey && e.keyCode == 20) //ctrl+T
+                app.events.openToolsMenu();
+
+        });
+    }
+
 
     app.debounce = function(fn, delay){
         var timer = null;
@@ -197,6 +218,7 @@ var app = app || {};
         
         //document.querySelector("#mainPage a[data-action=welcome]").addEventListener("click", mainGoToWelcome);
 
+        _initShortcuts();
         setTimeout(function(){
             app.events.init();
         }, app.const.dramaticWait);

@@ -685,6 +685,18 @@
         _show(app.const.pageIds.welcome);
     };
 
+    app.events.reload = function(){
+        function go(){
+            window.location.reload();
+        }
+
+        if(app.modified)
+            app.events.showAccept("Sortir", "Si surts es perdràn els canvis que no has desat. Vols continuar?",
+                "Sortir", go, "Cancela");
+        else
+            go();
+    };
+
     app.events.loadGoToWelcome = function(){
         _hide(app.const.pageIds.loadGraph, function(){
             _show(app.const.pageIds.welcome);
