@@ -1412,6 +1412,8 @@
         var content = document.getElementById("help").cloneNode(true);
         content.id=content.id+1;
         app.events.showPopup(content);
+        
+        document.querySelector("#"+content.id+" div[data-action=closeHelp]").addEventListener("click", app.events.hidePopup);
     };
 
 
