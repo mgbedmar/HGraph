@@ -406,7 +406,7 @@ body > div.page{
     width:90%;
 }
 
-.help {
+body > .help {
     display:none;
 }
 

@@ -496,12 +496,10 @@
         {
             //Let's see how big it is
             var authorNodes = _getNames(app.HGraph.getNodesOfType(app.const.nodeTypes.author), app.const.nodeTypes.author);
-            //app.HGraph.log(JSON.stringify(authorNodes));
             var termNodes = _getNames(app.HGraph.getNodesOfType(app.const.nodeTypes.term), app.const.nodeTypes.term);
             var paperNodes = _getNames(app.HGraph.getNodesOfType(app.const.nodeTypes.paper), app.const.nodeTypes.paper);
             var confNodes = _getNames(app.HGraph.getNodesOfType(app.const.nodeTypes.conf), app.const.nodeTypes.conf);
             nodes = authorNodes.concat(termNodes.concat(paperNodes.concat(confNodes)));
-            //app.HGraph.log(JSON.stringify(nodes));
             //Is it larger than maxNodes?
             large = (nodes.length >= app.settings.maxNodes);
         }
@@ -509,7 +507,6 @@
         app.graph.init(large);
         //document.querySelector("#mainPage #queryMenu > div > ul > li[data-action=completeGraph]").click();
 
-        app.HGraph.log(_lastDraw);
         if(_lastDraw && _lastDraw == "type")
             app.events.queryType();
         else if(_lastDraw && _lastDraw == "neighbours")
@@ -945,7 +942,6 @@
     
     app.events.allEdges = function(){
         if(!_partialGraphDrawn){
-            app.HGraph.log("Mireia, ");
             app.events.showDrawing();
             _drawRelevanceGraph(function(){
                 app.graph.allEdges();
@@ -953,7 +949,6 @@
             });
         }
         else {
-            app.HGraph.log("tens rao");
             app.graph.allEdges();
         }
     };
